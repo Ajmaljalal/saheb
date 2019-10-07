@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../store/store.dart';
 
 class Language extends StatefulWidget {
   @override
@@ -12,22 +14,7 @@ class LanguageState extends State<Language> {
       child: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://media-cdn.tripadvisor.com/media/photo-s/15/97/85/49/very-good-place-for-the.jpg'),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.transparent, Colors.black],
-                begin: AlignmentDirectional.topCenter,
-                end: AlignmentDirectional.bottomCenter,
-              ),
-            ),
+            color: Colors.deepPurple,
           ),
           Padding(
             padding: EdgeInsets.only(
@@ -42,7 +29,7 @@ class LanguageState extends State<Language> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -60,14 +47,16 @@ class LanguageState extends State<Language> {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: GestureDetector(
         onTap: () {
-          print(_lang);
+          Provider.of<Store>(context).changeLanguage(language);
+          Navigator.pushNamed(context, '/login');
         },
         child: Container(
           height: 60,
           width: MediaQuery.of(context).size.width * 0.6,
           decoration: BoxDecoration(
+            color: Colors.deepOrange,
             border: Border.all(
-              color: Colors.deepPurple,
+              color: Colors.deepOrange,
               width: 3.0,
             ),
             borderRadius: BorderRadius.circular(50),
@@ -77,7 +66,8 @@ class LanguageState extends State<Language> {
               _lang,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: _lang == 'English' ? 22 : 27,
+                fontSize: _lang == 'English' ? 25 : 30,
+                fontFamily: 'BadrLight',
               ),
             ),
           ),
