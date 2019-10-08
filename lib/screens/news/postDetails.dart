@@ -1,53 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import '../../widgets/verticalDivider.dart';
-import 'postDetails.dart';
 
-class SocialCard extends StatefulWidget {
+class PostDetails extends StatefulWidget {
   @override
-  _SocialCardState createState() => _SocialCardState();
+  _PostDetailsState createState() => _PostDetailsState();
 }
 
-class _SocialCardState extends State<SocialCard> {
-  bool flag = false;
-
-  _changeFlag() {
-    setState(() {
-      flag = !flag;
-    });
-  }
-
+class _PostDetailsState extends State<PostDetails> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 3.0),
-      child: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 1,
-          decoration: BoxDecoration(),
-          child: Card(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    cardHeader(),
-                    postTypeHolder(context),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PostDetails(),
-                      ),
-                    );
-                  },
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(title: Text('Details')),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 3.0),
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 1,
+                decoration: BoxDecoration(),
+                child: Card(
                   child: Column(
                     children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          cardHeader(),
+                          postTypeHolder(context),
+                        ],
+                      ),
                       Row(
                         children: <Widget>[
                           postTittleHolder('یخچال های مستعمل'),
@@ -56,18 +39,29 @@ class _SocialCardState extends State<SocialCard> {
                       postContent(
                         'ما یخچال های مستعمل داریم هر کس می خواهد به شماره ما تماس بیګرد. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند.',
                         'pictures',
-                        flag,
                       ),
+                      postLikesCommentsCountHolder(),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      postActionButtons(),
+                      Divider(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      postCommentsHolder(
+                          'بسیار زیبا است ممنون تان. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی.'),
+                      postCommentsHolder(
+                          'مقبول است اما یګان نقص دارد سرش بیشتر کار کن.'),
+                      postCommentsHolder(
+                          'ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی.'),
+                      postCommentsHolder(
+                          'چندان چیزی جور نه کدین حیف وقت تان که سری ای اپلیکشن ضایع کردین.'),
                     ],
                   ),
                 ),
-                postLikesCommentsCountHolder(),
-                Divider(
-                  color: Colors.grey,
-                  height: 1,
-                ),
-                postActionButtons(),
-              ],
+              ),
             ),
           ),
         ),
@@ -156,14 +150,14 @@ class _SocialCardState extends State<SocialCard> {
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 16,
           ),
         ),
       ),
     );
   }
 
-  Widget postContent(text, pictures, flag) {
+  Widget postContent(text, pictures) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -171,24 +165,10 @@ class _SocialCardState extends State<SocialCard> {
           Container(
             child: Text(
               text,
-              maxLines: flag ? 20 : 3,
               style: TextStyle(
+                fontWeight: FontWeight.bold,
                 fontSize: 14,
               ),
-            ),
-          ),
-          InkWell(
-            onTap: _changeFlag,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                flag
-                    ? Text('')
-                    : Text(
-                        "نور...",
-                        style: TextStyle(color: Colors.deepPurple),
-                      ),
-              ],
             ),
           ),
           postImages(),
@@ -298,6 +278,88 @@ class _SocialCardState extends State<SocialCard> {
             ),
             onPressed: () {},
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget postCommentsHolder(text) {
+    return individualCommentRenderer(text);
+  }
+
+  Widget individualCommentRenderer(text) {
+    return Container(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            child: imageRenderer(),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                userNameHolder(),
+                commentReplyHolder(text),
+                commentActionButtons(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget commentReplyHolder(text) {
+    return Container(
+      width: 330,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10.0),
+          bottomRight: Radius.circular(10.0),
+          bottomLeft: Radius.circular(10.0),
+        ),
+      ),
+      padding: EdgeInsets.all(10.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 14,
+        ),
+      ),
+    );
+  }
+
+  Widget commentActionButtons() {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            focusColor: Colors.white70,
+            icon: Icon(
+              Icons.favorite,
+              color: Colors.deepPurple,
+              size: 20,
+            ),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.deepPurple,
+              size: 20,
+            ),
+            onPressed: () {},
+          ),
+          SizedBox(width: 50),
+          Text('5'),
+          SizedBox(width: 5),
+          Text('Likes'),
         ],
       ),
     );

@@ -9,10 +9,10 @@ class News extends StatefulWidget {
 
 class _NewsState extends State<News> {
   List<Widget> numberOfCards = [
-    SocialCard(user: 'Ajmal'),
-    SocialCard(user: 'Ajmal'),
-    SocialCard(user: 'Ajmal'),
-    SocialCard(user: 'Ajmal'),
+    SocialCard(),
+    SocialCard(),
+    SocialCard(),
+    SocialCard(),
   ];
   @override
   Widget build(BuildContext context) {

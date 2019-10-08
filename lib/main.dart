@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/screens/news/postDetails.dart';
 import './store/store.dart';
 import './screens/login_screen.dart';
 //import './screens/language_screen.dart';
 import './screens/registration_screen.dart';
 import './screens/main__screen.dart';
+import './screens/news/postDetails.dart';
 
 void main() => runApp(MyApp());
 
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) => Login(),
           '/register': (context) => Registration(),
           '/mainFeeds': (context) => MainScreen(),
+          './newsPostDetails': (context) => PostDetails(),
         },
       ),
     );
