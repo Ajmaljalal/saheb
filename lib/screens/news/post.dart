@@ -1,73 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import '../../store/store.dart';
 import '../../widgets/verticalDivider.dart';
+import '../../constant_widgets/constants.dart';
 import 'postDetails.dart';
 
-class SocialCard extends StatefulWidget {
+class Post extends StatefulWidget {
+  final Map<String, dynamic> post;
+  Post({Key key, this.post}) : super(key: key);
   @override
-  _SocialCardState createState() => _SocialCardState();
+  _PostState createState() => _PostState();
 }
 
-class _SocialCardState extends State<SocialCard> {
-  bool flag = false;
+class _PostState extends State<Post> {
+  bool revealMoreTextFlag = false;
 
-  _changeFlag() {
+  _revealMoreText() {
     setState(() {
-      flag = !flag;
+      revealMoreTextFlag = !revealMoreTextFlag;
     });
+  }
+
+  goToDetailsScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PostDetails(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final post = widget.post;
     return Padding(
       padding: const EdgeInsets.only(top: 3.0),
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 1,
           decoration: BoxDecoration(),
-          child: Card(
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    cardHeader(),
-                    postTypeHolder(context),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PostDetails(),
-                      ),
-                    );
-                  },
-                  child: Column(
+          child: ChangeNotifierProvider<Store>(
+            builder: (_) => Store(),
+            child: Card(
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: kSpaceBetween,
+                    crossAxisAlignment: kStart,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          postTittleHolder('یخچال های مستعمل'),
-                        ],
-                      ),
-                      postContent(
-                        'ما یخچال های مستعمل داریم هر کس می خواهد به شماره ما تماس بیګرد. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند.',
-                        'pictures',
-                        flag,
+                      cardHeader(post),
+                      postTypeHolder(
+                        context,
+                        post['postType'],
                       ),
                     ],
                   ),
-                ),
-                postLikesCommentsCountHolder(),
-                Divider(
-                  color: Colors.grey,
-                  height: 1,
-                ),
-                postActionButtons(),
-              ],
+                  GestureDetector(
+                    onTap: () {
+                      goToDetailsScreen();
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            postTittleHolder(post['postTitle']),
+                          ],
+                        ),
+                        postContent(
+                          post['postText'],
+                          post['postPictures'],
+                          revealMoreTextFlag,
+                        ),
+                      ],
+                    ),
+                  ),
+                  postLikesCommentsCountHolder(
+                      post['postLikes'], post['postComments']),
+                  kHorizontalDivider,
+                  postActionButtons(),
+                ],
+              ),
             ),
           ),
         ),
@@ -75,13 +89,17 @@ class _SocialCardState extends State<SocialCard> {
     );
   }
 
-  Widget cardHeader() {
+  Widget cardHeader(post) {
     return Row(
       children: <Widget>[
         imageRenderer(),
-        userNameHolder(),
+        userNameHolder(
+          post['user'],
+        ),
         CustomVerticalDivider(),
-        userLocationHolder(),
+        userLocationHolder(
+          post['userLocation'],
+        ),
       ],
     );
   }
@@ -98,54 +116,41 @@ class _SocialCardState extends State<SocialCard> {
     );
   }
 
-  Widget userNameHolder() {
+  Widget userNameHolder(userName) {
     return Container(
       child: Text(
-        'اجمل جلال',
-        style: TextStyle(
-          color: Colors.black87,
-          fontSize: 15,
-          fontWeight: FontWeight.bold,
-        ),
+        userName,
+        style: kUserNameStyle,
       ),
     );
   }
 
-  Widget userLocationHolder() {
+  Widget userLocationHolder(location) {
     return Container(
       child: Text(
-        'دریم بلاک، ۱۲ ناحیه',
-        style: TextStyle(
-          color: Colors.black87,
-          fontSize: 10,
-          fontWeight: FontWeight.bold,
-        ),
+        location,
+        style: kUserLocationStyle,
       ),
     );
   }
 
-  Widget postTypeHolder(context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.15,
-      padding: EdgeInsets.symmetric(
-        horizontal: 3,
-        vertical: 2,
-      ),
-      child: Text(
-        'اعلان',
-        style: TextStyle(fontSize: 12, color: Colors.white),
-        textAlign: TextAlign.center,
-      ),
-      decoration: BoxDecoration(
-        color: Colors.deepOrange,
-        border: Border.all(
-          color: Colors.deepOrange,
-          width: 1,
+  Widget postTypeHolder(context, postType) {
+    if (postType != 'عادی') {
+      return Container(
+        width: MediaQuery.of(context).size.width * 0.15,
+        padding: EdgeInsets.symmetric(
+          horizontal: 3,
+          vertical: 2,
         ),
-        borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(10), topLeft: Radius.circular(5)),
-      ),
-    );
+        child: Text(
+          postType,
+          style: kPostTypeTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        decoration: kAdvertTypeBoxDecoration,
+      );
+    } else
+      return Text('');
   }
 
   Widget postTittleHolder(title) {
@@ -178,7 +183,7 @@ class _SocialCardState extends State<SocialCard> {
             ),
           ),
           InkWell(
-            onTap: _changeFlag,
+            onTap: _revealMoreText,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
@@ -191,7 +196,7 @@ class _SocialCardState extends State<SocialCard> {
               ],
             ),
           ),
-          postImages(),
+          postImages()
         ],
       ),
     );
@@ -229,7 +234,7 @@ class _SocialCardState extends State<SocialCard> {
     );
   }
 
-  Widget postLikesCommentsCountHolder() {
+  Widget postLikesCommentsCountHolder(likes, comments) {
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: 5.0,
@@ -249,7 +254,7 @@ class _SocialCardState extends State<SocialCard> {
           ),
           Row(
             children: <Widget>[
-              Text('15'),
+              Text(likes.toString()),
               SizedBox(
                 width: 2,
               ),
@@ -263,40 +268,56 @@ class _SocialCardState extends State<SocialCard> {
 
   Widget postActionButtons() {
     return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.0,
+        vertical: 10.0,
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          IconButton(
-            icon: Icon(
+          InkResponse(
+            splashColor: Colors.grey[200],
+            radius: 25.0,
+            child: Icon(
               Icons.favorite,
               color: Colors.deepPurple,
               size: 20,
             ),
-            onPressed: () {},
+            onTap: () {},
           ),
-          IconButton(
-            icon: Icon(
+          InkResponse(
+            splashColor: Colors.grey[200],
+            radius: 25.0,
+            child: Icon(
               Icons.mode_comment,
               color: Colors.deepPurple,
               size: 20,
             ),
-            onPressed: () {},
+            onTap: () {
+              goToDetailsScreen();
+            },
           ),
-          IconButton(
-            icon: Icon(
+          InkResponse(
+            splashColor: Colors.grey[200],
+            radius: 25.0,
+            child: Icon(
               Icons.share,
               color: Colors.deepPurple,
               size: 20,
             ),
-            onPressed: () {},
+            onTap: () {},
           ),
-          IconButton(
-            icon: Icon(
+          InkResponse(
+            splashColor: Colors.grey[200],
+            radius: 25.0,
+            child: Icon(
               Icons.delete,
               color: Colors.deepPurple,
               size: 20,
             ),
-            onPressed: () {},
+            onTap: () {
+              print('delete clicked');
+            },
           ),
         ],
       ),

@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-import 'social_card.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../store/store.dart';
+import 'post.dart';
 
 class News extends StatefulWidget {
   @override
@@ -8,19 +11,17 @@ class News extends StatefulWidget {
 }
 
 class _NewsState extends State<News> {
-  List<Widget> numberOfCards = [
-    SocialCard(),
-    SocialCard(),
-    SocialCard(),
-    SocialCard(),
-  ];
   @override
   Widget build(BuildContext context) {
+    Map _posts = Provider.of<Store>(context).getPosts;
+
     return ListView.builder(
       itemBuilder: (context, index) {
-        return numberOfCards[index];
+        var id = _posts.keys.toList().elementAt(index);
+        var post = _posts[id];
+        return Post(post: post);
       },
-      itemCount: numberOfCards.length,
+      itemCount: _posts.keys.length,
     );
   }
 }

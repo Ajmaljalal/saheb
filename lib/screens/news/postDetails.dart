@@ -8,61 +8,86 @@ class PostDetails extends StatefulWidget {
 }
 
 class _PostDetailsState extends State<PostDetails> {
+  bool addCommentFocusFlag = false;
+
+  FocusNode commentFieldFocusNode = FocusNode();
+  addCommentTextFieldFocus() {
+    FocusScope.of(context).requestFocus(commentFieldFocusNode);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: Text('Details')),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 3.0),
-            child: Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 1,
-                decoration: BoxDecoration(),
-                child: Card(
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            children: <Widget>[
+              Container(),
+              SingleChildScrollView(
+                child: Container(
                   child: Column(
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          cardHeader(),
-                          postTypeHolder(context),
-                        ],
+                      Container(
+                        width: MediaQuery.of(context).size.width * 1,
+                        decoration: BoxDecoration(),
+                        child: Card(
+                          child: Column(
+                            children: <Widget>[
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  cardHeader(),
+                                  postTypeHolder(context),
+                                ],
+                              ),
+                              Row(
+                                children: <Widget>[
+                                  postTittleHolder('یخچال های مستعمل'),
+                                ],
+                              ),
+                              postContent(
+                                'ما یخچال های مستعمل داریم هر کس می خواهد به شماره ما تماس بیګرد. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند.',
+                                'pictures',
+                              ),
+                              postLikesCommentsCountHolder(),
+                              Divider(
+                                color: Colors.grey,
+                                height: 1,
+                              ),
+                              postActionButtons(),
+                              Divider(
+                                color: Colors.grey,
+                                height: 1,
+                              ),
+                              postCommentsHolder(
+                                  'بسیار زیبا است ممنون تان. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی.'),
+                              postCommentsHolder(
+                                  'مقبول است اما یګان نقص دارد سرش بیشتر کار کن.'),
+                              postCommentsHolder(
+                                  'ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی.'),
+                              postCommentsHolder(
+                                  'چندان چیزی جور نه کدین حیف وقت تان که سری ای اپلیکشن ضایع کردین.'),
+                            ],
+                          ),
+                        ),
                       ),
-                      Row(
-                        children: <Widget>[
-                          postTittleHolder('یخچال های مستعمل'),
-                        ],
-                      ),
-                      postContent(
-                        'ما یخچال های مستعمل داریم هر کس می خواهد به شماره ما تماس بیګرد. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند. یخچال های ما دوباره سازی شده و به هیچ صورت خراب نیستند.',
-                        'pictures',
-                      ),
-                      postLikesCommentsCountHolder(),
-                      Divider(
-                        color: Colors.grey,
-                        height: 1,
-                      ),
-                      postActionButtons(),
-                      Divider(
-                        color: Colors.grey,
-                        height: 1,
-                      ),
-                      postCommentsHolder(
-                          'بسیار زیبا است ممنون تان. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی.'),
-                      postCommentsHolder(
-                          'مقبول است اما یګان نقص دارد سرش بیشتر کار کن.'),
-                      postCommentsHolder(
-                          'ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی. ډېر ښایسته دی آفرین شه. تکړه شی نور شیان هم جوړ کړی.'),
-                      postCommentsHolder(
-                          'چندان چیزی جور نه کدین حیف وقت تان که سری ای اپلیکشن ضایع کردین.'),
                     ],
                   ),
                 ),
               ),
-            ),
+              Positioned(
+                bottom: 0.0,
+                right: 0,
+                left: 0,
+                child: addCommentTextField(commentFieldFocusNode),
+              ),
+            ],
           ),
         ),
       ),
@@ -260,7 +285,7 @@ class _PostDetailsState extends State<PostDetails> {
               color: Colors.deepPurple,
               size: 20,
             ),
-            onPressed: () {},
+            onPressed: () => addCommentTextFieldFocus(),
           ),
           IconButton(
             icon: Icon(
@@ -361,6 +386,73 @@ class _PostDetailsState extends State<PostDetails> {
           SizedBox(width: 5),
           Text('Likes'),
         ],
+      ),
+    );
+  }
+
+  Widget addCommentTextField(focusNode) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black,
+            offset: Offset.zero,
+            blurRadius: 5.0,
+          ),
+        ],
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+      ),
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: TextField(
+          focusNode: focusNode,
+          autocorrect: false,
+          cursorColor: Colors.black,
+          autofocus: false,
+          maxLines: null,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 15,
+          ),
+          decoration: InputDecoration(
+            icon: IconButton(
+              icon: Icon(
+                Icons.arrow_upward,
+                color: Colors.deepPurple,
+                size: 40,
+              ),
+              onPressed: () {},
+            ),
+            contentPadding: EdgeInsets.symmetric(
+              vertical: 20,
+              horizontal: 20,
+            ),
+            fillColor: Colors.white,
+            labelText: 'پر دې پوسټ څه ولیکئ...',
+            labelStyle: TextStyle(
+              color: Colors.grey,
+              fontSize: 15,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(
+                color: Colors.black12,
+                width: 3.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(30),
+              borderSide: BorderSide(
+                color: Colors.deepPurple,
+                width: 2.0,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
