@@ -19,7 +19,7 @@ class _NewsState extends State<News> {
       itemBuilder: (context, index) {
         var id = _posts.keys.toList().elementAt(index);
         var post = _posts[id];
-        return Post(post: post);
+        return Post(post: post, id: id);
       },
       itemCount: _posts.keys.length,
     );

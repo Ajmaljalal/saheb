@@ -29,7 +29,7 @@ const Widget kHorizontalDivider = Divider(
 
 const TextStyle kUserNameStyle = TextStyle(
   color: Colors.black87,
-  fontSize: 15,
+  fontSize: 17,
   fontWeight: FontWeight.bold,
 );
 
@@ -46,4 +46,28 @@ const BoxDecoration kAdvertTypeBoxDecoration = BoxDecoration(
   color: Colors.deepOrange,
   borderRadius: BorderRadius.only(
       bottomRight: Radius.circular(10), topLeft: Radius.circular(5)),
+);
+
+const BorderRadius kBorderRadiusTopT10 = BorderRadius.only(
+  topLeft: Radius.circular(10),
+  topRight: Radius.circular(10),
+);
+
+const EdgeInsets kPaddingAll8 = EdgeInsets.all(8.0);
+const EdgeInsets kPaddingAll20 = EdgeInsets.all(20.0);
+
+OutlineInputBorder kOutlineInputBorderGrey = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(30),
+  borderSide: BorderSide(
+    color: Colors.black12,
+    width: 2.0,
+  ),
+);
+
+OutlineInputBorder kOutlineInputBorderPurple = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(30),
+  borderSide: BorderSide(
+    color: Colors.deepPurple,
+    width: 2.0,
+  ),
 );
