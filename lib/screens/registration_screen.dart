@@ -216,6 +216,13 @@ class _RegistrationState extends State<Registration> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Text(
+            appLanguage['haveAnAccount'],
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 25,
+            ),
+          ),
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
@@ -228,13 +235,6 @@ class _RegistrationState extends State<Registration> {
                 color: Colors.deepOrange,
                 fontSize: 25,
               ),
-            ),
-          ),
-          Text(
-            appLanguage['haveAnAccount'],
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
             ),
           ),
         ],

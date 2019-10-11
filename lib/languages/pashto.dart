@@ -1,11 +1,11 @@
 const Map pashto = {
   // Login and registration
-  'login': 'ور ننوځه',
+  'login': 'ننوځئ',
   'email': 'برېښنالیک',
   'password': 'پسورد',
-  'register': '!حساب جوړ کړه',
-  'haveAnAccount': ' ،که تیار حساب لرې',
-  'doNotHaveAnAccount': ' ،که حساب نه لرې',
+  'register': 'حساب جوړ کړه!',
+  'haveAnAccount': 'که حساب لرې، ',
+  'doNotHaveAnAccount': 'که حساب نه لرې، ',
 
   // ToolBar and Main Screen
   'home': 'کور',

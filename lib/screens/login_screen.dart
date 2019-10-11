@@ -129,6 +129,7 @@ class _LoginState extends State<Login> {
             print(
               state,
             );
+            Navigator.pop(context);
             Navigator.pushNamed(context, '/mainFeeds');
           },
           child: Center(
@@ -192,6 +193,13 @@ class _LoginState extends State<Login> {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Text(
+            appLanguage['doNotHaveAnAccount'],
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 25,
+            ),
+          ),
           FlatButton(
             onPressed: () {
               Navigator.pop(context);
@@ -204,13 +212,6 @@ class _LoginState extends State<Login> {
                 color: Colors.deepOrange,
                 fontSize: 25,
               ),
-            ),
-          ),
-          Text(
-            appLanguage['doNotHaveAnAccount'],
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 25,
             ),
           ),
         ],
