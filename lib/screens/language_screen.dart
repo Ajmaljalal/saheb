@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../store/store.dart';
+import '../providers/languageProvider.dart';
 
 class Language extends StatefulWidget {
   @override
@@ -47,7 +47,7 @@ class LanguageState extends State<Language> {
       padding: const EdgeInsets.only(bottom: 10.0),
       child: GestureDetector(
         onTap: () {
-          Provider.of<Store>(context).changeLanguage(language);
+          Provider.of<LanguageProvider>(context).changeLanguage(language);
           Navigator.pushNamed(context, '/login');
         },
         child: Container(

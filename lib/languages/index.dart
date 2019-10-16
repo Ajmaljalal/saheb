@@ -1,10 +1,10 @@
 import 'package:provider/provider.dart';
-import '../store/store.dart';
+import '../providers/languageProvider.dart';
 import 'pashto.dart';
 import 'dari.dart';
 
 Map getLanguages(context) {
-  String language = Provider.of<Store>(context).getLanguage;
+  String language = Provider.of<LanguageProvider>(context).getLanguage;
   Map appLanguage;
 
   if (language == 'pashto') {

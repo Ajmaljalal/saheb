@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:provider/provider.dart';
-import '../store/store.dart';
+import '../providers/languageProvider.dart';
 import '../languages/index.dart';
 
 class Registration extends StatefulWidget {
@@ -28,55 +27,52 @@ class _RegistrationState extends State<Registration> {
 
   @override
   Widget build(BuildContext context) {
-    String _language = Provider.of<Store>(context).getLanguage;
+    String _language = Provider.of<LanguageProvider>(context).getLanguage;
     Map appLanguage = getLanguages(context);
-    return ChangeNotifierProvider<Store>(
-      builder: (_) => Store(),
-      child: Scaffold(
+    return Scaffold(
 //        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.deepPurple,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              right: 10,
-              left: 10,
-              top: MediaQuery.of(context).size.height * 0.1,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  registrationInputs(
-                    'name',
-                    _language,
-                    handleEmailInputChange,
+      backgroundColor: Colors.deepPurple,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: 10,
+            left: 10,
+            top: MediaQuery.of(context).size.height * 0.1,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                registrationInputs(
+                  'name',
+                  _language,
+                  handleEmailInputChange,
+                ),
+                registrationInputs(
+                  'email',
+                  _language,
+                  handleEmailInputChange,
+                ),
+                registrationInputs(
+                  'password',
+                  _language,
+                  handlePasswordInputChange,
+                ),
+                registrationButton(
+                  _language,
+                  appLanguage,
+                  [_name, _email, _password],
+                ),
+                SizedBox(height: 80),
+                thirdPartyLoginButtons(),
+                Center(
+                  child: Divider(
+                    color: Colors.deepOrange,
+                    indent: 50.0,
+                    endIndent: 50.0,
                   ),
-                  registrationInputs(
-                    'email',
-                    _language,
-                    handleEmailInputChange,
-                  ),
-                  registrationInputs(
-                    'password',
-                    _language,
-                    handlePasswordInputChange,
-                  ),
-                  registrationButton(
-                    _language,
-                    appLanguage,
-                    [_name, _email, _password],
-                  ),
-                  SizedBox(height: 80),
-                  thirdPartyLoginButtons(),
-                  Center(
-                    child: Divider(
-                      color: Colors.deepOrange,
-                      indent: 50.0,
-                      endIndent: 50.0,
-                    ),
-                  ),
-                  Center(child: haveAnAccountText(_language, appLanguage))
-                ],
-              ),
+                ),
+                Center(child: haveAnAccountText(_language, appLanguage))
+              ],
             ),
           ),
         ),

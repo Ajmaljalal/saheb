@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../store/store.dart';
+import '../../providers/adverts.dart';
 import 'advert.dart';
 
 class Market extends StatefulWidget {
@@ -11,7 +11,7 @@ class Market extends StatefulWidget {
 class _MarketState extends State<Market> {
   @override
   Widget build(BuildContext context) {
-    Map _adverts = Provider.of<Store>(context).getPosts;
+    Map _adverts = Provider.of<Adverts>(context).getAdverts;
 
     return ListView.builder(
       itemBuilder: (context, index) {

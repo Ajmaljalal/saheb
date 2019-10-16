@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import '../../store/store.dart';
+import '../../providers/adverts.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
 
@@ -23,11 +23,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
 
   @override
   Widget build(BuildContext context) {
-    Map posts = Provider.of<Store>(context).getPosts;
-    Map post = posts[widget.id];
+    Map adverts = Provider.of<Adverts>(context).getAdverts;
+    Map advert = adverts[widget.id];
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(post['postTitle'])),
+        appBar: AppBar(title: Text(advert['postTitle'])),
         body: GestureDetector(
           onTap: () {
             FocusScope.of(context).unfocus();
@@ -50,37 +50,38 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  cardHeader(post),
-                                  postTypeHolder(context, post['postType']),
+                                  cardHeader(advert),
+                                  postTypeHolder(context, advert['postType']),
                                 ],
                               ),
                               Row(
                                 children: <Widget>[
-                                  postTittleHolder(post['postTitle']),
+                                  postTittleHolder(advert['postTitle']),
                                 ],
                               ),
                               postContent(
-                                post['postText'],
+                                advert['postText'],
                                 [],
                                 true,
                                 null,
                               ),
                               postLikesCommentsCountHolder(
-                                post['postLikes'],
-                                post['postComments'],
+                                advert['postLikes'],
+                                advert['postComments'],
                               ),
                               Divider(
                                 color: Colors.grey,
                                 height: 1,
                               ),
-                              advertActionButtons(addCommentTextFieldFocus),
+                              advertActionButtons(
+                                  addCommentTextFieldFocus, context),
                               Divider(
                                 color: Colors.grey,
                                 height: 1,
                               ),
-                              individualCommentRenderer(post['postComments']),
-                              individualCommentRenderer(post['postComments']),
-                              individualCommentRenderer(post['postComments']),
+                              individualCommentRenderer(advert['postComments']),
+                              individualCommentRenderer(advert['postComments']),
+                              individualCommentRenderer(advert['postComments']),
                             ],
                           ),
                         ),

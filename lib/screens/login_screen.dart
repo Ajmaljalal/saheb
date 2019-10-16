@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../store/store.dart';
+import '../providers/languageProvider.dart';
 import '../languages/index.dart';
 
 class Login extends StatefulWidget {
@@ -22,38 +22,35 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    String _language = Provider.of<Store>(context).getLanguage;
+    String _language = Provider.of<LanguageProvider>(context).getLanguage;
     Map appLanguage = getLanguages(context);
-    return ChangeNotifierProvider<Store>(
-      builder: (_) => Store(),
-      child: Scaffold(
+    return Scaffold(
 //        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.deepPurple,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(
-              right: 10,
-              left: 10,
-              top: MediaQuery.of(context).size.height * 0.15,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  loginInputs('email', _language, handleEmailInputChange),
-                  loginInputs('password', _language, handlePasswordInputChange),
-                  loginButton(_language, appLanguage, [_email, _password]),
-                  SizedBox(height: 80),
-                  thirdPartyLoginButtons(),
-                  Center(
-                    child: Divider(
-                      color: Colors.deepOrange,
-                      indent: 50.0,
-                      endIndent: 50.0,
-                    ),
+      backgroundColor: Colors.deepPurple,
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: 10,
+            left: 10,
+            top: MediaQuery.of(context).size.height * 0.15,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                loginInputs('email', _language, handleEmailInputChange),
+                loginInputs('password', _language, handlePasswordInputChange),
+                loginButton(_language, appLanguage, [_email, _password]),
+                SizedBox(height: 80),
+                thirdPartyLoginButtons(),
+                Center(
+                  child: Divider(
+                    color: Colors.deepOrange,
+                    indent: 50.0,
+                    endIndent: 50.0,
                   ),
-                  Center(child: haveAnAccountText(_language, appLanguage))
-                ],
-              ),
+                ),
+                Center(child: haveAnAccountText(_language, appLanguage))
+              ],
             ),
           ),
         ),
@@ -129,8 +126,7 @@ class _LoginState extends State<Login> {
             print(
               state,
             );
-            Navigator.pop(context);
-            Navigator.pushNamed(context, '/mainFeeds');
+            Navigator.pushReplacementNamed(context, '/mainFeeds');
           },
           child: Center(
             child: Text(

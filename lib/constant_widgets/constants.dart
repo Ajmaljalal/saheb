@@ -39,6 +39,12 @@ const TextStyle kUserLocationStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+const TextStyle kUserLocationProfileStyle = TextStyle(
+  color: Colors.black87,
+  fontSize: 20.0,
+  fontWeight: FontWeight.bold,
+);
+
 const TextStyle kPostTypeTextStyle =
     TextStyle(fontSize: 12, color: Colors.white);
 
@@ -61,6 +67,14 @@ OutlineInputBorder kOutlineInputBorderGrey = OutlineInputBorder(
   borderSide: BorderSide(
     color: Colors.black12,
     width: 2.0,
+  ),
+);
+
+OutlineInputBorder kOutlineInputBorderWhite = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(30),
+  borderSide: BorderSide(
+    color: Colors.white,
+    width: 1.0,
   ),
 );
 

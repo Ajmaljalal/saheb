@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import '../../constant_widgets/constants.dart';
-import 'advertDetails.dart';
+import 'postDetails.dart';
 import '../../mixins/post.dart';
-import '../../mixins/advert.dart';
 
-class Advert extends StatefulWidget {
-  final Map<String, dynamic> advert;
+class Post extends StatefulWidget {
+  final Map<String, dynamic> post;
   final String id;
-  Advert({Key key, this.advert, this.id}) : super(key: key);
+  Post({Key key, this.post, this.id}) : super(key: key);
 
   @override
-  _AdvertState createState() => _AdvertState();
+  _PostState createState() => _PostState();
 }
 
-class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
+class _PostState extends State<Post> with PostMixin {
   bool revealMoreTextFlag = false;
 
   _revealMoreText() {
@@ -28,14 +27,14 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AdvertDetails(id: widget.id),
+        builder: (context) => PostDetails(id: widget.id),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final advert = widget.advert;
+    final post = widget.post;
     return Padding(
       padding: const EdgeInsets.only(top: 3.0),
       child: Center(
@@ -49,10 +48,10 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   mainAxisAlignment: kSpaceBetween,
                   crossAxisAlignment: kStart,
                   children: <Widget>[
-                    cardHeader(advert),
+                    cardHeader(post),
                     postTypeHolder(
                       context,
-                      advert['postType'],
+                      post['postType'],
                     ),
                   ],
                 ),
@@ -63,10 +62,10 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      postTittleHolder(advert['postTitle']),
+                      postTittleHolder(post['postTitle']),
                       postContent(
-                        advert['postText'],
-                        advert['postPictures'],
+                        post['postText'],
+                        post['postPictures'],
                         revealMoreTextFlag,
                         _revealMoreText,
                       ),
@@ -74,9 +73,9 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   ),
                 ),
                 postLikesCommentsCountHolder(
-                    advert['postLikes'], advert['postComments']),
+                    post['postLikes'], post['postComments']),
                 kHorizontalDivider,
-                advertActionButtons(goToDetailsScreen, context),
+                postActionButtons(goToDetailsScreen),
               ],
             ),
           ),

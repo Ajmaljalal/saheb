@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import '../../store/store.dart';
+import '../../providers/postsProvider.dart';
 import '../../mixins/post.dart';
 
 class PostDetails extends StatefulWidget {
@@ -21,7 +21,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
 
   @override
   Widget build(BuildContext context) {
-    Map posts = Provider.of<Store>(context).getPosts;
+    Map posts = Provider.of<PostsProivder>(context).getPosts;
     Map post = posts[widget.id];
     return SafeArea(
       child: Scaffold(

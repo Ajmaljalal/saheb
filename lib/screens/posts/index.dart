@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../store/store.dart';
+import '../../providers/postsProvider.dart';
 import 'post.dart';
 
-class News extends StatefulWidget {
+class Posts extends StatefulWidget {
   @override
-  _NewsState createState() => _NewsState();
+  _PostsState createState() => _PostsState();
 }
 
-class _NewsState extends State<News> {
+class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
-    Map _posts = Provider.of<Store>(context).getPosts;
+    Map _posts = Provider.of<PostsProivder>(context).getPosts;
 
     return ListView.builder(
       itemBuilder: (context, index) {

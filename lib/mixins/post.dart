@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../widgets/verticalDivider.dart';
 import '../constant_widgets/constants.dart';
 import '../widgets/imageRenderer.dart';
@@ -130,8 +131,6 @@ class PostMixin {
                   'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg'),
               singleImageRenderer(
                   'https://www.mobilesmspk.net/user/images/wallpaper_images/2013/08/17/www.mobilesmspk.net_beautiful-nature_2521.jpg'),
-              singleImageRenderer(
-                  'http://www.wallpaperg.com/screenshot/filess/1452149070-beautiful-nature-wallpaper-screenshot.jpg'),
             ],
           ),
         ),
@@ -186,8 +185,8 @@ class PostMixin {
             splashColor: Colors.grey[200],
             radius: 25.0,
             child: Icon(
-              Icons.favorite,
-              color: Colors.deepPurple,
+              FontAwesomeIcons.thumbsUp,
+              color: Colors.grey,
               size: 20,
             ),
             onTap: () {},
@@ -196,8 +195,8 @@ class PostMixin {
             splashColor: Colors.grey[200],
             radius: 25.0,
             child: Icon(
-              Icons.mode_comment,
-              color: Colors.deepPurple,
+              FontAwesomeIcons.comment,
+              color: Colors.grey,
               size: 20,
             ),
             onTap: () {
@@ -208,8 +207,8 @@ class PostMixin {
             splashColor: Colors.grey[200],
             radius: 25.0,
             child: Icon(
-              Icons.share,
-              color: Colors.deepPurple,
+              FontAwesomeIcons.share,
+              color: Colors.grey,
               size: 20,
             ),
             onTap: () {},
@@ -218,8 +217,8 @@ class PostMixin {
             splashColor: Colors.grey[200],
             radius: 25.0,
             child: Icon(
-              Icons.delete,
-              color: Colors.deepPurple,
+              FontAwesomeIcons.ban,
+              color: Colors.grey,
               size: 20,
             ),
             onTap: () {
@@ -299,7 +298,7 @@ class PostMixin {
       children: <Widget>[
         IconButton(
           icon: Icon(
-            Icons.favorite,
+            FontAwesomeIcons.heart,
             color: Colors.deepPurple,
             size: 20,
           ),
@@ -307,9 +306,9 @@ class PostMixin {
         ),
         IconButton(
           icon: Icon(
-            Icons.delete,
+            FontAwesomeIcons.trash,
             color: Colors.deepPurple,
-            size: 20,
+            size: 18,
           ),
           onPressed: () {},
         ),

@@ -1,20 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/screens/news/postDetails.dart';
-import './store/store.dart';
+import './providers/languageProvider.dart';
+import './providers/postsProvider.dart';
+import './providers/adverts.dart';
 import './screens/login_screen.dart';
 //import './screens/language_screen.dart';
 import './screens/registration_screen.dart';
 import './screens/main__screen.dart';
-import './screens/news/postDetails.dart';
+import './screens/posts/postDetails.dart';
+import './screens/add_post/advertPost.dart';
 
 void main() => runApp(MainApp());
 
 class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Store>(
-      builder: (_) => Store(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: LanguageProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: PostsProivder(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Adverts(),
+        ),
+      ],
       child: MyApp(),
     );
   }
@@ -23,7 +35,7 @@ class MainApp extends StatelessWidget {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    String _language = Provider.of<Store>(context).getLanguage;
+    String _language = Provider.of<LanguageProvider>(context).getLanguage;
     return MaterialApp(
       title: 'Flutter Demo',
       localizationsDelegates: [
@@ -53,6 +65,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Registration(),
         '/mainFeeds': (context) => MainScreen(),
         '/newsPostDetails': (context) => PostDetails(),
+        '/advertPost': (context) => AdvertPost(),
       },
     );
   }
