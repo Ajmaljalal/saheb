@@ -9,7 +9,11 @@ import './screens/login_screen.dart';
 import './screens/registration_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
-import './screens/add_post/advertPost.dart';
+import './screens/add_posts/advert_post.dart';
+import './screens/add_posts/found.dart';
+import './screens/add_posts/lost.dart';
+import './screens/add_posts/general.dart';
+import './screens/add_posts/urgent.dart';
 
 void main() => runApp(MainApp());
 
@@ -66,6 +70,10 @@ class MyApp extends StatelessWidget {
         '/mainFeeds': (context) => MainScreen(),
         '/newsPostDetails': (context) => PostDetails(),
         '/advertPost': (context) => AdvertPost(),
+        '/found': (context) => Found(),
+        '/lost': (context) => Lost(),
+        '/general': (context) => General(),
+        '/urgent': (context) => Urgent(),
       },
     );
   }

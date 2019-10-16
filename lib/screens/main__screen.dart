@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../providers/languageProvider.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
 import './settings/index.dart';
-import './add_post/index.dart';
+import './add_posts/index.dart';
 import '../widgets/searchBar.dart';
 import '../screens/jobs/index.dart';
 
