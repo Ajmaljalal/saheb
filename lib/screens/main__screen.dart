@@ -56,26 +56,28 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final language = Provider.of<LanguageProvider>(context).getLanguage;
-    final appLanguage = getLanguages(context);
     final renderSearchAndAdd =
         _currentScreenIndex == 0 || _currentScreenIndex == 1;
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         automaticallyImplyLeading: renderSearchAndAdd,
-        leading: renderSearchAndAdd
-            ? IconButton(
-                icon: Icon(
-                  Icons.add_circle_outline,
-                  size: 40.0,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _currentScreenIndex = 2;
-                  });
-                },
-              )
-            : null,
+        leading: Container(
+          padding: EdgeInsets.only(right: 5.0),
+          child: renderSearchAndAdd
+              ? IconButton(
+                  icon: Icon(
+                    Icons.add_circle_outline,
+                    size: 40.0,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _currentScreenIndex = 2;
+                    });
+                  },
+                )
+              : null,
+        ),
         title: renderSearchAndAdd
             ? SearchBar()
             : Text(
@@ -87,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
         onTap: _setCurrentScreen,
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentScreenIndex,
-        backgroundColor: Colors.deepPurple[900],
+        backgroundColor: Theme.of(context).primaryColor,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white60,
         items: [

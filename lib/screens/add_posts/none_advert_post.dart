@@ -5,12 +5,12 @@ import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
 
-class General extends StatefulWidget {
+class NoneAdvertPost extends StatefulWidget {
   @override
-  State createState() => _GeneralState();
+  State createState() => _NoneAdvertPostState();
 }
 
-class _GeneralState extends State<General> with AddPostMixin {
+class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   onSend() {}
 
   @override

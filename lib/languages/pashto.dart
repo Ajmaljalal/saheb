@@ -38,4 +38,5 @@ const Map pashto = {
 
   'add new post': 'نوی پوست ولیکه!',
   'jobs': 'وظیفه',
+  'send': 'لېږل',
 };

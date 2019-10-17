@@ -38,4 +38,5 @@ const Map dari = {
   'add new post': 'پوست جدید بنویس!',
 
   'jobs': 'وظیفه',
+  'send': 'ارسال',
 };

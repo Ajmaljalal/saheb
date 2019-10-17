@@ -45,11 +45,13 @@ const TextStyle kUserLocationProfileStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-const TextStyle kPostTypeTextStyle =
-    TextStyle(fontSize: 12, color: Colors.white);
+const TextStyle kPostTypeTextStyle = TextStyle(
+  fontSize: 16.0,
+  color: Colors.white,
+);
 
-const BoxDecoration kAdvertTypeBoxDecoration = BoxDecoration(
-  color: Colors.deepOrange,
+const BoxDecoration kAdvertTypeBoxDecoration = const BoxDecoration(
+  color: Colors.cyan,
   borderRadius: BorderRadius.only(
       bottomRight: Radius.circular(10), topLeft: Radius.circular(5)),
 );

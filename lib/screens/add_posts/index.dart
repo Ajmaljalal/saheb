@@ -109,9 +109,9 @@ class _AddPostState extends State<AddPost> {
             groupValue: postType,
             onChanged: (value) {
               onSelectPostType(value);
-              Navigator.pushNamed(context, '/$type');
+              Navigator.pushNamed(context, '/$type', arguments: type);
             },
-            activeColor: Colors.deepPurple,
+            activeColor: Theme.of(context).accentColor,
           ),
         ),
       ),

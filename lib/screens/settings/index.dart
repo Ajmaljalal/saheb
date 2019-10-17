@@ -48,6 +48,9 @@ class _SettingsState extends State<Settings> {
               appLanguage: appLanguage,
               context: context,
               onClick: onSignOut,
+              forText: 'signOut',
+              width: MediaQuery.of(context).size.width * 0.5,
+              height: 45.0,
             ),
           ],
         ),
@@ -90,42 +93,45 @@ class _SettingsState extends State<Settings> {
           children: <Widget>[
             Flexible(
               child: RadioListTile(
-                  title: Text(
-                    'پښتو',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                    ),
+                title: Text(
+                  'پښتو',
+                  style: TextStyle(
+                    fontSize: 16.0,
                   ),
-                  value: 'pashto',
-                  groupValue: appLanguage,
-                  onChanged: onChangeAppLanguage,
-                  activeColor: Colors.deepPurple),
+                ),
+                value: 'pashto',
+                groupValue: appLanguage,
+                onChanged: onChangeAppLanguage,
+                activeColor: Theme.of(context).accentColor,
+              ),
             ),
             Flexible(
               child: RadioListTile(
-                  title: Text(
-                    'دری',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                    ),
+                title: Text(
+                  'دری',
+                  style: TextStyle(
+                    fontSize: 16.0,
                   ),
-                  value: 'dari',
-                  groupValue: appLanguage,
-                  onChanged: onChangeAppLanguage,
-                  activeColor: Colors.deepPurple),
+                ),
+                value: 'dari',
+                groupValue: appLanguage,
+                onChanged: onChangeAppLanguage,
+                activeColor: Theme.of(context).accentColor,
+              ),
             ),
             Flexible(
               child: RadioListTile(
-                  title: Text(
-                    'English',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                    ),
+                title: Text(
+                  'English',
+                  style: TextStyle(
+                    fontSize: 16.0,
                   ),
-                  value: 'English',
-                  groupValue: appLanguage,
-                  onChanged: onChangeAppLanguage,
-                  activeColor: Colors.deepPurple),
+                ),
+                value: 'English',
+                groupValue: appLanguage,
+                onChanged: onChangeAppLanguage,
+                activeColor: Theme.of(context).accentColor,
+              ),
             ),
           ],
         )

@@ -10,10 +10,7 @@ import './screens/registration_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
 import './screens/add_posts/advert_post.dart';
-import './screens/add_posts/found.dart';
-import './screens/add_posts/lost.dart';
-import './screens/add_posts/general.dart';
-import './screens/add_posts/urgent.dart';
+import './screens/add_posts/none_advert_post.dart';
 
 void main() => runApp(MainApp());
 
@@ -40,6 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
+
     return MaterialApp(
       title: 'Flutter Demo',
       localizationsDelegates: [
@@ -58,9 +56,10 @@ class MyApp extends StatelessWidget {
               : Locale(
                   "ps", "AF"), // OR Locale('ar', 'AE') OR Other RTL locales,
       theme: ThemeData(
-        primaryColor: Colors.deepPurple[900],
-        fontFamily: 'Muna',
-        scaffoldBackgroundColor: Colors.grey[200],
+        primaryColor: Colors.cyan[800],
+        accentColor: Colors.cyanAccent[700],
+        fontFamily: _language == 'English' ? 'Roboto' : 'Muna',
+        scaffoldBackgroundColor: Colors.grey[100],
       ),
       home: Login(),
       initialRoute: '/',
@@ -70,10 +69,10 @@ class MyApp extends StatelessWidget {
         '/mainFeeds': (context) => MainScreen(),
         '/newsPostDetails': (context) => PostDetails(),
         '/advertPost': (context) => AdvertPost(),
-        '/found': (context) => Found(),
-        '/lost': (context) => Lost(),
-        '/general': (context) => General(),
-        '/urgent': (context) => Urgent(),
+        '/general': (context) => NoneAdvertPost(),
+        '/urgent': (context) => NoneAdvertPost(),
+        '/lost': (context) => NoneAdvertPost(),
+        '/found': (context) => NoneAdvertPost(),
       },
     );
   }

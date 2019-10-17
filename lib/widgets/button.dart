@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 
-Widget customButton({userLanguage, appLanguage, context, onClick}) {
+Widget customButton(
+    {userLanguage, appLanguage, context, onClick, forText, width, height}) {
   return Padding(
     padding: EdgeInsets.all(8.0),
     child: Container(
-      width: MediaQuery.of(context).size.width * 1,
-      height: 50,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
-        color: Colors.deepOrange,
-        border: Border.all(
-          color: Colors.deepOrange,
-          width: 3.0,
-        ),
+        color: Theme.of(context).accentColor,
         borderRadius: BorderRadius.circular(30),
       ),
       child: FlatButton(
+        highlightColor: Theme.of(context).accentColor,
         onPressed: () {
           onClick();
-          Navigator.pushReplacementNamed(context, '/login');
         },
         child: Center(
           child: Text(
-            userLanguage == 'English' ? 'SignOut' : appLanguage['signOut'],
-            style: TextStyle(fontSize: 30, color: Colors.white),
+            userLanguage == 'English'
+                ? forText.toUpperCase()
+                : appLanguage['$forText'],
+            style: TextStyle(fontSize: 20, color: Colors.white),
           ),
         ),
       ),
