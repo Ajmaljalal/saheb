@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'advert_post.dart';
+import 'none_advert_post.dart';
 
 class AddPost extends StatefulWidget {
   @override
@@ -48,7 +50,7 @@ class _AddPostState extends State<AddPost> {
                 bgColor: true,
               ),
               _postTypeOption(
-                type: 'advertPost',
+                type: 'advert',
                 text: 'مثلاً می خواهید چیزی بخرید، بفروشید و یا به کراه دهید.',
                 appLanguageText: 'تجارتی',
                 bgColor: false,
@@ -86,7 +88,13 @@ class _AddPostState extends State<AddPost> {
   }) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/$type');
+        type != 'advert'
+            ? Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NoneAdvertPost(type)))
+            : Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdvertPost()),
+              );
       },
       child: Container(
         decoration: BoxDecoration(
@@ -109,7 +117,15 @@ class _AddPostState extends State<AddPost> {
             groupValue: postType,
             onChanged: (value) {
               onSelectPostType(value);
-              Navigator.pushNamed(context, '/$type', arguments: type);
+              type != 'advert'
+                  ? Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => NoneAdvertPost(type)))
+                  : Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AdvertPost()),
+                    );
             },
             activeColor: Theme.of(context).accentColor,
           ),

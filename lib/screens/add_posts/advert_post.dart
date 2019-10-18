@@ -3,14 +3,29 @@ import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
 import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
+import '../../mixins/add_post.dart';
 
 class AdvertPost extends StatefulWidget {
   @override
   _AdvertPostState createState() => _AdvertPostState();
 }
 
-class _AdvertPostState extends State<AdvertPost> {
+class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   onSend() {}
+  String dropdownValue = 'Sell';
+  final List<String> dropDownItems = [
+    'Sell',
+    'Rent',
+    'Buy',
+    'Need for a professional'
+  ];
+
+  onDropDownChange(value) {
+    setState(() {
+      dropdownValue = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final _language = Provider.of<LanguageProvider>(context).getLanguage;
@@ -38,7 +53,48 @@ class _AdvertPostState extends State<AdvertPost> {
         ),
       ),
       body: Container(
-        child: Text('advert here'),
+        margin: EdgeInsets.symmetric(
+          vertical: 5.0,
+          horizontal: 15.0,
+        ),
+        height: MediaQuery.of(context).size.height * 1,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    typeOfBusinessOptions(
+                      onDropDownChange: onDropDownChange,
+                      dropdownValue: dropdownValue,
+                      dropdownItems: dropDownItems,
+                    ),
+                    postTitle(),
+                    textArea(),
+                    Row(
+                      children: <Widget>[
+                        photoVideoArea(
+                          'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+                        ),
+                        photoVideoArea(
+                          'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              child: bottomBar(
+                onSend: onSend,
+                onOpenPhotoVideo: onSend,
+                context: context,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

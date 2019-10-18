@@ -6,6 +6,8 @@ import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
 
 class NoneAdvertPost extends StatefulWidget {
+  final String type;
+  NoneAdvertPost(this.type);
   @override
   State createState() => _NoneAdvertPostState();
 }
@@ -15,15 +17,20 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
   @override
   Widget build(BuildContext context) {
+    final type = widget.type;
     final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context, true),
+        ),
         title: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('General'),
+              Text('$type'),
               customButton(
                 userLanguage: _language,
                 appLanguage: appLanguage,
@@ -42,7 +49,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
           vertical: 5.0,
           horizontal: 15.0,
         ),
-//        height: MediaQuery.of(context).size.height * 1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[

@@ -14,6 +14,10 @@ class SearchBar extends StatelessWidget {
           height: 0.95,
         ),
         decoration: InputDecoration(
+          hintText: 'جستجو...',
+          hintStyle: TextStyle(
+            fontSize: 15.0,
+          ),
           filled: true,
           fillColor: Colors.white,
           contentPadding:

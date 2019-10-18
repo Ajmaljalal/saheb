@@ -5,8 +5,32 @@ import '../providers/languageProvider.dart';
 import '../languages/index.dart';
 
 class AddPostMixin {
+  Widget typeOfBusinessOptions(
+      {onDropDownChange, dropdownValue, dropdownItems}) {
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: onDropDownChange,
+      items: <String>[...dropdownItems]
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+    );
+  }
+
   Widget postTitle() {
     return TextField(
+      autofocus: true,
       decoration: InputDecoration(
         labelText: 'عنوان...',
         contentPadding: EdgeInsets.symmetric(

@@ -9,8 +9,6 @@ import './screens/login_screen.dart';
 import './screens/registration_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
-import './screens/add_posts/advert_post.dart';
-import './screens/add_posts/none_advert_post.dart';
 
 void main() => runApp(MainApp());
 
@@ -68,11 +66,6 @@ class MyApp extends StatelessWidget {
         '/register': (context) => Registration(),
         '/mainFeeds': (context) => MainScreen(),
         '/newsPostDetails': (context) => PostDetails(),
-        '/advertPost': (context) => AdvertPost(),
-        '/general': (context) => NoneAdvertPost(),
-        '/urgent': (context) => NoneAdvertPost(),
-        '/lost': (context) => NoneAdvertPost(),
-        '/found': (context) => NoneAdvertPost(),
       },
     );
   }
