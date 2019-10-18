@@ -21,7 +21,8 @@ Widget customButton(
             userLanguage == 'English'
                 ? forText.toUpperCase()
                 : appLanguage['$forText'],
-            style: TextStyle(fontSize: 20, color: Colors.white),
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontFamily: 'MidanBlack'),
           ),
         ),
       ),

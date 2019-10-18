@@ -12,8 +12,9 @@ class AdvertPost extends StatefulWidget {
 
 class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   onSend() {}
-  String dropdownValue = 'Sell';
+  String dropdownValue = 'نوع معامله';
   final List<String> dropDownItems = [
+    'نوع معامله',
     'Sell',
     'Rent',
     'Buy',
@@ -31,14 +32,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Container(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                'Advert',
-              ),
+              Text('Advert'),
               customButton(
                 userLanguage: _language,
                 appLanguage: appLanguage,
@@ -46,7 +46,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                 onClick: onSend,
                 forText: 'send',
                 width: MediaQuery.of(context).size.width * 0.2,
-                height: 28.0,
+                height: 32.0,
               ),
             ],
           ),
@@ -54,7 +54,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       ),
       body: Container(
         margin: EdgeInsets.symmetric(
-          vertical: 5.0,
+          vertical: 10.0,
           horizontal: 15.0,
         ),
         height: MediaQuery.of(context).size.height * 1,
@@ -63,26 +63,37 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
           children: <Widget>[
             Expanded(
               child: Container(
-                child: Column(
-                  children: <Widget>[
-                    typeOfBusinessOptions(
-                      onDropDownChange: onDropDownChange,
-                      dropdownValue: dropdownValue,
-                      dropdownItems: dropDownItems,
-                    ),
-                    postTitle(),
-                    textArea(),
-                    Row(
-                      children: <Widget>[
-                        photoVideoArea(
-                          'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
-                        ),
-                        photoVideoArea(
-                          'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
-                        ),
-                      ],
-                    )
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      typeOfBusinessOptions(
+                        onDropDownChange: onDropDownChange,
+                        dropdownValue: dropdownValue,
+                        dropdownItems: dropDownItems,
+                        context: context,
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      postTitle('تجارتی'),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      textArea('تجارتی'),
+                      phoneNumberArea(),
+                      emailAddressArea(),
+                      Row(
+                        children: <Widget>[
+                          photoVideoArea(
+                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+                          ),
+                          photoVideoArea(
+                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

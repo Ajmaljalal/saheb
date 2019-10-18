@@ -64,6 +64,15 @@ flutter:
     - family: Muna
       fonts:
         - asset: assets/fonts/Muna.ttf
+    - family: MyriadReg
+      fonts:
+        - asset: assets/fonts/Myriad-Regular.ttf
+    - family: MidanBlack
+      fonts:
+        - asset: assets/fonts/Midan-Black.ttf
+    - family: ZarReg
+      fonts:
+        - asset: assets/fonts/Zar-Regular.ttf
 
   #
   # For details regarding fonts from package dependencies,

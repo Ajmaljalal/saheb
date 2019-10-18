@@ -61,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        centerTitle: true,
         automaticallyImplyLeading: renderSearchAndAdd,
         leading: Container(
           padding: EdgeInsets.only(right: 5.0),

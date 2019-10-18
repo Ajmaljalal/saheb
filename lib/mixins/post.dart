@@ -78,7 +78,8 @@ class PostMixin {
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 20.0,
+            fontFamily: 'ZarReg',
           ),
         ),
       ),
@@ -95,7 +96,9 @@ class PostMixin {
               text,
               maxLines: flag ? 50 : 2,
               style: TextStyle(
-                fontSize: 14,
+                fontSize: 16,
+                fontFamily: 'AbanBold',
+                color: Colors.black,
               ),
             ),
           ),
@@ -108,7 +111,7 @@ class PostMixin {
                     ? Text('')
                     : Text(
                         "نور...",
-                        style: TextStyle(color: Colors.deepPurple),
+                        style: TextStyle(color: Colors.blueAccent),
                       ),
               ],
             ),
@@ -155,7 +158,9 @@ class PostMixin {
               SizedBox(
                 width: 5,
               ),
-              Text('تبصرې'),
+              Text(
+                'تبصرې',
+              ),
             ],
           ),
           Row(
@@ -265,9 +270,9 @@ class PostMixin {
           width: 1.5,
         ),
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(40.0),
-          bottomRight: Radius.circular(40.0),
-          bottomLeft: Radius.circular(40.0),
+          topLeft: Radius.circular(30.0),
+          bottomRight: Radius.circular(30.0),
+          bottomLeft: Radius.circular(30.0),
         ),
       ),
       padding: EdgeInsets.only(
@@ -299,7 +304,7 @@ class PostMixin {
         IconButton(
           icon: Icon(
             FontAwesomeIcons.heart,
-            color: Colors.deepPurple,
+            color: Colors.cyan,
             size: 20,
           ),
           onPressed: () {},
@@ -307,7 +312,7 @@ class PostMixin {
         IconButton(
           icon: Icon(
             FontAwesomeIcons.trash,
-            color: Colors.deepPurple,
+            color: Colors.cyan,
             size: 18,
           ),
           onPressed: () {},

@@ -58,7 +58,7 @@ class AdvertMixin {
             ),
           ),
           Container(
-            width: screenSize.width * 0.25,
+            width: screenSize.width * 0.28,
             height: 30,
             child: OutlineButton.icon(
               splashColor: Colors.grey[200],

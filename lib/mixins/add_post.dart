@@ -6,33 +6,86 @@ import '../languages/index.dart';
 
 class AddPostMixin {
   Widget typeOfBusinessOptions(
-      {onDropDownChange, dropdownValue, dropdownItems}) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
+      {onDropDownChange, dropdownValue, dropdownItems, context}) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.cyanAccent),
+        borderRadius: BorderRadius.circular(
+          10.0,
+        ),
       ),
-      onChanged: onDropDownChange,
-      items: <String>[...dropdownItems]
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+      child: DropdownButton(
+        value: dropdownValue,
+        isExpanded: true,
+        hint: Text('نوع معامله'),
+        icon: Icon(
+          Icons.arrow_drop_down,
+          color: Theme.of(context).accentColor,
+        ),
+        iconSize: 40.0,
+        elevation: 2,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20.0,
+        ),
+        underline: Container(
+          height: 1,
+          color: Colors.grey[100],
+        ),
+        onChanged: onDropDownChange,
+        items: <String>[...dropdownItems]
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Center(
+              child: Text(
+                value,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 
-  Widget postTitle() {
+  Widget postTitle(type) {
+    final label = type == 'تجارتی'
+        ? 'عنوان: (مثلاً موتر فروشی، خانه کرایی و غیره...)'
+        : 'عنوان...';
     return TextField(
-      autofocus: true,
+      style: TextStyle(
+        height: 0.95,
+        fontSize: 20.0,
+      ),
       decoration: InputDecoration(
-        labelText: 'عنوان...',
+        labelText: label,
+        labelStyle: TextStyle(
+          fontSize: 15.0,
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: 5.0,
+          horizontal: 10.0,
+        ),
+      ),
+    );
+  }
+
+  Widget textArea(type) {
+    final label = type == 'تجارتی'
+        ? 'تشریح: (مثلا رنګ، سال، مستعمل، جدید و غیره...)'
+        : 'مطلب...';
+    return TextField(
+      maxLines: 5,
+      style: TextStyle(
+        fontSize: 20.0,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(
+          fontSize: 15.0,
+        ),
+        alignLabelWithHint: true,
         contentPadding: EdgeInsets.symmetric(
           vertical: 0.0,
           horizontal: 10.0,
@@ -41,16 +94,43 @@ class AddPostMixin {
     );
   }
 
-  Widget textArea() {
-    return TextField(
-      maxLines: 5,
-      textAlignVertical: TextAlignVertical.top,
-      decoration: InputDecoration(
-        labelText: 'مطلب...',
-        alignLabelWithHint: true,
-        contentPadding: EdgeInsets.symmetric(
-          vertical: 0.0,
-          horizontal: 10.0,
+  Widget phoneNumberArea() {
+    return Container(
+      child: TextField(
+        style: TextStyle(
+          height: 0.95,
+          fontSize: 20.0,
+        ),
+        decoration: InputDecoration(
+          labelText: 'نمبر موبایل (اختیاری):',
+          labelStyle: TextStyle(
+            fontSize: 15.0,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: 10.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget emailAddressArea() {
+    return Container(
+      child: TextField(
+        style: TextStyle(
+          height: 0.95,
+          fontSize: 20.0,
+        ),
+        decoration: InputDecoration(
+          labelText: 'ایمیل آدرس (اختیاری):',
+          labelStyle: TextStyle(
+            fontSize: 15.0,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: 10.0,
+          ),
         ),
       ),
     );
@@ -85,10 +165,15 @@ class AddPostMixin {
           onClick: onSend,
           forText: 'send',
           width: MediaQuery.of(context).size.width * 0.2,
-          height: 30.0,
+          height: 32.0,
         ),
         FlatButton(
-          child: Text('Add Photo/Video'),
+          child: Text(
+            'Add Photo/Video',
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
           onPressed: onOpenPhotoVideo,
         ),
       ],

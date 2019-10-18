@@ -7,7 +7,7 @@ const Map pashto = {
   'email': 'برېښنالیک',
   'password': 'پسورد',
   'register': 'حساب جوړ کړه!',
-  'haveAnAccount': 'که حساب لرې، ',
+  'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',
 
   // ToolBar and Main Screen

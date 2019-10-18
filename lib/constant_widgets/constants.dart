@@ -28,19 +28,21 @@ const Widget kHorizontalDivider = Divider(
 );
 
 const TextStyle kUserNameStyle = TextStyle(
-  color: Colors.black87,
+  color: Colors.black,
   fontSize: 17,
   fontWeight: FontWeight.bold,
+  fontFamily: 'MyriadReg',
 );
 
 const TextStyle kUserLocationStyle = TextStyle(
-  color: Colors.black87,
+  color: Colors.black,
   fontSize: 10,
   fontWeight: FontWeight.bold,
+  fontFamily: 'MidanBlack',
 );
 
 const TextStyle kUserLocationProfileStyle = TextStyle(
-  color: Colors.black87,
+  color: Colors.black,
   fontSize: 20.0,
   fontWeight: FontWeight.bold,
 );

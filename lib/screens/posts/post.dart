@@ -42,6 +42,7 @@ class _PostState extends State<Post> with PostMixin {
           width: MediaQuery.of(context).size.width * 1,
           decoration: BoxDecoration(),
           child: Card(
+            color: Colors.white,
             child: Column(
               children: <Widget>[
                 Row(

@@ -39,7 +39,7 @@ class _AddPostState extends State<AddPost> {
               Text(
                 'در باره چه می خواهید بنویسید؟',
                 style: TextStyle(
-                  fontSize: 30.0,
+                  fontSize: 22.0,
                 ),
               ),
               SizedBox(height: 20.0),

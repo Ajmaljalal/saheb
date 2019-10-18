@@ -5,7 +5,7 @@ import './providers/languageProvider.dart';
 import './providers/postsProvider.dart';
 import './providers/adverts.dart';
 import './screens/login_screen.dart';
-//import './screens/language_screen.dart';
+import './screens/language_screen.dart';
 import './screens/registration_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
@@ -56,10 +56,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.cyan[800],
         accentColor: Colors.cyanAccent[700],
-        fontFamily: _language == 'English' ? 'Roboto' : 'Muna',
+        fontFamily: _language == 'English' ? 'Roboto' : 'BadrLight',
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: Login(),
+      home: Language(),
       initialRoute: '/',
       routes: {
         '/login': (context) => Login(),

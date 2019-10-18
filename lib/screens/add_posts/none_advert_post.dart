@@ -21,6 +21,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -54,21 +55,29 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
           children: <Widget>[
             Expanded(
               child: Container(
-                child: Column(
-                  children: <Widget>[
-                    postTitle(),
-                    textArea(),
-                    Row(
-                      children: <Widget>[
-                        photoVideoArea(
-                          'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
-                        ),
-                        photoVideoArea(
-                          'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
-                        ),
-                      ],
-                    )
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      postTitle('عادی'),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      textArea('عادی'),
+                      Row(
+                        children: <Widget>[
+                          photoVideoArea(
+                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+                          ),
+                          photoVideoArea(
+                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

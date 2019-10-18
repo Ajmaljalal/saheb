@@ -11,26 +11,40 @@ class LanguageState extends State<Language> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Stack(
-        children: <Widget>[
-          Container(
-            color: Colors.deepPurple,
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).size.height * 0.4,
-            ),
-            child: Center(
-              child: Column(
-                children: <Widget>[
-                  languageOption('pashto'),
-                  languageOption('dari'),
-                  languageOption('English'),
-                ],
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Theme.of(context).accentColor,
+                    Theme.of(context).primaryColor,
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.3,
+              ),
+              child: Center(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      languageOption('pashto'),
+                      languageOption('dari'),
+                      languageOption('English'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -48,15 +62,15 @@ class LanguageState extends State<Language> {
       child: GestureDetector(
         onTap: () {
           Provider.of<LanguageProvider>(context).changeLanguage(language);
-          Navigator.pushNamed(context, '/login');
+          Navigator.pushReplacementNamed(context, '/login');
         },
         child: Container(
           height: 60,
           width: MediaQuery.of(context).size.width * 0.6,
           decoration: BoxDecoration(
-            color: Colors.deepOrange,
+            color: Theme.of(context).primaryColor,
             border: Border.all(
-              color: Colors.deepOrange,
+              color: Colors.white,
               width: 3.0,
             ),
             borderRadius: BorderRadius.circular(50),

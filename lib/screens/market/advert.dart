@@ -60,17 +60,20 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   onTap: () {
                     goToDetailsScreen();
                   },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      postTittleHolder(advert['postTitle']),
-                      postContent(
-                        advert['postText'],
-                        advert['postPictures'],
-                        revealMoreTextFlag,
-                        _revealMoreText,
-                      ),
-                    ],
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        postTittleHolder(advert['postTitle']),
+                        postContent(
+                          advert['postText'],
+                          advert['postPictures'],
+                          revealMoreTextFlag,
+                          _revealMoreText,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 postLikesCommentsCountHolder(

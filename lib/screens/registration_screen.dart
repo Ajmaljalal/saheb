@@ -30,49 +30,62 @@ class _RegistrationState extends State<Registration> {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
     Map appLanguage = getLanguages(context);
     return Scaffold(
-//        resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: 10,
-            left: 10,
-            top: MediaQuery.of(context).size.height * 0.1,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                registrationInputs(
-                  'name',
-                  _language,
-                  handleEmailInputChange,
-                ),
-                registrationInputs(
-                  'email',
-                  _language,
-                  handleEmailInputChange,
-                ),
-                registrationInputs(
-                  'password',
-                  _language,
-                  handlePasswordInputChange,
-                ),
-                registrationButton(
-                  _language,
-                  appLanguage,
-                  [_name, _email, _password],
-                ),
-                SizedBox(height: 80),
-                thirdPartyLoginButtons(),
-                Center(
-                  child: Divider(
-                    color: Colors.deepOrange,
-                    indent: 50.0,
-                    endIndent: 50.0,
-                  ),
-                ),
-                Center(child: haveAnAccountText(_language, appLanguage))
+        child: Container(
+          height: MediaQuery.of(context).size.height * 1,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).accentColor,
+                Theme.of(context).primaryColor,
               ],
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: 10,
+              left: 10,
+              top: MediaQuery.of(context).size.height * 0.1,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  registrationInputs(
+                    'name',
+                    _language,
+                    handleEmailInputChange,
+                  ),
+                  registrationInputs(
+                    'email',
+                    _language,
+                    handleEmailInputChange,
+                  ),
+                  registrationInputs(
+                    'password',
+                    _language,
+                    handlePasswordInputChange,
+                  ),
+                  SizedBox(height: 20),
+                  registrationButton(
+                    _language,
+                    appLanguage,
+                    [_name, _email, _password],
+                  ),
+                  SizedBox(height: 80),
+                  thirdPartyLoginButtons(),
+                  Center(
+                    child: Divider(
+                      color: Colors.deepOrange,
+                      indent: 50.0,
+                      endIndent: 50.0,
+                    ),
+                  ),
+                  Center(child: haveAnAccountText(_language, appLanguage))
+                ],
+              ),
             ),
           ),
         ),
@@ -136,10 +149,10 @@ class _RegistrationState extends State<Registration> {
         width: MediaQuery.of(context).size.width * 1,
         height: 60,
         decoration: BoxDecoration(
-          color: Colors.deepOrange,
+          color: Theme.of(context).accentColor,
           border: Border.all(
-            color: Colors.deepOrange,
-            width: 3.0,
+            color: Colors.white,
+            width: 2.0,
           ),
           borderRadius: BorderRadius.circular(30),
         ),

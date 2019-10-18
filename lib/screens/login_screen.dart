@@ -18,6 +18,7 @@ class _LoginState extends State<Login> {
 
   void handlePasswordInputChange(value) {
     _password = value;
+    print(_password);
   }
 
   @override
@@ -25,32 +26,45 @@ class _LoginState extends State<Login> {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
     Map appLanguage = getLanguages(context);
     return Scaffold(
-//        resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Theme.of(context).primaryColor,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: 10,
-            left: 10,
-            top: MediaQuery.of(context).size.height * 0.15,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                loginInputs('email', _language, handleEmailInputChange),
-                loginInputs('password', _language, handlePasswordInputChange),
-                loginButton(_language, appLanguage, [_email, _password]),
-                SizedBox(height: 80),
-                thirdPartyLoginButtons(),
-                Center(
-                  child: Divider(
-                    color: Colors.deepOrange,
-                    indent: 50.0,
-                    endIndent: 50.0,
-                  ),
-                ),
-                Center(child: haveAnAccountText(_language, appLanguage))
+        child: Container(
+          height: MediaQuery.of(context).size.height * 1,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).accentColor,
+                Theme.of(context).primaryColor,
               ],
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: 10,
+              left: 10,
+              top: MediaQuery.of(context).size.height * 0.15,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  loginInputs('email', _language, handleEmailInputChange),
+                  loginInputs('password', _language, handlePasswordInputChange),
+                  SizedBox(height: 20),
+                  loginButton(_language, appLanguage, [_email, _password]),
+                  SizedBox(height: 80),
+                  thirdPartyLoginButtons(),
+                  Center(
+                    child: Divider(
+                      color: Colors.deepOrange,
+                      indent: 50.0,
+                      endIndent: 50.0,
+                    ),
+                  ),
+                  Center(child: haveAnAccountText(_language, appLanguage))
+                ],
+              ),
             ),
           ),
         ),
@@ -59,19 +73,17 @@ class _LoginState extends State<Login> {
   }
 
   Widget loginInputs(String type, String lang, onChange) {
-    TextEditingController controller = TextEditingController();
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: TextField(
-          onChanged: (value) => onChange(value),
+          onChanged: onChange,
           textAlign: TextAlign.center,
           autocorrect: false,
           autofocus: false,
           obscureText: type == 'password' ? true : false,
           keyboardType: TextInputType.emailAddress,
           cursorColor: Colors.white,
-//          controller: controller,
           style: TextStyle(
             color: Colors.white,
             fontSize: 25,
@@ -114,10 +126,10 @@ class _LoginState extends State<Login> {
         width: MediaQuery.of(context).size.width * 1,
         height: 60,
         decoration: BoxDecoration(
-          color: Colors.deepOrange,
+          color: Theme.of(context).accentColor,
           border: Border.all(
-            color: Colors.deepOrange,
-            width: 3.0,
+            color: Colors.white,
+            width: 2.0,
           ),
           borderRadius: BorderRadius.circular(30),
         ),
@@ -131,7 +143,7 @@ class _LoginState extends State<Login> {
           child: Center(
             child: Text(
               lang == 'English' ? 'Login' : appLanguage['login'],
-              style: TextStyle(fontSize: 30, color: Colors.white),
+              style: TextStyle(fontSize: 25, color: Colors.white),
             ),
           ),
         ),
