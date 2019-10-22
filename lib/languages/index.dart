@@ -6,7 +6,6 @@ import 'dari.dart';
 Map getLanguages(context) {
   String language = Provider.of<LanguageProvider>(context).getLanguage;
   Map appLanguage;
-
   if (language == 'pashto') {
     appLanguage = pashto;
   }

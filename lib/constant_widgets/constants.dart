@@ -31,14 +31,14 @@ const TextStyle kUserNameStyle = TextStyle(
   color: Colors.black,
   fontSize: 17,
   fontWeight: FontWeight.bold,
-  fontFamily: 'MyriadReg',
+  fontFamily: 'ZarReg',
 );
 
 const TextStyle kUserLocationStyle = TextStyle(
   color: Colors.black,
   fontSize: 10,
   fontWeight: FontWeight.bold,
-  fontFamily: 'MidanBlack',
+  fontFamily: 'ZarReg',
 );
 
 const TextStyle kUserLocationProfileStyle = TextStyle(

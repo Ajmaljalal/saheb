@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "839785315597",
+    "firebase_url": "https://saheb-mobile.firebaseio.com",
+    "project_id": "saheb-mobile",
+    "storage_bucket": "saheb-mobile.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839785315597:android:95960fd104800e883b8444",
+        "android_client_info": {
+          "package_name": "com.saheb.saheb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839785315597-g4duqeubendno8mh3v9trqdirgckugas.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJUt4rEQtooBAUf6Wkcnm-a0vLt6WbbNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839785315597-g4duqeubendno8mh3v9trqdirgckugas.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

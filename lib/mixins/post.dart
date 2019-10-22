@@ -97,7 +97,7 @@ class PostMixin {
               maxLines: flag ? 50 : 2,
               style: TextStyle(
                 fontSize: 16,
-                fontFamily: 'AbanBold',
+                fontFamily: 'ZarReg',
                 color: Colors.black,
               ),
             ),
@@ -289,6 +289,7 @@ class PostMixin {
             postComment['commentText'],
             style: TextStyle(
               fontSize: 14,
+              fontFamily: 'ZarReg',
             ),
           ),
           commentActionButtons(),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/languageProvider.dart';
+import '../providers/authProvider.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
@@ -19,6 +20,7 @@ class _MainScreenState extends State<MainScreen> {
 
   String _getAppBarTitle(language, context) {
     final appLanguage = getLanguages(context);
+
     if (language == 'English') {
       switch (_currentScreenIndex) {
         case 2:
@@ -56,8 +58,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final language = Provider.of<LanguageProvider>(context).getLanguage;
+    final isAuth = Provider.of<AuthProvider>(context).isAuth;
     final renderSearchAndAdd =
         _currentScreenIndex == 0 || _currentScreenIndex == 1;
+    print('auth is: $isAuth');
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(

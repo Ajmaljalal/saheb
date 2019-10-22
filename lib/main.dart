@@ -4,9 +4,10 @@ import 'package:provider/provider.dart';
 import './providers/languageProvider.dart';
 import './providers/postsProvider.dart';
 import './providers/adverts.dart';
-import './screens/login_screen.dart';
-import './screens/language_screen.dart';
-import './screens/registration_screen.dart';
+import './providers/authProvider.dart';
+import 'screens/startups/login_screen.dart';
+import 'screens/startups/index.dart';
+import 'screens/startups/registration_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
 
@@ -17,6 +18,9 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider.value(
+          value: AuthProvider(),
+        ),
+        ChangeNotifierProvider.value(
           value: LanguageProvider(),
         ),
         ChangeNotifierProvider.value(
@@ -26,16 +30,15 @@ class MainApp extends StatelessWidget {
           value: Adverts(),
         ),
       ],
-      child: MyApp(),
+      child: Application(),
     );
   }
 }
 
-class MyApp extends StatelessWidget {
+class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
-
     return MaterialApp(
       title: 'Flutter Demo',
       localizationsDelegates: [
@@ -56,10 +59,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.cyan[800],
         accentColor: Colors.cyanAccent[700],
-        fontFamily: _language == 'English' ? 'Roboto' : 'BadrLight',
+        fontFamily: _language == 'English' ? 'Roboto' : 'ZarReg',
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: Language(),
+      home: StartUps(),
       initialRoute: '/',
       routes: {
         '/login': (context) => Login(),

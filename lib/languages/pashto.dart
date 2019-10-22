@@ -9,6 +9,13 @@ const Map pashto = {
   'register': 'حساب جوړ کړه!',
   'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',
+  'phone': ' تیلفون شمېره',
+  'name': 'کارېدونکی نوم',
+
+  'signinWithFacebook': 'فیسبوک سره ننوځه',
+  'signinWithGoogle': 'ګوګل  سره  ننوځه ',
+  'registerWithFacebook': 'فیسبوکي ثبت نام',
+  'registerWithGoogle': 'ګوګل  ثبت  نام ',
 
   // ToolBar and Main Screen
   'home': 'کور',
@@ -39,4 +46,21 @@ const Map pashto = {
   'add new post': 'نوی پوست ولیکه!',
   'jobs': 'وظیفه',
   'send': 'لېږل',
+
+  ////////// Sign in/up error messages ///////////////////////
+
+  'invalidEmail':
+      'ایمیل سم نه دی، لطفاً سم ایمیل و کاروئ.  مثلاً ahmad@gmail.com',
+  'wrongPassword': 'پسورد سم نه دی، بیا هڅه وکړئ.',
+  'weakPassword': 'پسورد لنډ او کمزوری دی، پسورد باید کم تر کمه ۸ کرکتره وي.',
+  'inUseEmail': 'دا برېښنالیک مخکې ثبت شوی دی، لطفاً بل برېښنالیک و کاروئ.',
+  'userNotFound':
+      ' په دې نوم حساب نه شته، که حساب نه لرئ لطفاً اول ثبت نام وکړئ. ',
+  'loginFailed': 'پروګرام ته ننوتل ناکام شول، بیا هڅه وکړئ.',
+  'registrationFailed': 'ثبت نام و نه شو، لطفاً له سره هڅه وکړئ.',
+
+  'enter': ' ولیکئ!',
+
+  'errorDialogTitle': 'ستونزه!',
+  'ok': 'سمه ده',
 };

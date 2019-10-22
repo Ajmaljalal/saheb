@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/languageProvider.dart';
+import '../../providers/languageProvider.dart';
 
 class Language extends StatefulWidget {
   @override
