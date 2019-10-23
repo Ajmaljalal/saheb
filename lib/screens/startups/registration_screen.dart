@@ -16,7 +16,8 @@ class _RegistrationState extends State<Registration> {
   String _name;
   String _email;
   String _password;
-  bool _isRegistering;
+  bool _isRegistering = false;
+  bool _isGoogleRegistering = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -58,10 +59,32 @@ class _RegistrationState extends State<Registration> {
         appLanguage['errorDialogTitle'],
         appLanguage['ok'],
       );
+      setState(() {
+        _isRegistering = false;
+      });
     }
+  }
+
+  onGoogleRegistration(appLanguage) async {
     setState(() {
-      _isRegistering = false;
+      _isGoogleRegistering = true;
     });
+
+    try {
+      await Provider.of<AuthProvider>(context).googleSignIn('register');
+      Navigator.of(context).pushReplacementNamed('/mainFeeds');
+    } catch (error) {
+      var errorMessage = appLanguage['registrationFailed'];
+      showErrorDialog(
+        errorMessage,
+        context,
+        appLanguage['errorDialogTitle'],
+        appLanguage['ok'],
+      );
+      setState(() {
+        _isGoogleRegistering = false;
+      });
+    }
   }
 
   @override
@@ -284,8 +307,11 @@ class _RegistrationState extends State<Registration> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  onGoogleRegistration(appLanguage);
+                },
                 child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
                   padding: EdgeInsets.symmetric(
                     vertical: 10.0,
                     horizontal: 15.0,
@@ -294,26 +320,29 @@ class _RegistrationState extends State<Registration> {
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        language == 'English'
-                            ? 'Register with'
-                            : appLanguage['registerWithGoogle'],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
+                  child: _isGoogleRegistering
+                      ? Center(child: progressIndicator())
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              language == 'English'
+                                  ? 'Register with'
+                                  : appLanguage['registerWithGoogle'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.google,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        FontAwesomeIcons.google,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
                 ),
               ),
             ],

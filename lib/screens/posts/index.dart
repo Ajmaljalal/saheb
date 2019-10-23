@@ -11,7 +11,7 @@ class Posts extends StatefulWidget {
 class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
-    Map _posts = Provider.of<PostsProivder>(context).getPosts;
+    Map _posts = Provider.of<PostsProvider>(context).getPosts;
 
     return ListView.builder(
       itemBuilder: (context, index) {

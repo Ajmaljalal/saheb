@@ -16,6 +16,7 @@ class _LoginState extends State<Login> {
   String _email;
   String _password;
   bool _isLoggingIn = false;
+  bool _isGoogleLogingIn = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -31,12 +32,12 @@ class _LoginState extends State<Login> {
     setState(() {
       _isLoggingIn = true;
     });
-    String _user;
+
     try {
-      _user = await Provider.of<AuthProvider>(context).login(_email, _password);
-      if (_user.length > 0) {
-        Navigator.pushReplacementNamed(context, '/mainFeeds');
-      }
+      await Provider.of<AuthProvider>(context).login(_email, _password);
+//      if (_user.length > 0) {
+//        Navigator.pushReplacementNamed(context, '/mainFeeds');
+//      }
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       if (error.toString().contains('ERROR_WRONG_PASSWORD')) {
@@ -58,6 +59,26 @@ class _LoginState extends State<Login> {
     setState(() {
       _isLoggingIn = false;
     });
+  }
+
+  onGoogleLogin(appLanguage) async {
+    setState(() {
+      _isGoogleLogingIn = true;
+    });
+    try {
+      await Provider.of<AuthProvider>(context).googleSignIn('login');
+    } catch (error) {
+      var errorMessage = appLanguage['loginFailed'];
+      showErrorDialog(
+        errorMessage,
+        context,
+        appLanguage['errorDialogTitle'],
+        appLanguage['ok'],
+      );
+      setState(() {
+        _isGoogleLogingIn = false;
+      });
+    }
   }
 
   @override
@@ -112,7 +133,7 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                   SizedBox(height: 80),
-                  thirdPartyLoginButtons(appLanguage, _language),
+                  thirdPartyLoginButtons(appLanguage, _language, onGoogleLogin),
                   Center(
                     child: Divider(
                       color: Colors.white,
@@ -229,7 +250,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget thirdPartyLoginButtons(appLanguage, language) {
+  Widget thirdPartyLoginButtons(appLanguage, language, onGoogleLogin) {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -271,8 +292,11 @@ class _LoginState extends State<Login> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  onGoogleLogin(appLanguage);
+                },
                 child: Container(
+                  width: MediaQuery.of(context).size.width * 0.41,
                   padding: EdgeInsets.symmetric(
                     vertical: 10.0,
                     horizontal: 15.0,
@@ -281,26 +305,28 @@ class _LoginState extends State<Login> {
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        language == 'English'
-                            ? 'Sign in with'
-                            : appLanguage['signinWithGoogle'],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
+                  child: _isGoogleLogingIn
+                      ? Center(child: progressIndicator())
+                      : Row(
+                          children: <Widget>[
+                            Text(
+                              language == 'English'
+                                  ? 'Sign in with'
+                                  : appLanguage['signinWithGoogle'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.google,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        FontAwesomeIcons.google,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
                 ),
               ),
             ],

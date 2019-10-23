@@ -24,7 +24,7 @@ class MainApp extends StatelessWidget {
           value: LanguageProvider(),
         ),
         ChangeNotifierProvider.value(
-          value: PostsProivder(),
+          value: PostsProvider(),
         ),
         ChangeNotifierProvider.value(
           value: Adverts(),
@@ -39,6 +39,8 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
+    bool _isAuth = Provider.of<AuthProvider>(context).isAuth;
+    print('auth is: $_isAuth');
     return MaterialApp(
       title: 'Flutter Demo',
       localizationsDelegates: [
@@ -62,7 +64,7 @@ class Application extends StatelessWidget {
         fontFamily: _language == 'English' ? 'Roboto' : 'ZarReg',
         scaffoldBackgroundColor: Colors.grey[100],
       ),
-      home: StartUps(),
+      home: _isAuth == true ? MainScreen() : StartUps(),
       initialRoute: '/',
       routes: {
         '/login': (context) => Login(),
