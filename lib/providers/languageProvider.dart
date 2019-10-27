@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class LanguageProvider with ChangeNotifier {
-  String _language = 'pashto';
+  String _language;
 
   get getLanguage {
     return _language;
@@ -17,7 +17,6 @@ class LanguageProvider with ChangeNotifier {
     final extractedUserData =
         json.decode(prefs.getString('uiLanguage')) as Map<String, Object>;
     _language = extractedUserData['language'];
-    print("from inside the provider $_language");
     notifyListeners();
   }
 

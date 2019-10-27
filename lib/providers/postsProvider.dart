@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'dummy_data.dart';
 
-class PostsProivder with ChangeNotifier {
+class PostsProvider with ChangeNotifier {
   Map _posts = posts;
 
   get getPosts {

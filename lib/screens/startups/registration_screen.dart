@@ -16,7 +16,9 @@ class _RegistrationState extends State<Registration> {
   String _name;
   String _email;
   String _password;
-  bool _isRegistering;
+  bool _isRegistering = false;
+  bool _isGoogleRegistering = false;
+  bool _isFacebookRegistering = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -38,7 +40,7 @@ class _RegistrationState extends State<Registration> {
     });
     String _userId;
     try {
-      _userId = await Provider.of<AuthProvider>(context)
+      _userId = await Provider.of<AuthProvider>(context, listen: false)
           .register(_email, _password, _name);
       if (_userId.length > 0) {
         Navigator.pushReplacementNamed(context, '/login');
@@ -58,10 +60,58 @@ class _RegistrationState extends State<Registration> {
         appLanguage['errorDialogTitle'],
         appLanguage['ok'],
       );
+      setState(() {
+        _isRegistering = false;
+      });
     }
+  }
+
+  onGoogleRegistration(appLanguage) async {
     setState(() {
-      _isRegistering = false;
+      _isGoogleRegistering = true;
     });
+
+    try {
+      await Provider.of<AuthProvider>(context, listen: false)
+          .googleSignIn('register');
+      Navigator.of(context).pushReplacementNamed('/mainFeeds');
+    } catch (error) {
+      var errorMessage = appLanguage['registrationFailed'];
+      showErrorDialog(
+        errorMessage,
+        context,
+        appLanguage['errorDialogTitle'],
+        appLanguage['ok'],
+      );
+      setState(() {
+        _isGoogleRegistering = false;
+      });
+    }
+  }
+
+  onFacebookRegistration(appLanguage) async {
+    setState(() {
+      _isFacebookRegistering = true;
+    });
+    var _userId;
+    try {
+      _userId = await Provider.of<AuthProvider>(context, listen: false)
+          .facebookSignIn('register');
+      if (_userId.length > 0) {
+        Navigator.of(context).pushReplacementNamed('/mainFeeds');
+      }
+    } catch (error) {
+      var errorMessage = appLanguage['registrationFailed'];
+      showErrorDialog(
+        errorMessage,
+        context,
+        appLanguage['errorDialogTitle'],
+        appLanguage['ok'],
+      );
+      setState(() {
+        _isFacebookRegistering = false;
+      });
+    }
   }
 
   @override
@@ -254,38 +304,46 @@ class _RegistrationState extends State<Registration> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  onFacebookRegistration(appLanguage);
+                },
                 child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        language == 'English'
-                            ? 'Register with'
-                            : appLanguage['registerWithFacebook'],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
+                  child: _isFacebookRegistering
+                      ? Center(child: progressIndicator())
+                      : Row(
+                          children: <Widget>[
+                            Text(
+                              language == 'English'
+                                  ? 'Register with'
+                                  : appLanguage['registerWithFacebook'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.facebook,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        FontAwesomeIcons.facebook,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  onGoogleRegistration(appLanguage);
+                },
                 child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
                   padding: EdgeInsets.symmetric(
                     vertical: 10.0,
                     horizontal: 15.0,
@@ -294,26 +352,29 @@ class _RegistrationState extends State<Registration> {
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        language == 'English'
-                            ? 'Register with'
-                            : appLanguage['registerWithGoogle'],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
+                  child: _isGoogleRegistering
+                      ? Center(child: progressIndicator())
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              language == 'English'
+                                  ? 'Register with'
+                                  : appLanguage['registerWithGoogle'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.google,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        FontAwesomeIcons.google,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
                 ),
               ),
             ],

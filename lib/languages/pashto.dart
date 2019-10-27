@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 const Map pashto = {
   // Login and registration
   'login': 'ننوځئ',
-  'signOut': 'خروج',
+  'signOut': 'وتل',
   'email': 'برېښنالیک',
   'password': 'پسورد',
   'register': 'حساب جوړ کړه!',
@@ -21,7 +21,7 @@ const Map pashto = {
   'home': 'کور',
   'market': 'مارکیټ',
   'messages': 'پیغامونه',
-  'settings': 'تنظیمات',
+  'settings': 'سمونې',
 
   // post/advert actions buttons
 
@@ -63,4 +63,7 @@ const Map pashto = {
 
   'errorDialogTitle': 'ستونزه!',
   'ok': 'سمه ده',
+
+  ///////////////////////// Settings ///////////////////////////
+  'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',
 };

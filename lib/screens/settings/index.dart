@@ -5,6 +5,7 @@ import '../../widgets/userNameHolder.dart';
 import '../../widgets/userLocationHolder.dart';
 import '../../widgets/button.dart';
 import '../../providers/languageProvider.dart';
+import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
 
 class Settings extends StatefulWidget {
@@ -13,16 +14,27 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  String appLanguage = 'pashto';
+  String appLanguage;
 
-  onChangeAppLanguage(value) {
+  @override
+  didChangeDependencies() {
+    appLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    super.didChangeDependencies();
+  }
+
+  onChangeAppLanguage(value) async {
     setState(() {
       appLanguage = value;
     });
+    await Provider.of<LanguageProvider>(context).changeLanguage(value);
   }
 
-  onSignOut() {
-    print('signed out');
+  onSignOut() async {
+    await Provider.of<AuthProvider>(context).logout();
+//    bool _isAuth = Provider.of<AuthProvider>(context).isAuth;
+//    if (_isAuth == false) {
+//      Navigator.pushReplacementNamed(context, '/login');
+//    }
   }
 
   @override
@@ -40,7 +52,7 @@ class _SettingsState extends State<Settings> {
             _userProfile(),
             Container(
               margin: EdgeInsets.only(top: 30.0),
-              child: _settingsOptions(),
+              child: _settingsOptions(appLanguage),
             ),
             Divider(color: Colors.black),
             customButton(
@@ -73,19 +85,19 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget _settingsOptions() {
+  Widget _settingsOptions(appLanguage) {
     return Center(
-      child: _appLanguageOptions(),
+      child: _appLanguageOptions(appLanguage),
     );
   }
 
-  Widget _appLanguageOptions() {
+  Widget _appLanguageOptions(appLanguage) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Divider(color: Colors.black),
         Text(
-          'د آپلیکشن ژبه واړوئ!',
+          appLanguage['changeAppLanguage'],
           style: TextStyle(fontSize: 18.0),
         ),
         Row(
@@ -124,7 +136,7 @@ class _SettingsState extends State<Settings> {
                 title: Text(
                   'English',
                   style: TextStyle(
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                 ),
                 value: 'English',

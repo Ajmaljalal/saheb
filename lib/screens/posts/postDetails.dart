@@ -21,7 +21,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
 
   @override
   Widget build(BuildContext context) {
-    Map posts = Provider.of<PostsProivder>(context).getPosts;
+    Map posts = Provider.of<PostsProvider>(context).getPosts;
     Map post = posts[widget.id];
     return SafeArea(
       child: Scaffold(
