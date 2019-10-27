@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/widgets/circularProgressIndicator.dart';
 import '../../providers/languageProvider.dart';
 
 class Language extends StatefulWidget {
@@ -13,37 +14,45 @@ class LanguageState extends State<Language> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: Stack(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Theme.of(context).accentColor,
-                    Theme.of(context).primaryColor,
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.3,
-              ),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      languageOption('pashto'),
-                      languageOption('dari'),
-                      languageOption('English'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+        body: FutureBuilder(
+          future: Provider.of<LanguageProvider>(context).setLanguage(),
+          builder: (ctx, languageResultSnapshot) =>
+              languageResultSnapshot.connectionState == ConnectionState.waiting
+                  ? Center(
+                      child: progressIndicator(),
+                    )
+                  : Stack(
+                      children: <Widget>[
+                        Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Theme.of(context).accentColor,
+                                Theme.of(context).primaryColor,
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height * 0.3,
+                          ),
+                          child: Center(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                children: <Widget>[
+                                  languageOption('pashto'),
+                                  languageOption('dari'),
+                                  languageOption('English'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
         ),
       ),
     );
@@ -60,9 +69,8 @@ class LanguageState extends State<Language> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: GestureDetector(
-        onTap: () {
-          Provider.of<LanguageProvider>(context).changeLanguage(language);
-          Navigator.pushReplacementNamed(context, '/login');
+        onTap: () async {
+          await Provider.of<LanguageProvider>(context).changeLanguage(language);
         },
         child: Container(
           height: 60,

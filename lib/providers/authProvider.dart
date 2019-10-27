@@ -4,11 +4,13 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
+final FacebookLogin _facebookLogin = FacebookLogin();
 final Firestore db = Firestore.instance;
 
 /////////////// TODO: Make sure the get token is taking the expiration date into account //////////////
@@ -21,7 +23,10 @@ class AuthProvider with ChangeNotifier {
   }
 
   String get token {
-    return _token;
+    if (_token != null) {
+      return _token;
+    }
+    return null;
   }
 
   String get userId {
@@ -30,8 +35,8 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> registerUserToDb(id, name, email, photo) async {
     final _userRef = db.collection("users").document(id);
-    if (_userRef.documentID == null) {
-      _userRef.setData({
+    if (_userRef.documentID.toString().isNotEmpty) {
+      await _userRef.setData({
         "id": id,
         "name": name,
         "email": email,
@@ -40,7 +45,7 @@ class AuthProvider with ChangeNotifier {
         "hiddenPosts": []
       });
     } else {
-      _userRef.updateData({
+      await _userRef.updateData({
         "id": id,
         "name": name,
         "email": email,
@@ -86,11 +91,11 @@ class AuthProvider with ChangeNotifier {
     return _userId;
   }
 
-  Future<String> register(String email, String password, String name) async {
+  Future register(String email, String password, String name) async {
     return _authenticate(email, password, name, 'register');
   }
 
-  Future<String> login(String email, String password) async {
+  Future login(String email, String password) async {
     return _authenticate(email, password, '', 'login');
   }
 
@@ -124,6 +129,51 @@ class AuthProvider with ChangeNotifier {
         },
       );
       prefs.setString('userData', userData);
+      return _user.uid;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<String> facebookSignIn(actionType) async {
+    try {
+      final FacebookLoginResult _result =
+          await _facebookLogin.logIn(['email', 'public_profile']);
+//      switch (_result.status) {
+//        case FacebookLoginStatus.loggedIn:
+//          _status = 'success';
+//          break;
+//        case FacebookLoginStatus.cancelledByUser:
+//          _status = 'user cancelled loging in';
+//          break;
+//        case FacebookLoginStatus.error:
+//          _status = 'Error happened';
+//          break;
+//      }
+      FacebookAccessToken _facebookToken = _result.accessToken;
+      AuthCredential _credential =
+          FacebookAuthProvider.getCredential(accessToken: _facebookToken.token);
+
+      final FirebaseUser _user =
+          (await _auth.signInWithCredential(_credential)).user;
+      _token = (await _user.getIdToken()).token;
+      _userId = _user.uid;
+
+      if (actionType == 'register') {
+        registerUserToDb(
+            _user.uid, _user.displayName, _user.email, _user.photoUrl);
+      }
+
+      notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode(
+        {
+          'token': _token,
+          'userId': _userId,
+        },
+      );
+      prefs.setString('userData', userData);
+
       return _user.uid;
     } catch (error) {
       throw error;

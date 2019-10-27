@@ -17,6 +17,7 @@ class _LoginState extends State<Login> {
   String _password;
   bool _isLoggingIn = false;
   bool _isGoogleLogingIn = false;
+  bool _isFacebookLogingIn = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -28,7 +29,7 @@ class _LoginState extends State<Login> {
     _password = value;
   }
 
-  onLogin(appLanguage) async {
+  Future<void> onLogin(appLanguage) async {
     setState(() {
       _isLoggingIn = true;
     });
@@ -55,13 +56,13 @@ class _LoginState extends State<Login> {
         appLanguage['errorDialogTitle'],
         appLanguage['ok'],
       );
+      setState(() {
+        _isLoggingIn = false;
+      });
     }
-    setState(() {
-      _isLoggingIn = false;
-    });
   }
 
-  onGoogleLogin(appLanguage) async {
+  Future<void> onGoogleLogin(appLanguage) async {
     setState(() {
       _isGoogleLogingIn = true;
     });
@@ -77,6 +78,31 @@ class _LoginState extends State<Login> {
       );
       setState(() {
         _isGoogleLogingIn = false;
+      });
+    }
+  }
+
+  Future<void> onFacebookLogIn(appLanguage) async {
+    setState(() {
+      _isFacebookLogingIn = true;
+    });
+    var _userId;
+    try {
+      _userId =
+          await Provider.of<AuthProvider>(context).facebookSignIn('login');
+//      if (_userId.length > 0) {
+//        Navigator.of(context).pushReplacementNamed('/mainFeeds');
+//      }
+    } catch (error) {
+      var errorMessage = appLanguage['loginFailed'];
+      showErrorDialog(
+        errorMessage,
+        context,
+        appLanguage['errorDialogTitle'],
+        appLanguage['ok'],
+      );
+      setState(() {
+        _isFacebookLogingIn = false;
       });
     }
   }
@@ -262,33 +288,38 @@ class _LoginState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  onFacebookLogIn(appLanguage);
+                },
                 child: Container(
+                  width: MediaQuery.of(context).size.width * 0.41,
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
                   ),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        language == 'English'
-                            ? 'Sign in with'
-                            : appLanguage['signinWithFacebook'],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
+                  child: _isFacebookLogingIn
+                      ? Center(child: progressIndicator())
+                      : Row(
+                          children: <Widget>[
+                            Text(
+                              language == 'English'
+                                  ? 'Sign in with'
+                                  : appLanguage['signinWithFacebook'],
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.0,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.facebook,
+                              color: Colors.white,
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        FontAwesomeIcons.facebook,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
                 ),
               ),
               GestureDetector(
