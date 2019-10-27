@@ -33,6 +33,11 @@ class AuthProvider with ChangeNotifier {
     return _userId;
   }
 
+  Future<FirebaseUser> get currentUser async {
+    final FirebaseUser user = await _auth.currentUser();
+    return user;
+  }
+
   Future<void> registerUserToDb(id, name, email, photo) async {
     final _userRef = db.collection("users").document(id);
     if (_userRef.documentID.toString().isNotEmpty) {

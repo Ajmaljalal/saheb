@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
-import '../../providers/languageProvider.dart';
+//import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
 
@@ -29,7 +29,6 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   @override
   Widget build(BuildContext context) {
-    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -38,9 +37,8 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('Advert'),
+              Text('${appLanguage['advert'].toString()}'),
               customButton(
-                userLanguage: _language,
                 appLanguage: appLanguage,
                 context: context,
                 onClick: onSend,
@@ -75,13 +73,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                       SizedBox(
                         height: 15.0,
                       ),
-                      postTitle('تجارتی'),
+                      postTitle(appLanguage['advert'], appLanguage),
                       SizedBox(
                         height: 10.0,
                       ),
-                      textArea('تجارتی'),
-                      phoneNumberArea(),
-                      emailAddressArea(),
+                      textArea(appLanguage['advert'], appLanguage),
+                      phoneNumberArea(appLanguage),
+                      emailAddressArea(appLanguage),
                       Row(
                         children: <Widget>[
                           photoVideoArea(

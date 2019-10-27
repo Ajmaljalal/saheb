@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget customButton(
-    {userLanguage, appLanguage, context, onClick, forText, width, height}) {
+Widget customButton({appLanguage, context, onClick, forText, width, height}) {
   return Padding(
     padding: EdgeInsets.all(8.0),
     child: Container(
@@ -18,9 +17,7 @@ Widget customButton(
         },
         child: Center(
           child: Text(
-            userLanguage == 'English'
-                ? forText.toUpperCase()
-                : appLanguage['$forText'],
+            appLanguage['$forText'],
             style: TextStyle(
               fontSize: 20,
               color: Colors.white,

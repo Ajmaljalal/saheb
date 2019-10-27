@@ -72,13 +72,14 @@ class Application extends StatelessWidget {
                 : FutureBuilder(
                     future: auth.tryAutoLogin(),
                     builder: (ctx, authResultSnapshot) => Scaffold(
-                          body: authResultSnapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? Center(
-                                  child: progressIndicator(),
-                                )
-                              : Login(),
-                        )),
+                      body: authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? Center(
+                              child: progressIndicator(),
+                            )
+                          : Login(),
+                    ),
+                  ),
 //      initialRoute: '/',
         routes: {
           '/login': (context) => Login(),

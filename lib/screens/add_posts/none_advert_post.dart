@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
-import '../../providers/languageProvider.dart';
+//import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
 
@@ -18,7 +18,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   @override
   Widget build(BuildContext context) {
     final type = widget.type;
-    final _language = Provider.of<LanguageProvider>(context).getLanguage;
+//    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -33,7 +33,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
             children: <Widget>[
               Text('$type'),
               customButton(
-                userLanguage: _language,
                 appLanguage: appLanguage,
                 context: context,
                 onClick: onSend,
@@ -61,11 +60,11 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                       SizedBox(
                         height: 15.0,
                       ),
-                      postTitle('عادی'),
+                      postTitle(appLanguage['general'], appLanguage),
                       SizedBox(
                         height: 10.0,
                       ),
-                      textArea('عادی'),
+                      textArea(appLanguage['general'], appLanguage),
                       Row(
                         children: <Widget>[
                           photoVideoArea(

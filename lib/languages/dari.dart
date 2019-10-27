@@ -8,7 +8,7 @@ const Map dari = {
   'register': 'راجستر نمائید!',
   'haveAnAccount': 'اګر حساب دارید، ',
   'doNotHaveAnAccount': 'اګر حساب ندارید، ',
-  'phone': 'نمبر تیلفون',
+  'phone': 'نمبر تیلفون (اختیاری)',
   'name': 'نام کاربری',
   'signinWithFacebook': 'ورود با فیسبوک',
   'signinWithGoogle': 'ورود با ګوګل',
@@ -45,6 +45,20 @@ const Map dari = {
 
   'jobs': 'وظیفه',
   'send': 'ارسال',
+  'typeOfTransaction': 'نوع معامله',
+  'postTitle': 'عنوان...',
+  'advertPostTitle': 'عنوان: (مثلاً موتر فروشی، خانه کرایی و غیره...)',
+  'advertPostDiscription': 'تشریح: (مثلا رنګ، سال، مستعمل، جدید و غیره...)',
+  'postDiscription': 'تشریح...',
+  'optionalEmail': 'ایمیل آدرس (اختیاری)',
+
+  'whatPost': 'در باره چه می خواهید بنویسید؟',
+  'textForGeneralPost': 'مثلاً در باره حوادث عادی از محل بود و باش خود.',
+  'textForAdvertPost': 'مثلاً می خواهید چیزی بخرید، بفروشید و یا به کراه دهید.',
+  'textForEmergencyPost':
+      'مثلاً به خون ضرورت است، راه بند است، و حوادث امنیتی.',
+  'textForLostPost': 'مثلاً چیزی یا شخصی مفقود ګردیده.',
+  'textForFoundPost': 'مثلاً چیزی یا شخصی دریافت ګردیده.',
 
   ////////// Error messages ///////////////////////
 
@@ -63,4 +77,7 @@ const Map dari = {
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'زبان اپلیکشن را تغیر دهید!',
+
+  ///////// Add Post Bottom Bar ///////////////////
+  'addPhotoVideo': 'تصویر/ ویدیو'
 };

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 import '../widgets/button.dart';
-import '../providers/languageProvider.dart';
+//import '../providers/languageProvider.dart';
 import '../languages/index.dart';
 
 class AddPostMixin {
   Widget typeOfBusinessOptions(
-      {onDropDownChange, dropdownValue, dropdownItems, context}) {
+      {onDropDownChange, dropdownValue, dropdownItems, appLanguage, context}) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.cyanAccent),
@@ -17,7 +17,7 @@ class AddPostMixin {
       child: DropdownButton(
         value: dropdownValue,
         isExpanded: true,
-        hint: Text('نوع معامله'),
+//        hint: Text('${appLanguage['typeOfTransaction']}'),
         icon: Icon(
           Icons.arrow_drop_down,
           color: Theme.of(context).accentColor,
@@ -49,10 +49,10 @@ class AddPostMixin {
     );
   }
 
-  Widget postTitle(type) {
-    final label = type == 'تجارتی'
-        ? 'عنوان: (مثلاً موتر فروشی، خانه کرایی و غیره...)'
-        : 'عنوان...';
+  Widget postTitle(type, appLanguage) {
+    final label = type == appLanguage['advert']
+        ? appLanguage['advertPostTitle']
+        : appLanguage['postTitle'];
     return TextField(
       style: TextStyle(
         height: 0.95,
@@ -71,10 +71,10 @@ class AddPostMixin {
     );
   }
 
-  Widget textArea(type) {
-    final label = type == 'تجارتی'
-        ? 'تشریح: (مثلا رنګ، سال، مستعمل، جدید و غیره...)'
-        : 'مطلب...';
+  Widget textArea(type, appLanguage) {
+    final label = type == appLanguage['advert']
+        ? appLanguage['advertPostDiscription']
+        : appLanguage['postDiscription'];
     return TextField(
       maxLines: 5,
       style: TextStyle(
@@ -94,7 +94,7 @@ class AddPostMixin {
     );
   }
 
-  Widget phoneNumberArea() {
+  Widget phoneNumberArea(appLanguage) {
     return Container(
       child: TextField(
         style: TextStyle(
@@ -102,7 +102,7 @@ class AddPostMixin {
           fontSize: 20.0,
         ),
         decoration: InputDecoration(
-          labelText: 'نمبر موبایل (اختیاری):',
+          labelText: appLanguage['phone'],
           labelStyle: TextStyle(
             fontSize: 15.0,
           ),
@@ -115,7 +115,7 @@ class AddPostMixin {
     );
   }
 
-  Widget emailAddressArea() {
+  Widget emailAddressArea(appLanguage) {
     return Container(
       child: TextField(
         style: TextStyle(
@@ -123,7 +123,7 @@ class AddPostMixin {
           fontSize: 20.0,
         ),
         decoration: InputDecoration(
-          labelText: 'ایمیل آدرس (اختیاری):',
+          labelText: appLanguage['optionalEmail'],
           labelStyle: TextStyle(
             fontSize: 15.0,
           ),
@@ -153,13 +153,11 @@ class AddPostMixin {
   }
 
   Widget bottomBar({onSend, onOpenPhotoVideo, context}) {
-    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         customButton(
-          userLanguage: _language,
           appLanguage: appLanguage,
           context: context,
           onClick: onSend,
@@ -169,7 +167,7 @@ class AddPostMixin {
         ),
         FlatButton(
           child: Text(
-            'Add Photo/Video',
+            appLanguage['addPhotoVideo'],
             style: TextStyle(
               fontSize: 20.0,
             ),
