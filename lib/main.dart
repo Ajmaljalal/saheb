@@ -62,7 +62,7 @@ class Application extends StatelessWidget {
         theme: ThemeData(
           primaryColor: Colors.cyan[800],
           accentColor: Colors.cyanAccent[700],
-          fontFamily: _language == 'English' ? 'Roboto' : 'ZarReg',
+          fontFamily: _language == 'English' ? 'Lato' : 'ZarReg',
           scaffoldBackgroundColor: Colors.grey[100],
         ),
         home: _language == null

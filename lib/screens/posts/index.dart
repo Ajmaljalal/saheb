@@ -13,19 +13,25 @@ class Posts extends StatefulWidget {
 class _PostsState extends State<Posts> {
   @override
   Widget build(BuildContext context) {
-    Map _posts = Provider.of<PostsProvider>(context).getPosts;
     var _currentUser;
     Provider.of<AuthProvider>(context).currentUser.then((user) {
       _currentUser = user;
     });
 
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        var id = _posts.keys.toList().elementAt(index);
-        var post = _posts[id];
-        return Post(post: post, id: id);
+    return StreamBuilder(
+      stream: Provider.of<PostsProvider>(context).getAllPosts(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Text("Loading..");
+        }
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            var post = snapshot.data.documents[index];
+            return Post(post: post);
+          },
+          itemCount: snapshot.data.documents.length,
+        );
       },
-      itemCount: _posts.keys.length,
     );
   }
 }

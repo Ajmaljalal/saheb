@@ -15,6 +15,8 @@ const Map dari = {
   'registerWithFacebook': 'ثبت نام با فیسبوک',
   'registerWithGoogle': 'ثبت نام با ګوګل',
 
+  'more': 'ادامه...',
+
   // ToolBar and Main Screen
   'home': 'خانه',
   'market': 'مارکیت',
@@ -29,7 +31,7 @@ const Map dari = {
   'hide': 'پنهان',
   'like': 'پسندیدن',
 
-  //////////////// post types //////////////////
+  //////////////// post //////////////////
 
   'advert': 'اعلان',
   'general': 'عمومي',
@@ -39,9 +41,9 @@ const Map dari = {
 
   'singleComment': 'تبصره',
   'multiComments': 'تبصره',
-  'singleLike': FontAwesomeIcons.heart,
+  'addComment': 'تبصره...',
 
-  'add new post': 'پوست جدید بنویس!',
+  'addNewPost': 'پوست جدید بنویس!',
 
   'jobs': 'وظیفه',
   'send': 'ارسال',
@@ -79,5 +81,9 @@ const Map dari = {
   'changeAppLanguage': 'زبان اپلیکشن را تغیر دهید!',
 
   ///////// Add Post Bottom Bar ///////////////////
-  'addPhotoVideo': 'تصویر/ ویدیو'
+  'addPhotoVideo': 'تصویر/ ویدیو',
+
+  ///////// Search //////////////////
+
+  'search': 'جستجو...',
 };

@@ -17,6 +17,8 @@ const Map pashto = {
   'registerWithFacebook': 'فیسبوکي ثبت نام',
   'registerWithGoogle': 'ګوګل  ثبت  نام ',
 
+  'more': 'نور...',
+
   // ToolBar and Main Screen
   'home': 'کور',
   'market': 'مارکیټ',
@@ -31,7 +33,7 @@ const Map pashto = {
   'hide': 'پټول',
   'like': 'خوښول',
 
-  //////////////////// post types /////////////////////////////////////
+  //////////////////// post /////////////////////////////////////
 
   'advert': 'اعلان',
   'general': 'عمومي',
@@ -41,9 +43,9 @@ const Map pashto = {
 
   'singleComment': 'تبصره',
   'multiComments': 'تبصرې',
-  'singleLike': FontAwesomeIcons.heart,
+  'addComment': 'تبصره...',
 
-  'add new post': 'نوی پوست ولیکه!',
+  'addNewPost': 'نوی پوست ولیکه!',
   'jobs': 'وظیفه',
   'send': 'لېږل',
   'typeOfTransaction': 'د معاملې ډول',
@@ -83,5 +85,9 @@ const Map pashto = {
   'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',
 
   ///////// Add Post Bottom Bar ///////////////////
-  'addPhotoVideo': 'انځور/ ویډیو'
+  'addPhotoVideo': 'انځور/ ویډیو',
+
+  ///////// Search //////////////////
+
+  'search': 'پلټنه...',
 };

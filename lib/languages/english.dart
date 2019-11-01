@@ -17,6 +17,8 @@ const Map english = {
   'registerWithFacebook': 'Register with Facbook',
   'registerWithGoogle': 'Register with Google',
 
+  'more': 'more...',
+
   // ToolBar and Main Screen
   'home': 'Home',
   'market': 'Market',
@@ -31,7 +33,7 @@ const Map english = {
   'hide': 'Hide',
   'like': 'Like',
 
-  //////////////////// post types //////////////////////////
+  //////////////////// post //////////////////////////
 
   'advert': 'Advert',
   'general': 'General',
@@ -41,9 +43,9 @@ const Map english = {
 
   'singleComment': 'Comment',
   'multiComments': 'Comments',
-  'singleLike': FontAwesomeIcons.heart,
+  'addComment': 'Add a comment...',
 
-  'add new post': 'Add new post',
+  'addNewPost': 'Add new post',
   'jobs': 'Jobs',
   'send': 'Send',
   'typeOfTransaction': 'Type of transaction',
@@ -75,7 +77,7 @@ const Map english = {
   'loginFailed': 'Login failed, please try again.',
   'registrationFailed': 'Registration failed, please try again.',
 
-  'enter': 'Enter! ',
+  'enter': 'Enter',
 
   'errorDialogTitle': 'Error!',
   'ok': 'Ok',
@@ -84,5 +86,9 @@ const Map english = {
   'changeAppLanguage': 'Change application\'s language!',
 
   ///////// Add Post Bottom Bar ///////////////////
-  'addPhotoVideo': 'Photo/video'
+  'addPhotoVideo': 'Photo/video',
+
+  ///////// Search //////////////////
+
+  'search': 'search...',
 };

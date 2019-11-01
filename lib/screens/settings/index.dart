@@ -40,13 +40,12 @@ class _SettingsState extends State<Settings> {
 
   Future getUserProfile() async {
     final user = await Provider.of<AuthProvider>(context).currentUser;
-//    print(user);
     return user;
   }
 
   @override
   Widget build(BuildContext context) {
-    final _language = Provider.of<LanguageProvider>(context).getLanguage;
+//    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return SingleChildScrollView(
       child: Container(

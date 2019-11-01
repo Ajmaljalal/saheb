@@ -11,11 +11,11 @@ class PostMixin {
       children: <Widget>[
         imageRenderer(),
         userNameHolder(
-          post['user'],
+          post['owner']['name'],
         ),
         CustomVerticalDivider(),
         userLocationHolder(
-          post['userLocation'],
+          post['owner']['location'],
         ),
       ],
     );
@@ -86,7 +86,7 @@ class PostMixin {
     );
   }
 
-  Widget postContent(text, pictures, flag, onRevealMoreText) {
+  Widget postContent(text, pictures, flag, onRevealMoreText, appLanguage) {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -110,7 +110,7 @@ class PostMixin {
                 flag
                     ? Text('')
                     : Text(
-                        "نور...",
+                        appLanguage['more'],
                         style: TextStyle(color: Colors.blueAccent),
                       ),
               ],
@@ -141,7 +141,12 @@ class PostMixin {
     );
   }
 
-  Widget postLikesCommentsCountHolder(likes, comments) {
+  Widget postLikesCommentsCountHolder(post, appLanguage) {
+    final comments = post['comments'];
+    final likes = post['likes'];
+    final String commentsHolderText = comments.length > 1
+        ? appLanguage['multiComments']
+        : appLanguage['singleComment'];
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: 5.0,
@@ -159,7 +164,7 @@ class PostMixin {
                 width: 5,
               ),
               Text(
-                'تبصرې',
+                commentsHolderText.toString(),
               ),
             ],
           ),
@@ -167,9 +172,12 @@ class PostMixin {
             children: <Widget>[
               Text(likes.toString()),
               SizedBox(
-                width: 2,
+                width: 5,
               ),
-              Text('Likes'),
+              Icon(
+                FontAwesomeIcons.heart,
+                size: 15.0,
+              ),
             ],
           )
         ],
@@ -177,10 +185,11 @@ class PostMixin {
     );
   }
 
-  Widget postActionButtons(onClickComment) {
+  Widget postActionButtons(onClickComment, String postId, String postTitle,
+      flag, updateLikes, context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: 10.0,
+        horizontal: 20.0,
         vertical: 10.0,
       ),
       child: Row(
@@ -194,7 +203,9 @@ class PostMixin {
               color: Colors.grey,
               size: 20,
             ),
-            onTap: () {},
+            onTap: () {
+              updateLikes(context);
+            },
           ),
           InkResponse(
             splashColor: Colors.grey[200],
@@ -205,7 +216,10 @@ class PostMixin {
               size: 20,
             ),
             onTap: () {
-              onClickComment();
+              if (flag == 'details') {
+                onClickComment();
+              } else
+                onClickComment(postId, postTitle);
             },
           ),
           InkResponse(
@@ -238,27 +252,30 @@ class PostMixin {
   //////////////// POST DETAILS SCREEN////////////////////
   ///////////////////////////////////////////////////////
 
-  Widget individualCommentRenderer(postComments) {
-    return Container(
-      child: Row(
+  List individualCommentRenderer(postComments) {
+    return postComments.map((comment) {
+      return Container(
+        child: Container(
+          child: Row(
 //        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            child: imageRenderer(),
+            children: <Widget>[
+              Container(
+                child: imageRenderer(),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    commentTextHolder(comment),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Container(
-            margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-//                userNameHolder(postComments[0]['user']),
-                commentTextHolder(postComments[0]),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+        ),
+      );
+    }).toList();
   }
 
   Widget commentTextHolder(postComment) {
@@ -284,37 +301,37 @@ class PostMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          userNameHolder(postComment['user']),
+          userNameHolder(postComment['user']['name']),
           Text(
-            postComment['commentText'],
+            postComment['text'],
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'ZarReg',
             ),
           ),
-          commentActionButtons(),
+          commentActionButtons(postComment['likes']),
         ],
       ),
     );
   }
 
-  Widget commentActionButtons() {
+  Widget commentActionButtons(postLikes) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         IconButton(
           icon: Icon(
-            FontAwesomeIcons.heart,
+            FontAwesomeIcons.thumbsUp,
             color: Colors.cyan,
-            size: 20,
+            size: 18,
           ),
           onPressed: () {},
         ),
         IconButton(
           icon: Icon(
-            FontAwesomeIcons.trash,
+            Icons.delete_outline,
             color: Colors.cyan,
-            size: 18,
+            size: 19,
           ),
           onPressed: () {},
         ),
@@ -323,16 +340,20 @@ class PostMixin {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(width: 150),
-            Text('5'),
+            Text(postLikes.toString()),
             SizedBox(width: 5),
-            Text('Likes'),
+            Icon(
+              FontAwesomeIcons.heart,
+              size: 18.0,
+            ),
           ],
         ),
       ],
     );
   }
 
-  Widget addCommentTextField(focusNode) {
+  Widget addCommentTextField({focusNode, appLanguage, onChange, onSubmit}) {
+    final TextEditingController _controller = new TextEditingController();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -348,30 +369,36 @@ class PostMixin {
       child: Padding(
         padding: kPaddingAll8,
         child: TextField(
+          onChanged: onChange,
           focusNode: focusNode,
           autocorrect: false,
+          controller: _controller,
           cursorColor: Colors.black,
           autofocus: false,
           maxLines: null,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 15,
+            fontSize: 20,
           ),
           decoration: InputDecoration(
             icon: IconButton(
               icon: Icon(
-                Icons.arrow_upward,
-                color: Colors.deepPurple,
-                size: 40,
+                FontAwesomeIcons.arrowAltCircleUp,
+                textDirection: TextDirection.ltr,
+                color: Colors.cyan,
+                size: 35,
               ),
-              onPressed: () {},
+              onPressed: () {
+                onSubmit();
+                _controller.clear();
+              },
             ),
-            contentPadding: kPaddingAll20,
+            contentPadding: kPaddingAll10_15,
             fillColor: Colors.white,
-            labelText: 'پر دې پوسټ څه ولیکئ...',
+            labelText: appLanguage['addComment'],
             labelStyle: TextStyle(
               color: Colors.grey,
-              fontSize: 15,
+              fontSize: 18,
             ),
             enabledBorder: kOutlineInputBorderGrey,
             focusedBorder: kOutlineInputBorderPurple,

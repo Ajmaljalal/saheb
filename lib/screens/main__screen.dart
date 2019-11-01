@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/languageProvider.dart';
-import '../providers/authProvider.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
 import './settings/index.dart';
 import './add_posts/index.dart';
-import '../widgets/searchBar.dart';
+import '../widgets/appBarSearch.dart';
 import '../screens/jobs/index.dart';
 
 class MainScreen extends StatefulWidget {
@@ -18,27 +15,16 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentScreenIndex = 0;
 
-  String _getAppBarTitle(language, context) {
+  String _getAppBarTitle(context) {
     final appLanguage = getLanguages(context);
-
-    if (language == 'English') {
-      switch (_currentScreenIndex) {
-        case 2:
-          return 'Add new post';
-        case 4:
-          return 'Settings';
-      }
-    } else {
-      switch (_currentScreenIndex) {
-        case 2:
-          return appLanguage['add new post'];
-        case 3:
-          return appLanguage['jobs'];
-        case 4:
-          return appLanguage['settings'];
-      }
+    switch (_currentScreenIndex) {
+      case 2:
+        return appLanguage['addNewPost'];
+      case 4:
+        return appLanguage['settings'];
+      default:
+        return '';
     }
-    return '';
   }
 
   final List<Widget> screens = [
@@ -57,35 +43,82 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language = Provider.of<LanguageProvider>(context).getLanguage;
-    final renderSearchAndAdd =
-        _currentScreenIndex == 0 || _currentScreenIndex == 1;
+    final renderSearchAndAdd = _currentScreenIndex == 0 ||
+        _currentScreenIndex == 1 ||
+        _currentScreenIndex == 3;
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        centerTitle: true,
-        automaticallyImplyLeading: renderSearchAndAdd,
-        leading: Container(
-          padding: EdgeInsets.only(right: 5.0),
-          child: renderSearchAndAdd
-              ? IconButton(
-                  icon: Icon(
-                    Icons.add_circle_outline,
-                    size: 40.0,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _currentScreenIndex = 2;
-                    });
-                  },
-                )
-              : null,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(45.0),
+        child: AppBar(
+//        centerTitle: true,
+          titleSpacing: 0.0,
+          automaticallyImplyLeading: renderSearchAndAdd,
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              renderSearchAndAdd
+                  ? Container(
+                      height: 30.0,
+                      width: 30.0,
+                      decoration: BoxDecoration(
+//                      color: Colors.cyan,
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      margin: EdgeInsets.only(
+                        left: 15.0,
+                      ),
+                      child: Center(
+                        child: InkWell(
+                          child: Icon(
+                            Icons.add,
+                            size: 25.0,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              _currentScreenIndex = 2;
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                  : SizedBox(
+                      width: 0.0,
+                    ),
+              renderSearchAndAdd
+                  ? AppBarSearch()
+                  : SizedBox(
+                      width: 0.0,
+                    ),
+              renderSearchAndAdd
+                  ? Container(
+                      padding: EdgeInsets.only(
+                        right: 15.0,
+                      ),
+                      child: InkWell(
+                        child: Icon(
+                          Icons.message,
+                          size: 30.0,
+                        ),
+                        onTap: () {},
+                      ),
+                    )
+                  : SizedBox(width: 0.0),
+              renderSearchAndAdd
+                  ? SizedBox(
+                      width: 0.0,
+                    )
+                  : Text(
+                      _getAppBarTitle(context).toString(),
+                    ),
+            ],
+          ),
         ),
-        title: renderSearchAndAdd
-            ? SearchBar()
-            : Text(
-                _getAppBarTitle(language, context),
-              ),
       ),
       body: screens[_currentScreenIndex],
       bottomNavigationBar: BottomNavigationBar(
