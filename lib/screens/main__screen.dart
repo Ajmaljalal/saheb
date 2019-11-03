@@ -13,13 +13,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentScreenIndex = 0;
+  static int _currentScreenIndex = 0;
 
   String _getAppBarTitle(context) {
     final appLanguage = getLanguages(context);
     switch (_currentScreenIndex) {
-      case 2:
-        return appLanguage['addNewPost'];
+//      case 2:
+//        return appLanguage['addNewPost'];
       case 4:
         return appLanguage['settings'];
       default:
@@ -30,11 +30,10 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> screens = [
     Posts(),
     Market(),
-    AddPost(),
+//    AddPost(),
     Jobs(),
     Settings(),
   ];
-
   void _setCurrentScreen(int index) {
     setState(() {
       _currentScreenIndex = index;
@@ -45,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
         _currentScreenIndex == 1 ||
-        _currentScreenIndex == 3;
+        _currentScreenIndex == 2;
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
@@ -81,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           onTap: () {
                             setState(() {
-                              _currentScreenIndex = 2;
+                              Navigator.pushNamed(context, '/addPost');
                             });
                           },
                         ),
@@ -149,17 +148,17 @@ class _MainScreenState extends State<MainScreen> {
               style: TextStyle(fontSize: 0.0001),
             ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.add_circle_outline,
-              size: 40.0,
-              color: Colors.white,
-            ),
-            title: Text(
-              '',
-              style: TextStyle(fontSize: 0.0001),
-            ),
-          ),
+//          BottomNavigationBarItem(
+//            icon: Icon(
+//              Icons.add_circle_outline,
+//              size: 40.0,
+//              color: Colors.white,
+//            ),
+//            title: Text(
+//              '',
+//              style: TextStyle(fontSize: 0.0001),
+//            ),
+//          ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.work,

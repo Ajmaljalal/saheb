@@ -73,23 +73,31 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                       SizedBox(
                         height: 15.0,
                       ),
-                      postTitle(appLanguage['advert'], appLanguage),
+                      postTitle(
+                        type: appLanguage['advert'],
+                        appLanguage: appLanguage,
+                        onChange: () {},
+                      ),
                       SizedBox(
                         height: 10.0,
                       ),
-                      textArea(appLanguage['advert'], appLanguage),
+                      textArea(
+                        type: appLanguage['advert'],
+                        appLanguage: appLanguage,
+                        onChange: () {},
+                      ),
                       phoneNumberArea(appLanguage),
                       emailAddressArea(appLanguage),
-                      Row(
-                        children: <Widget>[
-                          photoVideoArea(
-                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
-                          ),
-                          photoVideoArea(
-                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
-                          ),
-                        ],
-                      )
+//                      Row(
+//                        children: <Widget>[
+//                          photoVideoArea(
+//                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+//                          ),
+//                          photoVideoArea(
+//                            'https://www.bestfunforall.com/better/imgs/Landscapes%20Nature%20For%20Mobile%20wallpaper%20%204.jpg',
+//                          ),
+//                        ],
+//                      )
                     ],
                   ),
                 ),

@@ -64,9 +64,12 @@ const BorderRadius kBorderRadiusTopT10 = BorderRadius.only(
 );
 
 const EdgeInsets kPaddingAll8 = EdgeInsets.all(8.0);
+const EdgeInsets kPaddingAll5 = EdgeInsets.all(5.0);
 const EdgeInsets kPaddingAll20 = EdgeInsets.all(20.0);
 const EdgeInsets kPaddingAll10_15 =
     EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0);
+const EdgeInsets kPaddingAll10_10 =
+    EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0);
 
 OutlineInputBorder kOutlineInputBorderGrey = OutlineInputBorder(
   borderRadius: BorderRadius.circular(30),

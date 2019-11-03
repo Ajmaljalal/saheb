@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+//import 'package:saheb/screens/add_posts/advert_post.dart';
+import 'package:saheb/screens/add_posts/index.dart';
+//import 'package:saheb/screens/add_posts/none_advert_post.dart';
 import 'package:saheb/screens/startups/language_screen.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import './providers/languageProvider.dart';
@@ -62,7 +65,7 @@ class Application extends StatelessWidget {
         theme: ThemeData(
           primaryColor: Colors.cyan[800],
           accentColor: Colors.cyanAccent[700],
-          fontFamily: _language == 'English' ? 'Lato' : 'ZarReg',
+          fontFamily: _language == 'English' ? 'Roboto' : 'ZarReg',
           scaffoldBackgroundColor: Colors.grey[100],
         ),
         home: _language == null
@@ -84,8 +87,11 @@ class Application extends StatelessWidget {
         routes: {
           '/login': (context) => Login(),
           '/register': (context) => Registration(),
-          '/mainFeeds': (context) => MainScreen(),
-          '/newsPostDetails': (context) => PostDetails(),
+          '/posts': (context) => MainScreen(),
+          '/postDetails': (context) => PostDetails(),
+          '/addPost': (context) => AddPost(),
+//          './addNonAdvertPost': (context) => NoneAdvertPost('null'),
+//          './addAdvertPost': (context) => AdvertPost(),
         },
       ),
     );

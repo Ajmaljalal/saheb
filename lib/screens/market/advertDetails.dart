@@ -62,8 +62,13 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                   postTittleHolder(advert['postTitle']),
                                 ],
                               ),
-                              postContent(advert['postText'], [], true, null,
-                                  appLanguage),
+                              postContent(
+                                text: advert['postText'],
+                                images: advert['postPictures'],
+                                flag: true,
+                                onRevealMoreText: null,
+                                appLanguage: appLanguage,
+                              ),
 //                              postLikesCommentsCountHolder(
 //                                advert['postLikes'],
 //                                advert['postComments'],

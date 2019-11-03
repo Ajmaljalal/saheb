@@ -88,6 +88,10 @@ const Map english = {
   ///////// Add Post Bottom Bar ///////////////////
   'addPhotoVideo': 'Photo/video',
 
+  'select6Images': 'Select up to 6 img',
+  '6ImagesSelected': '۶6 img completed',
+  'wait': 'Please wait...!',
+
   ///////// Search //////////////////
 
   'search': 'search...',

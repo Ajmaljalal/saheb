@@ -5,13 +5,11 @@ class Uuid {
   final Random _random = Random();
 
   String generateV4() {
-    final int special = 8 + _random.nextInt(4);
+//    final int special = 8 + _random.nextInt(4);
 
     return '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}-'
         '${_bitsDigits(16, 4)}-'
-        '4${_bitsDigits(12, 3)}-'
-        '${_printDigits(special, 1)}${_bitsDigits(12, 3)}-'
-        '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}';
+        '4${_bitsDigits(12, 3)}';
   }
 
   String _bitsDigits(int bitCount, int digitCount) =>

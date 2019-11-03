@@ -83,6 +83,10 @@ const Map dari = {
   ///////// Add Post Bottom Bar ///////////////////
   'addPhotoVideo': 'تصویر/ ویدیو',
 
+  'select6Images': 'تا ۶ تصویر برګزینید!',
+  '6ImagesSelected': '۶ تصویر پوره شد.',
+  'wait': 'منتظر باشید لطفاً...',
+
   ///////// Search //////////////////
 
   'search': 'جستجو...',

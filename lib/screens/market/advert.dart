@@ -70,8 +70,13 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         postTittleHolder(advert['postTitle']),
-                        postContent(advert['postText'], advert['postPictures'],
-                            revealMoreTextFlag, _revealMoreText, appLanguage),
+                        postContent(
+                          text: advert['postText'],
+                          images: advert['postPictures'],
+                          flag: revealMoreTextFlag,
+                          onRevealMoreText: _revealMoreText,
+                          appLanguage: appLanguage,
+                        ),
                       ],
                     ),
                   ),

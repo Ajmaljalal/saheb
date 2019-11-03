@@ -10,7 +10,7 @@ class AddPost extends StatefulWidget {
 
 class _AddPostState extends State<AddPost> {
   String postType = '';
-
+  var changeCurrentIndexFunction;
   onSelectPostType(value) {
     setState(() {
       postType = value;
@@ -22,6 +22,9 @@ class _AddPostState extends State<AddPost> {
     final appLanguage = getLanguages(context);
     return Scaffold(
       backgroundColor: Colors.grey,
+      appBar: AppBar(
+        title: Text(appLanguage['addNewPost'].toString()),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height * 0.8,
         decoration: BoxDecoration(

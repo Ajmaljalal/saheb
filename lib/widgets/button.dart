@@ -12,8 +12,8 @@ Widget customButton({appLanguage, context, onClick, forText, width, height}) {
       ),
       child: FlatButton(
         highlightColor: Theme.of(context).accentColor,
-        onPressed: () {
-          onClick();
+        onPressed: () async {
+          await onClick();
         },
         child: Center(
           child: Text(

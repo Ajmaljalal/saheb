@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import '../../providers/authProvider.dart';
+
 import '../../constant_widgets/constants.dart';
 import 'postDetails.dart';
 import '../../mixins/post.dart';
@@ -43,13 +44,21 @@ class _PostState extends State<Post> with PostMixin {
     Provider.of<PostsProvider>(context).updatePostLikes(widget.post.documentID);
   }
 
+  deletePost(context) {
+    Provider.of<PostsProvider>(context).deleteOnePost(widget.post.documentID);
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final DocumentSnapshot post = widget.post;
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4.0),
+      padding: const EdgeInsets.only(
+        bottom: 4.0,
+        top: 2.0,
+      ),
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 1,
@@ -64,10 +73,10 @@ class _PostState extends State<Post> with PostMixin {
                   crossAxisAlignment: kStart,
                   children: <Widget>[
                     cardHeader(post),
-                    postTypeHolder(
-                      context,
-                      post['type'],
-                    ),
+//                    postTypeHolder(
+//                      context,
+//                      post['type'],
+//                    ),
                   ],
                 ),
                 GestureDetector(
@@ -79,19 +88,33 @@ class _PostState extends State<Post> with PostMixin {
                     children: <Widget>[
                       postTittleHolder(post['title']),
                       postContent(
-                        post['text'],
-                        post['images'],
-                        revealMoreTextFlag,
-                        _revealMoreText,
-                        appLanguage,
+                        text: post['text'],
+                        images: post['images'],
+                        flag: revealMoreTextFlag,
+                        onRevealMoreText: _revealMoreText,
+                        appLanguage: appLanguage,
+                        context: context,
+                        imagesScrollView: Axis.horizontal,
                       ),
                     ],
                   ),
                 ),
-                postLikesCommentsCountHolder(post, appLanguage),
+                postLikesCommentsCountHolder(
+                    post: post,
+                    appLanguage: appLanguage,
+                    userId: currentUserId),
                 kHorizontalDivider,
-                postActionButtons(goToDetailsScreen, post.documentID,
-                    post['title'], 'post', updateLikes, context),
+                postActionButtons(
+                  onClickComment: goToDetailsScreen,
+                  postId: post.documentID,
+                  userId: currentUserId,
+                  post: post,
+                  postTitle: post['title'],
+                  flag: 'post',
+                  updateLikes: updateLikes,
+                  onDeletePost: deletePost,
+                  context: context,
+                ),
               ],
             ),
           ),

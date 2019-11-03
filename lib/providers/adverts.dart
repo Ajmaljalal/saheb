@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'dummy_data.dart';
 
 class Adverts with ChangeNotifier {
-  Map _adverts = posts;
+  Map _adverts;
 
   get getAdverts {
     return _adverts;

@@ -87,6 +87,10 @@ const Map pashto = {
   ///////// Add Post Bottom Bar ///////////////////
   'addPhotoVideo': 'انځور/ ویډیو',
 
+  'select6Images': '۶ انځوره پورته کوی شی.',
+  '6ImagesSelected': '۶ پوره شول',
+  'wait': 'منتظر اوسی لطفاً...',
+
   ///////// Search //////////////////
 
   'search': 'پلټنه...',
