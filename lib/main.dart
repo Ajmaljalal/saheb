@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+//import 'package:saheb/screens/add_posts/advert_post.dart';
+import 'package:saheb/screens/add_posts/index.dart';
+//import 'package:saheb/screens/add_posts/none_advert_post.dart';
 import 'package:saheb/screens/startups/language_screen.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import './providers/languageProvider.dart';
@@ -72,19 +75,23 @@ class Application extends StatelessWidget {
                 : FutureBuilder(
                     future: auth.tryAutoLogin(),
                     builder: (ctx, authResultSnapshot) => Scaffold(
-                          body: authResultSnapshot.connectionState ==
-                                  ConnectionState.waiting
-                              ? Center(
-                                  child: progressIndicator(),
-                                )
-                              : Login(),
-                        )),
+                      body: authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? Center(
+                              child: progressIndicator(),
+                            )
+                          : Login(),
+                    ),
+                  ),
 //      initialRoute: '/',
         routes: {
           '/login': (context) => Login(),
           '/register': (context) => Registration(),
-          '/mainFeeds': (context) => MainScreen(),
-          '/newsPostDetails': (context) => PostDetails(),
+          '/posts': (context) => MainScreen(),
+          '/postDetails': (context) => PostDetails(),
+          '/addPost': (context) => AddPost(),
+//          './addNonAdvertPost': (context) => NoneAdvertPost('null'),
+//          './addAdvertPost': (context) => AdvertPost(),
         },
       ),
     );

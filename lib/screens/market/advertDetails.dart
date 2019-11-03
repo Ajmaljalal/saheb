@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../providers/adverts.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
+import '../../languages/index.dart';
 
 class AdvertDetails extends StatefulWidget {
   final String id;
@@ -24,6 +25,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
   @override
   Widget build(BuildContext context) {
     Map adverts = Provider.of<Adverts>(context).getAdverts;
+    final appLanguage = getLanguages(context);
     Map advert = adverts[widget.id];
     return SafeArea(
       child: Scaffold(
@@ -37,6 +39,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
               Container(),
               SingleChildScrollView(
                 child: Container(
+                  padding: EdgeInsets.only(bottom: 65.0),
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -60,15 +63,17 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                 ],
                               ),
                               postContent(
-                                advert['postText'],
-                                [],
-                                true,
-                                null,
+                                text: advert['postText'],
+                                images: advert['postPictures'],
+                                flag: true,
+                                onRevealMoreText: null,
+                                appLanguage: appLanguage,
                               ),
-                              postLikesCommentsCountHolder(
-                                advert['postLikes'],
-                                advert['postComments'],
-                              ),
+//                              postLikesCommentsCountHolder(
+//                                advert['postLikes'],
+//                                advert['postComments'],
+//                                appLanguage,
+//                              ),
                               Divider(
                                 color: Colors.grey,
                                 height: 1,
@@ -79,9 +84,9 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                 color: Colors.grey,
                                 height: 1,
                               ),
-                              individualCommentRenderer(advert['postComments']),
-                              individualCommentRenderer(advert['postComments']),
-                              individualCommentRenderer(advert['postComments']),
+//                              individualCommentRenderer(advert['postComments']),
+//                              individualCommentRenderer(advert['postComments']),
+//                              individualCommentRenderer(advert['postComments']),
                             ],
                           ),
                         ),
@@ -90,12 +95,15 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 0.0,
-                right: 0,
-                left: 0,
-                child: addCommentTextField(commentFieldFocusNode),
-              ),
+//              Positioned(
+////                bottom: 0.0,
+////                right: 0,
+////                left: 0,
+////                child: addCommentTextField(
+////                  commentFieldFocusNode,
+////                  appLanguage,
+////                ),
+////              ),
             ],
           ),
         ),

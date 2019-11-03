@@ -9,13 +9,15 @@ const Map pashto = {
   'register': 'حساب جوړ کړه!',
   'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',
-  'phone': ' تیلفون شمېره',
+  'phone': ' تیلفون شمېره (اختیاری)',
   'name': 'کارېدونکی نوم',
 
   'signinWithFacebook': 'فیسبوک سره ننوځه',
   'signinWithGoogle': 'ګوګل  سره  ننوځه ',
   'registerWithFacebook': 'فیسبوکي ثبت نام',
   'registerWithGoogle': 'ګوګل  ثبت  نام ',
+
+  'more': 'نور...',
 
   // ToolBar and Main Screen
   'home': 'کور',
@@ -31,7 +33,7 @@ const Map pashto = {
   'hide': 'پټول',
   'like': 'خوښول',
 
-  // post types
+  //////////////////// post /////////////////////////////////////
 
   'advert': 'اعلان',
   'general': 'عمومي',
@@ -41,11 +43,26 @@ const Map pashto = {
 
   'singleComment': 'تبصره',
   'multiComments': 'تبصرې',
-  'singleLike': FontAwesomeIcons.heart,
+  'addComment': 'تبصره...',
 
-  'add new post': 'نوی پوست ولیکه!',
+  'addNewPost': 'نوی پوست ولیکه!',
   'jobs': 'وظیفه',
   'send': 'لېږل',
+  'typeOfTransaction': 'د معاملې ډول',
+  'postTitle': 'عنوان...',
+  'advertPostTitle':
+      'عنوان: (مثلاً موټر د خرڅلاو لپاره، کور د کراه لپاره او نور...)',
+  'advertPostDiscription': 'تشریح: (مثلا رنګ، کال، مستعمل، نوی او نور...)',
+  'postDiscription': 'تشریح...',
+  'optionalEmail': 'برېښنالیک (اختیاری)',
+
+  'whatPost': 'د څه شي په اړه غواړی ولیکی؟',
+  'textForGeneralPost': 'مثلاً د خپل محل د عادی حوادثو او مسایلو په اړه.',
+  'textForAdvertPost': 'مثلاً غواړی کوم شی واخلی، کراه کړی، او یا یې خرڅ کړی.',
+  'textForEmergencyPost':
+      'مثلاً وینې ته ضرورت دی، لار بنده ده او یا نور امنیتي حوادث.',
+  'textForLostPost': 'مثلاً کوم شی او یا شخص ورک دی.',
+  'textForFoundPost': 'مثلاً کوم لادرکه شی او یا شخص پیدا شوی دی.',
 
   ////////// Sign in/up error messages ///////////////////////
 
@@ -66,4 +83,15 @@ const Map pashto = {
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',
+
+  ///////// Add Post Bottom Bar ///////////////////
+  'addPhotoVideo': 'انځور/ ویډیو',
+
+  'select6Images': '۶ انځوره پورته کوی شی.',
+  '6ImagesSelected': '۶ پوره شول',
+  'wait': 'منتظر اوسی لطفاً...',
+
+  ///////// Search //////////////////
+
+  'search': 'پلټنه...',
 };

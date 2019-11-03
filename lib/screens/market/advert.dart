@@ -5,6 +5,7 @@ import '../../constant_widgets/constants.dart';
 import 'advertDetails.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
+import '../../languages/index.dart';
 
 class Advert extends StatefulWidget {
   final Map<String, dynamic> advert;
@@ -35,14 +36,17 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
 
   @override
   Widget build(BuildContext context) {
+    final appLanguage = getLanguages(context);
     final advert = widget.advert;
     return Padding(
-      padding: const EdgeInsets.only(top: 3.0),
+      padding: const EdgeInsets.only(bottom: 4.0),
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 1,
           decoration: BoxDecoration(),
           child: Card(
+            margin: EdgeInsets.symmetric(horizontal: 2.0),
+            color: Colors.white,
             child: Column(
               children: <Widget>[
                 Row(
@@ -67,17 +71,18 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                       children: <Widget>[
                         postTittleHolder(advert['postTitle']),
                         postContent(
-                          advert['postText'],
-                          advert['postPictures'],
-                          revealMoreTextFlag,
-                          _revealMoreText,
+                          text: advert['postText'],
+                          images: advert['postPictures'],
+                          flag: revealMoreTextFlag,
+                          onRevealMoreText: _revealMoreText,
+                          appLanguage: appLanguage,
                         ),
                       ],
                     ),
                   ),
                 ),
-                postLikesCommentsCountHolder(
-                    advert['postLikes'], advert['postComments']),
+//                postLikesCommentsCountHolder(
+//                    advert['likes'], advert['postComments'], appLanguage),
                 kHorizontalDivider,
                 advertActionButtons(goToDetailsScreen, context),
               ],

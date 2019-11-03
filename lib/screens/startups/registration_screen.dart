@@ -203,9 +203,11 @@ class _RegistrationState extends State<Registration> {
         child: TextFormField(
           onChanged: onChange,
           validator: (value) {
-            String errorText = lang == 'English' ? 'Enter ' : error;
+            String errorText = error;
             if (value.isEmpty) {
-              return '$type $errorText';
+              return lang == 'English'
+                  ? '$errorText $type'
+                  : '$type $errorText';
             }
             return null;
           },
@@ -226,10 +228,10 @@ class _RegistrationState extends State<Registration> {
                 vertical: 15,
                 horizontal: 20,
               ),
-              hintText: type.toUpperCase(),
+              hintText: type,
               hintStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: 20,
+                fontSize: 17.0,
               ),
               errorStyle: TextStyle(
                 color: Colors.white,
@@ -308,7 +310,7 @@ class _RegistrationState extends State<Registration> {
                   onFacebookRegistration(appLanguage);
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.41,
                   padding: EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
@@ -317,6 +319,7 @@ class _RegistrationState extends State<Registration> {
                   child: _isFacebookRegistering
                       ? Center(child: progressIndicator())
                       : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
                               language == 'English'
@@ -343,7 +346,7 @@ class _RegistrationState extends State<Registration> {
                   onGoogleRegistration(appLanguage);
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.43,
                   padding: EdgeInsets.symmetric(
                     vertical: 10.0,
                     horizontal: 15.0,
@@ -394,7 +397,7 @@ class _RegistrationState extends State<Registration> {
               'Have an account?',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 22,
               ),
             ),
             FlatButton(
@@ -406,7 +409,7 @@ class _RegistrationState extends State<Registration> {
                 'Login',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 25,
+                  fontSize: 22,
                 ),
               ),
             )
@@ -421,7 +424,7 @@ class _RegistrationState extends State<Registration> {
             appLanguage['haveAnAccount'],
             style: TextStyle(
               color: Colors.white,
-              fontSize: 25,
+              fontSize: 22,
             ),
           ),
           FlatButton(
@@ -434,7 +437,7 @@ class _RegistrationState extends State<Registration> {
               appLanguage['login'],
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 24,
               ),
             ),
           ),

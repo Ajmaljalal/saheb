@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/widgets/circularProgressIndicator.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/userNameHolder.dart';
 import '../../widgets/userLocationHolder.dart';
@@ -37,9 +38,14 @@ class _SettingsState extends State<Settings> {
 //    }
   }
 
+  Future getUserProfile() async {
+    final user = await Provider.of<AuthProvider>(context).currentUser;
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _language = Provider.of<LanguageProvider>(context).getLanguage;
+//    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     return SingleChildScrollView(
       child: Container(
@@ -49,14 +55,15 @@ class _SettingsState extends State<Settings> {
         ),
         child: Column(
           children: <Widget>[
-            _userProfile(),
+            _userProfile(
+              getUserProfile,
+            ),
             Container(
               margin: EdgeInsets.only(top: 30.0),
               child: _settingsOptions(appLanguage),
             ),
             Divider(color: Colors.black),
             customButton(
-              userLanguage: _language,
               appLanguage: appLanguage,
               context: context,
               onClick: onSignOut,
@@ -70,18 +77,29 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget _userProfile() {
-    return Center(
-      child: Column(
-        children: <Widget>[
-          imageRenderer(
-            height: 80.0,
-            width: 80.0,
-          ),
-          userNameHolder(name: 'Ajmal Jalal', fontSize: 30.0),
-          userLocationHolder('12 District'),
-        ],
-      ),
+  Widget _userProfile(currentUser) {
+    var user;
+    return FutureBuilder(
+      future: currentUser(),
+      builder: (context, userSnapshot) {
+        user = userSnapshot.data;
+        if (user != null) {
+          return Center(
+            child: Column(
+              children: <Widget>[
+                imageRenderer(
+                  height: 80.0,
+                  width: 80.0,
+                  photo: user.photoUrl,
+                ),
+                userNameHolder(name: user.displayName, fontSize: 30.0),
+                userLocationHolder('12 District'),
+              ],
+            ),
+          );
+        } else
+          return Center(child: progressIndicator());
+      },
     );
   }
 

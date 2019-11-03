@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+//import 'package:provider/provider.dart';
 import '../widgets/button.dart';
-import '../providers/languageProvider.dart';
+//import '../providers/languageProvider.dart';
 import '../languages/index.dart';
 
 class AddPostMixin {
   Widget typeOfBusinessOptions(
-      {onDropDownChange, dropdownValue, dropdownItems, context}) {
+      {onDropDownChange, dropdownValue, dropdownItems, appLanguage, context}) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.cyanAccent),
@@ -17,7 +19,7 @@ class AddPostMixin {
       child: DropdownButton(
         value: dropdownValue,
         isExpanded: true,
-        hint: Text('نوع معامله'),
+//        hint: Text('${appLanguage['typeOfTransaction']}'),
         icon: Icon(
           Icons.arrow_drop_down,
           color: Theme.of(context).accentColor,
@@ -49,11 +51,12 @@ class AddPostMixin {
     );
   }
 
-  Widget postTitle(type) {
-    final label = type == 'تجارتی'
-        ? 'عنوان: (مثلاً موتر فروشی، خانه کرایی و غیره...)'
-        : 'عنوان...';
+  Widget postTitle({type, appLanguage, onChange}) {
+    final label = type == appLanguage['advert']
+        ? appLanguage['advertPostTitle']
+        : appLanguage['postTitle'];
     return TextField(
+      onChanged: onChange,
       style: TextStyle(
         height: 0.95,
         fontSize: 20.0,
@@ -71,11 +74,12 @@ class AddPostMixin {
     );
   }
 
-  Widget textArea(type) {
-    final label = type == 'تجارتی'
-        ? 'تشریح: (مثلا رنګ، سال، مستعمل، جدید و غیره...)'
-        : 'مطلب...';
+  Widget textArea({type, appLanguage, onChange}) {
+    final label = type == appLanguage['advert']
+        ? appLanguage['advertPostDiscription']
+        : appLanguage['postDiscription'];
     return TextField(
+      onChanged: onChange,
       maxLines: 5,
       style: TextStyle(
         fontSize: 20.0,
@@ -94,7 +98,7 @@ class AddPostMixin {
     );
   }
 
-  Widget phoneNumberArea() {
+  Widget phoneNumberArea(appLanguage) {
     return Container(
       child: TextField(
         style: TextStyle(
@@ -102,7 +106,7 @@ class AddPostMixin {
           fontSize: 20.0,
         ),
         decoration: InputDecoration(
-          labelText: 'نمبر موبایل (اختیاری):',
+          labelText: appLanguage['phone'],
           labelStyle: TextStyle(
             fontSize: 15.0,
           ),
@@ -115,7 +119,7 @@ class AddPostMixin {
     );
   }
 
-  Widget emailAddressArea() {
+  Widget emailAddressArea(appLanguage) {
     return Container(
       child: TextField(
         style: TextStyle(
@@ -123,7 +127,7 @@ class AddPostMixin {
           fontSize: 20.0,
         ),
         decoration: InputDecoration(
-          labelText: 'ایمیل آدرس (اختیاری):',
+          labelText: appLanguage['optionalEmail'],
           labelStyle: TextStyle(
             fontSize: 15.0,
           ),
@@ -136,30 +140,69 @@ class AddPostMixin {
     );
   }
 
-  Widget photoVideoArea(url) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: 5.0,
-        horizontal: 5.0,
-      ),
-      child: Image.network(
-        url,
-        height: 70,
-        width: 70,
-        filterQuality: FilterQuality.low,
-        fit: BoxFit.cover,
-      ),
-    );
+  List photoVideoArea(images, deleteSelectedImage) {
+    return images.map((image) {
+      final index = images.indexOf(image);
+      if (image != null) {
+        return Container(
+          margin: EdgeInsets.only(
+            top: 10.0,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.symmetric(
+                  vertical: 5.0,
+                  horizontal: 5.0,
+                ),
+                child: Image.file(
+                  image,
+                  height: 50,
+                  width: 50,
+                  filterQuality: FilterQuality.low,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  deleteSelectedImage(index);
+                },
+                child: Container(
+                  width: 20.0,
+                  height: 20.0,
+//                padding: EdgeInsets.only(right: 10.0, top: 5.0),
+                  color: Colors.purple,
+                  child: Center(
+                    child: Text(
+                      'X',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      } else
+        return Text('');
+    }).toList();
   }
 
-  Widget bottomBar({onSend, onOpenPhotoVideo, context}) {
-    final _language = Provider.of<LanguageProvider>(context).getLanguage;
+  Widget bottomBar({
+    onSend,
+    onOpenPhotoVideo,
+    context,
+    maxImageSize,
+    appLanguage,
+  }) {
     final appLanguage = getLanguages(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         customButton(
-          userLanguage: _language,
           appLanguage: appLanguage,
           context: context,
           onClick: onSend,
@@ -167,15 +210,42 @@ class AddPostMixin {
           width: MediaQuery.of(context).size.width * 0.2,
           height: 32.0,
         ),
-        FlatButton(
-          child: Text(
-            'Add Photo/Video',
-            style: TextStyle(
-              fontSize: 20.0,
+//        FlatButton(
+        Row(
+          children: <Widget>[
+            maxImageSize
+                ? Text(appLanguage['6ImagesSelected'].toString())
+                : Text(appLanguage['select6Images'].toString()),
+            IconButton(
+              icon: Icon(
+                Icons.photo_camera,
+                color: maxImageSize ? Colors.grey : Colors.black,
+              ),
+              onPressed: () {
+                if (maxImageSize == false) {
+                  onOpenPhotoVideo(ImageSource.camera);
+                } else {
+                  return;
+                }
+              },
             ),
-          ),
-          onPressed: onOpenPhotoVideo,
+            IconButton(
+              icon: Icon(
+                Icons.photo_library,
+                color: maxImageSize ? Colors.grey : Colors.black,
+              ),
+              onPressed: () {
+                if (maxImageSize == false) {
+                  onOpenPhotoVideo(ImageSource.gallery);
+                } else {
+                  return;
+                }
+              },
+            ),
+          ],
         ),
+//          onPressed: onOpenPhotoVideo,
+//        ),
       ],
     );
   }

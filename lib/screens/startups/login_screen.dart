@@ -86,13 +86,8 @@ class _LoginState extends State<Login> {
     setState(() {
       _isFacebookLogingIn = true;
     });
-    var _userId;
     try {
-      _userId =
-          await Provider.of<AuthProvider>(context).facebookSignIn('login');
-//      if (_userId.length > 0) {
-//        Navigator.of(context).pushReplacementNamed('/mainFeeds');
-//      }
+      await Provider.of<AuthProvider>(context).facebookSignIn('login');
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       showErrorDialog(
@@ -163,8 +158,8 @@ class _LoginState extends State<Login> {
                   Center(
                     child: Divider(
                       color: Colors.white,
-                      indent: 50.0,
-                      endIndent: 50.0,
+                      indent: 45.0,
+                      endIndent: 45.0,
                     ),
                   ),
                   Center(child: haveAnAccountText(_language, appLanguage))
@@ -187,9 +182,11 @@ class _LoginState extends State<Login> {
         child: TextFormField(
           onChanged: onChange,
           validator: (value) {
-            String errorText = lang == 'English' ? 'Enter ' : error;
+            String errorText = error;
             if (value.isEmpty) {
-              return '$type $errorText';
+              return lang == 'English'
+                  ? '$errorText $type'
+                  : '$type $errorText';
             }
             return null;
           },
@@ -214,10 +211,10 @@ class _LoginState extends State<Login> {
               color: Colors.white,
               fontSize: 20.0,
             ),
-            hintText: type.toUpperCase(),
+            hintText: type,
             hintStyle: TextStyle(
               color: Colors.grey,
-              fontSize: 20,
+              fontSize: 17,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),
@@ -301,6 +298,7 @@ class _LoginState extends State<Login> {
                   child: _isFacebookLogingIn
                       ? Center(child: progressIndicator())
                       : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
                               language == 'English'
@@ -339,6 +337,7 @@ class _LoginState extends State<Login> {
                   child: _isGoogleLogingIn
                       ? Center(child: progressIndicator())
                       : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
                               language == 'English'
@@ -377,7 +376,7 @@ class _LoginState extends State<Login> {
               'Do not an account?',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 22,
               ),
             ),
             FlatButton(
@@ -389,7 +388,7 @@ class _LoginState extends State<Login> {
                 'Register',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 25,
+                  fontSize: 24,
                 ),
               ),
             )
@@ -404,7 +403,7 @@ class _LoginState extends State<Login> {
             appLanguage['doNotHaveAnAccount'],
             style: TextStyle(
               color: Colors.white,
-              fontSize: 25,
+              fontSize: 22,
             ),
           ),
           FlatButton(
@@ -417,7 +416,7 @@ class _LoginState extends State<Login> {
               appLanguage['register'],
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 25,
+                fontSize: 24,
               ),
             ),
           ),

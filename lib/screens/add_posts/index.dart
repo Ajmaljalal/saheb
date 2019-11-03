@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'advert_post.dart';
 import 'none_advert_post.dart';
+import '../../languages/index.dart';
 
 class AddPost extends StatefulWidget {
   @override
@@ -9,7 +10,7 @@ class AddPost extends StatefulWidget {
 
 class _AddPostState extends State<AddPost> {
   String postType = '';
-
+  var changeCurrentIndexFunction;
   onSelectPostType(value) {
     setState(() {
       postType = value;
@@ -18,8 +19,12 @@ class _AddPostState extends State<AddPost> {
 
   @override
   Widget build(BuildContext context) {
+    final appLanguage = getLanguages(context);
     return Scaffold(
       backgroundColor: Colors.grey,
+      appBar: AppBar(
+        title: Text(appLanguage['addNewPost'].toString()),
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height * 0.8,
         decoration: BoxDecoration(
@@ -37,40 +42,40 @@ class _AddPostState extends State<AddPost> {
           child: Column(
             children: <Widget>[
               Text(
-                'در باره چه می خواهید بنویسید؟',
+                appLanguage['whatPost'].toString(),
                 style: TextStyle(
                   fontSize: 22.0,
                 ),
               ),
               SizedBox(height: 20.0),
               _postTypeOption(
-                type: 'general',
-                text: 'مثلاً در باره حوادث عادی از محل بود و باش شما.',
-                appLanguageText: 'عمومی',
+                type: appLanguage['general'],
+                text: appLanguage['textForGeneralPost'],
+                appLanguageText: appLanguage['general'],
                 bgColor: true,
               ),
               _postTypeOption(
-                type: 'advert',
-                text: 'مثلاً می خواهید چیزی بخرید، بفروشید و یا به کراه دهید.',
-                appLanguageText: 'تجارتی',
+                type: appLanguage['advert'],
+                text: appLanguage['textForAdvertPost'],
+                appLanguageText: appLanguage['advert'],
                 bgColor: false,
               ),
               _postTypeOption(
-                type: 'urgent',
-                text: 'مثلاً به خون ضرورت است، راه بند است، و حوادث امنیتی.',
-                appLanguageText: 'عاجل',
+                type: appLanguage['emergency'],
+                text: appLanguage['textForEmergencyPost'],
+                appLanguageText: appLanguage['emergency'],
                 bgColor: true,
               ),
               _postTypeOption(
-                type: 'lost',
-                text: 'مثلاً چیزی یا شخصی مفقود ګردیده.',
-                appLanguageText: 'مفقودی',
+                type: appLanguage['lost'],
+                text: appLanguage['textForLostPost'],
+                appLanguageText: appLanguage['lost'],
                 bgColor: false,
               ),
               _postTypeOption(
-                type: 'found',
-                text: 'مثلاً چیزی یا شخصی دریافت ګردیده.',
-                appLanguageText: 'دریافتی',
+                type: appLanguage['found'],
+                text: appLanguage['textForFoundPost'],
+                appLanguageText: appLanguage['found'],
                 bgColor: true,
               ),
             ],
@@ -88,7 +93,7 @@ class _AddPostState extends State<AddPost> {
   }) {
     return GestureDetector(
       onTap: () {
-        type != 'advert'
+        type != 'advert' || type != 'اعلان'
             ? Navigator.push(context,
                 MaterialPageRoute(builder: (context) => NoneAdvertPost(type)))
             : Navigator.push(
@@ -117,14 +122,18 @@ class _AddPostState extends State<AddPost> {
             groupValue: postType,
             onChanged: (value) {
               onSelectPostType(value);
-              type != 'advert'
+              type == 'Advert' || type == 'اعلان'
                   ? Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => NoneAdvertPost(type)))
+                        builder: (context) => AdvertPost(),
+                      ),
+                    )
                   : Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => AdvertPost()),
+                      MaterialPageRoute(
+                        builder: (context) => NoneAdvertPost(type),
+                      ),
                     );
             },
             activeColor: Theme.of(context).accentColor,
