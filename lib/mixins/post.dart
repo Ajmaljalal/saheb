@@ -430,8 +430,8 @@ class PostMixin {
                 color: Colors.cyan,
                 size: 18,
               ),
-              onPressed: () {
-                likeComment(comment);
+              onPressed: () async {
+                await likeComment(comment);
               },
             ),
             canDeleteComment
@@ -479,14 +479,16 @@ class PostMixin {
     final TextEditingController _controller = new TextEditingController();
     return Container(
       width: MediaQuery.of(context).size.width,
+//      height: 50.0,
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black,
-            blurRadius: 5.0,
+        border: Border(
+          top: BorderSide(
+            //                    <--- top side
+            color: Colors.grey,
+            width: .4,
           ),
-        ],
+        ),
       ),
       child: Container(
         padding: kPaddingAll5,
@@ -502,7 +504,7 @@ class PostMixin {
                   FontAwesomeIcons.arrowAltCircleUp,
                   textDirection: TextDirection.ltr,
                   color: Colors.cyan,
-                  size: 45.0,
+                  size: 36.0,
                 ),
                 onTap: () {
                   onSubmit();
@@ -553,13 +555,13 @@ class PostMixin {
             Container(
               padding: EdgeInsets.only(
                 right: 5.0,
-                bottom: 7.0,
+                bottom: 5.0,
               ),
               child: InkWell(
                 child: Icon(
                   FontAwesomeIcons.arrowAltCircleDown,
                   color: Colors.grey,
-                  size: 45.0,
+                  size: 36.0,
                 ),
                 onTap: () {
                   onClearTextField();

@@ -41,11 +41,13 @@ class _PostState extends State<Post> with PostMixin {
   }
 
   updateLikes(context) {
-    Provider.of<PostsProvider>(context).updatePostLikes(widget.post.documentID);
+    Provider.of<PostsProvider>(context)
+        .updatePostLikes(widget.post.documentID, 'posts');
   }
 
   deletePost(context) {
-    Provider.of<PostsProvider>(context).deleteOnePost(widget.post.documentID);
+    Provider.of<PostsProvider>(context)
+        .deleteOnePost(widget.post.documentID, 'posts');
   }
 
   @override
@@ -56,16 +58,20 @@ class _PostState extends State<Post> with PostMixin {
 
     return Padding(
       padding: const EdgeInsets.only(
-        bottom: 4.0,
-        top: 2.0,
-      ),
+//        bottom: 1.0,
+//        top: 2.0,
+          ),
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 1,
           decoration: BoxDecoration(),
           child: Card(
+            elevation: 0.0,
             color: Colors.white,
-            margin: EdgeInsets.symmetric(horizontal: 2.0),
+            margin: EdgeInsets.symmetric(
+              vertical: 3.0,
+              horizontal: 1.0,
+            ),
             child: Column(
               children: <Widget>[
                 Row(
@@ -100,9 +106,10 @@ class _PostState extends State<Post> with PostMixin {
                   ),
                 ),
                 postLikesCommentsCountHolder(
-                    post: post,
-                    appLanguage: appLanguage,
-                    userId: currentUserId),
+                  post: post,
+                  appLanguage: appLanguage,
+                  userId: currentUserId,
+                ),
                 kHorizontalDivider,
                 postActionButtons(
                   onClickComment: goToDetailsScreen,

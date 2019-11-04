@@ -62,7 +62,7 @@ class AddPostMixin {
         fontSize: 20.0,
       ),
       decoration: InputDecoration(
-        labelText: label,
+        labelText: label.toString(),
         labelStyle: TextStyle(
           fontSize: 15.0,
         ),
@@ -98,9 +98,10 @@ class AddPostMixin {
     );
   }
 
-  Widget phoneNumberArea(appLanguage) {
+  Widget phoneNumberArea({appLanguage, onChange}) {
     return Container(
       child: TextField(
+        onChanged: onChange,
         style: TextStyle(
           height: 0.95,
           fontSize: 20.0,
@@ -119,15 +120,16 @@ class AddPostMixin {
     );
   }
 
-  Widget emailAddressArea(appLanguage) {
+  Widget emailAddressArea({appLanguage, onChange}) {
     return Container(
       child: TextField(
+        onChanged: onChange,
         style: TextStyle(
           height: 0.95,
           fontSize: 20.0,
         ),
         decoration: InputDecoration(
-          labelText: appLanguage['optionalEmail'],
+          labelText: appLanguage['optionalEmail'].toString(),
           labelStyle: TextStyle(
             fontSize: 15.0,
           ),

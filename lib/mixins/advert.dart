@@ -6,7 +6,17 @@ import '../providers/languageProvider.dart';
 import '../languages/index.dart';
 
 class AdvertMixin {
-  Widget advertActionButtons(onClickComment, context) {
+  Widget advertActionButtons({
+    onClickComment,
+    advertId,
+    userId,
+    advert,
+    advertTitle,
+    flag,
+    updateLikes,
+    onDeleteAdvert,
+    context,
+  }) {
     final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
     final screenSize = MediaQuery.of(context).size;
@@ -73,7 +83,11 @@ class AdvertMixin {
               ),
               borderSide: BorderSide.none,
               onPressed: () {
-                onClickComment();
+                if (flag == 'details') {
+                  onClickComment();
+                } else {
+                  onClickComment(advertId, advertTitle);
+                }
               },
             ),
           ),

@@ -32,7 +32,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
 
   updateLikes(context) {
     Provider.of<PostsProvider>(context, listen: false)
-        .updatePostLikes(widget.postId);
+        .updatePostLikes(widget.postId, 'posts');
   }
 
   addComment() async {
@@ -41,12 +41,14 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
       final currentUserId =
           Provider.of<AuthProvider>(context, listen: false).userId;
       await Provider.of<PostsProvider>(context, listen: false).addCommentOnPost(
+        collection: 'posts',
         postId: widget.postId,
         text: _text,
         user: {
           'name': user.displayName,
           'id': currentUserId,
           'photo': user.photoUrl,
+          'location': 'some location'
         },
       );
     } else
@@ -61,17 +63,26 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
   }
 
   updateCommentLikes(postComment) async {
-    await Provider.of<PostsProvider>(context, listen: false)
-        .updateCommentLikes(postComment: postComment, postId: widget.postId);
+    await Provider.of<PostsProvider>(context, listen: false).updateCommentLikes(
+      collection: 'posts',
+      postComment: postComment,
+      postId: widget.postId,
+    );
   }
 
   deleteComment(postComment) async {
-    await Provider.of<PostsProvider>(context, listen: false)
-        .deleteComment(postComment: postComment, postId: widget.postId);
+    await Provider.of<PostsProvider>(context, listen: false).deleteComment(
+      collection: 'posts',
+      postComment: postComment,
+      postId: widget.postId,
+    );
   }
 
   deletePost(context) async {
-    await Provider.of<PostsProvider>(context).deleteOnePost(widget.postId);
+    await Provider.of<PostsProvider>(context).deleteOnePost(
+      'posts',
+      widget.postId,
+    );
   }
 
   @override
@@ -132,13 +143,15 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     userId,
   }) {
     return StreamBuilder(
-      stream: Provider.of<PostsProvider>(context).getOnePost(postId),
+      stream: Provider.of<PostsProvider>(context).getOnePost('posts', postId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Text("Loading..");
         }
         var post = snapshot.data;
         return Card(
+          margin: EdgeInsets.symmetric(vertical: 2.0),
+          elevation: 0.0,
           child: Column(
             children: <Widget>[
               Row(

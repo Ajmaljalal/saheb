@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import '../../providers/adverts.dart';
+import 'package:saheb/providers/postsProvider.dart';
+import '../../providers/authProvider.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
 import '../../languages/index.dart';
+import 'package:saheb/widgets/fullScreenImage.dart';
 
 class AdvertDetails extends StatefulWidget {
-  final String id;
-  AdvertDetails({Key key, this.id}) : super(key: key);
+  final advertTitle;
+  final advertId;
+  AdvertDetails({Key key, this.advertId, this.advertTitle}) : super(key: key);
   @override
   _AdvertDetailsState createState() => _AdvertDetailsState();
 }
@@ -16,98 +19,225 @@ class AdvertDetails extends StatefulWidget {
 class _AdvertDetailsState extends State<AdvertDetails>
     with PostMixin, AdvertMixin {
   bool addCommentFocusFlag = false;
+  String _text;
 
   FocusNode commentFieldFocusNode = FocusNode();
+
+  handleTextInputChange(value) {
+    _text = value;
+  }
+
   addCommentTextFieldFocus() {
     FocusScope.of(context).requestFocus(commentFieldFocusNode);
   }
 
+  updateLikes(context) {
+    Provider.of<PostsProvider>(context, listen: false)
+        .updatePostLikes(widget.advertId, 'adverts');
+  }
+
+  addComment() async {
+    final user = await Provider.of<AuthProvider>(context).currentUser;
+    if (_text != null && _text.length != 0) {
+      final currentUserId =
+          Provider.of<AuthProvider>(context, listen: false).userId;
+      await Provider.of<PostsProvider>(context, listen: false).addCommentOnPost(
+        collection: 'adverts',
+        postId: widget.advertId,
+        text: _text,
+        user: {
+          'name': user.displayName,
+          'id': currentUserId,
+          'photo': user.photoUrl,
+          'location': 'some location'
+        },
+      );
+    } else
+      return;
+
+    FocusScope.of(context).unfocus();
+  }
+
+  clearAddCommentTextField() {
+    FocusScope.of(context).unfocus();
+    _text = '';
+  }
+
+  updateCommentLikes(advertComment) async {
+    await Provider.of<PostsProvider>(context, listen: false).updateCommentLikes(
+      collection: 'adverts',
+      postComment: advertComment,
+      postId: widget.advertId,
+    );
+  }
+
+  deleteComment(postComment) async {
+    await Provider.of<PostsProvider>(context, listen: false).deleteComment(
+      collection: 'adverts',
+      postComment: postComment,
+      postId: widget.advertId,
+    );
+  }
+
+  deletePost(context) async {
+    await Provider.of<PostsProvider>(context).deleteOnePost(
+      'advert',
+      widget.advertId,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Map adverts = Provider.of<Adverts>(context).getAdverts;
     final appLanguage = getLanguages(context);
-    Map advert = adverts[widget.id];
+    final String advertTitle = widget.advertTitle;
+    final String advertId = widget.advertId;
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(advert['postTitle'])),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: Stack(
-            children: <Widget>[
-              Container(),
-              SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.only(bottom: 65.0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        width: MediaQuery.of(context).size.width * 1,
-                        decoration: BoxDecoration(),
-                        child: Card(
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  cardHeader(advert),
-                                  postTypeHolder(context, advert['postType']),
-                                ],
-                              ),
-                              Row(
-                                children: <Widget>[
-                                  postTittleHolder(advert['postTitle']),
-                                ],
-                              ),
-                              postContent(
-                                text: advert['postText'],
-                                images: advert['postPictures'],
-                                flag: true,
-                                onRevealMoreText: null,
-                                appLanguage: appLanguage,
-                              ),
-//                              postLikesCommentsCountHolder(
-//                                advert['postLikes'],
-//                                advert['postComments'],
-//                                appLanguage,
-//                              ),
-                              Divider(
-                                color: Colors.grey,
-                                height: 1,
-                              ),
-                              advertActionButtons(
-                                  addCommentTextFieldFocus, context),
-                              Divider(
-                                color: Colors.grey,
-                                height: 1,
-                              ),
-//                              individualCommentRenderer(advert['postComments']),
-//                              individualCommentRenderer(advert['postComments']),
-//                              individualCommentRenderer(advert['postComments']),
-                            ],
-                          ),
-                        ),
+        appBar: AppBar(title: Text(advertTitle)),
+        body: Stack(
+          children: <Widget>[
+            Container(),
+            SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.only(bottom: 65.0),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width * 1,
+                      decoration: BoxDecoration(),
+                      child: renderPostContentAndComments(
+                        advertId: advertId,
+                        advertTitle: advertTitle,
+                        appLanguage: appLanguage,
+                        userId: currentUserId,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-//              Positioned(
-////                bottom: 0.0,
-////                right: 0,
-////                left: 0,
-////                child: addCommentTextField(
-////                  commentFieldFocusNode,
-////                  appLanguage,
-////                ),
-////              ),
-            ],
-          ),
+            ),
+            Positioned(
+              bottom: 0.0,
+              right: 0,
+              left: 0,
+              child: addCommentTextField(
+                focusNode: commentFieldFocusNode,
+                appLanguage: appLanguage,
+                onChange: handleTextInputChange,
+                onSubmit: addComment,
+                userId: currentUserId,
+                onClearTextField: clearAddCommentTextField,
+                context: context,
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  renderPostContentAndComments({
+    advertId,
+    advertTitle,
+    appLanguage,
+    userId,
+  }) {
+    return StreamBuilder(
+      stream:
+          Provider.of<PostsProvider>(context).getOnePost('adverts', advertId),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Text("Loading..");
+        }
+        var advert = snapshot.data;
+        return Card(
+          elevation: 0.0,
+          margin: EdgeInsets.symmetric(
+            vertical: 3.0,
+            horizontal: 1.0,
+          ),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  cardHeader(advert),
+                  postTypeHolder(context, advert['type']),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  postTittleHolder(advert['title']),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  if (advert['images'].length > 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImage(
+                          images: advert['images'],
+                        ),
+                      ),
+                    );
+                  } else {
+                    return;
+                  }
+                },
+                child: postContent(
+                  text: advert['text'],
+                  images: advert['images'],
+                  flag: true,
+                  onRevealMoreText: null,
+                  appLanguage: appLanguage,
+                  context: context,
+                  imagesScrollView: Axis.horizontal,
+                ),
+              ),
+              postLikesCommentsCountHolder(
+                post: advert,
+                appLanguage: appLanguage,
+                userId: userId,
+              ),
+              Divider(
+                color: Colors.grey,
+                height: 1,
+              ),
+              advertActionButtons(
+                onClickComment: addCommentTextFieldFocus,
+                advertId: advertId,
+                userId: userId,
+                advert: advert,
+                advertTitle: advertTitle,
+                flag: 'details',
+                updateLikes: updateLikes,
+                context: context,
+                onDeleteAdvert: deletePost,
+              ),
+              Divider(
+                color: Colors.grey,
+                height: 1,
+              ),
+              Container(
+                child: Column(
+                  children: <Widget>[
+                    ...individualCommentRenderer(
+                      comments: advert['comments'],
+                      likeComment: updateCommentLikes,
+                      deleteComment: deleteComment,
+                      userId: userId,
+                      postOwnerId: advert['owner']['id'],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -75,7 +75,7 @@ OutlineInputBorder kOutlineInputBorderGrey = OutlineInputBorder(
   borderRadius: BorderRadius.circular(30),
   borderSide: BorderSide(
     color: Colors.black12,
-    width: 2.0,
+    width: .5,
   ),
 );
 
@@ -91,6 +91,6 @@ OutlineInputBorder kOutlineInputBorderPurple = OutlineInputBorder(
   borderRadius: BorderRadius.circular(30),
   borderSide: BorderSide(
     color: Colors.deepPurple,
-    width: 2.0,
+    width: 1.0,
   ),
 );
