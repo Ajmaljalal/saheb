@@ -30,32 +30,65 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  deleteOnePost(postId) async {
+  addOneAdvert({
+    owner,
+    text,
+    title,
+    type,
+    email,
+    price,
+    phone,
+    images,
+    location,
+  }) {
     try {
-      await db.collection('posts').document(postId).delete();
+      db.collection('adverts').add(
+        {
+          'comments': [],
+          'date': DateTime.now(),
+          'likes': 0,
+          'owner': owner,
+          'text': text,
+          'title': title,
+          'phone': phone,
+          'email': email,
+          'price': price,
+          'type': type,
+          'images': images,
+          'location': location
+        },
+      );
     } catch (e) {
       print(e.toString());
     }
   }
 
-  Stream<QuerySnapshot> getAllPosts() {
-    final dataStream = db.collection('posts').snapshots();
+  deleteOnePost(postId, collection) async {
+    try {
+      await db.collection(collection).document(postId).delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Stream<QuerySnapshot> getAllPosts(String collection) {
+    final dataStream = db.collection(collection).snapshots();
     return dataStream;
   }
 
-  Stream<DocumentSnapshot> getOnePost(id) {
+  Stream<DocumentSnapshot> getOnePost(collection, id) {
     var dataStream;
     try {
-      dataStream = db.collection('posts').document(id).snapshots();
+      dataStream = db.collection(collection).document(id).snapshots();
     } catch (e) {
       print(e.toString());
     }
     return dataStream;
   }
 
-  updatePostLikes(String postId) {
+  updatePostLikes(String postId, collection) {
     try {
-      db.collection('posts').document(postId).updateData(
+      db.collection(collection).document(postId).updateData(
         {
           'likes': FieldValue.increment(1),
         },
@@ -65,9 +98,9 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  addCommentOnPost({String postId, String text, Map user}) {
+  addCommentOnPost({String postId, String text, Map user, String collection}) {
     try {
-      db.collection('posts').document(postId).updateData(
+      db.collection(collection).document(postId).updateData(
         {
           'comments': FieldValue.arrayUnion(
             [
@@ -87,10 +120,10 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  updateCommentLikes({String postId, postComment}) {
+  updateCommentLikes({String postId, postComment, collection}) async {
     //// add date to work
     try {
-      db.collection('posts').document(postId).updateData(
+      await db.collection(collection).document(postId).updateData(
         {
           'comments': FieldValue.arrayRemove(
             [
@@ -105,7 +138,7 @@ class PostsProvider with ChangeNotifier {
           )
         },
       );
-      db.collection('posts').document(postId).updateData(
+      db.collection(collection).document(postId).updateData(
         {
           'comments': FieldValue.arrayUnion(
             [
@@ -125,9 +158,13 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  deleteComment({String postId, postComment}) {
+  deleteComment({
+    String postId,
+    postComment,
+    collection,
+  }) {
     try {
-      db.collection('posts').document(postId).updateData(
+      db.collection(collection).document(postId).updateData(
         {
           'comments': FieldValue.arrayRemove(
             [

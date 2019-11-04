@@ -5,9 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flushbar/flushbar.dart';
-//import 'package:firebase_storage/firebase_storage.dart';
-//import 'package:path/path.dart' as Path;
-//import 'package:saheb/widgets/errorDialog.dart';
 import '../../providers/authProvider.dart';
 import '../../widgets/button.dart';
 import '../../util/uploadImage.dart';
@@ -142,16 +139,18 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                         height: 15.0,
                       ),
                       postTitle(
-                          type: appLanguage['general'],
-                          appLanguage: appLanguage,
-                          onChange: onTitleInputChange),
+                        type: appLanguage['general'],
+                        appLanguage: appLanguage,
+                        onChange: onTitleInputChange,
+                      ),
                       SizedBox(
                         height: 10.0,
                       ),
                       textArea(
-                          type: appLanguage['general'],
-                          appLanguage: appLanguage,
-                          onChange: onTextInputChange),
+                        type: appLanguage['general'],
+                        appLanguage: appLanguage,
+                        onChange: onTextInputChange,
+                      ),
                       _images.length != 0
                           ? Row(
                               children: <Widget>[

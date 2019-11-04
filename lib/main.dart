@@ -8,7 +8,6 @@ import 'package:saheb/screens/startups/language_screen.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import './providers/languageProvider.dart';
 import './providers/postsProvider.dart';
-import './providers/adverts.dart';
 import './providers/authProvider.dart';
 import 'screens/startups/login_screen.dart';
 import 'screens/startups/registration_screen.dart';
@@ -29,9 +28,6 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: PostsProvider(),
-        ),
-        ChangeNotifierProvider.value(
-          value: Adverts(),
         ),
       ],
       child: Application(),

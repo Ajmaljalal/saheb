@@ -1,4 +1,3 @@
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 //import '../../providers/authProvider.dart';
@@ -19,18 +18,17 @@ class _PostsState extends State<Posts> {
 //    });
 
     return StreamBuilder(
-      stream: Provider.of<PostsProvider>(context).getAllPosts(),
+      stream: Provider.of<PostsProvider>(context).getAllPosts('posts'),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: Text("Loading.."));
         }
-
-//        if (snapshot.data.documents.toList().length == 0) {
-//          return Center(
-//            child: Text(
-//                'No posts exit, add post by clicking the add(+) button above'),
-//          );
-//        }
+        if (snapshot.data.documents.toList().length == 0) {
+          return Center(
+            child: Text(
+                'No posts exit, add post by clicking the add(+) button above'),
+          );
+        }
         return ListView.builder(
           itemBuilder: (context, index) {
             var post = snapshot.data.documents[index];

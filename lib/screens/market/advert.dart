@@ -1,16 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+import 'package:saheb/providers/postsProvider.dart';
 import '../../constant_widgets/constants.dart';
+import '../../providers/authProvider.dart';
 import 'advertDetails.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
 import '../../languages/index.dart';
 
 class Advert extends StatefulWidget {
-  final Map<String, dynamic> advert;
-  final String id;
-  Advert({Key key, this.advert, this.id}) : super(key: key);
+  final DocumentSnapshot advert;
+  Advert({Key key, this.advert}) : super(key: key);
 
   @override
   _AdvertState createState() => _AdvertState();
@@ -25,27 +28,51 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     });
   }
 
-  goToDetailsScreen() {
+  goToDetailsScreen(advertId, advertTitle) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AdvertDetails(id: widget.id),
+        builder: (context) => AdvertDetails(
+          advertTitle: advertTitle,
+          advertId: advertId,
+        ),
       ),
+    );
+  }
+
+  updateLikes(context) {
+    Provider.of<PostsProvider>(context)
+        .updatePostLikes(widget.advert.documentID, 'adverts');
+  }
+
+  deleteAdvert(context) {
+    Provider.of<PostsProvider>(context).deleteOnePost(
+      'adverts',
+      widget.advert.documentID,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
-    final advert = widget.advert;
+    final DocumentSnapshot advert = widget.advert;
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4.0),
+      padding: const EdgeInsets.only(
+//        bottom: 4.0,
+//        top: 2.0,
+          ),
       child: Center(
         child: Container(
           width: MediaQuery.of(context).size.width * 1,
           decoration: BoxDecoration(),
           child: Card(
-            margin: EdgeInsets.symmetric(horizontal: 2.0),
+            elevation: 0.0,
+            margin: EdgeInsets.symmetric(
+              vertical: 3.0,
+              horizontal: 1.0,
+            ),
             color: Colors.white,
             child: Column(
               children: <Widget>[
@@ -54,37 +81,52 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   crossAxisAlignment: kStart,
                   children: <Widget>[
                     cardHeader(advert),
-                    postTypeHolder(
-                      context,
-                      advert['postType'],
-                    ),
+//                    postTypeHolder(
+//                      context,
+//                      advert['postType'],
+//                    ),
                   ],
                 ),
                 GestureDetector(
                   onTap: () {
-                    goToDetailsScreen();
+                    goToDetailsScreen(advert.documentID, advert['title']);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 1,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        postTittleHolder(advert['postTitle']),
+                        postTittleHolder(advert['title']),
                         postContent(
-                          text: advert['postText'],
-                          images: advert['postPictures'],
+                          text: advert['text'],
+                          images: advert['images'],
                           flag: revealMoreTextFlag,
                           onRevealMoreText: _revealMoreText,
                           appLanguage: appLanguage,
+                          context: context,
+                          imagesScrollView: Axis.horizontal,
                         ),
                       ],
                     ),
                   ),
                 ),
-//                postLikesCommentsCountHolder(
-//                    advert['likes'], advert['postComments'], appLanguage),
+                postLikesCommentsCountHolder(
+                  post: advert,
+                  appLanguage: appLanguage,
+                  userId: currentUserId,
+                ),
                 kHorizontalDivider,
-                advertActionButtons(goToDetailsScreen, context),
+                advertActionButtons(
+                  onClickComment: goToDetailsScreen,
+                  advertId: advert.documentID,
+                  userId: currentUserId,
+                  advert: advert,
+                  advertTitle: advert['title'],
+                  flag: 'posts',
+                  updateLikes: updateLikes,
+                  onDeleteAdvert: deleteAdvert,
+                  context: context,
+                ),
               ],
             ),
           ),

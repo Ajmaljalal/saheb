@@ -93,12 +93,16 @@ class _AddPostState extends State<AddPost> {
   }) {
     return GestureDetector(
       onTap: () {
-        type != 'advert' || type != 'اعلان'
-            ? Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NoneAdvertPost(type)))
-            : Navigator.push(
+        type == 'Advert' || type == 'اعلان'
+            ? Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AdvertPost()),
+              )
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NoneAdvertPost(type),
+                ),
               );
       },
       child: Container(

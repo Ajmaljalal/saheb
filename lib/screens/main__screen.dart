@@ -3,7 +3,6 @@ import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
 import './settings/index.dart';
-import './add_posts/index.dart';
 import '../widgets/appBarSearch.dart';
 import '../screens/jobs/index.dart';
 
@@ -18,8 +17,6 @@ class _MainScreenState extends State<MainScreen> {
   String _getAppBarTitle(context) {
     final appLanguage = getLanguages(context);
     switch (_currentScreenIndex) {
-//      case 2:
-//        return appLanguage['addNewPost'];
       case 4:
         return appLanguage['settings'];
       default:
@@ -30,7 +27,6 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> screens = [
     Posts(),
     Market(),
-//    AddPost(),
     Jobs(),
     Settings(),
   ];
@@ -62,7 +58,6 @@ class _MainScreenState extends State<MainScreen> {
                       height: 30.0,
                       width: 30.0,
                       decoration: BoxDecoration(
-//                      color: Colors.cyan,
                         border: Border.all(
                           color: Colors.white,
                           width: 2.0,
@@ -120,66 +115,67 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       body: screens[_currentScreenIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _setCurrentScreen,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentScreenIndex,
-        backgroundColor: Theme.of(context).primaryColor,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white60,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-              size: 35.0,
-            ),
-            title: Text(
-              '',
-              style: TextStyle(fontSize: 0.0001),
+      bottomNavigationBar: Container(
+        height: 51.0,
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Colors.cyan,
+              width: .5,
             ),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.monetization_on,
-              size: 35.0,
+        ),
+        child: BottomNavigationBar(
+          onTap: _setCurrentScreen,
+          elevation: 10.0,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentScreenIndex,
+          backgroundColor: Colors.white,
+          selectedItemColor: Theme.of(context).accentColor,
+          unselectedItemColor: Theme.of(context).primaryColor,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 35.0,
+              ),
+              title: Text(
+                '',
+                style: TextStyle(fontSize: 0.0001),
+              ),
             ),
-            title: Text(
-              '',
-              style: TextStyle(fontSize: 0.0001),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.monetization_on,
+                size: 35.0,
+              ),
+              title: Text(
+                '',
+                style: TextStyle(fontSize: 0.0001),
+              ),
             ),
-          ),
-//          BottomNavigationBarItem(
-//            icon: Icon(
-//              Icons.add_circle_outline,
-//              size: 40.0,
-//              color: Colors.white,
-//            ),
-//            title: Text(
-//              '',
-//              style: TextStyle(fontSize: 0.0001),
-//            ),
-//          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.work,
-              size: 35.0,
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.work,
+                size: 35.0,
+              ),
+              title: Text(
+                '',
+                style: TextStyle(fontSize: 0.0001),
+              ),
             ),
-            title: Text(
-              '',
-              style: TextStyle(fontSize: 0.0001),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.settings,
+                size: 35.0,
+              ),
+              title: Text(
+                '',
+                style: TextStyle(fontSize: 0.0001),
+              ),
             ),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.settings,
-              size: 35.0,
-            ),
-            title: Text(
-              '',
-              style: TextStyle(fontSize: 0.0001),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
