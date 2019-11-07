@@ -116,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: screens[_currentScreenIndex],
       bottomNavigationBar: Container(
-        height: 51.0,
+        height: 47.0,
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -131,13 +131,14 @@ class _MainScreenState extends State<MainScreen> {
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentScreenIndex,
           backgroundColor: Colors.white,
-          selectedItemColor: Theme.of(context).accentColor,
-          unselectedItemColor: Theme.of(context).primaryColor,
+          selectedItemColor: Theme.of(context).primaryColor,
+          unselectedItemColor: Colors.grey,
+          iconSize: 30.0,
           items: [
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
-                size: 35.0,
+//                size: 30.0,
               ),
               title: Text(
                 '',
@@ -147,7 +148,7 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.monetization_on,
-                size: 35.0,
+//                size: 35.0,
               ),
               title: Text(
                 '',
@@ -157,7 +158,7 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.work,
-                size: 35.0,
+//                size: 35.0,
               ),
               title: Text(
                 '',
@@ -167,7 +168,7 @@ class _MainScreenState extends State<MainScreen> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.settings,
-                size: 35.0,
+//                size: 35.0,
               ),
               title: Text(
                 '',

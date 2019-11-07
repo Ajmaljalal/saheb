@@ -72,7 +72,8 @@ class PostsProvider with ChangeNotifier {
   }
 
   Stream<QuerySnapshot> getAllPosts(String collection) {
-    final dataStream = db.collection(collection).snapshots();
+    final dataStream =
+        db.collection(collection).orderBy("date", descending: true).snapshots();
     return dataStream;
   }
 

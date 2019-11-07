@@ -69,13 +69,14 @@ class _LoginState extends State<Login> {
     try {
       await Provider.of<AuthProvider>(context).googleSignIn('login');
     } catch (error) {
-      var errorMessage = appLanguage['loginFailed'];
-      showErrorDialog(
-        errorMessage,
-        context,
-        appLanguage['errorDialogTitle'],
-        appLanguage['ok'],
-      );
+//      var errorMessage = appLanguage['loginFailed'];
+//      showErrorDialog(
+//        errorMessage,
+//        context,
+//        appLanguage['errorDialogTitle'],
+//        appLanguage['ok'],
+//      );
+      print('error $error');
       setState(() {
         _isGoogleLogingIn = false;
       });

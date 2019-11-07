@@ -15,6 +15,7 @@ class AdvertMixin {
     flag,
     updateLikes,
     onDeleteAdvert,
+    onCallPhoneNumber,
     context,
   }) {
     final _language = Provider.of<LanguageProvider>(context).getLanguage;
@@ -64,7 +65,9 @@ class AdvertMixin {
                 style: TextStyle(fontSize: 12, color: Colors.grey[700]),
               ),
               borderSide: BorderSide.none,
-              onPressed: () {},
+              onPressed: () {
+                onCallPhoneNumber(advert['phone']);
+              },
             ),
           ),
           Container(

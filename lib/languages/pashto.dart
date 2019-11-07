@@ -64,6 +64,15 @@ const Map pashto = {
   'textForLostPost': 'مثلاً کوم شی او یا شخص ورک دی.',
   'textForFoundPost': 'مثلاً کوم لادرکه شی او یا شخص پیدا شوی دی.',
 
+  'typeOfDeal': 'د معاملې ډول',
+  'sell': 'پلورل',
+  'rent': 'کرایی',
+  'buy': 'اخیستل',
+  'needPro': 'مسلکي خدمتونه',
+
+  'price': 'بیه',
+  'free': 'وړیا',
+
   ////////// Sign in/up error messages ///////////////////////
 
   'invalidEmail':

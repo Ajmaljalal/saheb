@@ -21,16 +21,18 @@ class LanguageProvider with ChangeNotifier {
   }
 
   Future<void> changeLanguage(lang) async {
-    final prefs = await SharedPreferences.getInstance();
-
-    final uiLanguage = json.encode(
-      {
-        'language': lang,
-      },
-    );
-
-    prefs.setString('uiLanguage', uiLanguage);
-    _language = lang;
-    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final uiLanguage = json.encode(
+        {
+          'language': lang,
+        },
+      );
+      prefs.setString('uiLanguage', uiLanguage);
+      _language = lang;
+      notifyListeners();
+    } catch (error) {
+      print(error.toString());
+    }
   }
 }

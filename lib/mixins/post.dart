@@ -101,6 +101,7 @@ class PostMixin {
     appLanguage,
     context,
     imagesScrollView,
+    price,
   }) {
     return Container(
       child: Column(
@@ -122,22 +123,59 @@ class PostMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                flag
-                    ? Text('')
-                    : Padding(
-                        padding: const EdgeInsets.only(
-                          left: 8.0,
-                          bottom: 3.0,
-                          top: 0.0,
-                          right: 8.0,
+                text.toString().length < 120
+                    ? Text(
+                        '',
+                        style: TextStyle(
+                          fontSize: 0.000001,
                         ),
-                        child: Text(
-                          appLanguage['more'],
-                          style: TextStyle(color: Colors.blueAccent),
-                        ),
-                      ),
+                      )
+                    : flag
+                        ? Text(
+                            '',
+                            style: TextStyle(
+                              fontSize: 0.000001,
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                              left: 8.0,
+                              bottom: 3.0,
+                              top: 0.0,
+                              right: 8.0,
+                            ),
+                            child: Text(
+                              appLanguage['more'],
+                              style: TextStyle(color: Colors.blueAccent),
+                            ),
+                          ),
               ],
             ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              price.toString() != 'null'
+                  ? Container(
+                      color: Colors.purple,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10.0,
+                      ),
+                      child: Text(
+                        price,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 2.0,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(
+                      width: 0.0,
+                      height: 0.0,
+                    ),
+            ],
           ),
           images.length > 0
               ? postImages(
