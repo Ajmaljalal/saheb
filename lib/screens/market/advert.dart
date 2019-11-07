@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
@@ -52,6 +53,14 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     );
   }
 
+  callPhoneNumber(phoneNumber) async {
+    if (await canLaunch("tel://${phoneNumber.toString()}")) {
+      await launch(("tel://${phoneNumber.toString()}"));
+    } else {
+      throw 'Could not call $phoneNumber';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
@@ -98,14 +107,14 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                       children: <Widget>[
                         postTittleHolder(advert['title']),
                         postContent(
-                          text: advert['text'],
-                          images: advert['images'],
-                          flag: revealMoreTextFlag,
-                          onRevealMoreText: _revealMoreText,
-                          appLanguage: appLanguage,
-                          context: context,
-                          imagesScrollView: Axis.horizontal,
-                        ),
+                            text: advert['text'],
+                            images: advert['images'],
+                            flag: revealMoreTextFlag,
+                            onRevealMoreText: _revealMoreText,
+                            appLanguage: appLanguage,
+                            context: context,
+                            imagesScrollView: Axis.horizontal,
+                            price: advert['price']),
                       ],
                     ),
                   ),
@@ -125,6 +134,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   flag: 'posts',
                   updateLikes: updateLikes,
                   onDeleteAdvert: deleteAdvert,
+                  onCallPhoneNumber: callPhoneNumber,
                   context: context,
                 ),
               ],

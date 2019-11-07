@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class AdvertPost extends StatefulWidget {
 }
 
 class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
-  String dropdownValue = 'نوع معامله';
+  String dropdownValue;
   String _text;
   String _title;
   String _price;
@@ -27,13 +28,6 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   String _email;
   List<File> _images = [];
   List<String> _uploadedFileUrl = [];
-  final List<String> dropDownItems = [
-    'نوع معامله',
-    'Sell',
-    'Rent',
-    'Buy',
-    'Need for a professional'
-  ];
 
   onDropDownChange(value) {
     setState(() {
@@ -128,6 +122,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final imagesMax = _images.length > 5 ? true : false;
+
+    final List<String> dropDownItems = [
+      appLanguage['sell'].toString(),
+      appLanguage['rent'].toString(),
+      appLanguage['buy'].toString(),
+      appLanguage['needPro'].toString()
+    ];
     return Scaffold(
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -167,6 +168,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                         dropdownValue: dropdownValue,
                         dropdownItems: dropDownItems,
                         context: context,
+                        appLanguage: appLanguage,
                       ),
                       SizedBox(
                         height: 15.0,
@@ -184,6 +186,9 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                         appLanguage: appLanguage,
                         onChange: onTextInputChange,
                       ),
+                      priceArea(
+                          appLanguage: appLanguage,
+                          onChange: onPhoneInputChange),
                       phoneNumberArea(
                         appLanguage: appLanguage,
                         onChange: onPhoneInputChange,

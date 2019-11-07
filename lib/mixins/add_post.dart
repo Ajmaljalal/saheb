@@ -19,7 +19,15 @@ class AddPostMixin {
       child: DropdownButton(
         value: dropdownValue,
         isExpanded: true,
-//        hint: Text('${appLanguage['typeOfTransaction']}'),
+        hint: Container(
+          padding: EdgeInsets.only(
+            right: 10.0,
+          ),
+          child: Text(
+            '${appLanguage['typeOfDeal'].toString()}',
+            style: TextStyle(fontFamily: 'ZarReg'),
+          ),
+        ),
         icon: Icon(
           Icons.arrow_drop_down,
           color: Theme.of(context).accentColor,
@@ -28,10 +36,11 @@ class AddPostMixin {
         elevation: 2,
         style: TextStyle(
           color: Colors.black,
-          fontSize: 20.0,
+          fontSize: 15.0,
+          fontFamily: 'ZarReg',
         ),
         underline: Container(
-          height: 1,
+          height: 0.5,
           color: Colors.grey[100],
         ),
         onChanged: onDropDownChange,
@@ -130,6 +139,31 @@ class AddPostMixin {
         ),
         decoration: InputDecoration(
           labelText: appLanguage['optionalEmail'].toString(),
+          labelStyle: TextStyle(
+            fontSize: 15.0,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: 10.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget priceArea({
+    appLanguage,
+    onChange,
+  }) {
+    return Container(
+      child: TextField(
+        onChanged: onChange,
+        style: TextStyle(
+          height: 0.95,
+          fontSize: 20.0,
+        ),
+        decoration: InputDecoration(
+          labelText: appLanguage['price'],
           labelStyle: TextStyle(
             fontSize: 15.0,
           ),

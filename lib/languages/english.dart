@@ -63,6 +63,15 @@ const Map english = {
   'textForLostPost': 'Someone or someting is lost.',
   'textForFoundPost': 'Found someone or something.',
 
+  'typeOfDeal': 'Type of deal',
+  'sell': 'For sell',
+  'rent': 'For rent',
+  'buy': 'For purhchase',
+  'needPro': 'Professional service',
+
+  'price': 'Price',
+  'free': 'Free',
+
   ////////// Sign in/up error messages ///////////////////////
 
   'invalidEmail':
