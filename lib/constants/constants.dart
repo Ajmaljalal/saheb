@@ -31,25 +31,23 @@ const TextStyle kUserNameStyle = TextStyle(
   color: Colors.black,
   fontSize: 17,
   fontWeight: FontWeight.bold,
-  fontFamily: 'ZarReg',
 );
 
 const TextStyle kUserLocationStyle = TextStyle(
-  color: Colors.black,
+  color: Colors.grey,
   fontSize: 10,
   fontWeight: FontWeight.bold,
-  fontFamily: 'ZarReg',
 );
 
 const TextStyle kUserLocationProfileStyle = TextStyle(
   color: Colors.black,
-  fontSize: 20.0,
+  fontSize: 15.0,
   fontWeight: FontWeight.bold,
 );
 
 const TextStyle kPostTypeTextStyle = TextStyle(
-  fontSize: 16.0,
-  color: Colors.white,
+  fontSize: 13.0,
+  color: Colors.grey,
 );
 
 const BoxDecoration kAdvertTypeBoxDecoration = const BoxDecoration(

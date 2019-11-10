@@ -89,7 +89,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
-    final String advertTitle = widget.advertTitle;
+    final String advertTitle = widget.advertTitle.toString();
     final String advertId = widget.advertId;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     return SafeArea(
@@ -155,7 +155,6 @@ class _AdvertDetailsState extends State<AdvertDetails>
           elevation: 0.0,
           margin: EdgeInsets.symmetric(
             vertical: 3.0,
-            horizontal: 1.0,
           ),
           child: Column(
             children: <Widget>[
@@ -164,12 +163,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   cardHeader(advert),
-                  postTypeHolder(context, advert['type']),
                 ],
               ),
               Row(
                 children: <Widget>[
-                  postTittleHolder(advert['title']),
+                  postTittleHolder(advert['title'].toString()),
                 ],
               ),
               GestureDetector(
@@ -188,7 +186,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   }
                 },
                 child: postContent(
-                  text: advert['text'],
+                  text: advert['text'].toString(),
                   images: advert['images'],
                   flag: true,
                   onRevealMoreText: null,
@@ -230,6 +228,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                       deleteComment: deleteComment,
                       userId: userId,
                       postOwnerId: advert['owner']['id'],
+                      context: context,
                     ),
                   ],
                 ),

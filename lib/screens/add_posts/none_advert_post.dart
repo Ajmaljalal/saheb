@@ -5,7 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flushbar/flushbar.dart';
+import 'package:saheb/widgets/errorDialog.dart';
 import '../../providers/authProvider.dart';
+import '../../widgets/locationPicker.dart';
+import '../../locations/locations_sublocations.dart';
 import '../../widgets/button.dart';
 import '../../util/uploadImage.dart';
 //import '../../providers/languageProvider.dart';
@@ -22,6 +25,7 @@ class NoneAdvertPost extends StatefulWidget {
 class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   String _text;
   String _title;
+  String _location;
   List<File> _images = [];
   List<String> _uploadedFileUrl = [];
 
@@ -31,6 +35,10 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
   onTitleInputChange(value) {
     _title = value;
+  }
+
+  onLocationChange(value) {
+    _location = value;
   }
 
   Future chooseFile(source) async {
@@ -64,10 +72,14 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   }
 
   onSend() async {
-    if (_text == null && _title == null) {
+    final appLanguage = getLanguages(context);
+
+    if (_text == null || _title == null || _location == null) {
+      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
+          appLanguage['emptyForm'], appLanguage['ok']);
       return;
     }
-    final appLanguage = getLanguages(context);
+
     final flashBarDuration =
         _images.length == 0 ? _images.length : _images.length + 1;
     showInfoFlushbarHelper(context, flashBarDuration, appLanguage['wait']);
@@ -79,6 +91,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       type: widget.type,
       text: _text,
       title: _title,
+      location: _location,
       owner: {
         'name': user.displayName,
         'id': currentUserId,
@@ -99,7 +112,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final appLanguage = getLanguages(context);
     final imagesMax = _images.length > 5 ? true : false;
     return Scaffold(
-      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -135,16 +147,18 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      SizedBox(
-                        height: 15.0,
+                      DropDownPicker(
+                        onChange: onLocationChange,
+                        value: appLanguage['location'],
+                        items: locations['kabul'],
+                        hintText: appLanguage['location'],
+                        label: appLanguage['location'],
+                        search: true,
                       ),
                       postTitle(
                         type: appLanguage['general'],
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
-                      ),
-                      SizedBox(
-                        height: 10.0,
                       ),
                       textArea(
                         type: appLanguage['general'],
@@ -187,18 +201,18 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       flushbarStyle: FlushbarStyle.FLOATING,
       reverseAnimationCurve: Curves.decelerate,
       forwardAnimationCurve: Curves.elasticOut,
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.white,
       boxShadows: [
         BoxShadow(
-            color: Colors.blue[800], offset: Offset(0.0, 2.0), blurRadius: 3.0)
+            color: Colors.black, offset: Offset(0.0, 2.0), blurRadius: 3.0)
       ],
-      backgroundGradient:
-          LinearGradient(colors: [Colors.cyanAccent, Colors.cyan]),
+//      backgroundGradient:
+//          LinearGradient(colors: [Colors.cyanAccent, Colors.cyan]),
       isDismissible: false,
       duration: Duration(seconds: duration),
       icon: Icon(
         Icons.file_upload,
-        color: Colors.purple,
+        color: Colors.green,
       ),
       showProgressIndicator: true,
       progressIndicatorBackgroundColor: Colors.blueGrey,
@@ -206,9 +220,9 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
         child: Text(
           message.toString(),
           style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.white,
-              fontFamily: "ShadowsIntoLightTwo"),
+            fontSize: 18.0,
+            color: Colors.black,
+          ),
         ),
       ),
     ).show(context);

@@ -9,6 +9,7 @@ class PostsProvider with ChangeNotifier {
     owner,
     text,
     title,
+    location,
     type,
     images,
   }) {
@@ -23,6 +24,7 @@ class PostsProvider with ChangeNotifier {
           'title': title,
           'type': type,
           'images': images,
+          'location': location,
         },
       );
     } catch (e) {

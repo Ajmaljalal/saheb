@@ -110,10 +110,14 @@ class _AddPostState extends State<AddPost> {
           color: bgColor ? Colors.grey[200] : Colors.white,
         ),
         height: 75.0,
-        padding: EdgeInsets.only(bottom: 30.0),
         child: Center(
           child: RadioListTile(
-            subtitle: Text(text),
+            subtitle: Text(
+              text,
+              style: TextStyle(
+                fontSize: 15.0,
+              ),
+            ),
             isThreeLine: false,
             title: Text(
               appLanguageText,

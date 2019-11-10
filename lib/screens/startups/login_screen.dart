@@ -36,9 +36,6 @@ class _LoginState extends State<Login> {
 
     try {
       await Provider.of<AuthProvider>(context).login(_email, _password);
-//      if (_user.length > 0) {
-//        Navigator.pushReplacementNamed(context, '/mainFeeds');
-//      }
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       if (error.toString().contains('ERROR_WRONG_PASSWORD')) {
@@ -69,14 +66,13 @@ class _LoginState extends State<Login> {
     try {
       await Provider.of<AuthProvider>(context).googleSignIn('login');
     } catch (error) {
-//      var errorMessage = appLanguage['loginFailed'];
-//      showErrorDialog(
-//        errorMessage,
-//        context,
-//        appLanguage['errorDialogTitle'],
-//        appLanguage['ok'],
-//      );
-      print('error $error');
+      var errorMessage = appLanguage['loginFailed'];
+      showErrorDialog(
+        errorMessage,
+        context,
+        appLanguage['errorDialogTitle'],
+        appLanguage['ok'],
+      );
       setState(() {
         _isGoogleLogingIn = false;
       });
@@ -126,7 +122,7 @@ class _LoginState extends State<Login> {
             padding: EdgeInsets.only(
               right: 10,
               left: 10,
-              top: MediaQuery.of(context).size.height * 0.15,
+              top: MediaQuery.of(context).size.height * 0.13,
             ),
             child: SingleChildScrollView(
               child: Column(
@@ -198,14 +194,14 @@ class _LoginState extends State<Login> {
           cursorColor: Colors.black,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 25,
+            fontSize: 20,
             letterSpacing: 3,
           ),
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
             contentPadding: EdgeInsets.symmetric(
-              vertical: 15,
+              vertical: 10,
               horizontal: 20,
             ),
             errorStyle: TextStyle(
@@ -240,12 +236,11 @@ class _LoginState extends State<Login> {
   Widget loginButton(String lang, appLanguage, onLogin) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
         horizontal: 20.0,
       ),
       child: Container(
         width: MediaQuery.of(context).size.width * 1,
-        height: 60,
+        height: 50,
         decoration: BoxDecoration(
           color: Theme.of(context).accentColor,
           border: Border.all(
@@ -265,8 +260,8 @@ class _LoginState extends State<Login> {
             child: _isLoggingIn == true
                 ? progressIndicator()
                 : Text(
-                    lang == 'English' ? 'Login' : appLanguage['login'],
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                    appLanguage['login'],
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
           ),
         ),
@@ -278,7 +273,6 @@ class _LoginState extends State<Login> {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(
-          vertical: 8.0,
           horizontal: 20.0,
         ),
         child: Container(
@@ -290,8 +284,8 @@ class _LoginState extends State<Login> {
                   onFacebookLogIn(appLanguage);
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.41,
-                  padding: EdgeInsets.all(10.0),
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
@@ -302,16 +296,14 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              language == 'English'
-                                  ? 'Sign in with'
-                                  : appLanguage['signinWithFacebook'],
+                              appLanguage['signinWithFacebook'],
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20.0,
+                                fontSize: 15.0,
                               ),
                             ),
                             SizedBox(
-                              width: 5.0,
+                              width: 4.0,
                             ),
                             Icon(
                               FontAwesomeIcons.facebook,
@@ -326,10 +318,9 @@ class _LoginState extends State<Login> {
                   onGoogleLogin(appLanguage);
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.41,
+                  width: MediaQuery.of(context).size.width * 0.40,
                   padding: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 15.0,
+                    vertical: 8.0,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
@@ -341,16 +332,14 @@ class _LoginState extends State<Login> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              language == 'English'
-                                  ? 'Sign in with'
-                                  : appLanguage['signinWithGoogle'],
+                              appLanguage['signinWithGoogle'],
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20.0,
+                                fontSize: 15.0,
                               ),
                             ),
                             SizedBox(
-                              width: 5.0,
+                              width: 4.0,
                             ),
                             Icon(
                               FontAwesomeIcons.google,

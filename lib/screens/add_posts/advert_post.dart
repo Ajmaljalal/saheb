@@ -1,13 +1,16 @@
 import 'dart:io';
-import 'dart:ui';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/widgets/errorDialog.dart';
+import '../../widgets/verticalDivider.dart';
 import '../../providers/authProvider.dart';
-import 'package:flushbar/flushbar.dart';
+import '../../locations/locations_sublocations.dart';
 import '../../util/uploadImage.dart';
+import '../../widgets/locationPicker.dart';
 //import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
 //import '../../providers/languageProvider.dart';
@@ -21,6 +24,7 @@ class AdvertPost extends StatefulWidget {
 
 class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   String dropdownValue;
+  String locationDropDownValue;
   String _text;
   String _title;
   String _price;
@@ -32,6 +36,12 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   onDropDownChange(value) {
     setState(() {
       dropdownValue = value;
+    });
+  }
+
+  onLocationChange(value) {
+    setState(() {
+      locationDropDownValue = value;
     });
   }
 
@@ -62,7 +72,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
         _images.add(image);
       });
     } catch (error) {
-      print(error.toString());
+      print(error);
     }
   }
 
@@ -86,10 +96,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   }
 
   onSend() async {
-    if (_text == null && _title == null) {
+    final appLanguage = getLanguages(context);
+    if (_text == null || _title == null || locationDropDownValue == null) {
+      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
+          appLanguage['emptyForm'], appLanguage['ok']);
       return;
     }
-    final appLanguage = getLanguages(context);
+
     final flashBarDuration =
         _images.length == 0 ? _images.length : _images.length + 1;
     showInfoFlushbarHelper(context, flashBarDuration, appLanguage['wait']);
@@ -104,7 +117,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       phone: _phone,
       email: _email,
       price: _price.toString(),
-      location: 'someLocation',
+      location: locationDropDownValue,
       owner: {
         'name': user.displayName,
         'id': currentUserId,
@@ -130,7 +143,6 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       appLanguage['needPro'].toString()
     ];
     return Scaffold(
-      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Container(
           child: Row(
@@ -149,12 +161,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
           ),
         ),
       ),
-      body: Container(
+      body: Card(
+        color: Colors.white,
+        elevation: 10.0,
         margin: EdgeInsets.symmetric(
-          vertical: 10.0,
-          horizontal: 15.0,
+          vertical: 5.0,
+          horizontal: 8.0,
         ),
-        height: MediaQuery.of(context).size.height * 1,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -163,35 +176,50 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      typeOfBusinessOptions(
-                        onDropDownChange: onDropDownChange,
-                        dropdownValue: dropdownValue,
-                        dropdownItems: dropDownItems,
-                        context: context,
-                        appLanguage: appLanguage,
-                      ),
-                      SizedBox(
-                        height: 15.0,
+                      Row(
+                        children: <Widget>[
+                          DropDownPicker(
+                            onChange: onDropDownChange,
+                            value: appLanguage['typeOfDeal'],
+                            items: dropDownItems,
+                            label: appLanguage['typeOfDeal'],
+                            search: false,
+                          ),
+                          DropDownPicker(
+                            search: true,
+                            items: locations['kabul'],
+                            hintText: appLanguage['location'],
+                            label: appLanguage['location'],
+                            value: appLanguage['location'],
+                            onChange: onLocationChange,
+                          ),
+                        ],
                       ),
                       postTitle(
                         type: appLanguage['advert'].toString(),
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
                       ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
                       textArea(
                         type: appLanguage['advert'].toString(),
                         appLanguage: appLanguage,
                         onChange: onTextInputChange,
                       ),
-                      priceArea(
-                          appLanguage: appLanguage,
-                          onChange: onPhoneInputChange),
-                      phoneNumberArea(
-                        appLanguage: appLanguage,
-                        onChange: onPhoneInputChange,
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: priceArea(
+                                appLanguage: appLanguage,
+                                onChange: onPhoneInputChange),
+                          ),
+                          CustomVerticalDivider(),
+                          Expanded(
+                            child: phoneNumberArea(
+                              appLanguage: appLanguage,
+                              onChange: onPhoneInputChange,
+                            ),
+                          ),
+                        ],
                       ),
                       emailAddressArea(
                         appLanguage: appLanguage,
@@ -232,13 +260,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       flushbarStyle: FlushbarStyle.FLOATING,
       reverseAnimationCurve: Curves.decelerate,
       forwardAnimationCurve: Curves.elasticOut,
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.white,
       boxShadows: [
         BoxShadow(
-            color: Colors.blue[800], offset: Offset(0.0, 2.0), blurRadius: 3.0)
+            color: Colors.black, offset: Offset(0.0, 2.0), blurRadius: 3.0)
       ],
-      backgroundGradient:
-          LinearGradient(colors: [Colors.cyanAccent, Colors.cyan]),
+//      backgroundGradient:
+//          LinearGradient(colors: [Colors.cyanAccent, Colors.cyan]),
       isDismissible: false,
       duration: Duration(seconds: duration),
       icon: Icon(
@@ -246,14 +274,14 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
         color: Colors.purple,
       ),
       showProgressIndicator: true,
-      progressIndicatorBackgroundColor: Colors.blueGrey,
+      progressIndicatorBackgroundColor: Colors.green,
       messageText: Center(
         child: Text(
           message.toString(),
           style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.white,
-              fontFamily: "ShadowsIntoLightTwo"),
+            fontSize: 18.0,
+            color: Colors.black,
+          ),
         ),
       ),
     ).show(context);

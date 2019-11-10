@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:geolocator/geolocator.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
@@ -13,6 +14,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   static int _currentScreenIndex = 0;
+//  var _location;
 
   String _getAppBarTitle(context) {
     final appLanguage = getLanguages(context);
@@ -30,9 +32,12 @@ class _MainScreenState extends State<MainScreen> {
     Jobs(),
     Settings(),
   ];
-  void _setCurrentScreen(int index) {
+  void _setCurrentScreen(int index) async {
+//    List<Placemark> placemark =
+////        await Geolocator().placemarkFromCoordinates(34.519822, 69.328775);
     setState(() {
       _currentScreenIndex = index;
+//      _location = placemark[0].subLocality;
     });
   }
 
@@ -41,6 +46,8 @@ class _MainScreenState extends State<MainScreen> {
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
         _currentScreenIndex == 1 ||
         _currentScreenIndex == 2;
+
+//    print('location $_location');
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
