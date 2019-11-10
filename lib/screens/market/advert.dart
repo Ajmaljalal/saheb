@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
-import '../../constant_widgets/constants.dart';
+import '../../constants/constants.dart';
 import '../../providers/authProvider.dart';
 import 'advertDetails.dart';
 import '../../mixins/post.dart';
@@ -105,16 +105,16 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        postTittleHolder(advert['title']),
+                        postTittleHolder(advert['title'].toString()),
                         postContent(
-                            text: advert['text'],
+                            text: advert['text'].toString(),
                             images: advert['images'],
                             flag: revealMoreTextFlag,
                             onRevealMoreText: _revealMoreText,
                             appLanguage: appLanguage,
                             context: context,
                             imagesScrollView: Axis.horizontal,
-                            price: advert['price']),
+                            price: advert['price'].toString()),
                       ],
                     ),
                   ),

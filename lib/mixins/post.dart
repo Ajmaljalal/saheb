@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:saheb/widgets/fullScreenImage.dart';
-import '../widgets/verticalDivider.dart';
-import '../constant_widgets/constants.dart';
+//import 'package:http/http.dart';
+//import '../widgets/verticalDivider.dart';
+import '../constants/constants.dart';
 import '../widgets/imageRenderer.dart';
 
 class PostMixin {
@@ -11,13 +11,22 @@ class PostMixin {
     return Row(
       children: <Widget>[
         userAvatarHolder(url: post['owner']['photo']),
-        userNameHolder(
-          post['owner']['name'],
-        ),
-        CustomVerticalDivider(),
-        userLocationHolder(
-          post['owner']['location'],
-        ),
+        Container(
+          margin: EdgeInsets.only(
+            top: 5.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              userNameHolder(
+                post['owner']['name'],
+              ),
+              userLocationHolder(
+                post['location'].toString(),
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -56,23 +65,57 @@ class PostMixin {
     );
   }
 
-  Widget postTypeHolder(context, postType) {
-    if (postType != 'عادی') {
+  Widget postTypeHolder(context, postType, appLanguage) {
+    Color circleColor;
+    if (postType == 'مفقودی' || postType == 'Lost') {
+      circleColor = Colors.red;
+    }
+    if (postType == 'پیدا شوی' ||
+        postType == 'پیدا شده' ||
+        postType == 'Found') {
+      circleColor = Colors.green;
+    }
+    if (postType == 'عاجل' || postType == 'Emergency') {
+      circleColor = Colors.orange;
+    }
+
+    if (postType != appLanguage['general']) {
       return Container(
-        width: MediaQuery.of(context).size.width * 0.15,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 3,
-          vertical: 2,
+        margin: EdgeInsets.symmetric(
+          horizontal: 10.0,
         ),
-        child: Text(
-          postType,
-          style: kPostTypeTextStyle,
-          textAlign: TextAlign.center,
+        child: Row(
+          children: <Widget>[
+            Container(
+              height: 7.0,
+              width: 7.0,
+              decoration: BoxDecoration(
+                color: circleColor,
+                borderRadius: BorderRadius.circular(
+                  10.0,
+                ),
+              ),
+              child: Text(''),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 3,
+              ),
+              child: Text(
+                postType,
+                style: kPostTypeTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              decoration: BoxDecoration(),
+            ),
+          ],
         ),
-        decoration: kAdvertTypeBoxDecoration,
       );
     } else
-      return Text('');
+      return SizedBox(
+        height: 0.0,
+        width: 0.0,
+      );
   }
 
   Widget postTittleHolder(title) {
@@ -86,7 +129,7 @@ class PostMixin {
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 20.0,
+            fontSize: 15.0,
           ),
         ),
       ),
@@ -113,7 +156,7 @@ class PostMixin {
               text,
               maxLines: flag ? 50 : 2,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 color: Colors.black,
               ),
             ),
@@ -241,24 +284,29 @@ class PostMixin {
             children: <Widget>[
               Text(
                 comments.length.toString(),
+                style: const TextStyle(fontSize: 13.0),
               ),
               SizedBox(
                 width: 5,
               ),
               Text(
                 commentsHolderText.toString(),
+                style: const TextStyle(fontSize: 13.0),
               ),
             ],
           ),
           Row(
             children: <Widget>[
-              Text(likes.toString()),
-              SizedBox(
+              Text(
+                likes.toString(),
+                style: const TextStyle(fontSize: 13.0),
+              ),
+              const SizedBox(
                 width: 5,
               ),
-              Icon(
+              const Icon(
                 FontAwesomeIcons.heart,
-                size: 15.0,
+                size: 13.0,
               ),
             ],
           )
@@ -279,6 +327,7 @@ class PostMixin {
     context,
   }) {
     return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
         vertical: 10.0,
@@ -329,29 +378,6 @@ class PostMixin {
             ),
             onTap: () {},
           ),
-          SizedBox(
-            width: 80.0,
-          ),
-          flag == 'details'
-              ? Text('Details')
-              : InkResponse(
-                  splashColor: Colors.grey[200],
-                  radius: 25.0,
-                  child: Icon(
-                    userId == post['owner']['id']
-                        ? Icons.delete_outline
-                        : Icons.remove_red_eye,
-                    color: Colors.grey,
-                    size: 20,
-                  ),
-                  onTap: () async {
-                    if (userId == post['owner']['id']) {
-                      await onDeletePost(context);
-                    } else {
-                      return;
-                    }
-                  },
-                ),
         ],
       ),
     );
@@ -366,35 +392,33 @@ class PostMixin {
     deleteComment,
     userId,
     postOwnerId,
+    context,
   }) {
     return comments.map((comment) {
-      return Container(
-        child: Container(
-          child: Row(
-            children: <Widget>[
-              Container(
-                child: userAvatarHolder(
-                  url: comment['user']['photo'],
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    commentTextHolder(
-                      postComment: comment,
-                      likeComment: likeComment,
-                      userId: userId,
-                      postOwnerId: postOwnerId,
-                      deleteComment: deleteComment,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+      return Row(
+        children: <Widget>[
+          Container(
+            child: userAvatarHolder(
+              url: comment['user']['photo'],
+            ),
           ),
-        ),
+          Container(
+            margin: EdgeInsets.only(top: 15.0, bottom: 5.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                commentTextHolder(
+                  postComment: comment,
+                  likeComment: likeComment,
+                  userId: userId,
+                  postOwnerId: postOwnerId,
+                  deleteComment: deleteComment,
+                  context: context,
+                ),
+              ],
+            ),
+          ),
+        ],
       );
     }).toList();
   }
@@ -405,9 +429,10 @@ class PostMixin {
     deleteComment,
     userId,
     postOwnerId,
+    context,
   }) {
     return Container(
-      width: 330,
+      width: MediaQuery.of(context).size.width * 0.75,
       decoration: BoxDecoration(
         border: Border.all(
           color: Colors.grey[300],
@@ -428,9 +453,9 @@ class PostMixin {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          userNameHolder(postComment['user']['name']),
+          userNameHolder(postComment['user']['name'].toString()),
           Text(
-            postComment['text'],
+            postComment['text'].toString(),
             style: TextStyle(
               fontSize: 14,
               fontFamily: 'ZarReg',

@@ -7,59 +7,6 @@ import '../widgets/button.dart';
 import '../languages/index.dart';
 
 class AddPostMixin {
-  Widget typeOfBusinessOptions(
-      {onDropDownChange, dropdownValue, dropdownItems, appLanguage, context}) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.cyanAccent),
-        borderRadius: BorderRadius.circular(
-          10.0,
-        ),
-      ),
-      child: DropdownButton(
-        value: dropdownValue,
-        isExpanded: true,
-        hint: Container(
-          padding: EdgeInsets.only(
-            right: 10.0,
-          ),
-          child: Text(
-            '${appLanguage['typeOfDeal'].toString()}',
-            style: TextStyle(fontFamily: 'ZarReg'),
-          ),
-        ),
-        icon: Icon(
-          Icons.arrow_drop_down,
-          color: Theme.of(context).accentColor,
-        ),
-        iconSize: 40.0,
-        elevation: 2,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 15.0,
-          fontFamily: 'ZarReg',
-        ),
-        underline: Container(
-          height: 0.5,
-          color: Colors.grey[100],
-        ),
-        onChanged: onDropDownChange,
-        items: <String>[...dropdownItems]
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Center(
-              child: Text(
-                value,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   Widget postTitle({type, appLanguage, onChange}) {
     final label = type == appLanguage['advert']
         ? appLanguage['advertPostTitle']
@@ -67,7 +14,6 @@ class AddPostMixin {
     return TextField(
       onChanged: onChange,
       style: TextStyle(
-        height: 0.95,
         fontSize: 20.0,
       ),
       decoration: InputDecoration(
@@ -107,7 +53,10 @@ class AddPostMixin {
     );
   }
 
-  Widget phoneNumberArea({appLanguage, onChange}) {
+  Widget phoneNumberArea({
+    appLanguage,
+    onChange,
+  }) {
     return Container(
       child: TextField(
         onChanged: onChange,
@@ -129,10 +78,14 @@ class AddPostMixin {
     );
   }
 
-  Widget emailAddressArea({appLanguage, onChange}) {
+  Widget emailAddressArea({
+    appLanguage,
+    onChange,
+  }) {
     return Container(
       child: TextField(
         onChanged: onChange,
+        keyboardType: TextInputType.emailAddress,
         style: TextStyle(
           height: 0.95,
           fontSize: 20.0,
@@ -176,7 +129,10 @@ class AddPostMixin {
     );
   }
 
-  List photoVideoArea(images, deleteSelectedImage) {
+  List photoVideoArea(
+    images,
+    deleteSelectedImage,
+  ) {
     return images.map((image) {
       final index = images.indexOf(image);
       if (image != null) {
@@ -257,9 +213,9 @@ class AddPostMixin {
                 Icons.photo_camera,
                 color: maxImageSize ? Colors.grey : Colors.black,
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (maxImageSize == false) {
-                  onOpenPhotoVideo(ImageSource.camera);
+                  await onOpenPhotoVideo(ImageSource.camera);
                 } else {
                   return;
                 }
@@ -270,9 +226,9 @@ class AddPostMixin {
                 Icons.photo_library,
                 color: maxImageSize ? Colors.grey : Colors.black,
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (maxImageSize == false) {
-                  onOpenPhotoVideo(ImageSource.gallery);
+                  await onOpenPhotoVideo(ImageSource.gallery);
                 } else {
                   return;
                 }
@@ -280,8 +236,6 @@ class AddPostMixin {
             ),
           ],
         ),
-//          onPressed: onOpenPhotoVideo,
-//        ),
       ],
     );
   }

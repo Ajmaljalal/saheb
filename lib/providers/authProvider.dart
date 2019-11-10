@@ -69,6 +69,13 @@ class AuthProvider with ChangeNotifier {
         _user = (await _auth.createUserWithEmailAndPassword(
                 email: email, password: password))
             .user;
+
+        UserUpdateInfo info = new UserUpdateInfo();
+        info.displayName = name;
+        info.photoUrl =
+            'https://firebasestorage.googleapis.com/v0/b/saheb-mobile.appspot.com/o/users%2Fuser.png?alt=media&token=0f61b161-14a4-49ca-af9e-cef6ba8a80ca';
+        await _user.updateProfile(info);
+
         await registerUserToDb(_user.uid, name, email, _user.photoUrl);
       } else {
         _user = (await _auth.signInWithEmailAndPassword(

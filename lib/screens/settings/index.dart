@@ -15,17 +15,11 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  String appLanguage;
-
-  @override
-  didChangeDependencies() {
-    appLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    super.didChangeDependencies();
-  }
+  String appLanguageOption;
 
   onChangeAppLanguage(value) async {
     setState(() {
-      appLanguage = value;
+      appLanguageOption = value;
     });
     await Provider.of<LanguageProvider>(context).changeLanguage(value);
   }
@@ -122,45 +116,42 @@ class _SettingsState extends State<Settings> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Flexible(
-              child: RadioListTile(
-                title: Text(
-                  'پښتو',
-                  style: TextStyle(
-                    fontSize: 16.0,
+              child: Row(
+                children: <Widget>[
+                  Radio(
+                    value: 'pashto',
+                    groupValue: appLanguageOption,
+                    onChanged: onChangeAppLanguage,
+                    activeColor: Theme.of(context).accentColor,
                   ),
-                ),
-                value: 'pashto',
-                groupValue: appLanguage,
-                onChanged: onChangeAppLanguage,
-                activeColor: Theme.of(context).accentColor,
+                  Text('پښتو'),
+                ],
               ),
             ),
             Flexible(
-              child: RadioListTile(
-                title: Text(
-                  'دری',
-                  style: TextStyle(
-                    fontSize: 16.0,
+              child: Row(
+                children: <Widget>[
+                  Radio(
+                    value: 'dari',
+                    groupValue: appLanguageOption,
+                    onChanged: onChangeAppLanguage,
+                    activeColor: Theme.of(context).accentColor,
                   ),
-                ),
-                value: 'dari',
-                groupValue: appLanguage,
-                onChanged: onChangeAppLanguage,
-                activeColor: Theme.of(context).accentColor,
+                  Text('دری'),
+                ],
               ),
             ),
             Flexible(
-              child: RadioListTile(
-                title: Text(
-                  'English',
-                  style: TextStyle(
-                    fontSize: 14.0,
+              child: Row(
+                children: <Widget>[
+                  Radio(
+                    value: 'English',
+                    groupValue: appLanguageOption,
+                    onChanged: onChangeAppLanguage,
+                    activeColor: Theme.of(context).accentColor,
                   ),
-                ),
-                value: 'English',
-                groupValue: appLanguage,
-                onChanged: onChangeAppLanguage,
-                activeColor: Theme.of(context).accentColor,
+                  Text('English'),
+                ],
               ),
             ),
           ],

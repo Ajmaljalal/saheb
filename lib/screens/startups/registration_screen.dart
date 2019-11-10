@@ -193,7 +193,12 @@ class _RegistrationState extends State<Registration> {
   }
 
   Widget registrationInputs(
-      String type, String lang, onChange, error, isPassword) {
+    String type,
+    String lang,
+    onChange,
+    error,
+    isPassword,
+  ) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -218,14 +223,14 @@ class _RegistrationState extends State<Registration> {
           cursorColor: Colors.black,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 25,
+            fontSize: 20,
             letterSpacing: 3,
           ),
           decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
               contentPadding: EdgeInsets.symmetric(
-                vertical: 15,
+                vertical: 10,
                 horizontal: 20,
               ),
               hintText: type,
@@ -257,15 +262,18 @@ class _RegistrationState extends State<Registration> {
   }
 
   Widget registrationButton(
-      String lang, appLanguage, onSubmit, _isRegistering) {
+    String lang,
+    appLanguage,
+    onSubmit,
+    _isRegistering,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: 8.0,
         horizontal: 20.0,
       ),
       child: Container(
         width: MediaQuery.of(context).size.width * 1,
-        height: 60,
+        height: 50,
         decoration: BoxDecoration(
           color: Theme.of(context).accentColor,
           border: Border.all(
@@ -285,8 +293,8 @@ class _RegistrationState extends State<Registration> {
             child: _isRegistering == true
                 ? progressIndicator()
                 : Text(
-                    lang == 'English' ? 'Register' : appLanguage['register'],
-                    style: TextStyle(fontSize: 25, color: Colors.white),
+                    appLanguage['register'],
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
           ),
         ),
@@ -310,8 +318,8 @@ class _RegistrationState extends State<Registration> {
                   onFacebookRegistration(appLanguage);
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.41,
-                  padding: EdgeInsets.all(10.0),
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
@@ -322,16 +330,14 @@ class _RegistrationState extends State<Registration> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              language == 'English'
-                                  ? 'Register with'
-                                  : appLanguage['registerWithFacebook'],
+                              appLanguage['registerWithFacebook'],
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 20.0,
+                                fontSize: 15.0,
                               ),
                             ),
                             SizedBox(
-                              width: 5.0,
+                              width: 4.0,
                             ),
                             Icon(
                               FontAwesomeIcons.facebook,
@@ -346,10 +352,9 @@ class _RegistrationState extends State<Registration> {
                   onGoogleRegistration(appLanguage);
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.43,
+                  width: MediaQuery.of(context).size.width * 0.4,
                   padding: EdgeInsets.symmetric(
-                    vertical: 10.0,
-                    horizontal: 15.0,
+                    vertical: 8.0,
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40.0),
@@ -361,18 +366,16 @@ class _RegistrationState extends State<Registration> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              language == 'English'
-                                  ? 'Register with'
-                                  : appLanguage['registerWithGoogle'],
-                              style: TextStyle(
+                              appLanguage['registerWithGoogle'],
+                              style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 20.0,
+                                fontSize: 15.0,
                               ),
                             ),
-                            SizedBox(
-                              width: 5.0,
+                            const SizedBox(
+                              width: 4.0,
                             ),
-                            Icon(
+                            const Icon(
                               FontAwesomeIcons.google,
                               color: Colors.white,
                             )

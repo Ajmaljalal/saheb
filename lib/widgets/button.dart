@@ -19,7 +19,7 @@ Widget customButton({appLanguage, context, onClick, forText, width, height}) {
           child: Text(
             appLanguage['$forText'],
             style: TextStyle(
-              fontSize: 20,
+              fontSize: 15.0,
               color: Colors.white,
             ),
           ),

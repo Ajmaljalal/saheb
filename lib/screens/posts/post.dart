@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import '../../providers/authProvider.dart';
 
-import '../../constant_widgets/constants.dart';
+import '../../constants/constants.dart';
 import 'postDetails.dart';
 import '../../mixins/post.dart';
 import '../../languages/index.dart';
@@ -79,10 +79,6 @@ class _PostState extends State<Post> with PostMixin {
                   crossAxisAlignment: kStart,
                   children: <Widget>[
                     cardHeader(post),
-//                    postTypeHolder(
-//                      context,
-//                      post['type'],
-//                    ),
                   ],
                 ),
                 GestureDetector(
@@ -93,6 +89,7 @@ class _PostState extends State<Post> with PostMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       postTittleHolder(post['title']),
+                      postTypeHolder(context, post['type'], appLanguage),
                       postContent(
                         text: post['text'],
                         images: post['images'],

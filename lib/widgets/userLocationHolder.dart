@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constant_widgets/constants.dart';
+import '../constants/constants.dart';
 
 Widget userLocationHolder(location) {
   return Container(

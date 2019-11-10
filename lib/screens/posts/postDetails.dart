@@ -159,7 +159,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   cardHeader(post),
-                  postTypeHolder(context, post['type']),
+//                  postTypeHolder(context, post['type'], appLanguage),
                 ],
               ),
               Row(
@@ -225,6 +225,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                       deleteComment: deleteComment,
                       userId: userId,
                       postOwnerId: post['owner']['id'],
+                      context: context,
                     ),
                   ],
                 ),
