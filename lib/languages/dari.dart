@@ -19,9 +19,10 @@ const Map dari = {
 
   // ToolBar and Main Screen
   'home': 'خانه',
-  'market': 'مارکیت',
+  'market': 'بازار',
   'messages': 'پیام ها',
-  'settings': 'تنظیمات',
+  'me': 'من',
+  'services': 'خدمات',
 
   // post/advert actions buttons
 
@@ -86,8 +87,13 @@ const Map dari = {
   'registrationFailed': 'ثبت نام موفق نه بود، دوباره کوشش نمائید.',
   'enter': ' وارد نمائید!',
 
+  /////////////// Error Dialog ///////////////////
+
   'errorDialogTitle': 'مشکلی وجود دارد!',
   'ok': 'درست است',
+  'alertDialogTitle': 'با معذرت',
+  'underConstruction':
+      'روی این بخش کار جریان دارد و به زودی در خدمت شما خواهد بود.',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'زبان اپلیکشن را تغیر دهید!',
@@ -102,4 +108,22 @@ const Map dari = {
   ///////// Search //////////////////
 
   'search': 'جستجو...',
+
+  /////////// Services /////////////////
+
+  'health': 'صحی',
+  'education': 'تعلیمی و تحصیلی',
+  'painting': 'رنګمالی',
+  'construction': 'ساختمانی',
+  'carpenter': 'نجاری',
+  'electrician': 'برق و لین دوانی',
+  'mechanic': 'موتر و مستری',
+  'cleaning': 'صفایی',
+  'plumber': 'نلدوانی تمیرات',
+  'laundry': 'کالا شویی',
+  'computer': 'کامپیوتر و موبایل',
+  'transportation': 'ترانسپورتی',
+  'legal': 'حقوقی و قضایی',
+  'decoration': 'دیزاین و دیکور',
+  'cosmetics': 'آرایش و سلمانی',
 };

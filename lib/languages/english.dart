@@ -23,7 +23,8 @@ const Map english = {
   'home': 'Home',
   'market': 'Market',
   'messages': 'Messages',
-  'settings': 'Settings',
+  'me': 'Me',
+  'services': 'Services',
 
   // post/advert actions buttons
 
@@ -93,8 +94,13 @@ const Map english = {
 
   'enter': 'Enter',
 
-  'errorDialogTitle': 'Error!',
+  /////////////// Error Dialog ///////////////////
+
+  'errorDialogTitle': 'Error',
   'ok': 'Ok',
+  'alertDialogTitle': 'Sorry',
+  'underConstruction':
+      'This section is under construction and will be updated soon.',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'Change application\'s language!',
@@ -109,4 +115,22 @@ const Map english = {
   ///////// Search //////////////////
 
   'search': 'search...',
+
+  /////////// Services /////////////////
+
+  'health': 'Health',
+  'education': 'Educational',
+  'painting': 'Painting',
+  'construction': 'Construction',
+  'carpenter': 'Carpenters',
+  'electrician': 'Electricity',
+  'mechanic': 'Mechanics',
+  'cleaning': 'Cleaning',
+  'plumber': 'Plumber',
+  'laundry': 'Laundry',
+  'computer': 'Computer/Mobile',
+  'transportation': 'Transportation',
+  'legal': 'Law/Legal',
+  'decoration': 'Decoration',
+  'cosmetics': 'Barbarshops',
 };

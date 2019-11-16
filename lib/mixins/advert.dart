@@ -21,7 +21,7 @@ class AdvertMixin {
     final appLanguage = getLanguages(context);
     final screenSize = MediaQuery.of(context).size;
     return Container(
-      width: screenSize.width * 0.85,
+      width: screenSize.width * 0.9,
       padding: const EdgeInsets.symmetric(
         horizontal: 2.0,
         vertical: 5.0,
@@ -30,7 +30,6 @@ class AdvertMixin {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-//            width: screenSize.width * 0.20,
             height: 30,
             child: OutlineButton.icon(
               splashColor: Colors.grey[200],
@@ -50,7 +49,6 @@ class AdvertMixin {
             ),
           ),
           Container(
-//            width: screenSize.width * 0.25,
             height: 30,
             child: OutlineButton.icon(
               padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 0.0),
@@ -71,7 +69,6 @@ class AdvertMixin {
             ),
           ),
           Container(
-//            width: screenSize.width * 0.28,
             height: 30,
             child: OutlineButton.icon(
               splashColor: Colors.grey[200],

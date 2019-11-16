@@ -21,9 +21,10 @@ const Map pashto = {
 
   // ToolBar and Main Screen
   'home': 'کور',
-  'market': 'مارکیټ',
+  'market': 'بازار',
   'messages': 'پیغامونه',
-  'settings': 'سمونې',
+  'me': 'زه',
+  'services': 'خدمات',
 
   // post/advert actions buttons
 
@@ -92,8 +93,13 @@ const Map pashto = {
 
   'enter': ' ولیکئ!',
 
-  'errorDialogTitle': 'ستونزه!',
+  /////////////// Error Dialog ///////////////////
+
+  'errorDialogTitle': 'ستونزه',
   'ok': 'سمه ده',
+  'alertDialogTitle': 'وبښئ',
+  'underConstruction':
+      'دا برخه تر کار لاندې ده او ژر به ستاسې چوپړ ته آماده شي.',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',
@@ -108,4 +114,22 @@ const Map pashto = {
   ///////// Search //////////////////
 
   'search': 'پلټنه...',
+
+  /////////// Services /////////////////
+
+  'health': 'روغتیایي',
+  'education': 'تعلیمي او تحصیلي',
+  'painting': 'رنګمالي',
+  'construction': 'ساختماني',
+  'carpenter': 'نجاري',
+  'electrician': 'برق او لین تېرول',
+  'mechanic': 'موتر او مستري',
+  'cleaning': 'صفايي',
+  'plumber': 'د تعمیراتو نل دواني',
+  'laundry': 'کالي مېنځل',
+  'computer': 'کامپیوتر او موبایل',
+  'transportation': 'ترانسپورتي',
+  'legal': 'حقوقي او قضایي',
+  'decoration': 'دیزاین او دیکور',
+  'cosmetics': 'سینګار او سلماني',
 };
