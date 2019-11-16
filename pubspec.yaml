@@ -31,8 +31,11 @@ dependencies:
   image_picker: ^0.6.1+8
   url_launcher: ^5.2.5
   geolocator: ^5.1.4+2
-  dropdownfield: ^1.0.3
+#  dropdownfield: ^1.0.3
   find_dropdown: ^0.1.7+1
+#  cached_network_image: ^2.0.0-rc.1
+#  bmnav: ^0.3.4
+  bottom_navy_bar: ^5.2.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2

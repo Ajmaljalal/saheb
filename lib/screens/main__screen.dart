@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+//import 'package:bmnav/bmnav.dart' as bmnav;
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 //import 'package:geolocator/geolocator.dart';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
 import './settings/index.dart';
 import '../widgets/appBarSearch.dart';
-import '../screens/jobs/index.dart';
+import '../screens/services/index.dart';
+//import '../languages/index.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -29,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> screens = [
     Posts(),
     Market(),
-    Jobs(),
+    Services(),
     Settings(),
   ];
   void _setCurrentScreen(int index) async {
@@ -46,8 +50,7 @@ class _MainScreenState extends State<MainScreen> {
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
         _currentScreenIndex == 1 ||
         _currentScreenIndex == 2;
-
-//    print('location $_location');
+    final appLanguage = getLanguages(context);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
@@ -72,7 +75,8 @@ class _MainScreenState extends State<MainScreen> {
                         borderRadius: BorderRadius.circular(50.0),
                       ),
                       margin: EdgeInsets.only(
-                        left: 15.0,
+                        left: 5.0,
+                        right: 5.0,
                       ),
                       child: Center(
                         child: InkWell(
@@ -99,7 +103,8 @@ class _MainScreenState extends State<MainScreen> {
               renderSearchAndAdd
                   ? Container(
                       padding: EdgeInsets.only(
-                        right: 15.0,
+                        right: 5.0,
+                        left: 5.0,
                       ),
                       child: InkWell(
                         child: Icon(
@@ -123,65 +128,38 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: screens[_currentScreenIndex],
       bottomNavigationBar: Container(
-        height: 47.0,
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              color: Colors.cyan,
-              width: .5,
+              color: Colors.cyanAccent,
+              width: .3,
             ),
           ),
         ),
-        child: BottomNavigationBar(
-          onTap: _setCurrentScreen,
-          elevation: 10.0,
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentScreenIndex,
-          backgroundColor: Colors.white,
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.grey,
-          iconSize: 30.0,
+        child: BottomNavyBar(
+          selectedIndex: _currentScreenIndex,
+          showElevation: true, // use this to remove appBar's elevation
+          onItemSelected: _setCurrentScreen,
           items: [
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-//                size: 30.0,
-              ),
-              title: Text(
-                '',
-                style: TextStyle(fontSize: 0.0001),
-              ),
+            BottomNavyBarItem(
+              icon: Icon(Icons.home),
+              title: Text(appLanguage['home']),
+              activeColor: Colors.cyan,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.monetization_on,
-//                size: 35.0,
-              ),
-              title: Text(
-                '',
-                style: TextStyle(fontSize: 0.0001),
-              ),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.work,
-//                size: 35.0,
-              ),
-              title: Text(
-                '',
-                style: TextStyle(fontSize: 0.0001),
-              ),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(
-                Icons.settings,
-//                size: 35.0,
-              ),
-              title: Text(
-                '',
-                style: TextStyle(fontSize: 0.0001),
-              ),
-            ),
+            BottomNavyBarItem(
+                icon: Icon(Icons.monetization_on),
+                title: Text(appLanguage['market']),
+                activeColor: Colors.cyan),
+            BottomNavyBarItem(
+                icon: Icon(Icons.work),
+                title: Text(appLanguage['services']),
+                activeColor: Colors.cyan),
+            BottomNavyBarItem(
+                icon: Icon(Icons.person),
+                title: Text(
+                  appLanguage['me'],
+                ),
+                activeColor: Colors.cyan),
           ],
         ),
       ),
