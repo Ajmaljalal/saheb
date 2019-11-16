@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:saheb/screens/startups/registration_screen.dart';
 import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
@@ -18,6 +19,7 @@ class _LoginState extends State<Login> {
   bool _isLoggingIn = false;
   bool _isGoogleLogingIn = false;
   bool _isFacebookLogingIn = false;
+  String screen = 'login';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -27,6 +29,18 @@ class _LoginState extends State<Login> {
 
   void handlePasswordInputChange(value) {
     _password = value;
+  }
+
+  void swapScreens() {
+    if (screen == 'login') {
+      setState(() {
+        screen = 'register';
+      });
+    } else {
+      setState(() {
+        screen = 'login';
+      });
+    }
   }
 
   Future<void> onLogin(appLanguage) async {
@@ -104,75 +118,78 @@ class _LoginState extends State<Login> {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = _language == 'English' ? 15.0 : 17.0;
     Map appLanguage = getLanguages(context);
-    return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      body: SafeArea(
-        child: Container(
-          height: MediaQuery.of(context).size.height * 1,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Theme.of(context).accentColor,
-                Theme.of(context).primaryColor,
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              right: 10,
-              left: 10,
-              top: MediaQuery.of(context).size.height * 0.13,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Form(
-                    key: _formKey,
+    return screen == 'login'
+        ? Scaffold(
+            backgroundColor: Theme.of(context).primaryColor,
+            body: SafeArea(
+              child: Container(
+                height: MediaQuery.of(context).size.height * 1,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Theme.of(context).accentColor,
+                      Theme.of(context).primaryColor,
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    right: 10,
+                    left: 10,
+                    top: MediaQuery.of(context).size.height * 0.13,
+                  ),
+                  child: SingleChildScrollView(
                     child: Column(
                       children: <Widget>[
-                        loginInputs(
-                          appLanguage['email'],
-                          _language,
-                          handleEmailInputChange,
-                          appLanguage['enter'],
-                          false,
-                          fontSize,
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            children: <Widget>[
+                              loginInputs(
+                                appLanguage['email'],
+                                _language,
+                                handleEmailInputChange,
+                                appLanguage['enter'],
+                                false,
+                                fontSize,
+                              ),
+                              loginInputs(
+                                appLanguage['password'],
+                                _language,
+                                handlePasswordInputChange,
+                                appLanguage['enter'],
+                                true,
+                                fontSize,
+                              ),
+                              SizedBox(height: 20),
+                              loginButton(
+                                  _language, appLanguage, onLogin, fontSize),
+                            ],
+                          ),
                         ),
-                        loginInputs(
-                          appLanguage['password'],
-                          _language,
-                          handlePasswordInputChange,
-                          appLanguage['enter'],
-                          true,
-                          fontSize,
+                        SizedBox(height: 80),
+                        thirdPartyLoginButtons(
+                            appLanguage, _language, onGoogleLogin, fontSize),
+                        Center(
+                          child: Divider(
+                            color: Colors.white,
+                            indent: 45.0,
+                            endIndent: 45.0,
+                          ),
                         ),
-                        SizedBox(height: 20),
-                        loginButton(_language, appLanguage, onLogin, fontSize),
+                        Center(
+                            child: haveAnAccountText(
+                                _language, appLanguage, fontSize, swapScreens))
                       ],
                     ),
                   ),
-                  SizedBox(height: 80),
-                  thirdPartyLoginButtons(
-                      appLanguage, _language, onGoogleLogin, fontSize),
-                  Center(
-                    child: Divider(
-                      color: Colors.white,
-                      indent: 45.0,
-                      endIndent: 45.0,
-                    ),
-                  ),
-                  Center(
-                      child:
-                          haveAnAccountText(_language, appLanguage, fontSize))
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
-    );
+          )
+        : Registration(swapScreens);
   }
 
   Widget loginInputs(
@@ -370,7 +387,7 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget haveAnAccountText(lang, appLanguage, fontSize) {
+  Widget haveAnAccountText(lang, appLanguage, fontSize, swapScreens) {
     if (lang == 'English') {
       return Center(
         child: Row(
@@ -385,8 +402,7 @@ class _LoginState extends State<Login> {
             ),
             FlatButton(
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/register');
+                swapScreens();
               },
               child: Text(
                 'Register',
@@ -412,8 +428,7 @@ class _LoginState extends State<Login> {
           ),
           FlatButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/register');
+              swapScreens();
             },
             padding: EdgeInsets.all(0),
             child: Text(

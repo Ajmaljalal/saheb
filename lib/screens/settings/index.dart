@@ -26,10 +26,6 @@ class _SettingsState extends State<Settings> {
 
   onSignOut() async {
     await Provider.of<AuthProvider>(context).logout();
-//    bool _isAuth = Provider.of<AuthProvider>(context).isAuth;
-//    if (_isAuth == false) {
-//      Navigator.pushReplacementNamed(context, '/login');
-//    }
   }
 
   Future getUserProfile() async {

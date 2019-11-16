@@ -81,13 +81,9 @@ class Application extends StatelessWidget {
                   ),
 //      initialRoute: '/',
         routes: {
-          '/login': (context) => Login(),
-          '/register': (context) => Registration(),
           '/posts': (context) => MainScreen(),
           '/postDetails': (context) => PostDetails(),
           '/addPost': (context) => AddPost(),
-//          './addNonAdvertPost': (context) => NoneAdvertPost('null'),
-//          './addAdvertPost': (context) => AdvertPost(),
         },
       ),
     );
