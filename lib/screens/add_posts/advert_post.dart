@@ -13,7 +13,7 @@ import '../../util/uploadImage.dart';
 import '../../widgets/locationPicker.dart';
 //import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
-//import '../../providers/languageProvider.dart';
+import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
 
@@ -135,6 +135,8 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final imagesMax = _images.length > 5 ? true : false;
+    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 13.0 : 15.0;
 
     final List<String> dropDownItems = [
       appLanguage['sell'].toString(),
@@ -156,6 +158,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                 forText: 'send',
                 width: MediaQuery.of(context).size.width * 0.2,
                 height: 28.0,
+                fontSize: fontSize,
               ),
             ],
           ),
@@ -166,7 +169,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
         elevation: 10.0,
         margin: EdgeInsets.symmetric(
           vertical: 5.0,
-          horizontal: 8.0,
+          horizontal: 5.0,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,24 +202,29 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                         type: appLanguage['advert'].toString(),
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
+                        fontSize: fontSize,
                       ),
                       textArea(
                         type: appLanguage['advert'].toString(),
                         appLanguage: appLanguage,
                         onChange: onTextInputChange,
+                        fontSize: fontSize,
                       ),
                       Row(
                         children: <Widget>[
                           Expanded(
                             child: priceArea(
-                                appLanguage: appLanguage,
-                                onChange: onPhoneInputChange),
+                              appLanguage: appLanguage,
+                              onChange: onPhoneInputChange,
+                              fontSize: fontSize,
+                            ),
                           ),
                           CustomVerticalDivider(),
                           Expanded(
                             child: phoneNumberArea(
                               appLanguage: appLanguage,
                               onChange: onPhoneInputChange,
+                              fontSize: fontSize,
                             ),
                           ),
                         ],
@@ -224,6 +232,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                       emailAddressArea(
                         appLanguage: appLanguage,
                         onChange: onEmailInputChange,
+                        fontSize: fontSize,
                       ),
                       _images.length != 0
                           ? Row(
@@ -240,6 +249,14 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
               ),
             ),
             Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.cyanAccent,
+                    width: 0.3,
+                  ),
+                ),
+              ),
               child: bottomBar(
                 onSend: onSend,
                 onOpenPhotoVideo: chooseFile,

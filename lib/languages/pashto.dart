@@ -110,6 +110,7 @@ const Map pashto = {
   'select6Images': '۶ انځوره پورته کوی شی.',
   '6ImagesSelected': '۶ پوره شول',
   'wait': 'منتظر اوسی لطفاً...',
+  'noContent': 'تر اوسه دلته څه نشته.',
 
   ///////// Search //////////////////
 

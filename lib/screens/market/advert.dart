@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import '../../providers/languageProvider.dart';
 import '../../constants/constants.dart';
 import '../../providers/authProvider.dart';
 import 'advertDetails.dart';
@@ -66,6 +67,8 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     final appLanguage = getLanguages(context);
     final DocumentSnapshot advert = widget.advert;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
+    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -105,16 +108,18 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        postTittleHolder(advert['title'].toString()),
+                        postTittleHolder(advert['title'].toString(), fontSize),
                         postContent(
-                            text: advert['text'].toString(),
-                            images: advert['images'],
-                            flag: revealMoreTextFlag,
-                            onRevealMoreText: _revealMoreText,
-                            appLanguage: appLanguage,
-                            context: context,
-                            imagesScrollView: Axis.horizontal,
-                            price: advert['price'].toString()),
+                          text: advert['text'].toString(),
+                          images: advert['images'],
+                          flag: revealMoreTextFlag,
+                          onRevealMoreText: _revealMoreText,
+                          appLanguage: appLanguage,
+                          context: context,
+                          imagesScrollView: Axis.horizontal,
+                          price: advert['price'].toString(),
+                          fontSize: fontSize,
+                        ),
                       ],
                     ),
                   ),
