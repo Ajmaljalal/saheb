@@ -8,6 +8,8 @@ import '../../widgets/errorDialog.dart';
 import '../../widgets/circularProgressIndicator.dart';
 
 class Registration extends StatefulWidget {
+  final swapScreens;
+  Registration(this.swapScreens);
   @override
   _RegistrationState createState() => _RegistrationState();
 }
@@ -38,13 +40,10 @@ class _RegistrationState extends State<Registration> {
     setState(() {
       _isRegistering = true;
     });
-    String _userId;
+
     try {
-      _userId = await Provider.of<AuthProvider>(context, listen: false)
+      await Provider.of<AuthProvider>(context, listen: false)
           .register(_email, _password, _name);
-      if (_userId.length > 0) {
-        Navigator.pushReplacementNamed(context, '/login');
-      }
     } catch (error) {
       var errorMessage = appLanguage['registrationFailed'];
       if (error.toString().contains('ERROR_EMAIL_ALREADY_IN_USE')) {
@@ -187,8 +186,8 @@ class _RegistrationState extends State<Registration> {
                     ),
                   ),
                   Center(
-                      child:
-                          haveAnAccountText(_language, appLanguage, fontSize))
+                      child: haveAnAccountText(
+                          _language, appLanguage, fontSize, widget.swapScreens))
                 ],
               ),
             ),
@@ -393,7 +392,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Widget haveAnAccountText(lang, appLanguage, fontSize) {
+  Widget haveAnAccountText(lang, appLanguage, fontSize, swapScreens) {
     if (lang == 'English') {
       return Center(
         child: Row(
@@ -408,8 +407,7 @@ class _RegistrationState extends State<Registration> {
             ),
             FlatButton(
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pushNamed(context, '/login');
+                swapScreens();
               },
               child: Text(
                 'Login',
@@ -435,8 +433,7 @@ class _RegistrationState extends State<Registration> {
           ),
           FlatButton(
             onPressed: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/login');
+              swapScreens();
             },
             padding: EdgeInsets.all(0),
             child: Text(
