@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import '../../providers/authProvider.dart';
+import '../../providers/languageProvider.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
 import '../../languages/index.dart';
@@ -92,6 +93,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
     final String advertTitle = widget.advertTitle.toString();
     final String advertId = widget.advertId;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
+    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: Text(advertTitle)),
@@ -111,6 +114,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                         advertTitle: advertTitle,
                         appLanguage: appLanguage,
                         userId: currentUserId,
+                        fontSize: fontSize,
                       ),
                     ),
                   ],
@@ -142,6 +146,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     advertTitle,
     appLanguage,
     userId,
+    fontSize,
   }) {
     return StreamBuilder(
       stream:
@@ -167,7 +172,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
               ),
               Row(
                 children: <Widget>[
-                  postTittleHolder(advert['title'].toString()),
+                  postTittleHolder(advert['title'].toString(), fontSize),
                 ],
               ),
               GestureDetector(
@@ -193,6 +198,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   appLanguage: appLanguage,
                   context: context,
                   imagesScrollView: Axis.horizontal,
+                  fontSize: fontSize,
                 ),
               ),
               postLikesCommentsCountHolder(

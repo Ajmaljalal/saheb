@@ -7,7 +7,9 @@ import '../constants/constants.dart';
 import '../widgets/imageRenderer.dart';
 
 class PostMixin {
-  Widget cardHeader(post) {
+  Widget cardHeader(
+    post,
+  ) {
     return Row(
       children: <Widget>[
         userAvatarHolder(url: post['owner']['photo']),
@@ -47,7 +49,9 @@ class PostMixin {
     );
   }
 
-  Widget userNameHolder(userName) {
+  Widget userNameHolder(
+    userName,
+  ) {
     return Container(
       child: Text(
         userName,
@@ -56,7 +60,9 @@ class PostMixin {
     );
   }
 
-  Widget userLocationHolder(location) {
+  Widget userLocationHolder(
+    location,
+  ) {
     return Container(
       child: Text(
         location,
@@ -65,7 +71,11 @@ class PostMixin {
     );
   }
 
-  Widget postTypeHolder(context, postType, appLanguage) {
+  Widget postTypeHolder(
+    context,
+    postType,
+    appLanguage,
+  ) {
     Color circleColor;
     if (postType == 'مفقودی' || postType == 'Lost') {
       circleColor = Colors.red;
@@ -118,7 +128,10 @@ class PostMixin {
       );
   }
 
-  Widget postTittleHolder(title) {
+  Widget postTittleHolder(
+    title,
+    fontSize,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(
         right: 10.0,
@@ -129,7 +142,7 @@ class PostMixin {
           title,
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 15.0,
+            fontSize: fontSize,
           ),
         ),
       ),
@@ -145,6 +158,7 @@ class PostMixin {
     context,
     imagesScrollView,
     price,
+    fontSize,
   }) {
     return Container(
       child: Column(
@@ -154,9 +168,9 @@ class PostMixin {
             padding: const EdgeInsets.all(10.0),
             child: Text(
               text,
-              maxLines: flag ? 50 : 2,
+              maxLines: flag ? 50 : 3,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: fontSize,
                 color: Colors.black,
               ),
             ),
@@ -458,7 +472,6 @@ class PostMixin {
             postComment['text'].toString(),
             style: TextStyle(
               fontSize: 14,
-              fontFamily: 'ZarReg',
             ),
           ),
           commentActionButtons(
@@ -542,7 +555,6 @@ class PostMixin {
     final TextEditingController _controller = new TextEditingController();
     return Container(
       width: MediaQuery.of(context).size.width,
-//      height: 50.0,
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(

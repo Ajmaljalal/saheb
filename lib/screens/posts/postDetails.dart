@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/widgets/fullScreenImage.dart';
 import '../../providers/authProvider.dart';
+import '../../providers/languageProvider.dart';
 import 'package:flutter/widgets.dart';
 import '../../mixins/post.dart';
 import '../../languages/index.dart';
@@ -91,6 +92,8 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     final String postTitle = widget.postTitle;
     final String postId = widget.postId;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
+    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(title: Text(postTitle)),
@@ -110,6 +113,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                         postTitle: postTitle,
                         appLanguage: appLanguage,
                         userId: currentUserId,
+                        fontSize: fontSize,
                       ),
                     ),
                   ],
@@ -141,6 +145,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     postTitle,
     appLanguage,
     userId,
+    fontSize,
   }) {
     return StreamBuilder(
       stream: Provider.of<PostsProvider>(context).getOnePost('posts', postId),
@@ -164,7 +169,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
               ),
               Row(
                 children: <Widget>[
-                  postTittleHolder(post['title']),
+                  postTittleHolder(post['title'], fontSize),
                 ],
               ),
               GestureDetector(
@@ -190,6 +195,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                   appLanguage: appLanguage,
                   context: context,
                   imagesScrollView: Axis.horizontal,
+                  fontSize: fontSize,
                 ),
               ),
               postLikesCommentsCountHolder(

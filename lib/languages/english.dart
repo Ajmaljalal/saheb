@@ -12,10 +12,10 @@ const Map english = {
   'phone': 'Phone number (Optional)',
   'name': 'User name',
 
-  'signinWithFacebook': 'Sign in with Facebook',
-  'signinWithGoogle': 'Sign in with Google',
-  'registerWithFacebook': 'Register with Facbook',
-  'registerWithGoogle': 'Register with Google',
+  'signinWithFacebook': 'Sign in with',
+  'signinWithGoogle': 'Sign in with',
+  'registerWithFacebook': 'Register with',
+  'registerWithGoogle': 'Register with',
 
   'more': 'more...',
 
@@ -58,9 +58,9 @@ const Map english = {
   'optionalEmail': 'Email (Optional',
 
   'whatPost': 'What do you want to post?',
-  'textForGeneralPost': 'Like normal events or matters around you.',
-  'textForAdvertPost': 'Want to sell, rend or buy something.',
-  'textForEmergencyPost': 'Need for blood, traffic, or other security issues',
+  'textForGeneralPost': 'Normal events or matters around you.',
+  'textForAdvertPost': 'Want to sell, rent or buy something.',
+  'textForEmergencyPost': 'Need blood, traffic, or security issues',
   'textForLostPost': 'Someone or someting is lost.',
   'textForFoundPost': 'Found someone or something.',
 
@@ -72,7 +72,7 @@ const Map english = {
 
   'price': 'Price',
   'free': 'Free',
-  'location': 'Choose a location (required)',
+  'location': 'location(required)',
 
   'emptyForm': 'Empty form!',
   'fillOutRequiredSections':
@@ -111,6 +111,7 @@ const Map english = {
   'select6Images': 'Select up to 6 img',
   '6ImagesSelected': '۶6 img completed',
   'wait': 'Please wait...!',
+  'noContent': 'NO CONTENT HERE',
 
   ///////// Search //////////////////
 

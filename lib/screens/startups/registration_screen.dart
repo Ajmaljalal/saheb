@@ -117,6 +117,7 @@ class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = _language == 'English' ? 15.0 : 17.0;
     Map appLanguage = getLanguages(context);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -152,6 +153,7 @@ class _RegistrationState extends State<Registration> {
                           handleNameInputChange,
                           appLanguage['enter'],
                           false,
+                          fontSize,
                         ),
                         registrationInputs(
                           appLanguage['email'],
@@ -159,6 +161,7 @@ class _RegistrationState extends State<Registration> {
                           handleEmailInputChange,
                           appLanguage['enter'],
                           false,
+                          fontSize,
                         ),
                         registrationInputs(
                           appLanguage['password'],
@@ -166,15 +169,16 @@ class _RegistrationState extends State<Registration> {
                           handlePasswordInputChange,
                           appLanguage['enter'],
                           true,
+                          fontSize,
                         ),
                         SizedBox(height: 20),
-                        registrationButton(
-                            _language, appLanguage, onSubmit, _isRegistering),
+                        registrationButton(_language, appLanguage, onSubmit,
+                            _isRegistering, fontSize),
                       ],
                     ),
                   ),
                   SizedBox(height: 80),
-                  thirdPartyLoginButtons(appLanguage, _language),
+                  thirdPartyLoginButtons(appLanguage, _language, fontSize),
                   Center(
                     child: Divider(
                       color: Colors.white,
@@ -182,7 +186,9 @@ class _RegistrationState extends State<Registration> {
                       endIndent: 50.0,
                     ),
                   ),
-                  Center(child: haveAnAccountText(_language, appLanguage))
+                  Center(
+                      child:
+                          haveAnAccountText(_language, appLanguage, fontSize))
                 ],
               ),
             ),
@@ -198,6 +204,7 @@ class _RegistrationState extends State<Registration> {
     onChange,
     error,
     isPassword,
+    fontSize,
   ) {
     return Center(
       child: Padding(
@@ -223,7 +230,7 @@ class _RegistrationState extends State<Registration> {
           cursorColor: Colors.black,
           style: TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: fontSize,
             letterSpacing: 3,
           ),
           decoration: InputDecoration(
@@ -236,11 +243,11 @@ class _RegistrationState extends State<Registration> {
               hintText: type,
               hintStyle: TextStyle(
                 color: Colors.grey,
-                fontSize: 17.0,
+                fontSize: fontSize,
               ),
               errorStyle: TextStyle(
                 color: Colors.white,
-                fontSize: 20.0,
+                fontSize: fontSize,
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -262,11 +269,7 @@ class _RegistrationState extends State<Registration> {
   }
 
   Widget registrationButton(
-    String lang,
-    appLanguage,
-    onSubmit,
-    _isRegistering,
-  ) {
+      String lang, appLanguage, onSubmit, _isRegistering, fontSize) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
@@ -294,7 +297,7 @@ class _RegistrationState extends State<Registration> {
                 ? progressIndicator()
                 : Text(
                     appLanguage['register'],
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                   ),
           ),
         ),
@@ -302,7 +305,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Widget thirdPartyLoginButtons(appLanguage, language) {
+  Widget thirdPartyLoginButtons(appLanguage, language, fontSize) {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -333,7 +336,7 @@ class _RegistrationState extends State<Registration> {
                               appLanguage['registerWithFacebook'],
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15.0,
+                                fontSize: fontSize,
                               ),
                             ),
                             SizedBox(
@@ -367,9 +370,9 @@ class _RegistrationState extends State<Registration> {
                           children: <Widget>[
                             Text(
                               appLanguage['registerWithGoogle'],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 15.0,
+                                fontSize: fontSize,
                               ),
                             ),
                             const SizedBox(
@@ -390,7 +393,7 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Widget haveAnAccountText(lang, appLanguage) {
+  Widget haveAnAccountText(lang, appLanguage, fontSize) {
     if (lang == 'English') {
       return Center(
         child: Row(
@@ -400,7 +403,7 @@ class _RegistrationState extends State<Registration> {
               'Have an account?',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 22,
+                fontSize: fontSize,
               ),
             ),
             FlatButton(
@@ -412,7 +415,7 @@ class _RegistrationState extends State<Registration> {
                 'Login',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22,
+                  fontSize: fontSize,
                 ),
               ),
             )
@@ -427,7 +430,7 @@ class _RegistrationState extends State<Registration> {
             appLanguage['haveAnAccount'],
             style: TextStyle(
               color: Colors.white,
-              fontSize: 22,
+              fontSize: fontSize,
             ),
           ),
           FlatButton(
@@ -440,7 +443,7 @@ class _RegistrationState extends State<Registration> {
               appLanguage['login'],
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 24,
+                fontSize: fontSize,
               ),
             ),
           ),

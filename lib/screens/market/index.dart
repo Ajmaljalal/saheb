@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/postsProvider.dart';
+import '../../languages/index.dart';
 import 'advert.dart';
 
 class Market extends StatefulWidget {
@@ -11,16 +12,16 @@ class Market extends StatefulWidget {
 class _MarketState extends State<Market> {
   @override
   Widget build(BuildContext context) {
+    final appLanguage = getLanguages(context);
     return StreamBuilder(
       stream: Provider.of<PostsProvider>(context).getAllPosts('adverts'),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Center(child: Text("Loading.."));
+          return Center(child: Text(appLanguage['wait']));
         }
         if (snapshot.data.documents.toList().length == 0) {
           return Center(
-            child: Text(
-                'No adverts exit, add advertizments by clicking the add(+) button above'),
+            child: Text(appLanguage['noContent']),
           );
         }
         return ListView.builder(

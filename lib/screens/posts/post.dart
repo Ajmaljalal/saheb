@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import '../../providers/authProvider.dart';
+import '../../providers/languageProvider.dart';
 
 import '../../constants/constants.dart';
 import 'postDetails.dart';
@@ -55,6 +56,8 @@ class _PostState extends State<Post> with PostMixin {
     final appLanguage = getLanguages(context);
     final DocumentSnapshot post = widget.post;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
+    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -88,7 +91,7 @@ class _PostState extends State<Post> with PostMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      postTittleHolder(post['title']),
+                      postTittleHolder(post['title'], fontSize),
                       postTypeHolder(context, post['type'], appLanguage),
                       postContent(
                         text: post['text'],
@@ -98,6 +101,7 @@ class _PostState extends State<Post> with PostMixin {
                         appLanguage: appLanguage,
                         context: context,
                         imagesScrollView: Axis.horizontal,
+                        fontSize: fontSize,
                       ),
                     ],
                   ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'advert_post.dart';
 import 'none_advert_post.dart';
 import '../../languages/index.dart';
+import '../../providers/languageProvider.dart';
 
 class AddPost extends StatefulWidget {
   @override
@@ -20,6 +22,8 @@ class _AddPostState extends State<AddPost> {
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
+    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 13.0 : 15.0;
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: AppBar(
@@ -53,30 +57,40 @@ class _AddPostState extends State<AddPost> {
                 text: appLanguage['textForGeneralPost'],
                 appLanguageText: appLanguage['general'],
                 bgColor: true,
+                context: context,
+                fontSize: fontSize,
               ),
               _postTypeOption(
                 type: appLanguage['advert'],
                 text: appLanguage['textForAdvertPost'],
                 appLanguageText: appLanguage['advert'],
                 bgColor: false,
+                context: context,
+                fontSize: fontSize,
               ),
               _postTypeOption(
                 type: appLanguage['emergency'],
                 text: appLanguage['textForEmergencyPost'],
                 appLanguageText: appLanguage['emergency'],
                 bgColor: true,
+                context: context,
+                fontSize: fontSize,
               ),
               _postTypeOption(
                 type: appLanguage['lost'],
                 text: appLanguage['textForLostPost'],
                 appLanguageText: appLanguage['lost'],
                 bgColor: false,
+                context: context,
+                fontSize: fontSize,
               ),
               _postTypeOption(
                 type: appLanguage['found'],
                 text: appLanguage['textForFoundPost'],
                 appLanguageText: appLanguage['found'],
                 bgColor: true,
+                context: context,
+                fontSize: fontSize,
               ),
             ],
           ),
@@ -85,12 +99,13 @@ class _AddPostState extends State<AddPost> {
     );
   }
 
-  Widget _postTypeOption({
-    String type,
-    String text,
-    String appLanguageText,
-    bool bgColor,
-  }) {
+  Widget _postTypeOption(
+      {String type,
+      String text,
+      String appLanguageText,
+      bool bgColor,
+      context,
+      fontSize}) {
     return GestureDetector(
       onTap: () {
         type == 'Advert' || type == 'اعلان'
@@ -115,7 +130,7 @@ class _AddPostState extends State<AddPost> {
             subtitle: Text(
               text,
               style: TextStyle(
-                fontSize: 15.0,
+                fontSize: fontSize,
               ),
             ),
             isThreeLine: false,

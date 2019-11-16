@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-Widget customButton({appLanguage, context, onClick, forText, width, height}) {
+Widget customButton(
+    {appLanguage, context, onClick, forText, width, height, fontSize}) {
   return Padding(
     padding: EdgeInsets.all(8.0),
     child: Container(
@@ -19,7 +20,7 @@ Widget customButton({appLanguage, context, onClick, forText, width, height}) {
           child: Text(
             appLanguage['$forText'],
             style: TextStyle(
-              fontSize: 15.0,
+              fontSize: fontSize,
               color: Colors.white,
             ),
           ),
