@@ -19,23 +19,20 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^3.1.0
-  intl: 0.16.0
-  http: ^0.12.0+2
-  shared_preferences: ^0.5.4+3
-  firebase_auth: ^0.14.0+5
-  google_sign_in: ^4.0.7
+  provider: ^3.1.0+1
+  #  intl: 0.16.0
+  #  http: ^0.12.0+2
+  shared_preferences: ^0.5.4+5
+  firebase_auth: ^0.15.0+1
+  google_sign_in: ^4.0.14
   flutter_facebook_login: ^3.0.0
-  cloud_firestore: ^0.12.9+5
-  firebase_storage: ^3.0.6
-  image_picker: ^0.6.1+8
+  cloud_firestore: ^0.12.10+2
+  firebase_storage: ^3.0.8
+  image_picker: ^0.6.2
   url_launcher: ^5.2.5
-  geolocator: ^5.1.4+2
-#  dropdownfield: ^1.0.3
+  geolocator: ^5.1.5
   find_dropdown: ^0.1.7+1
-#  cached_network_image: ^2.0.0-rc.1
-#  bmnav: ^0.3.4
-  bottom_navy_bar: ^5.2.0
+  bottom_navy_bar: ^5.2.2
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2

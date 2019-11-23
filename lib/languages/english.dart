@@ -8,7 +8,7 @@ const Map english = {
   'password': 'Password',
   'register': 'Register!',
   'haveAnAccount': 'Have an account? ',
-  'doNotHaveAnAccount': 'Do not have an account? ',
+  'doNotHaveAnAccount': 'Don\'t have an account? ',
   'phone': 'Phone number (Optional)',
   'name': 'User name',
 
@@ -112,6 +112,18 @@ const Map english = {
   '6ImagesSelected': '۶6 img completed',
   'wait': 'Please wait...!',
   'noContent': 'NO CONTENT HERE',
+
+  ////////////// Post options bottom sheet ///////////////
+  'savePost': 'Save this post',
+  'savePostSubText': 'Save this post for later review.',
+  'editPost': 'Edit this post',
+  'editPostSubText': 'It is your post and you want to edit it.',
+  'hidePost': 'Hide this post',
+  'hidePostSubText': 'You want to hide it from your screen.',
+  'reportPost': 'Report this post',
+  'reportPostSubText': 'You want us to remove it.',
+  'deletePost': 'Delete this post',
+  'deletePostSubText': 'This your post and you want to remove it.',
 
   ///////// Search //////////////////
 
