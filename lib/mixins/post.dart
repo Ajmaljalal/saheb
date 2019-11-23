@@ -128,6 +128,62 @@ class PostMixin {
       );
   }
 
+  Widget postOptions({
+    context,
+    onOpenOptions,
+    appLanguage,
+    postId,
+    currentUserId,
+  }) {
+    return Container(
+      width: 45.0,
+      child: FlatButton(
+        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: EdgeInsets.symmetric(horizontal: 0.0),
+        onPressed: () {
+          onOpenOptions(
+            context,
+            appLanguage,
+            currentUserId,
+            postId,
+          );
+        },
+        child: Container(
+          width: 20.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                height: 5.0,
+                width: 5.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50.0),
+                  color: Colors.black54,
+                ),
+              ),
+              Container(
+                height: 5.0,
+                width: 5.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50.0),
+                  color: Colors.black54,
+                ),
+              ),
+              Container(
+                height: 5.0,
+                width: 5.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50.0),
+                  color: Colors.black54,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget postTittleHolder(
     title,
     fontSize,

@@ -42,7 +42,7 @@ class Application extends StatelessWidget {
 
     return Consumer<AuthProvider>(
       builder: (context, auth, _) => MaterialApp(
-        title: 'saheb',
+        title: 'PYWAST',
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

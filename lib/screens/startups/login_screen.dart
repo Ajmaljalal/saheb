@@ -394,7 +394,7 @@ class _LoginState extends State<Login> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Do not an account?',
+              appLanguage['doNotHaveAnAccount'],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: fontSize,
