@@ -42,10 +42,10 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     );
   }
 
-  updateLikes(context) {
-    Provider.of<PostsProvider>(context)
-        .updatePostLikes(widget.advert.documentID, 'adverts');
-  }
+//  updateLikes(context) {
+//    Provider.of<PostsProvider>(context)
+//        .updatePostLikes(widget.advert.documentID, 'adverts');
+//  }
 
   deleteAdvert(context) {
     Provider.of<PostsProvider>(context).deleteOnePost(
@@ -124,11 +124,11 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                     ),
                   ),
                 ),
-                postLikesCommentsCountHolder(
-                  post: advert,
-                  appLanguage: appLanguage,
-                  userId: currentUserId,
-                ),
+//                postLikesCommentsCountHolder(
+//                  post: advert,
+//                  appLanguage: appLanguage,
+//                  userId: currentUserId,
+//                ),
                 kHorizontalDivider,
                 advertActionButtons(
                   onClickComment: goToDetailsScreen,
@@ -137,7 +137,6 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   advert: advert,
                   advertTitle: advert['title'],
                   flag: 'posts',
-                  updateLikes: updateLikes,
                   onDeleteAdvert: deleteAdvert,
                   onCallPhoneNumber: callPhoneNumber,
                   context: context,

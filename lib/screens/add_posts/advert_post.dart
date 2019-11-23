@@ -215,7 +215,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                           Expanded(
                             child: priceArea(
                               appLanguage: appLanguage,
-                              onChange: onPhoneInputChange,
+                              onChange: onPriceInputChange,
                               fontSize: fontSize,
                             ),
                           ),

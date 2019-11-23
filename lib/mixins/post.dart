@@ -338,7 +338,7 @@ class PostMixin {
     userId,
   }) {
     final comments = post['comments'];
-    final likes = post['likes'];
+    final List likes = post['likes'];
     final String commentsHolderText = comments.length > 1
         ? appLanguage['multiComments']
         : appLanguage['singleComment'];
@@ -368,7 +368,7 @@ class PostMixin {
           Row(
             children: <Widget>[
               Text(
-                likes.toString(),
+                likes.length.toString(),
                 style: const TextStyle(fontSize: 13.0),
               ),
               const SizedBox(
@@ -414,7 +414,7 @@ class PostMixin {
               size: 20,
             ),
             onTap: () {
-              updateLikes(context);
+              updateLikes(context, post['likes'], userId);
             },
           ),
           SizedBox(
@@ -551,6 +551,7 @@ class PostMixin {
   }) {
     bool canDeleteComment =
         comment['user']['id'] == userId || postOwnerId == userId;
+    final commentLikes = comment['likes'];
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -563,7 +564,7 @@ class PostMixin {
                 size: 18,
               ),
               onPressed: () async {
-                await likeComment(comment);
+                await likeComment(comment, userId);
               },
             ),
             canDeleteComment
@@ -587,7 +588,9 @@ class PostMixin {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(comment['likes'].toString()),
+            Text(
+              commentLikes.length.toString(),
+            ),
             SizedBox(width: 5),
             Icon(
               FontAwesomeIcons.heart,

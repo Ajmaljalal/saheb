@@ -32,10 +32,10 @@ class _AdvertDetailsState extends State<AdvertDetails>
     FocusScope.of(context).requestFocus(commentFieldFocusNode);
   }
 
-  updateLikes(context) {
-    Provider.of<PostsProvider>(context, listen: false)
-        .updatePostLikes(widget.advertId, 'adverts');
-  }
+//  updateLikes(context) {
+//    Provider.of<PostsProvider>(context, listen: false)
+//        .updatePostLikes(widget.advertId, 'adverts');
+//  }
 
   addComment() async {
     final user = await Provider.of<AuthProvider>(context).currentUser;
@@ -121,20 +121,20 @@ class _AdvertDetailsState extends State<AdvertDetails>
                 ),
               ),
             ),
-            Positioned(
-              bottom: 0.0,
-              right: 0,
-              left: 0,
-              child: addCommentTextField(
-                focusNode: commentFieldFocusNode,
-                appLanguage: appLanguage,
-                onChange: handleTextInputChange,
-                onSubmit: addComment,
-                userId: currentUserId,
-                onClearTextField: clearAddCommentTextField,
-                context: context,
-              ),
-            ),
+//            Positioned(
+//              bottom: 0.0,
+//              right: 0,
+//              left: 0,
+//              child: addCommentTextField(
+//                focusNode: commentFieldFocusNode,
+//                appLanguage: appLanguage,
+//                onChange: handleTextInputChange,
+//                onSubmit: addComment,
+//                userId: currentUserId,
+//                onClearTextField: clearAddCommentTextField,
+//                context: context,
+//              ),
+//            ),
           ],
         ),
       ),
@@ -201,11 +201,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   fontSize: fontSize,
                 ),
               ),
-              postLikesCommentsCountHolder(
-                post: advert,
-                appLanguage: appLanguage,
-                userId: userId,
-              ),
+//              postLikesCommentsCountHolder(
+//                post: advert,
+//                appLanguage: appLanguage,
+//                userId: userId,
+//              ),
               Divider(
                 color: Colors.grey,
                 height: 1,
@@ -217,7 +217,6 @@ class _AdvertDetailsState extends State<AdvertDetails>
                 advert: advert,
                 advertTitle: advertTitle,
                 flag: 'details',
-                updateLikes: updateLikes,
                 context: context,
                 onDeleteAdvert: deletePost,
               ),
@@ -225,20 +224,20 @@ class _AdvertDetailsState extends State<AdvertDetails>
                 color: Colors.grey,
                 height: 1,
               ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    ...individualCommentRenderer(
-                      comments: advert['comments'],
-                      likeComment: updateCommentLikes,
-                      deleteComment: deleteComment,
-                      userId: userId,
-                      postOwnerId: advert['owner']['id'],
-                      context: context,
-                    ),
-                  ],
-                ),
-              ),
+//              Container(
+//                child: Column(
+//                  children: <Widget>[
+//                    ...individualCommentRenderer(
+//                      comments: advert['comments'],
+//                      likeComment: updateCommentLikes,
+//                      deleteComment: deleteComment,
+//                      userId: userId,
+//                      postOwnerId: advert['owner']['id'],
+//                      context: context,
+//                    ),
+//                  ],
+//                ),
+//              ),
             ],
           ),
         );

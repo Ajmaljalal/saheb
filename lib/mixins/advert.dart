@@ -13,7 +13,6 @@ class AdvertMixin {
     advert,
     advertTitle,
     flag,
-    updateLikes,
     onDeleteAdvert,
     onCallPhoneNumber,
     context,

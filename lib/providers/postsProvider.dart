@@ -18,7 +18,7 @@ class PostsProvider with ChangeNotifier {
         {
           'comments': [],
           'date': DateTime.now(),
-          'likes': 0,
+          'likes': [],
           'owner': owner,
           'text': text,
           'title': title,
@@ -46,9 +46,7 @@ class PostsProvider with ChangeNotifier {
     try {
       db.collection('adverts').add(
         {
-          'comments': [],
           'date': DateTime.now(),
-          'likes': 0,
           'owner': owner,
           'text': text,
           'title': title,
@@ -89,11 +87,13 @@ class PostsProvider with ChangeNotifier {
     return dataStream;
   }
 
-  updatePostLikes(String postId, collection) {
+  updatePostLikes(String postId, collection, userId) {
     try {
       db.collection(collection).document(postId).updateData(
         {
-          'likes': FieldValue.increment(1),
+          'likes': FieldValue.arrayUnion(
+            [userId],
+          ),
         },
       );
     } catch (e) {
@@ -110,7 +110,7 @@ class PostsProvider with ChangeNotifier {
               {
                 'id': Uuid().generateV4(),
                 'text': text,
-                'likes': 0,
+                'likes': [],
                 'user': user,
                 'date': DateTime.now(),
               }
@@ -123,7 +123,9 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  updateCommentLikes({String postId, postComment, collection}) async {
+  updateCommentLikes({String postId, postComment, collection, userId}) async {
+    final List commentLikes = new List<String>.from(postComment['likes']);
+    commentLikes.add(userId);
     //// add date to work
     try {
       await db.collection(collection).document(postId).updateData(
@@ -149,7 +151,7 @@ class PostsProvider with ChangeNotifier {
                 'date': postComment['date'],
                 'id': postComment['id'],
                 'text': postComment['text'],
-                'likes': postComment['likes'] + 1,
+                'likes': commentLikes,
                 'user': postComment['user'],
               }
             ],

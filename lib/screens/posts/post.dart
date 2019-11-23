@@ -44,9 +44,13 @@ class _PostState extends State<Post> with PostMixin {
     );
   }
 
-  updateLikes(context) {
-    Provider.of<PostsProvider>(context)
-        .updatePostLikes(widget.post.documentID, 'posts');
+  updateLikes(context, List postLikes, userId) {
+    if (postLikes.contains(userId)) {
+      return;
+    } else {
+      Provider.of<PostsProvider>(context)
+          .updatePostLikes(widget.post.documentID, 'posts', userId);
+    }
   }
 
   deletePost(context) {

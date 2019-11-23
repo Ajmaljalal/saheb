@@ -31,9 +31,9 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     FocusScope.of(context).requestFocus(commentFieldFocusNode);
   }
 
-  updateLikes(context) {
+  updateLikes(context, postLikes, userId) {
     Provider.of<PostsProvider>(context, listen: false)
-        .updatePostLikes(widget.postId, 'posts');
+        .updatePostLikes(widget.postId, 'posts', userId);
   }
 
   addComment() async {
@@ -63,12 +63,19 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     _text = '';
   }
 
-  updateCommentLikes(postComment) async {
-    await Provider.of<PostsProvider>(context, listen: false).updateCommentLikes(
-      collection: 'posts',
-      postComment: postComment,
-      postId: widget.postId,
-    );
+  updateCommentLikes(postComment, userId) async {
+    final List commentLikes = postComment['likes'];
+    if (commentLikes.contains(userId)) {
+      return;
+    } else {
+      await Provider.of<PostsProvider>(context, listen: false)
+          .updateCommentLikes(
+        collection: 'posts',
+        postComment: postComment,
+        postId: widget.postId,
+        userId: userId,
+      );
+    }
   }
 
   deleteComment(postComment) async {
