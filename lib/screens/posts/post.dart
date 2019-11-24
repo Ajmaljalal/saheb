@@ -16,8 +16,9 @@ import '../../mixins/post.dart';
 import '../../languages/index.dart';
 
 class Post extends StatefulWidget {
-  final DocumentSnapshot post;
-  Post({Key key, this.post}) : super(key: key);
+  final post;
+  final postId;
+  Post({Key key, this.post, this.postId}) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -49,13 +50,12 @@ class _PostState extends State<Post> with PostMixin {
       return;
     } else {
       Provider.of<PostsProvider>(context)
-          .updatePostLikes(widget.post.documentID, 'posts', userId);
+          .updatePostLikes(widget.postId, 'posts', userId);
     }
   }
 
   deletePost(context) {
-    Provider.of<PostsProvider>(context)
-        .deleteOnePost(widget.post.documentID, 'posts');
+    Provider.of<PostsProvider>(context).deleteOnePost(widget.postId, 'posts');
   }
 
   closeBottomSheet() {}
@@ -139,7 +139,7 @@ class _PostState extends State<Post> with PostMixin {
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
-    final DocumentSnapshot post = widget.post;
+    final post = widget.post;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
@@ -178,7 +178,7 @@ class _PostState extends State<Post> with PostMixin {
                 ),
                 GestureDetector(
                   onTap: () {
-                    goToDetailsScreen(post.documentID, post['title']);
+                    goToDetailsScreen(widget.postId, post['title']);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +206,7 @@ class _PostState extends State<Post> with PostMixin {
                 kHorizontalDivider,
                 postActionButtons(
                   onClickComment: goToDetailsScreen,
-                  postId: post.documentID,
+                  postId: widget.postId,
                   userId: currentUserId,
                   post: post,
                   postTitle: post['title'],

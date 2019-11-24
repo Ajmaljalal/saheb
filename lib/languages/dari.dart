@@ -104,7 +104,8 @@ const Map dari = {
   'select6Images': 'تا ۶ تصویر برګزینید!',
   '6ImagesSelected': '۶ تصویر پوره شد.',
   'wait': 'منتظر باشید لطفاً...',
-  'noContent': 'هنوز چیزی موجود نیست.',
+  'noContent': 'چیزی موجود نیست.',
+  'cancel': 'انصراف',
 
   ////////////// Post options bottom sheet ///////////////
   'savePost': 'نوشته را برای خود نشانی نمائید.',
@@ -121,6 +122,8 @@ const Map dari = {
   ///////// Search //////////////////
 
   'search': 'جستجو...',
+  'myPosts': 'نوشته های من',
+  'myFavorites': 'نشانی شده',
 
   /////////// Services /////////////////
 

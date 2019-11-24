@@ -111,7 +111,8 @@ const Map english = {
   'select6Images': 'Select up to 6 img',
   '6ImagesSelected': '۶6 img completed',
   'wait': 'Please wait...!',
-  'noContent': 'NO CONTENT HERE',
+  'noContent': 'NO CONTENT',
+  'cancel': 'Cancel',
 
   ////////////// Post options bottom sheet ///////////////
   'savePost': 'Save this post',
@@ -128,6 +129,8 @@ const Map english = {
   ///////// Search //////////////////
 
   'search': 'search...',
+  'myPosts': 'My posts',
+  'myFavorites': 'Favorites',
 
   /////////// Services /////////////////
 
