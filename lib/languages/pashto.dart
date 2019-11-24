@@ -110,7 +110,8 @@ const Map pashto = {
   'select6Images': '۶ انځوره پورته کوی شی.',
   '6ImagesSelected': '۶ پوره شول',
   'wait': 'منتظر اوسی لطفاً...',
-  'noContent': 'تر اوسه دلته څه نشته.',
+  'noContent': 'څه نشته.',
+  'cancel': 'انصراف',
 
   ////////////// Post options bottom sheet ///////////////
   'savePost': 'لیکنه نشاني کړی.',
@@ -127,6 +128,8 @@ const Map pashto = {
   ///////// Search //////////////////
 
   'search': 'پلټنه...',
+  'myPosts': 'زما لیکنې',
+  'myFavorites': 'نشاني شوې',
 
   /////////// Services /////////////////
 

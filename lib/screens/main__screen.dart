@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/widgets/emptyBox.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
@@ -18,7 +19,14 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   static int _currentScreenIndex = 0;
+  static String _searchBarString;
 //  var _location;
+
+  handleSearchBarStringChange(value) {
+    setState(() {
+      _searchBarString = value;
+    });
+  }
 
   String _getAppBarTitle(context) {
     final appLanguage = getLanguages(context);
@@ -30,12 +38,6 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  final List<Widget> screens = [
-    Posts(),
-    Market(),
-    Services(),
-    Settings(),
-  ];
   void _setCurrentScreen(int index) async {
 //    List<Placemark> placemark =
 ////        await Geolocator().placemarkFromCoordinates(34.519822, 69.328775);
@@ -53,6 +55,12 @@ class _MainScreenState extends State<MainScreen> {
     final appLanguage = getLanguages(context);
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
+    final List<Widget> screens = [
+      Posts(searchBarString: _searchBarString),
+      Market(),
+      Services(),
+      Settings(),
+    ];
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
@@ -62,9 +70,9 @@ class _MainScreenState extends State<MainScreen> {
           titleSpacing: 0.0,
           automaticallyImplyLeading: renderSearchAndAdd,
           title: appBarTitle(
-            renderSearchAndAdd: renderSearchAndAdd,
-            currentLanguage: currentLanguage,
-          ),
+              renderSearchAndAdd: renderSearchAndAdd,
+              currentLanguage: currentLanguage,
+              handleSearchBarStringChange: handleSearchBarStringChange),
         ),
       ),
       body: screens[_currentScreenIndex],
@@ -128,16 +136,15 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget appBarTitle({renderSearchAndAdd, currentLanguage}) {
+  Widget appBarTitle(
+      {renderSearchAndAdd, currentLanguage, handleSearchBarStringChange}) {
     if (currentLanguage == 'English') {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           renderSearchAndAdd
-              ? SizedBox(
-                  width: 0.0,
-                )
+              ? emptyBox()
               : Text(
                   _getAppBarTitle(context).toString(),
                 ),
@@ -155,12 +162,10 @@ class _MainScreenState extends State<MainScreen> {
                     onTap: () {},
                   ),
                 )
-              : SizedBox(width: 0.0),
+              : emptyBox(),
           renderSearchAndAdd
-              ? AppBarSearch()
-              : SizedBox(
-                  width: 0.0,
-                ),
+              ? AppBarSearch(handleSearchBarStringChange)
+              : emptyBox(),
           renderSearchAndAdd
               ? Container(
                   height: 30.0,
@@ -190,9 +195,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                 )
-              : SizedBox(
-                  width: 0.0,
-                ),
+              : emptyBox(),
         ],
       );
     } else {
@@ -229,14 +232,10 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                   ),
                 )
-              : SizedBox(
-                  width: 0.0,
-                ),
+              : emptyBox(),
           renderSearchAndAdd
-              ? AppBarSearch()
-              : SizedBox(
-                  width: 0.0,
-                ),
+              ? AppBarSearch(handleSearchBarStringChange)
+              : emptyBox(),
           renderSearchAndAdd
               ? Container(
                   padding: EdgeInsets.only(
@@ -251,11 +250,9 @@ class _MainScreenState extends State<MainScreen> {
                     onTap: () {},
                   ),
                 )
-              : SizedBox(width: 0.0),
+              : emptyBox(),
           renderSearchAndAdd
-              ? SizedBox(
-                  width: 0.0,
-                )
+              ? emptyBox()
               : Text(
                   _getAppBarTitle(context).toString(),
                 ),

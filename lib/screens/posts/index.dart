@@ -1,18 +1,22 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-//import '../../providers/authProvider.dart';
+import 'package:saheb/providers/authProvider.dart';
+import 'package:saheb/widgets/noContent.dart';
 import '../../providers/postsProvider.dart';
 import '../../languages/index.dart';
 import 'post.dart';
 
 class Posts extends StatefulWidget {
+  final searchBarString;
+  Posts({Key key, this.searchBarString}) : super(key: key);
   @override
   _PostsState createState() => _PostsState();
 }
 
 class _PostsState extends State<Posts> {
-  String currentFilterOption = 'احمد شاه بابا مینه';
+  String currentFilterOption = 'افغانستان';
   int currentOptionId = 1;
 
   handleFilterOptionsChange(text, id) {
@@ -22,40 +26,87 @@ class _PostsState extends State<Posts> {
     });
   }
 
+  filterPosts(List posts, appLanguage, currentUserId, appBarSearchString) {
+    var filteredPosts = posts;
+    if (appBarSearchString != null) {
+      filteredPosts = posts
+          .where(
+            (post) =>
+                post['title']
+                    .toString()
+                    .contains(appBarSearchString.toString()) ||
+                post['text']
+                    .toString()
+                    .contains(appBarSearchString.toString()) ||
+                post['type'].toString().contains(appBarSearchString.toString()),
+          )
+          .toList();
+    }
+    if (currentFilterOption.toLowerCase() == 'افغانستان') {
+      return filteredPosts;
+    }
+
+    if (currentFilterOption == appLanguage['myPosts']) {
+      filteredPosts = filteredPosts
+          .where((post) =>
+              post['owner']['id'].toString() == currentUserId.toString())
+          .toList();
+      return filteredPosts;
+    }
+
+    filteredPosts = filteredPosts
+        .where((post) => post['location']
+            .toString()
+            .toLowerCase()
+            .contains(currentFilterOption.toLowerCase()))
+        .toList();
+    return filteredPosts;
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
-    return screenContent(appLanguage);
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
+    return screenContent(appLanguage, currentUserId);
   }
 
-  Widget screenContent(appLanguage) {
+  Widget screenContent(appLanguage, currentUserId) {
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
-          filterOptions(),
+          filterOptions(appLanguage),
           StreamBuilder(
             stream: Provider.of<PostsProvider>(context).getAllPosts('posts'),
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
-                return Center(child: Text(appLanguage['wait']));
+                return noContent(appLanguage, context);
               }
               if (snapshot.data.documents.toList().length == 0) {
-                return Center(
-                  child: Text(
-                    appLanguage['noContent'],
-                  ),
-                );
+                return noContent(appLanguage, context);
               }
-              return ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  var post = snapshot.data.documents[index];
-                  return Post(post: post);
-                },
-                itemCount: snapshot.data.documents.length,
-              );
+              List<DocumentSnapshot> tempList = snapshot.data.documents;
+              List<Map<dynamic, dynamic>> posts = List();
+              posts = tempList.map((DocumentSnapshot docSnapshot) {
+                return docSnapshot.data;
+              }).toList();
+
+              var filteredPosts = filterPosts(
+                  posts, appLanguage, currentUserId, widget.searchBarString);
+
+              return filteredPosts.length > 0
+                  ? ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: filteredPosts.length,
+                      itemBuilder: (context, index) {
+                        final postId =
+                            snapshot.data.documents[index].documentID;
+                        var post = filteredPosts.toList()[index];
+                        return Post(post: post, postId: postId);
+                      },
+                    )
+                  : noContent(appLanguage, context);
             },
           ),
         ],
@@ -63,13 +114,9 @@ class _PostsState extends State<Posts> {
     );
   }
 
-  Widget filterOptions() {
+  Widget filterOptions(appLanguage) {
     return SingleChildScrollView(
       child: Container(
-//        color: Colors.blueAccent,
-//        padding: EdgeInsets.all(
-//          5.0,
-//        ),
         height: 40.0,
         child: ListView(
           scrollDirection: Axis.horizontal,
@@ -77,8 +124,8 @@ class _PostsState extends State<Posts> {
             filterOption('احمد شاه بابا مینه', 1),
             filterOption('کابل', 2),
             filterOption('افغانستان', 3),
-            filterOption('زما لیکنې', 4),
-            filterOption('نشاني شوي', 5),
+            filterOption(appLanguage['myPosts'], 4),
+            filterOption(appLanguage['myFavorites'], 5),
           ],
         ),
       ),
@@ -93,17 +140,17 @@ class _PostsState extends State<Posts> {
           borderRadius: BorderRadius.circular(50.0),
           color: id == currentOptionId ? Colors.greenAccent[700] : Colors.white,
           boxShadow: [
-            new BoxShadow(
+            BoxShadow(
               color: Colors.grey[400],
               blurRadius: 5.0,
             )
           ],
         ),
-        constraints: BoxConstraints(
+        constraints: const BoxConstraints(
           minWidth: 50.0,
         ),
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        margin: EdgeInsets.all(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        margin: const EdgeInsets.all(
           5.0,
         ),
         child: Center(
