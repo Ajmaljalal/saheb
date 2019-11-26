@@ -10,7 +10,7 @@ import './providers/languageProvider.dart';
 import './providers/postsProvider.dart';
 import './providers/authProvider.dart';
 import 'screens/startups/login_screen.dart';
-import 'screens/startups/registration_screen.dart';
+//import 'screens/startups/registration_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
 

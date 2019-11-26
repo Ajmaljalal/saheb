@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
-import 'package:image_picker/image_picker.dart';
+//import 'package:image_picker/image_picker.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:saheb/widgets/errorDialog.dart';
 import '../../providers/authProvider.dart';
@@ -11,6 +11,7 @@ import '../../widgets/locationPicker.dart';
 import '../../locations/locations_sublocations.dart';
 import '../../widgets/button.dart';
 import '../../util/uploadImage.dart';
+import '../../util/resourcePicker.dart';
 //import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
@@ -43,7 +44,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
   Future chooseFile(source) async {
     try {
-      final image = await ImagePicker.pickImage(source: source);
+      final image = await ResourcePicker.pickImage(source: source);
       setState(() {
         _images.add(image);
       });
