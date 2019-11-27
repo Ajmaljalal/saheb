@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
-//import 'package:image_picker/image_picker.dart';
-import '../../util/resourcePicker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flushbar/flushbar.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
@@ -68,7 +67,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   Future chooseFile(source) async {
     try {
-      final image = await ResourcePicker.pickImage(source: source);
+      final image = await ImagePicker.pickImage(source: source);
       setState(() {
         _images.add(image);
       });
