@@ -28,9 +28,9 @@ const Map pashto = {
 
   //////////////// ToolBar and Main Screen //////////////////
   'home': 'کور',
-  'market': 'بازار',
+  'market': 'مارکیټ',
   'messages': 'پیغامونه',
-  'me': 'زه',
+  'settings': 'تنظیمات',
   'services': 'خدمات',
 
   ////////////////// post/advert actions buttons ////////////////

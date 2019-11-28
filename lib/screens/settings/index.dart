@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/userNameHolder.dart';
@@ -37,6 +38,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
 //    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
+    final userLocation = Provider.of<LocationProvider>(context).getLocation;
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -47,6 +49,7 @@ class _SettingsState extends State<Settings> {
           children: <Widget>[
             _userProfile(
               getUserProfile,
+              userLocation,
             ),
             Container(
               margin: EdgeInsets.only(top: 30.0),
@@ -67,7 +70,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget _userProfile(currentUser) {
+  Widget _userProfile(currentUser, userLocation) {
     var user;
     return FutureBuilder(
       future: currentUser(),
@@ -83,7 +86,7 @@ class _SettingsState extends State<Settings> {
                   photo: user.photoUrl,
                 ),
                 userNameHolder(name: user.displayName, fontSize: 30.0),
-                userLocationHolder('12 District'),
+                userLocationHolder(userLocation),
               ],
             ),
           );

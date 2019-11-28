@@ -176,6 +176,8 @@ class _PostsState extends State<Posts> {
     return SingleChildScrollView(
       child: Container(
         height: 40.0,
+        color: Colors.white,
+        margin: EdgeInsets.only(bottom: 2.0),
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[
@@ -196,26 +198,25 @@ class _PostsState extends State<Posts> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50.0),
-          color: id == currentOptionId ? Colors.greenAccent[700] : Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey[400],
-              blurRadius: 5.0,
-            )
-          ],
+          border: Border.all(color: Colors.cyan, width: 0.5),
+          color: id == currentOptionId ? Colors.cyan : Colors.white,
         ),
         constraints: const BoxConstraints(
           minWidth: 50.0,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-        margin: const EdgeInsets.all(
-          5.0,
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10.0,
+        ),
+        margin: const EdgeInsets.symmetric(
+          horizontal: 3.0,
+          vertical: 3.0,
         ),
         child: Center(
           child: Text(
             text,
             style: TextStyle(
               color: id == currentOptionId ? Colors.white : Colors.cyan,
+              fontSize: 14.0,
             ),
           ),
         ),
