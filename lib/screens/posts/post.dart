@@ -45,7 +45,7 @@ class _PostState extends State<Post> with PostMixin {
     );
   }
 
-  updateLikes(context, List postLikes, userId) {
+  updateLikes(List postLikes, userId) {
     if (postLikes.contains(userId)) {
       return;
     } else {
@@ -54,22 +54,41 @@ class _PostState extends State<Post> with PostMixin {
     }
   }
 
-  deletePost(context) {
+  deletePost() {
     Provider.of<PostsProvider>(context).deleteOnePost(widget.postId, 'posts');
+    Navigator.pop(context);
+  }
+
+  favoriteAPost(userId) {
+    Provider.of<PostsProvider>(context)
+        .favoriteAPost(widget.postId, 'posts', userId);
+    Navigator.pop(context);
+  }
+
+  hideAPost(userId) async {
+    await Provider.of<PostsProvider>(context)
+        .hideAPost(widget.postId, 'posts', userId);
+    Navigator.pop(context);
+  }
+
+  reportAPost() async {
+    await Provider.of<PostsProvider>(context)
+        .reportAPost(widget.post, widget.postId);
+    Navigator.pop(context);
   }
 
   closeBottomSheet() {}
 
-  showPostOptions(context, appLanguage, currentUserId, postId) {
-    bool postOwner = currentUserId == postId ? true : false;
+  showPostOptions(context, appLanguage, currentUserId, postOwnerId) {
+    bool postOwner = currentUserId == postOwnerId ? true : false;
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
       context: context,
       builder: (context) => Container(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           horizontal: 2.0,
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: 5.0,
           vertical: 10.0,
         ),
@@ -96,7 +115,9 @@ class _PostState extends State<Post> with PostMixin {
               subText: appLanguage['savePostSubText'],
               icon: Icons.bookmark,
               color: Colors.green,
-              onPressed: () {},
+              onPressed: () {
+                this.favoriteAPost(currentUserId);
+              },
             ),
             postOwner
                 ? flatButtonWithIconAndText(
@@ -112,7 +133,9 @@ class _PostState extends State<Post> with PostMixin {
                     subText: appLanguage['reportPostSubText'],
                     icon: Icons.report,
                     color: Colors.red,
-                    onPressed: () {})
+                    onPressed: () {
+                      this.reportAPost();
+                    })
                 : emptyBox(),
             !postOwner
                 ? flatButtonWithIconAndText(
@@ -120,7 +143,9 @@ class _PostState extends State<Post> with PostMixin {
                     subText: appLanguage['hidePostSubText'],
                     icon: Icons.block,
                     color: Colors.grey,
-                    onPressed: () {})
+                    onPressed: () {
+                      this.hideAPost(currentUserId);
+                    })
                 : emptyBox(),
             postOwner
                 ? flatButtonWithIconAndText(
@@ -128,7 +153,9 @@ class _PostState extends State<Post> with PostMixin {
                     subText: appLanguage['deletePostSubText'],
                     icon: Icons.delete,
                     color: Colors.blueAccent,
-                    onPressed: () {})
+                    onPressed: () {
+                      this.deletePost();
+                    })
                 : emptyBox(),
           ],
         ),
@@ -140,6 +167,7 @@ class _PostState extends State<Post> with PostMixin {
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final post = widget.post;
+    final postId = widget.postId;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
@@ -171,14 +199,14 @@ class _PostState extends State<Post> with PostMixin {
                       context: context,
                       onOpenOptions: showPostOptions,
                       appLanguage: appLanguage,
-                      postId: post['owner']['id'],
+                      postOwnerId: post['owner']['id'],
                       currentUserId: currentUserId,
                     ),
                   ],
                 ),
                 GestureDetector(
                   onTap: () {
-                    goToDetailsScreen(widget.postId, post['title']);
+                    goToDetailsScreen(postId, post['title']);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

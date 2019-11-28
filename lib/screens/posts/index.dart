@@ -34,34 +34,81 @@ class _PostsState extends State<Posts> {
       filteredPosts = posts
           .where(
             (post) =>
-                post['title']
+                post['post']['title']
                     .toString()
                     .contains(appBarSearchString.toString()) ||
-                post['text']
+                post['post']['text']
                     .toString()
                     .contains(appBarSearchString.toString()) ||
-                post['type'].toString().contains(appBarSearchString.toString()),
+                post['post']['type']
+                    .toString()
+                    .contains(appBarSearchString.toString()),
           )
           .toList();
     }
     if (currentFilterOption.toLowerCase() == 'افغانستان') {
+      filteredPosts = filteredPosts
+          .where(
+            (post) =>
+                (post['post']['hiddenFrom']
+                    .toList()
+                    .contains(currentUserId.toString())) ==
+                false,
+          )
+          .toList();
       return filteredPosts;
     }
 
     if (currentFilterOption == appLanguage['myPosts']) {
       filteredPosts = filteredPosts
-          .where((post) =>
-              post['owner']['id'].toString() == currentUserId.toString())
+          .where(
+            (post) =>
+                post['post']['owner']['id'].toString() ==
+                    currentUserId.toString() &&
+                (post['post']['hiddenFrom']
+                        .toList()
+                        .contains(currentUserId.toString())) ==
+                    false,
+          )
+          .toList();
+      return filteredPosts;
+    }
+
+    if (currentFilterOption.toLowerCase() == appLanguage['myFavorites']) {
+      filteredPosts = filteredPosts
+          .where(
+            (post) =>
+                post['post']['favorites']
+                    .toList()
+                    .contains(currentUserId.toString()) &&
+                (post['post']['hiddenFrom']
+                        .toList()
+                        .contains(currentUserId.toString())) ==
+                    false,
+          )
           .toList();
       return filteredPosts;
     }
 
     filteredPosts = filteredPosts
-        .where((post) => post['location']
-            .toString()
-            .toLowerCase()
-            .contains(currentFilterOption.toLowerCase()))
+        .where((post) =>
+            post['post']['location'].toString().toLowerCase().contains(
+                  currentFilterOption.toLowerCase(),
+                ) &&
+            (post['post']['hiddenFrom']
+                    .toList()
+                    .contains(currentUserId.toString())) ==
+                false)
         .toList();
+
+    filteredPosts = filteredPosts
+        .where((post) =>
+            (post['post']['hiddenFrom']
+                .toList()
+                .contains(currentUserId.toString())) ==
+            false)
+        .toList();
+
     return filteredPosts;
   }
 
@@ -96,7 +143,11 @@ class _PostsState extends State<Posts> {
               List<DocumentSnapshot> tempList = snapshot.data.documents;
               List<Map<dynamic, dynamic>> posts = List();
               posts = tempList.map((DocumentSnapshot docSnapshot) {
-                return docSnapshot.data;
+                var post = {
+                  'post': docSnapshot.data,
+                  'postId': docSnapshot.documentID
+                };
+                return post;
               }).toList();
 
               var filteredPosts = filterPosts(
@@ -108,9 +159,8 @@ class _PostsState extends State<Posts> {
                       shrinkWrap: true,
                       itemCount: filteredPosts.length,
                       itemBuilder: (context, index) {
-                        final postId =
-                            snapshot.data.documents[index].documentID;
-                        var post = filteredPosts.toList()[index];
+                        final postId = filteredPosts.toList()[index]['postId'];
+                        var post = filteredPosts.toList()[index]['post'];
                         return Post(post: post, postId: postId);
                       },
                     )
