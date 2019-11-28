@@ -1,7 +1,14 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 const Map pashto = {
-  // Login and registration
+  ///////// General texts ///////////////////
+  'addPhotoVideo': 'انځور/ ویډیو',
+  'select6Images': '۶ انځوره پورته کوی شی.',
+  '6ImagesSelected': '۶ پوره شول',
+  'wait': 'منتظر اوسی لطفاً...',
+  'noContent': 'څه نشته.',
+  'cancel': 'انصراف',
+  'chooseYourLocation': 'د اوسېدو ځای مو وټاکئ لطفاً',
+
+  /////////////////// Login and sign up  ////////////////
   'login': 'ننوځئ',
   'signOut': 'وتل',
   'email': 'برېښنالیک',
@@ -19,15 +26,14 @@ const Map pashto = {
 
   'more': 'نور...',
 
-  // ToolBar and Main Screen
+  //////////////// ToolBar and Main Screen //////////////////
   'home': 'کور',
   'market': 'بازار',
   'messages': 'پیغامونه',
   'me': 'زه',
   'services': 'خدمات',
 
-  // post/advert actions buttons
-
+  ////////////////// post/advert actions buttons ////////////////
   'text': 'پیغام',
   'call': 'زنګ',
   'comment': 'تبصره',
@@ -35,7 +41,6 @@ const Map pashto = {
   'like': 'خوښول',
 
   //////////////////// post /////////////////////////////////////
-
   'advert': 'اعلان',
   'general': 'عمومی',
   'lost': 'مفقودی',
@@ -80,7 +85,6 @@ const Map pashto = {
       'لطفاً ضروری معلومات سم ولیکئ. د ځای، عنوان او تشریحاتو برخه اجباري ده.',
 
   ////////// Sign in/up error messages ///////////////////////
-
   'invalidEmail':
       'ایمیل سم نه دی، لطفاً سم ایمیل و کاروئ.  مثلاً ahmad@gmail.com',
   'wrongPassword': 'پسورد سم نه دی، بیا هڅه وکړئ.',
@@ -94,7 +98,6 @@ const Map pashto = {
   'enter': ' ولیکئ!',
 
   /////////////// Error Dialog ///////////////////
-
   'errorDialogTitle': 'ستونزه',
   'ok': 'سمه ده',
   'alertDialogTitle': 'وبښئ',
@@ -103,15 +106,6 @@ const Map pashto = {
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',
-
-  ///////// Add Post Bottom Bar ///////////////////
-  'addPhotoVideo': 'انځور/ ویډیو',
-
-  'select6Images': '۶ انځوره پورته کوی شی.',
-  '6ImagesSelected': '۶ پوره شول',
-  'wait': 'منتظر اوسی لطفاً...',
-  'noContent': 'څه نشته.',
-  'cancel': 'انصراف',
 
   ////////////// Post options bottom sheet ///////////////
   'savePost': 'لیکنه نشاني کړی.',
@@ -126,13 +120,11 @@ const Map pashto = {
   'deletePostSubText': 'لیکنه ستاسې خپله ده او غواړی ایسته یې کړی.',
 
   ///////// Search //////////////////
-
   'search': 'پلټنه...',
   'myPosts': 'زما لیکنې',
   'myFavorites': 'نشاني شوې',
 
   /////////// Services /////////////////
-
   'health': 'روغتیایي',
   'education': 'تعلیمي او تحصیلي',
   'painting': 'رنګمالي',

@@ -156,7 +156,7 @@ class _PostState extends State<Post> with PostMixin {
           child: Card(
             elevation: 0.0,
             color: Colors.white,
-            margin: EdgeInsets.symmetric(
+            margin: const EdgeInsets.symmetric(
               vertical: 3.0,
               horizontal: 1.0,
             ),
@@ -186,15 +186,15 @@ class _PostState extends State<Post> with PostMixin {
                       postTittleHolder(post['title'], fontSize),
                       postTypeHolder(context, post['type'], appLanguage),
                       postContent(
-                        text: post['text'],
-                        images: post['images'],
-                        flag: revealMoreTextFlag,
-                        onRevealMoreText: _revealMoreText,
-                        appLanguage: appLanguage,
-                        context: context,
-                        imagesScrollView: Axis.horizontal,
-                        fontSize: fontSize,
-                      ),
+                          text: post['text'],
+                          images: post['images'],
+                          flag: revealMoreTextFlag,
+                          onRevealMoreText: _revealMoreText,
+                          appLanguage: appLanguage,
+                          context: context,
+                          imagesScrollView: Axis.horizontal,
+                          fontSize: fontSize,
+                          postDate: post['date']),
                     ],
                   ),
                 ),

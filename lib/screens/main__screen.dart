@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:geolocator/geolocator.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/widgets/emptyBox.dart';
+import 'package:saheb/languages/provinces.dart';
+import 'package:saheb/locations/locations_sublocations.dart';
+import 'package:saheb/widgets/circularProgressIndicator.dart';
+import 'package:saheb/widgets/locationPicker.dart';
+import '../providers/locationProvider.dart';
+import '../widgets/emptyBox.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
@@ -20,12 +23,16 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   static int _currentScreenIndex = 0;
   static String _searchBarString;
-//  var _location;
+  static String _userProvince;
 
   handleSearchBarStringChange(value) {
     setState(() {
       _searchBarString = value;
     });
+  }
+
+  onChangeLocation(value) async {
+    await Provider.of<LocationProvider>(context).changeLocation(value);
   }
 
   String _getAppBarTitle(context) {
@@ -39,12 +46,23 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _setCurrentScreen(int index) async {
-//    List<Placemark> placemark =
-////        await Geolocator().placemarkFromCoordinates(34.519822, 69.328775);
     setState(() {
       _currentScreenIndex = index;
-//      _location = placemark[0].subLocality;
     });
+  }
+
+  @override
+  didChangeDependencies() {
+    if (_userProvince == null) {
+      Provider.of<LocationProvider>(context).getProvince().then((province) {
+        if (this.mounted) {
+          setState(() {
+            _userProvince = province;
+          });
+        }
+      });
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -54,90 +72,95 @@ class _MainScreenState extends State<MainScreen> {
         _currentScreenIndex == 2;
     final appLanguage = getLanguages(context);
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
+    final userLocation = Provider.of<LocationProvider>(context).getLocation;
+    final double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
+    if (userLocation == null) {}
     final List<Widget> screens = [
-      Posts(searchBarString: _searchBarString),
+      Posts(
+          searchBarString: _searchBarString,
+          usersProvince: provinces[_userProvince]),
       Market(),
       Services(),
       Settings(),
     ];
-    return Scaffold(
-      backgroundColor: Colors.grey[200],
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(45.0),
-        child: AppBar(
-//        centerTitle: true,
-          titleSpacing: 0.0,
-          automaticallyImplyLeading: renderSearchAndAdd,
-          title: appBarTitle(
-              renderSearchAndAdd: renderSearchAndAdd,
-              currentLanguage: currentLanguage,
-              handleSearchBarStringChange: handleSearchBarStringChange),
-        ),
-      ),
-      body: screens[_currentScreenIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Colors.cyanAccent,
-              width: .3,
+    return userLocation != null
+        ? Scaffold(
+            backgroundColor: Colors.grey[200],
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(45.0),
+              child: AppBar(
+                titleSpacing: 0.0,
+                automaticallyImplyLeading: renderSearchAndAdd,
+                title: appBarTitle(
+                    renderSearchAndAdd: renderSearchAndAdd,
+                    currentLanguage: currentLanguage,
+                    handleSearchBarStringChange: handleSearchBarStringChange),
+              ),
             ),
-          ),
-        ),
-        child: BottomNavyBar(
-          selectedIndex: _currentScreenIndex,
-          showElevation: true, // use this to remove appBar's elevation
-          onItemSelected: _setCurrentScreen,
-          items: [
-            BottomNavyBarItem(
-              icon: Icon(Icons.home),
-              title: Text(
-                appLanguage['home'],
-                style: TextStyle(
-                  fontSize: fontSize,
+            body: screens[_currentScreenIndex],
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.cyanAccent,
+                    width: .3,
+                  ),
                 ),
               ),
-              activeColor: Colors.cyan,
+              child: BottomNavyBar(
+                selectedIndex: _currentScreenIndex,
+                showElevation: true,
+                onItemSelected: _setCurrentScreen,
+                items: [
+                  bottomNavBarItem(
+                    text: appLanguage['home'],
+                    icon: Icons.home,
+                    fontSize: fontSize,
+                  ),
+                  bottomNavBarItem(
+                    text: appLanguage['market'],
+                    icon: Icons.monetization_on,
+                    fontSize: fontSize,
+                  ),
+                  bottomNavBarItem(
+                    text: appLanguage['services'],
+                    icon: Icons.work,
+                    fontSize: fontSize,
+                  ),
+                  bottomNavBarItem(
+                    text: appLanguage['me'],
+                    icon: Icons.person,
+                    fontSize: fontSize,
+                  ),
+                ],
+              ),
             ),
-            BottomNavyBarItem(
-                icon: Icon(Icons.monetization_on),
-                title: Text(
-                  appLanguage['market'],
-                  style: TextStyle(
-                    fontSize: fontSize,
-                  ),
-                ),
-                activeColor: Colors.cyan),
-            BottomNavyBarItem(
-                icon: Icon(
-                  Icons.work,
-                  size: 22.0,
-                ),
-                title: Text(
-                  appLanguage['services'],
-                  style: TextStyle(
-                    fontSize: fontSize,
-                  ),
-                ),
-                activeColor: Colors.cyan),
-            BottomNavyBarItem(
-                icon: Icon(Icons.person),
-                title: Text(
-                  appLanguage['me'],
-                  style: TextStyle(
-                    fontSize: fontSize,
-                  ),
-                ),
-                activeColor: Colors.cyan),
-          ],
+          )
+        : locationPicker();
+  }
+
+  BottomNavyBarItem bottomNavBarItem({
+    text,
+    icon,
+    fontSize,
+  }) {
+    return BottomNavyBarItem(
+      icon: Icon(icon),
+      title: Text(
+        text,
+        style: TextStyle(
+          fontSize: fontSize,
         ),
       ),
+      activeColor: Colors.cyan,
     );
   }
 
-  Widget appBarTitle(
-      {renderSearchAndAdd, currentLanguage, handleSearchBarStringChange}) {
+  Widget appBarTitle({
+    renderSearchAndAdd,
+    currentLanguage,
+    handleSearchBarStringChange,
+  }) {
     if (currentLanguage == 'English') {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -259,5 +282,50 @@ class _MainScreenState extends State<MainScreen> {
         ],
       );
     }
+  }
+
+  Widget locationPicker() {
+    final appLanguage = getLanguages(context);
+    return Scaffold(
+      body: SafeArea(
+        child: _userProvince != null
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Center(
+                    child: Text(
+                      appLanguage['chooseYourLocation'],
+                      style: TextStyle(
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+                  FutureBuilder(
+                    future:
+                        Provider.of<LocationProvider>(context).setLocation(),
+                    builder: (ctx, languageResultSnapshot) =>
+                        languageResultSnapshot.connectionState ==
+                                ConnectionState.waiting
+                            ? Center(
+                                child: progressIndicator(),
+                              )
+                            : Container(
+                                child: DropDownPicker(
+                                  onChange: onChangeLocation,
+                                  value: appLanguage['location'],
+                                  items: locations[_userProvince],
+                                  hintText: appLanguage['location'],
+                                  label: appLanguage['location'],
+                                  search: true,
+                                ),
+                              ),
+                  ),
+                ],
+              )
+            : Center(
+                child: progressIndicator(),
+              ),
+      ),
+    );
   }
 }

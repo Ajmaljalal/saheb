@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:saheb/widgets/emptyBox.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 //import 'package:http/http.dart';
-//import '../widgets/verticalDivider.dart';
+import '../widgets/verticalDivider.dart';
 import '../constants/constants.dart';
 import '../widgets/imageRenderer.dart';
 
@@ -10,11 +12,15 @@ class PostMixin {
   Widget cardHeader(
     post,
   ) {
+    final shamsiDate = Jalali.fromDateTime(post['date'].toDate());
+    final postDate =
+        '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         userAvatarHolder(url: post['owner']['photo']),
         Container(
-          margin: EdgeInsets.only(
+          margin: const EdgeInsets.only(
             top: 5.0,
           ),
           child: Column(
@@ -23,8 +29,17 @@ class PostMixin {
               userNameHolder(
                 post['owner']['name'],
               ),
-              userLocationHolder(
-                post['location'].toString(),
+              Row(
+                children: <Widget>[
+                  userLocationHolder(
+                    post['location'].toString(),
+                  ),
+                  CustomVerticalDivider(),
+                  Text(
+                    postDate,
+                    style: kUserLocationStyle,
+                  ),
+                ],
               ),
             ],
           ),
@@ -215,6 +230,7 @@ class PostMixin {
     imagesScrollView,
     price,
     fontSize,
+    postDate,
   }) {
     return Container(
       child: Column(
@@ -325,7 +341,10 @@ class PostMixin {
           scrollDirection: scrollView,
           itemCount: images.length,
           itemBuilder: (BuildContext context, int index) {
-            return singleImageRenderer(images[index], context, imagesWidth);
+            if (images[index] != null) {
+              return singleImageRenderer(images[index], context, imagesWidth);
+            } else
+              return emptyBox();
           },
         ),
       ),
