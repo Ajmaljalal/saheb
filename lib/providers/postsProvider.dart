@@ -18,6 +18,8 @@ class PostsProvider with ChangeNotifier {
         {
           'comments': [],
           'date': DateTime.now(),
+          'favorites': [],
+          'hiddenFrom': [],
           'likes': [],
           'owner': owner,
           'text': text,
@@ -66,6 +68,44 @@ class PostsProvider with ChangeNotifier {
   deleteOnePost(postId, collection) async {
     try {
       await db.collection(collection).document(postId).delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  favoriteAPost(postId, collection, userId) async {
+    try {
+      db.collection(collection).document(postId).updateData(
+        {
+          'favorites': FieldValue.arrayUnion(
+            [userId],
+          ),
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  hideAPost(postId, collection, userId) async {
+    try {
+      db.collection(collection).document(postId).updateData(
+        {
+          'hiddenFrom': FieldValue.arrayUnion(
+            [userId],
+          ),
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  reportAPost(post, postId) {
+    try {
+      db.collection('reported').document(postId).setData(
+            post,
+          );
     } catch (e) {
       print(e.toString());
     }

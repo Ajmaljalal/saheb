@@ -147,7 +147,7 @@ class PostMixin {
     context,
     onOpenOptions,
     appLanguage,
-    postId,
+    postOwnerId,
     currentUserId,
   }) {
     return Container(
@@ -160,7 +160,7 @@ class PostMixin {
             context,
             appLanguage,
             currentUserId,
-            postId,
+            postOwnerId,
           );
         },
         child: Container(
