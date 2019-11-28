@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flushbar/flushbar.dart';
@@ -195,7 +196,11 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     );
   }
 
-  void showInfoFlushbarHelper(BuildContext context, duration, message) {
+  void showInfoFlushbarHelper(
+    BuildContext context,
+    duration,
+    message,
+  ) {
     Flushbar(
 //      message: 'uploading images',
       flushbarPosition: FlushbarPosition.TOP,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/authProvider.dart';
+import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/widgets/noContent.dart';
 import '../../providers/postsProvider.dart';
 import '../../languages/index.dart';
@@ -10,13 +11,14 @@ import 'post.dart';
 
 class Posts extends StatefulWidget {
   final searchBarString;
-  Posts({Key key, this.searchBarString}) : super(key: key);
+  final usersProvince;
+  Posts({Key key, this.searchBarString, this.usersProvince}) : super(key: key);
   @override
   _PostsState createState() => _PostsState();
 }
 
 class _PostsState extends State<Posts> {
-  String currentFilterOption = 'افغانستان';
+  String currentFilterOption;
   int currentOptionId = 1;
 
   handleFilterOptionsChange(text, id) {
@@ -67,15 +69,21 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final currentUserId = Provider.of<AuthProvider>(context).userId;
-    return screenContent(appLanguage, currentUserId);
+    final userLocation = Provider.of<LocationProvider>(context).getLocation;
+    if (currentFilterOption == null) {
+      setState(() {
+        currentFilterOption = userLocation;
+      });
+    }
+    return screenContent(appLanguage, currentUserId, userLocation);
   }
 
-  Widget screenContent(appLanguage, currentUserId) {
+  Widget screenContent(appLanguage, currentUserId, userLocation) {
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
-          filterOptions(appLanguage),
+          filterOptions(appLanguage, userLocation),
           StreamBuilder(
             stream: Provider.of<PostsProvider>(context).getAllPosts('posts'),
             builder: (context, AsyncSnapshot snapshot) {
@@ -114,15 +122,15 @@ class _PostsState extends State<Posts> {
     );
   }
 
-  Widget filterOptions(appLanguage) {
+  Widget filterOptions(appLanguage, userLocation) {
     return SingleChildScrollView(
       child: Container(
         height: 40.0,
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[
-            filterOption('احمد شاه بابا مینه', 1),
-            filterOption('کابل', 2),
+            filterOption(userLocation, 1),
+            filterOption(widget.usersProvince, 2),
             filterOption('افغانستان', 3),
             filterOption(appLanguage['myPosts'], 4),
             filterOption(appLanguage['myFavorites'], 5),

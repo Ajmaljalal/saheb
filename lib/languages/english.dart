@@ -1,7 +1,16 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 const Map english = {
-  // Login and registration
+  /////////    General texts ///////////////////
+  'addPhotoVideo': 'Photo/video',
+  'select6Images': 'Select up to 6 img',
+  '6ImagesSelected': '۶6 img completed',
+  'wait': 'Please wait...!',
+  'noContent': 'NO CONTENT',
+  'cancel': 'Cancel',
+  'chooseYourLocation': 'Please choose your location.',
+
+  ////////////////// Login and sign up //////////////////////
   'login': 'Login',
   'signOut': 'Sign out',
   'email': 'Email',
@@ -19,15 +28,14 @@ const Map english = {
 
   'more': 'more...',
 
-  // ToolBar and Main Screen
+  ////////////// ToolBar and Main Screen ///////////////////////////
   'home': 'Home',
   'market': 'Market',
   'messages': 'Messages',
   'me': 'Me',
   'services': 'Services',
 
-  // post/advert actions buttons
-
+  //////////////////////// post/advert actions buttons ////////////////
   'text': 'Text',
   'call': 'Call',
   'comment': 'comment',
@@ -35,7 +43,6 @@ const Map english = {
   'like': 'Like',
 
   //////////////////// post //////////////////////////
-
   'advert': 'Advert',
   'general': 'General',
   'lost': 'Lost',
@@ -79,7 +86,6 @@ const Map english = {
       'Please enter required information accurately. Selecting a location, title and description is required.',
 
   ////////// Sign in/up error messages ///////////////////////
-
   'invalidEmail':
       'Email is not valid, please enter a valid email. e.g. ahmad@gmail.com.',
   'wrongPassword': 'Incorrect password, please try again.',
@@ -95,7 +101,6 @@ const Map english = {
   'enter': 'Enter',
 
   /////////////// Error Dialog ///////////////////
-
   'errorDialogTitle': 'Error',
   'ok': 'Ok',
   'alertDialogTitle': 'Sorry',
@@ -104,15 +109,6 @@ const Map english = {
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'Change application\'s language!',
-
-  ///////// Add Post Bottom Bar ///////////////////
-  'addPhotoVideo': 'Photo/video',
-
-  'select6Images': 'Select up to 6 img',
-  '6ImagesSelected': '۶6 img completed',
-  'wait': 'Please wait...!',
-  'noContent': 'NO CONTENT',
-  'cancel': 'Cancel',
 
   ////////////// Post options bottom sheet ///////////////
   'savePost': 'Save this post',
@@ -127,13 +123,11 @@ const Map english = {
   'deletePostSubText': 'This your post and you want to remove it.',
 
   ///////// Search //////////////////
-
   'search': 'search...',
   'myPosts': 'My posts',
   'myFavorites': 'Favorites',
 
   /////////// Services /////////////////
-
   'health': 'Health',
   'education': 'Educational',
   'painting': 'Painting',

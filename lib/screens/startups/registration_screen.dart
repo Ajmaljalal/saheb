@@ -25,15 +25,15 @@ class _RegistrationState extends State<Registration> {
   final _formKey = GlobalKey<FormState>();
 
   void handleNameInputChange(value) {
-    _name = value;
+    _name = value.toString().trim();
   }
 
   void handleEmailInputChange(value) {
-    _email = value;
+    _email = value.toString().trim();
   }
 
   void handlePasswordInputChange(value) {
-    _password = value;
+    _password = value.toString().trim();
   }
 
   onSubmit(appLanguage) async {

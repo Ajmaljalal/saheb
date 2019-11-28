@@ -24,11 +24,11 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
 
   void handleEmailInputChange(value) {
-    _email = value;
+    _email = value.toString().trim();
   }
 
   void handlePasswordInputChange(value) {
-    _password = value;
+    _password = value.toString().trim();
   }
 
   void swapScreens() {

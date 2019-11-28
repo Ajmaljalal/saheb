@@ -35,8 +35,9 @@ const TextStyle kUserNameStyle = TextStyle(
 
 const TextStyle kUserLocationStyle = TextStyle(
   color: Colors.grey,
-  fontSize: 10,
+  fontSize: 12,
   fontWeight: FontWeight.bold,
+  height: .5,
 );
 
 const TextStyle kUserLocationProfileStyle = TextStyle(

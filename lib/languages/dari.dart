@@ -1,6 +1,16 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 const Map dari = {
+  ///////// General Texts ///////////////////
+  'addPhotoVideo': 'تصویر/ ویدیو',
+  'select6Images': 'تا ۶ تصویر برګزینید!',
+  '6ImagesSelected': '۶ تصویر پوره شد.',
+  'wait': 'منتظر باشید لطفاً...',
+  'noContent': 'چیزی موجود نیست.',
+  'cancel': 'انصراف',
+  'chooseYourLocation': 'محل بود و باش خود را انتخاب نمائید لطفاً',
+
+  ///////////// Login and sign up /////////////////////////
   'login': 'وارد شوید',
   'signOut': 'خروج',
   'email': 'ایمیل آدرس',
@@ -17,14 +27,14 @@ const Map dari = {
 
   'more': 'ادامه...',
 
-  // ToolBar and Main Screen
+  ///////////////////// ToolBar and Main Screen ////////////////////////
   'home': 'خانه',
   'market': 'بازار',
   'messages': 'پیام ها',
   'me': 'من',
   'services': 'خدمات',
 
-  // post/advert actions buttons
+  ////////////////////// post/advert actions buttons ////////////////////////
 
   'text': 'پیام',
   'call': 'زنګ',
@@ -97,15 +107,6 @@ const Map dari = {
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'زبان اپلیکشن را تغیر دهید!',
-
-  ///////// Add Post Bottom Bar ///////////////////
-  'addPhotoVideo': 'تصویر/ ویدیو',
-
-  'select6Images': 'تا ۶ تصویر برګزینید!',
-  '6ImagesSelected': '۶ تصویر پوره شد.',
-  'wait': 'منتظر باشید لطفاً...',
-  'noContent': 'چیزی موجود نیست.',
-  'cancel': 'انصراف',
 
   ////////////// Post options bottom sheet ///////////////
   'savePost': 'نوشته را برای خود نشانی نمائید.',

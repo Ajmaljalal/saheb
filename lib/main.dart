@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-//import 'package:saheb/screens/add_posts/advert_post.dart';
-import 'package:saheb/screens/add_posts/index.dart';
-//import 'package:saheb/screens/add_posts/none_advert_post.dart';
-import 'package:saheb/screens/startups/language_screen.dart';
-import 'package:saheb/widgets/circularProgressIndicator.dart';
+import './providers/locationProvider.dart';
+import './screens/add_posts/index.dart';
+import './screens/startups/language_screen.dart';
+import './widgets/circularProgressIndicator.dart';
 import './providers/languageProvider.dart';
 import './providers/postsProvider.dart';
 import './providers/authProvider.dart';
-import 'screens/startups/login_screen.dart';
-//import 'screens/startups/registration_screen.dart';
+import './screens/startups/login_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
 
@@ -25,6 +23,9 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: LanguageProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: LocationProvider(),
         ),
         ChangeNotifierProvider.value(
           value: PostsProvider(),
