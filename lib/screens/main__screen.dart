@@ -39,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
     final appLanguage = getLanguages(context);
     switch (_currentScreenIndex) {
       case 3:
-        return appLanguage['me'];
+        return appLanguage['settings'];
       default:
         return '';
     }
@@ -128,8 +128,8 @@ class _MainScreenState extends State<MainScreen> {
                     fontSize: fontSize,
                   ),
                   bottomNavBarItem(
-                    text: appLanguage['me'],
-                    icon: Icons.person,
+                    text: appLanguage['settings'],
+                    icon: Icons.settings,
                     fontSize: fontSize,
                   ),
                 ],

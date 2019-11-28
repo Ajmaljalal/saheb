@@ -32,7 +32,7 @@ const Map english = {
   'home': 'Home',
   'market': 'Market',
   'messages': 'Messages',
-  'me': 'Me',
+  'settings': 'Settings',
   'services': 'Services',
 
   //////////////////////// post/advert actions buttons ////////////////

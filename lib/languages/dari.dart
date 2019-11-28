@@ -29,9 +29,9 @@ const Map dari = {
 
   ///////////////////// ToolBar and Main Screen ////////////////////////
   'home': 'خانه',
-  'market': 'بازار',
+  'market': 'مارکیت',
   'messages': 'پیام ها',
-  'me': 'من',
+  'settings': 'تنظیمات',
   'services': 'خدمات',
 
   ////////////////////// post/advert actions buttons ////////////////////////
