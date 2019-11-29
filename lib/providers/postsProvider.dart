@@ -34,6 +34,41 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
+  editOnePost({
+    postId,
+    owner,
+    text,
+    title,
+    location,
+    type,
+    images,
+    comments,
+    date,
+    hiddenFrom,
+    likes,
+    favorites,
+  }) {
+    try {
+      db.collection('posts').document(postId).setData(
+        {
+          'comments': comments,
+          'date': date,
+          'favorites': favorites,
+          'hiddenFrom': hiddenFrom,
+          'likes': likes,
+          'owner': owner,
+          'text': text,
+          'title': title,
+          'type': type,
+          'images': images,
+          'location': location,
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   addOneAdvert({
     owner,
     text,

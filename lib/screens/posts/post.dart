@@ -1,24 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/widgets/emptyBox.dart';
+import '../../widgets/showInfoFushbar.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
 
 import '../../constants/constants.dart';
 import '../../widgets/flatButtonWithIconAndText.dart';
 import 'postDetails.dart';
+import '../add_posts/none_advert_post.dart';
 import '../../mixins/post.dart';
 import '../../languages/index.dart';
 
 class Post extends StatefulWidget {
   final post;
   final postId;
-  Post({Key key, this.post, this.postId}) : super(key: key);
+  final usersProvince;
+  Post({Key key, this.post, this.postId, this.usersProvince}) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -33,6 +34,17 @@ class _PostState extends State<Post> with PostMixin {
     });
   }
 
+  renderFlashBar(message) {
+    showInfoFlushbar(
+      context: context,
+      duration: 2,
+      message: message,
+      icon: Icons.check_circle,
+      progressBar: false,
+      positionTop: false,
+    );
+  }
+
   goToDetailsScreen(postId, postTitle) {
     Navigator.push(
       context,
@@ -45,7 +57,7 @@ class _PostState extends State<Post> with PostMixin {
     );
   }
 
-  updateLikes(List postLikes, userId) {
+  updateLikes({List postLikes, userId}) {
     if (postLikes.contains(userId)) {
       return;
     } else {
@@ -54,27 +66,47 @@ class _PostState extends State<Post> with PostMixin {
     }
   }
 
-  deletePost() {
+  deletePost(message) {
     Provider.of<PostsProvider>(context).deleteOnePost(widget.postId, 'posts');
     Navigator.pop(context);
+    renderFlashBar(message);
   }
 
-  favoriteAPost(userId) {
+  favoriteAPost(userId, message) {
     Provider.of<PostsProvider>(context)
         .favoriteAPost(widget.postId, 'posts', userId);
     Navigator.pop(context);
+    renderFlashBar(message);
   }
 
-  hideAPost(userId) async {
+  hideAPost(userId, message) async {
     await Provider.of<PostsProvider>(context)
         .hideAPost(widget.postId, 'posts', userId);
     Navigator.pop(context);
+    renderFlashBar(message);
   }
 
-  reportAPost() async {
+  reportAPost(message) async {
     await Provider.of<PostsProvider>(context)
         .reportAPost(widget.post, widget.postId);
     Navigator.pop(context);
+    renderFlashBar(message);
+  }
+
+  editPost(post, postId) {
+    final province = widget.usersProvince;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NoneAdvertPost(
+          type: post['type'],
+          edit: true,
+          post: post,
+          postId: postId,
+          province: province,
+        ),
+      ),
+    );
   }
 
   closeBottomSheet() {}
@@ -116,7 +148,7 @@ class _PostState extends State<Post> with PostMixin {
               icon: Icons.bookmark,
               color: Colors.green,
               onPressed: () {
-                this.favoriteAPost(currentUserId);
+                this.favoriteAPost(currentUserId, appLanguage['postSaved']);
               },
             ),
             postOwner
@@ -125,7 +157,9 @@ class _PostState extends State<Post> with PostMixin {
                     subText: appLanguage['editPostSubText'],
                     icon: Icons.edit,
                     color: Colors.purpleAccent,
-                    onPressed: () {})
+                    onPressed: () {
+                      this.editPost(widget.post, widget.postId);
+                    })
                 : emptyBox(),
             !postOwner
                 ? flatButtonWithIconAndText(
@@ -134,7 +168,7 @@ class _PostState extends State<Post> with PostMixin {
                     icon: Icons.report,
                     color: Colors.red,
                     onPressed: () {
-                      this.reportAPost();
+                      this.reportAPost(appLanguage['postReported']);
                     })
                 : emptyBox(),
             !postOwner
@@ -144,7 +178,7 @@ class _PostState extends State<Post> with PostMixin {
                     icon: Icons.block,
                     color: Colors.grey,
                     onPressed: () {
-                      this.hideAPost(currentUserId);
+                      this.hideAPost(currentUserId, appLanguage['postHide']);
                     })
                 : emptyBox(),
             postOwner
@@ -154,7 +188,7 @@ class _PostState extends State<Post> with PostMixin {
                     icon: Icons.delete,
                     color: Colors.blueAccent,
                     onPressed: () {
-                      this.deletePost();
+                      this.deletePost(appLanguage['postDeleted']);
                     })
                 : emptyBox(),
           ],

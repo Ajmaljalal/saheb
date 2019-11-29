@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:saheb/providers/authProvider.dart';
 import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/widgets/noContent.dart';
+import 'package:saheb/languages/provinces.dart';
 import '../../providers/postsProvider.dart';
 import '../../languages/index.dart';
 import 'post.dart';
@@ -145,7 +146,7 @@ class _PostsState extends State<Posts> {
               posts = tempList.map((DocumentSnapshot docSnapshot) {
                 var post = {
                   'post': docSnapshot.data,
-                  'postId': docSnapshot.documentID
+                  'postId': docSnapshot.documentID,
                 };
                 return post;
               }).toList();
@@ -161,7 +162,10 @@ class _PostsState extends State<Posts> {
                       itemBuilder: (context, index) {
                         final postId = filteredPosts.toList()[index]['postId'];
                         var post = filteredPosts.toList()[index]['post'];
-                        return Post(post: post, postId: postId);
+                        return Post(
+                            post: post,
+                            postId: postId,
+                            usersProvince: widget.usersProvince);
                       },
                     )
                   : noContent(appLanguage, context);
@@ -182,7 +186,7 @@ class _PostsState extends State<Posts> {
           scrollDirection: Axis.horizontal,
           children: <Widget>[
             filterOption(userLocation, 1),
-            filterOption(widget.usersProvince, 2),
+            filterOption(provinces[widget.usersProvince], 2),
             filterOption('افغانستان', 3),
             filterOption(appLanguage['myPosts'], 4),
             filterOption(appLanguage['myFavorites'], 5),

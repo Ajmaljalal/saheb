@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/languages/provinces.dart';
 import 'package:saheb/locations/locations_sublocations.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import 'package:saheb/widgets/locationPicker.dart';
@@ -53,15 +52,13 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   didChangeDependencies() {
-    if (_userProvince == null) {
-      Provider.of<LocationProvider>(context).getProvince().then((province) {
-        if (this.mounted) {
-          setState(() {
-            _userProvince = province;
-          });
-        }
-      });
-    }
+    Provider.of<LocationProvider>(context).getProvince().then((province) {
+      if (this.mounted) {
+        setState(() {
+          _userProvince = province;
+        });
+      }
+    });
     super.didChangeDependencies();
   }
 
@@ -77,8 +74,9 @@ class _MainScreenState extends State<MainScreen> {
     if (userLocation == null) {}
     final List<Widget> screens = [
       Posts(
-          searchBarString: _searchBarString,
-          usersProvince: provinces[_userProvince]),
+        searchBarString: _searchBarString,
+        usersProvince: _userProvince,
+      ),
       Market(),
       Services(),
       Settings(),

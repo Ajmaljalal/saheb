@@ -8,6 +8,12 @@ const Map pashto = {
   'cancel': 'انصراف',
   'chooseYourLocation': 'د اوسېدو ځای مو وټاکئ لطفاً',
 
+  'postDeleted': 'ستاسې خبره پاکه شوه.',
+  'postEdited': 'ستاسې خبره اصلاح شوه.',
+  'postReported': 'راپور موږ ته راورسېد، مننه.',
+  'postSaved': 'خبره (نشاني شوې) برخه کې ثبت شوه.',
+  'postHide': 'خبره ستاسې له نظره پټه شوه.',
+
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځئ',
   'signOut': 'وتل',
@@ -54,6 +60,7 @@ const Map pashto = {
   'addNewPost': 'نوی پوست ولیکه!',
   'jobs': 'وظیفه',
   'send': 'لېږل',
+  'save': 'ثبت',
   'typeOfTransaction': 'د معاملې ډول',
   'postTitle': 'عنوان...',
   'advertPostTitle':
@@ -108,16 +115,16 @@ const Map pashto = {
   'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',
 
   ////////////// Post options bottom sheet ///////////////
-  'savePost': 'لیکنه نشاني کړی.',
-  'savePostSubText': 'لیکنه ځان ته نشاني کړی تر څو یې بیا ولیدای شی.',
-  'editPost': 'لیکنه اصلاح کړی.',
-  'editPostSubText': 'لیکنه ستاسې خپله ده، ستونزه لري غواړی سمه یې کړی.',
-  'hidePost': 'لیکنه پټه کړی.',
-  'hidePostSubText': 'لیکنه مو نه خوښیږي غواړی له نظره مو لرې شي.',
-  'reportPost': 'لیکنه رپوټ کړی.',
-  'reportPostSubText': 'لیکنه ستونزه لري او غواړی موږ یې ایسته کړو.',
-  'deletePost': 'لیکنه پاکه کړی.',
-  'deletePostSubText': 'لیکنه ستاسې خپله ده او غواړی ایسته یې کړی.',
+  'savePost': 'خبره نشاني کړی.',
+  'savePostSubText': 'دا خبره ځان ته نشاني کړی تر څو یې بیا ولیدای شی.',
+  'editPost': 'خبره اصلاح کړی.',
+  'editPostSubText': 'خبره مو خپله ده، ستونزه لري غواړی سمه یې کړی.',
+  'hidePost': 'خبره پټه کړی.',
+  'hidePostSubText': 'خبره مو نه خوښیږي غواړی له نظره مو لرې شي.',
+  'reportPost': 'خبره رپوټ کړی.',
+  'reportPostSubText': 'خبره ستونزه لري او غواړی موږ یې ایسته کړو.',
+  'deletePost': 'خبره پاکه کړی.',
+  'deletePostSubText': 'خبره مو خپله ده او غواړی ایسته یې کړی.',
 
   ///////// Search //////////////////
   'search': 'پلټنه...',

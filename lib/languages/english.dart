@@ -10,6 +10,12 @@ const Map english = {
   'cancel': 'Cancel',
   'chooseYourLocation': 'Please choose your location.',
 
+  'postDeleted': 'Post deleted.',
+  'postEdited': 'Post edited.',
+  'postReported': 'We received your report.',
+  'postSaved': 'Post saved to favorites.',
+  'postHide': 'Post is now hidden for you.',
+
   ////////////////// Login and sign up //////////////////////
   'login': 'Login',
   'signOut': 'Sign out',
@@ -56,6 +62,7 @@ const Map english = {
   'addNewPost': 'Add new post',
   'jobs': 'Jobs',
   'send': 'Send',
+  'save': 'Save',
   'typeOfTransaction': 'Type of transaction',
   'postTitle': 'Title',
   'advertPostTitle': 'Title: (like a car for sell, house for rent,...etc.',

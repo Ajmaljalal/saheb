@@ -12,12 +12,16 @@ class AddPostMixin {
     appLanguage,
     onChange,
     fontSize,
+    initialValue,
+    focusNode,
   }) {
     final label = type == appLanguage['advert']
         ? appLanguage['advertPostTitle']
         : appLanguage['postTitle'];
-    return TextField(
+    return TextFormField(
+      initialValue: initialValue,
       onChanged: onChange,
+      focusNode: focusNode,
       style: TextStyle(
         fontSize: fontSize,
       ),
@@ -39,12 +43,16 @@ class AddPostMixin {
     appLanguage,
     onChange,
     fontSize,
+    initialValue,
+    focusNode,
   }) {
     final label = type == appLanguage['advert']
         ? appLanguage['advertPostDiscription']
         : appLanguage['postDiscription'];
-    return TextField(
+    return TextFormField(
+      initialValue: initialValue,
       onChanged: onChange,
+      focusNode: focusNode,
       maxLines: 5,
       style: TextStyle(
         fontSize: fontSize,
@@ -202,6 +210,7 @@ class AddPostMixin {
     context,
     maxImageSize,
     appLanguage,
+    edit,
   }) {
     final appLanguage = getLanguages(context);
     return Row(
@@ -211,7 +220,7 @@ class AddPostMixin {
           appLanguage: appLanguage,
           context: context,
           onClick: onSend,
-          forText: 'send',
+          forText: edit ? 'save' : 'send',
           width: MediaQuery.of(context).size.width * 0.2,
           height: 32.0,
         ),
