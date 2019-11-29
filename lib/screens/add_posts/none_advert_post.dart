@@ -70,10 +70,12 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     FocusScope.of(context).unfocus();
     try {
       final image = await ImagePicker.pickImage(
-          source: source, imageQuality: 80, maxWidth: 600, maxHeight: 900);
-      setState(() {
-        _images.add(image);
-      });
+          source: source, imageQuality: 70, maxWidth: 600, maxHeight: 900);
+      if (image != null) {
+        setState(() {
+          _images.add(image);
+        });
+      }
     } catch (error) {
       print(error.toString());
     }
@@ -176,7 +178,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
     final post = widget.post;
 
-    await Provider.of<PostsProvider>(context, listen: false).editOnePost(
+    Provider.of<PostsProvider>(context, listen: false).editOnePost(
       postId: widget.postId,
       type: widget.type,
       text: _text,
