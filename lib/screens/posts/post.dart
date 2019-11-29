@@ -95,6 +95,7 @@ class _PostState extends State<Post> with PostMixin {
 
   editPost(post, postId) {
     final province = widget.usersProvince;
+    Navigator.pop(context);
     Navigator.push(
       context,
       MaterialPageRoute(
