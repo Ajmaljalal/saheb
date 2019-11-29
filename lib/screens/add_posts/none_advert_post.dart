@@ -1,24 +1,31 @@
 import 'dart:io';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:saheb/widgets/errorDialog.dart';
+import '../../widgets/showInfoFushbar.dart';
 import '../../providers/authProvider.dart';
 import '../../widgets/locationPicker.dart';
 import '../../locations/locations_sublocations.dart';
 import '../../widgets/button.dart';
 import '../../util/uploadImage.dart';
-//import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
 
 class NoneAdvertPost extends StatefulWidget {
   final String type;
-  NoneAdvertPost(this.type);
+  final Map post;
+  final postId;
+  final bool edit;
+  final province;
+  NoneAdvertPost(
+      {@required this.type,
+      this.postId,
+      @required this.edit,
+      this.post,
+      this.province});
   @override
   State createState() => _NoneAdvertPostState();
 }
@@ -28,7 +35,24 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   String _title;
   String _location;
   List<File> _images = [];
-  List<String> _uploadedFileUrl = [];
+  List _uploadedFileUrl = [];
+
+  FocusNode titleFieldFocusNode = FocusNode();
+  FocusNode textFieldFocusNode = FocusNode();
+
+  @override
+  initState() {
+    super.initState();
+    if (widget.edit == true) {
+      setState(() {
+        _text = widget.post['text'];
+        _title = widget.post['title'];
+        _location = widget.post['location'];
+        _uploadedFileUrl = List.from(widget.post['images']);
+      });
+    } else
+      return;
+  }
 
   onTextInputChange(value) {
     _text = value;
@@ -43,6 +67,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   }
 
   Future chooseFile(source) async {
+    FocusScope.of(context).unfocus();
     try {
       final image = await ImagePicker.pickImage(
           source: source, imageQuality: 80, maxWidth: 600, maxHeight: 900);
@@ -84,11 +109,24 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
     final flashBarDuration =
         _images.length == 0 ? _images.length : _images.length + 1;
-    showInfoFlushbarHelper(context, flashBarDuration, appLanguage['wait']);
-    await Future.wait(uploadAllImages(_images));
+    showInfoFlushbar(
+      context: context,
+      duration: flashBarDuration,
+      message: appLanguage['wait'],
+      icon: Icons.file_upload,
+      progressBar: true,
+      positionTop: true,
+    );
+
+    if (_images.length > 0) {
+      await Future.wait(uploadAllImages(_images));
+    }
+
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
         Provider.of<AuthProvider>(context, listen: false).userId;
+    final userLocation =
+        Provider.of<LocationProvider>(context, listen: false).getLocation;
     await Provider.of<PostsProvider>(context, listen: false).addOnePost(
       type: widget.type,
       text: _text,
@@ -97,7 +135,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       owner: {
         'name': user.displayName,
         'id': currentUserId,
-        'location': 'Some where in Kabul',
+        'location': userLocation,
         'photo': user.photoUrl,
       },
       images: _uploadedFileUrl,
@@ -107,10 +145,62 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     Navigator.of(context).pop();
   }
 
+  onEdit() async {
+    final appLanguage = getLanguages(context);
+
+    if (_text == null ||
+        _text.length == 0 ||
+        _title == null ||
+        _title.length == 0 ||
+        _location.length == 0 ||
+        _location == null) {
+      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
+          appLanguage['emptyForm'], appLanguage['ok']);
+      return;
+    }
+
+    final flashBarDuration =
+        _images.length == 0 ? _images.length : _images.length + 1;
+    showInfoFlushbar(
+      context: context,
+      duration: flashBarDuration,
+      message: appLanguage['wait'],
+      icon: Icons.file_upload,
+      progressBar: true,
+      positionTop: true,
+    );
+
+    if (_images.length > 0) {
+      await Future.wait(uploadAllImages(_images));
+    }
+
+    final post = widget.post;
+
+    await Provider.of<PostsProvider>(context, listen: false).editOnePost(
+      postId: widget.postId,
+      type: widget.type,
+      text: _text,
+      title: _title,
+      location: _location,
+      owner: post['owner'],
+      images: _uploadedFileUrl,
+      comments: post['comments'],
+      likes: post['likes'],
+      favorites: post['favorites'],
+      hiddenFrom: post['hiddenFrom'],
+      date: post['date'],
+    );
+
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final type = widget.type;
-//    final _language = Provider.of<LanguageProvider>(context).getLanguage;
+    final edit = widget.edit;
+    final post = widget.post;
+    final userProvince = widget.province;
     final appLanguage = getLanguages(context);
     final imagesMax = _images.length > 5 ? true : false;
     return Scaffold(
@@ -128,7 +218,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                 appLanguage: appLanguage,
                 context: context,
                 onClick: onSend,
-                forText: 'send',
+                forText: edit ? 'save' : 'send',
                 width: MediaQuery.of(context).size.width * 0.2,
                 height: 28.0,
               ),
@@ -151,8 +241,9 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                     children: <Widget>[
                       DropDownPicker(
                         onChange: onLocationChange,
-                        value: appLanguage['location'],
-                        items: locations['kabul'],
+                        value:
+                            edit ? post['location'] : appLanguage['location'],
+                        items: locations[userProvince],
                         hintText: appLanguage['location'],
                         label: appLanguage['location'],
                         search: true,
@@ -161,11 +252,15 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                         type: appLanguage['general'],
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
+                        initialValue: edit ? post['title'] : '',
+                        focusNode: titleFieldFocusNode,
                       ),
                       textArea(
                         type: appLanguage['general'],
                         appLanguage: appLanguage,
                         onChange: onTextInputChange,
+                        initialValue: edit ? post['text'] : '',
+                        focusNode: textFieldFocusNode,
                       ),
                       _images.length != 0
                           ? Row(
@@ -183,54 +278,17 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
             ),
             Container(
               child: bottomBar(
-                onSend: onSend,
+                onSend: edit ? onEdit : onSend,
                 onOpenPhotoVideo: chooseFile,
                 context: context,
                 maxImageSize: imagesMax,
                 appLanguage: appLanguage,
+                edit: edit,
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void showInfoFlushbarHelper(
-    BuildContext context,
-    duration,
-    message,
-  ) {
-    Flushbar(
-//      message: 'uploading images',
-      flushbarPosition: FlushbarPosition.TOP,
-      flushbarStyle: FlushbarStyle.FLOATING,
-      reverseAnimationCurve: Curves.decelerate,
-      forwardAnimationCurve: Curves.elasticOut,
-      backgroundColor: Colors.white,
-      boxShadows: [
-        BoxShadow(
-            color: Colors.black, offset: Offset(0.0, 2.0), blurRadius: 3.0)
-      ],
-//      backgroundGradient:
-//          LinearGradient(colors: [Colors.cyanAccent, Colors.cyan]),
-      isDismissible: false,
-      duration: Duration(seconds: duration),
-      icon: Icon(
-        Icons.file_upload,
-        color: Colors.green,
-      ),
-      showProgressIndicator: true,
-      progressIndicatorBackgroundColor: Colors.blueGrey,
-      messageText: Center(
-        child: Text(
-          message.toString(),
-          style: TextStyle(
-            fontSize: 18.0,
-            color: Colors.black,
-          ),
-        ),
-      ),
-    ).show(context);
   }
 }

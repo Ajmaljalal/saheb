@@ -11,6 +11,10 @@ class LocationProvider with ChangeNotifier {
     return _location;
   }
 
+  get getUserProvince {
+    return _province;
+  }
+
   Future<void> setLocation() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('userLocation')) {
@@ -39,16 +43,20 @@ class LocationProvider with ChangeNotifier {
   }
 
   Future<String> getProvince() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-    List<Placemark> placemark = await Geolocator()
-        .placemarkFromCoordinates(position.latitude, position.longitude);
-    var province = placemark[0].locality.toString().toLowerCase();
-    if (province == 'sacramento') {
-      province = 'kabul';
-    }
-    _province = province;
-    notifyListeners();
-    return province;
+    var province;
+    if (_province == null) {
+      Position position = await Geolocator()
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+      List<Placemark> placemark = await Geolocator()
+          .placemarkFromCoordinates(position.latitude, position.longitude);
+      province = placemark[0].locality.toString().toLowerCase();
+      if (province == 'sacramento') {
+        province = 'kabul';
+      }
+      _province = province;
+      notifyListeners();
+      return province;
+    } else
+      return _province;
   }
 }

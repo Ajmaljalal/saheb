@@ -31,9 +31,13 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     FocusScope.of(context).requestFocus(commentFieldFocusNode);
   }
 
-  updateLikes(context, postLikes, userId) {
-    Provider.of<PostsProvider>(context, listen: false)
-        .updatePostLikes(widget.postId, 'posts', userId);
+  updateLikes({List postLikes, userId}) {
+    if (postLikes.contains(userId)) {
+      return;
+    } else {
+      Provider.of<PostsProvider>(context)
+          .updatePostLikes(widget.postId, 'posts', userId);
+    }
   }
 
   addComment() async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/providers/locationProvider.dart';
 import 'advert_post.dart';
 import 'none_advert_post.dart';
 import '../../languages/index.dart';
@@ -23,6 +24,8 @@ class _AddPostState extends State<AddPost> {
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    final usersProvince =
+        Provider.of<LocationProvider>(context).getUserProvince;
     double fontSize = currentLanguage == 'English' ? 13.0 : 15.0;
     return Scaffold(
       backgroundColor: Colors.grey,
@@ -59,6 +62,7 @@ class _AddPostState extends State<AddPost> {
                 bgColor: true,
                 context: context,
                 fontSize: fontSize,
+                usersProvince: usersProvince,
               ),
               _postTypeOption(
                 type: appLanguage['advert'],
@@ -67,6 +71,7 @@ class _AddPostState extends State<AddPost> {
                 bgColor: false,
                 context: context,
                 fontSize: fontSize,
+                usersProvince: usersProvince,
               ),
               _postTypeOption(
                 type: appLanguage['emergency'],
@@ -75,6 +80,7 @@ class _AddPostState extends State<AddPost> {
                 bgColor: true,
                 context: context,
                 fontSize: fontSize,
+                usersProvince: usersProvince,
               ),
               _postTypeOption(
                 type: appLanguage['lost'],
@@ -83,6 +89,7 @@ class _AddPostState extends State<AddPost> {
                 bgColor: false,
                 context: context,
                 fontSize: fontSize,
+                usersProvince: usersProvince,
               ),
               _postTypeOption(
                 type: appLanguage['found'],
@@ -91,6 +98,7 @@ class _AddPostState extends State<AddPost> {
                 bgColor: true,
                 context: context,
                 fontSize: fontSize,
+                usersProvince: usersProvince,
               ),
             ],
           ),
@@ -99,13 +107,15 @@ class _AddPostState extends State<AddPost> {
     );
   }
 
-  Widget _postTypeOption(
-      {String type,
-      String text,
-      String appLanguageText,
-      bool bgColor,
-      context,
-      fontSize}) {
+  Widget _postTypeOption({
+    String type,
+    String text,
+    String appLanguageText,
+    bool bgColor,
+    context,
+    fontSize,
+    usersProvince,
+  }) {
     return GestureDetector(
       onTap: () {
         type == 'Advert' || type == 'اعلان'
@@ -116,7 +126,11 @@ class _AddPostState extends State<AddPost> {
             : Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NoneAdvertPost(type),
+                  builder: (context) => NoneAdvertPost(
+                    type: type,
+                    edit: false,
+                    province: usersProvince,
+                  ),
                 ),
               );
       },
@@ -155,7 +169,11 @@ class _AddPostState extends State<AddPost> {
                   : Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => NoneAdvertPost(type),
+                        builder: (context) => NoneAdvertPost(
+                          type: type,
+                          edit: false,
+                          province: usersProvince,
+                        ),
                       ),
                     );
             },

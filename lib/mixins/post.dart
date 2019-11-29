@@ -433,7 +433,7 @@ class PostMixin {
               size: 20,
             ),
             onTap: () {
-              updateLikes(post['likes'], userId);
+              updateLikes(postLikes: post['likes'], userId: userId);
             },
           ),
           SizedBox(

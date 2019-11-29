@@ -9,6 +9,11 @@ const Map dari = {
   'noContent': 'چیزی موجود نیست.',
   'cancel': 'انصراف',
   'chooseYourLocation': 'محل بود و باش خود را انتخاب نمائید لطفاً',
+  'postDeleted': 'ګپ شما مؤفقانه حذف شد.',
+  'postEdited': 'ګپ شما مؤفقانه اصلاح ګردید.',
+  'postReported': 'راپور به ما رسید، تشکر.',
+  'postSaved': 'ګپ در بخش نشاني شده ها ثبت شد.',
+  'postHide': 'ګپ از دید شما پنهان شد.',
 
   ///////////// Login and sign up /////////////////////////
   'login': 'وارد شوید',
@@ -58,6 +63,7 @@ const Map dari = {
 
   'jobs': 'وظیفه',
   'send': 'ارسال',
+  'save': 'ثبت',
   'typeOfTransaction': 'نوع معامله',
   'postTitle': 'عنوان...',
   'advertPostTitle': 'عنوان(اجباری): (مثلاً موتر فروشی، خانه کرایی و غیره...)',
