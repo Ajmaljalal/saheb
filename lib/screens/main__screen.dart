@@ -77,7 +77,10 @@ class _MainScreenState extends State<MainScreen> {
         searchBarString: _searchBarString,
         usersProvince: _userProvince,
       ),
-      Market(),
+      Market(
+        searchBarString: _searchBarString,
+        usersProvince: _userProvince,
+      ),
       Services(),
       Settings(),
     ];

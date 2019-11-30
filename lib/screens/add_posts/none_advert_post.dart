@@ -70,7 +70,11 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     FocusScope.of(context).unfocus();
     try {
       final image = await ImagePicker.pickImage(
-          source: source, imageQuality: 70, maxWidth: 600, maxHeight: 900);
+        source: source,
+        imageQuality: 70,
+        maxWidth: 600,
+        maxHeight: 800,
+      );
       if (image != null) {
         setState(() {
           _images.add(image);

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flushbar/flushbar.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/widgets/errorDialog.dart';
@@ -13,6 +12,7 @@ import '../../util/uploadImage.dart';
 import '../../widgets/locationPicker.dart';
 //import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
+import '../../widgets/showInfoFushbar.dart';
 import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
@@ -67,7 +67,12 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   Future chooseFile(source) async {
     try {
-      final image = await ImagePicker.pickImage(source: source);
+      final image = await ImagePicker.pickImage(
+        source: source,
+        maxWidth: 600,
+        maxHeight: 800,
+        imageQuality: 70,
+      );
       setState(() {
         _images.add(image);
       });
@@ -105,7 +110,14 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
     final flashBarDuration =
         _images.length == 0 ? _images.length : _images.length + 1;
-    showInfoFlushbarHelper(context, flashBarDuration, appLanguage['wait']);
+    showInfoFlushbar(
+      context: context,
+      duration: flashBarDuration,
+      message: appLanguage['wait'],
+      icon: Icons.file_upload,
+      progressBar: true,
+      positionTop: true,
+    );
     await Future.wait(uploadAllImages(_images));
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
@@ -262,45 +274,12 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                 onOpenPhotoVideo: chooseFile,
                 maxImageSize: imagesMax,
                 context: context,
+                edit: false,
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  void showInfoFlushbarHelper(BuildContext context, duration, message) {
-    Flushbar(
-//      message: 'uploading images',
-      flushbarPosition: FlushbarPosition.TOP,
-      flushbarStyle: FlushbarStyle.FLOATING,
-      reverseAnimationCurve: Curves.decelerate,
-      forwardAnimationCurve: Curves.elasticOut,
-      backgroundColor: Colors.white,
-      boxShadows: [
-        BoxShadow(
-            color: Colors.black, offset: Offset(0.0, 2.0), blurRadius: 3.0)
-      ],
-//      backgroundGradient:
-//          LinearGradient(colors: [Colors.cyanAccent, Colors.cyan]),
-      isDismissible: false,
-      duration: Duration(seconds: duration),
-      icon: Icon(
-        Icons.file_upload,
-        color: Colors.purple,
-      ),
-      showProgressIndicator: true,
-      progressIndicatorBackgroundColor: Colors.green,
-      messageText: Center(
-        child: Text(
-          message.toString(),
-          style: TextStyle(
-            fontSize: 18.0,
-            color: Colors.black,
-          ),
-        ),
-      ),
-    ).show(context);
   }
 }

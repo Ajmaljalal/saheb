@@ -357,7 +357,7 @@ class PostMixin {
     userId,
   }) {
     final comments = post['comments'];
-    final List likes = post['likes'];
+    final likes = post['likes'];
     final String commentsHolderText = comments.length > 1
         ? appLanguage['multiComments']
         : appLanguage['singleComment'];

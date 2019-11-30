@@ -33,7 +33,7 @@ const Map pashto = {
   'more': 'نور...',
 
   //////////////// ToolBar and Main Screen //////////////////
-  'home': 'کور',
+  'home': 'خبرې',
   'market': 'مارکیټ',
   'messages': 'پیغامونه',
   'settings': 'تنظیمات',
@@ -85,7 +85,8 @@ const Map pashto = {
 
   'price': 'قیمت(مثلاً ۳۰۰ افغانی)',
   'free': 'وړیا',
-  'location': 'ځای انتخاب کړئ (اجباری)!',
+  'location': 'ځای انتخاب کړئ(اجباری)',
+  'noPrice': 'قیمت نشته',
 
   'emptyForm': 'تش فورم!',
   'fillOutRequiredSections':

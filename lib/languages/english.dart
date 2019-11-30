@@ -87,7 +87,7 @@ const Map english = {
   'price': 'Price',
   'free': 'Free',
   'location': 'location(required)',
-
+  'noPrice': 'No price',
   'emptyForm': 'Empty form!',
   'fillOutRequiredSections':
       'Please enter required information accurately. Selecting a location, title and description is required.',
