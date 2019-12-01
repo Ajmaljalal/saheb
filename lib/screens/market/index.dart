@@ -73,6 +73,7 @@ class _MarketState extends State<Market> {
                 type: 'adverts',
                 appLanguage: appLanguage,
                 appBarSearchString: widget.searchBarString,
+                context: context,
               );
 
               return filteredPosts.length > 0
@@ -135,14 +136,38 @@ class _MarketState extends State<Market> {
               handleFilterOptionsChange: handleFilterOptionsChange,
             ),
             topScreenFilterOption(
-              text: appLanguage['myPosts'],
+              text: appLanguage['myAdverts'],
               id: 4,
               currentOptionId: currentOptionId,
               handleFilterOptionsChange: handleFilterOptionsChange,
             ),
             topScreenFilterOption(
-              text: appLanguage['myFavorites'],
+              text: appLanguage['sell'],
               id: 5,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+            topScreenFilterOption(
+              text: appLanguage['rent'],
+              id: 6,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+            topScreenFilterOption(
+              text: appLanguage['buy'],
+              id: 7,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+            topScreenFilterOption(
+              text: appLanguage['needPro'],
+              id: 8,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+            topScreenFilterOption(
+              text: appLanguage['myFavorites'],
+              id: 9,
               currentOptionId: currentOptionId,
               handleFilterOptionsChange: handleFilterOptionsChange,
             ),

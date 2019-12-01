@@ -202,6 +202,7 @@ class PostMixin {
   Widget postTittleHolder(
     title,
     fontSize,
+    context,
   ) {
     return Padding(
       padding: const EdgeInsets.only(
@@ -209,6 +210,7 @@ class PostMixin {
         left: 10.0,
       ),
       child: Container(
+        width: MediaQuery.of(context).size.width * 0.7,
         child: Text(
           title,
           style: TextStyle(
@@ -312,9 +314,7 @@ class PostMixin {
                   context: context,
                   scrollView: imagesScrollView,
                 )
-              : SizedBox(
-                  height: 0.0,
-                ),
+              : emptyBox(),
         ],
       ),
     );

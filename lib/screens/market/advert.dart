@@ -64,7 +64,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     double fontSize = currentLanguage == 'English' ? 12.0 : 14.0;
     return GestureDetector(
       onTap: () {
-        goToDetailsScreen(advert.documentID, advert['title']);
+        goToDetailsScreen(widget.advertId, advert['title']);
       },
       child: Container(
         margin: EdgeInsets.only(

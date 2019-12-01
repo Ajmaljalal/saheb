@@ -246,7 +246,7 @@ class _PostState extends State<Post> with PostMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      postTittleHolder(post['title'], fontSize),
+                      postTittleHolder(post['title'], fontSize, context),
                       postTypeHolder(context, post['type'], appLanguage),
                       postContent(
                           text: post['text'],

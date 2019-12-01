@@ -180,7 +180,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
               ),
               Row(
                 children: <Widget>[
-                  postTittleHolder(post['title'], fontSize),
+                  postTittleHolder(post['title'], fontSize, context),
                 ],
               ),
               GestureDetector(

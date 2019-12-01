@@ -70,12 +70,14 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       final image = await ImagePicker.pickImage(
         source: source,
         maxWidth: 600,
-        maxHeight: 800,
-        imageQuality: 70,
+        maxHeight: 700,
+        imageQuality: 50,
       );
-      setState(() {
-        _images.add(image);
-      });
+      if (image != null) {
+        setState(() {
+          _images.add(image);
+        });
+      }
     } catch (error) {
       print(error);
     }

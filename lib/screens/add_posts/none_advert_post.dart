@@ -71,9 +71,9 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     try {
       final image = await ImagePicker.pickImage(
         source: source,
-        imageQuality: 70,
+        imageQuality: 50,
         maxWidth: 600,
-        maxHeight: 800,
+        maxHeight: 700,
       );
       if (image != null) {
         setState(() {

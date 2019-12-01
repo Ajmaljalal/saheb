@@ -1,4 +1,4 @@
-const Map pashto = {
+Map pashto = {
   ///////// General texts ///////////////////
   'addPhotoVideo': 'انځور/ ویډیو',
   'select6Images': '۶ انځوره پورته کوی شی.',
@@ -23,6 +23,7 @@ const Map pashto = {
   'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',
   'phone': ' تیلفون شمېره (اختیاری)',
+  'phoneNumber': 'تیلفون',
   'name': 'کارېدونکی نوم',
 
   'signinWithFacebook': 'فیسبوک سره ننوځه',
@@ -86,6 +87,8 @@ const Map pashto = {
   'price': 'قیمت(مثلاً ۳۰۰ افغانی)',
   'free': 'وړیا',
   'location': 'ځای انتخاب کړئ(اجباری)',
+  'locationHolder': 'ځای',
+  'date': 'نېټه',
   'noPrice': 'قیمت نشته',
 
   'emptyForm': 'تش فورم!',
@@ -129,8 +132,9 @@ const Map pashto = {
 
   ///////// Search //////////////////
   'search': 'پلټنه...',
-  'myPosts': 'زما لیکنې',
+  'myPosts': 'زما خبرې',
   'myFavorites': 'نشاني شوې',
+  'myAdverts': 'زما اعلانات',
 
   /////////// Services /////////////////
   'health': 'روغتیایي',

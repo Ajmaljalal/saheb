@@ -1,6 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-const Map english = {
+Map english = {
   /////////    General texts ///////////////////
   'addPhotoVideo': 'Photo/video',
   'select6Images': 'Select up to 6 img',
@@ -25,6 +25,7 @@ const Map english = {
   'haveAnAccount': 'Have an account? ',
   'doNotHaveAnAccount': 'Don\'t have an account? ',
   'phone': 'Phone number (Optional)',
+  'phoneNumber': 'Phone number',
   'name': 'User name',
 
   'signinWithFacebook': 'Sign in with',
@@ -81,12 +82,14 @@ const Map english = {
   'typeOfDeal': 'Type of deal',
   'sell': 'For sell',
   'rent': 'For rent',
-  'buy': 'For purhchase',
+  'buy': 'For purchase',
   'needPro': 'Professional service',
 
   'price': 'Price',
   'free': 'Free',
   'location': 'location(required)',
+  'locationHolder': 'Location',
+  'date': 'Date',
   'noPrice': 'No price',
   'emptyForm': 'Empty form!',
   'fillOutRequiredSections':
@@ -133,6 +136,7 @@ const Map english = {
   'search': 'search...',
   'myPosts': 'My posts',
   'myFavorites': 'Favorites',
+  'myAdverts': 'My adverts',
 
   /////////// Services /////////////////
   'health': 'Health',

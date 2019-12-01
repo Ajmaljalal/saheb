@@ -1,6 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-const Map dari = {
+Map dari = {
   ///////// General Texts ///////////////////
   'addPhotoVideo': 'تصویر/ ویدیو',
   'select6Images': 'تا ۶ تصویر برګزینید!',
@@ -24,6 +24,7 @@ const Map dari = {
   'haveAnAccount': 'اګر حساب دارید، ',
   'doNotHaveAnAccount': 'اګر حساب ندارید، ',
   'phone': 'نمبر تیلفون (اختیاری)',
+  'phoneNumber': 'تیلفون',
   'name': 'نام کاربری',
   'signinWithFacebook': 'ورود با فیسبوک',
   'signinWithGoogle': 'ورود با ګوګل',
@@ -87,6 +88,8 @@ const Map dari = {
   'price': 'قیمت(مثلاً ۳۰۰ افغانی)',
   'free': 'رایګان',
   'location': 'انتخاب موقعیت(اجباری)',
+  'locationHolder': 'موقعیت',
+  'date': 'تاریخ',
   'noPrice': 'قیمت نامعلوم',
   'emptyForm': 'فورم خالی!',
   'fillOutRequiredSections':
@@ -130,8 +133,9 @@ const Map dari = {
   ///////// Search //////////////////
 
   'search': 'جستجو...',
-  'myPosts': 'نوشته های من',
+  'myPosts': 'ګپ های خودم',
   'myFavorites': 'نشانی شده',
+  'myAdverts': 'اعلانات خودم',
 
   /////////// Services /////////////////
 

@@ -1,10 +1,14 @@
+import 'package:provider/provider.dart';
+import 'package:saheb/providers/languageProvider.dart';
+
 filterList({
   List posts,
   appBarSearchString,
-  currentFilterOption,
+  String currentFilterOption,
   appLanguage,
   currentUserId,
   type,
+  context,
 }) {
   ///////////////// for adverts only ////////////////////////
   if (type == 'adverts') {
@@ -38,7 +42,7 @@ filterList({
       return filteredPosts;
     }
 
-    if (currentFilterOption == appLanguage['myPosts']) {
+    if (currentFilterOption == appLanguage['myAdverts']) {
       filteredPosts = filteredPosts
           .where(
             (post) =>
@@ -63,6 +67,71 @@ filterList({
                 (post['advert']['hiddenFrom']
                         .toList()
                         .contains(currentUserId.toString())) ==
+                    false,
+          )
+          .toList();
+      return filteredPosts;
+    }
+
+    const String sellString = 'پلورل فروشی for sell';
+    const String buyString = 'اخیستل خرید for purchase';
+    const String rentString = 'کرایی for rent';
+    const String needProString =
+        'professional service مسلکي خدمتونه خدمات مسلکی';
+
+    if (sellString.contains(currentFilterOption)) {
+      filteredPosts = filteredPosts
+          .where(
+            (post) =>
+                (sellString.contains(
+                    post['advert']['type'].toString().toLowerCase())) &&
+                (post['advert']['hiddenFrom']
+                        .toList()
+                        .contains(currentUserId.toLowerCase())) ==
+                    false,
+          )
+          .toList();
+      return filteredPosts;
+    }
+
+    if (buyString.contains(currentFilterOption)) {
+      filteredPosts = filteredPosts
+          .where(
+            (post) =>
+                (buyString.contains(
+                    post['advert']['type'].toString().toLowerCase())) &&
+                (post['advert']['hiddenFrom']
+                        .toList()
+                        .contains(currentUserId.toLowerCase())) ==
+                    false,
+          )
+          .toList();
+      return filteredPosts;
+    }
+    if (rentString.contains(currentFilterOption)) {
+      filteredPosts = filteredPosts
+          .where(
+            (post) =>
+                (rentString.contains(
+                    post['advert']['type'].toString().toLowerCase())) &&
+                (post['advert']['hiddenFrom']
+                        .toList()
+                        .contains(currentUserId.toLowerCase())) ==
+                    false,
+          )
+          .toList();
+      return filteredPosts;
+    }
+
+    if (needProString.contains(currentFilterOption)) {
+      filteredPosts = filteredPosts
+          .where(
+            (post) =>
+                (needProString.contains(
+                    post['advert']['type'].toString().toLowerCase())) &&
+                (post['advert']['hiddenFrom']
+                        .toList()
+                        .contains(currentUserId.toLowerCase())) ==
                     false,
           )
           .toList();

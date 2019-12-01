@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/widgets/emptyBox.dart';
+import 'package:saheb/widgets/horizontalDividerIndented.dart';
+import 'package:saheb/widgets/wait.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
 import '../../mixins/post.dart';
@@ -21,7 +25,6 @@ class _AdvertDetailsState extends State<AdvertDetails>
     with PostMixin, AdvertMixin {
   bool addCommentFocusFlag = false;
   String _text;
-
   FocusNode commentFieldFocusNode = FocusNode();
 
   handleTextInputChange(value) {
@@ -31,11 +34,6 @@ class _AdvertDetailsState extends State<AdvertDetails>
   addCommentTextFieldFocus() {
     FocusScope.of(context).requestFocus(commentFieldFocusNode);
   }
-
-//  updateLikes(context) {
-//    Provider.of<PostsProvider>(context, listen: false)
-//        .updatePostLikes(widget.advertId, 'adverts');
-//  }
 
   addComment() async {
     final user = await Provider.of<AuthProvider>(context).currentUser;
@@ -97,51 +95,22 @@ class _AdvertDetailsState extends State<AdvertDetails>
     double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(title: Text(advertTitle)),
-        body: Stack(
-          children: <Widget>[
-            Container(),
-            SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(bottom: 65.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 1,
-                      decoration: BoxDecoration(),
-                      child: renderPostContentAndComments(
-                        advertId: advertId,
-                        advertTitle: advertTitle,
-                        appLanguage: appLanguage,
-                        userId: currentUserId,
-                        fontSize: fontSize,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-//            Positioned(
-//              bottom: 0.0,
-//              right: 0,
-//              left: 0,
-//              child: addCommentTextField(
-//                focusNode: commentFieldFocusNode,
-//                appLanguage: appLanguage,
-//                onChange: handleTextInputChange,
-//                onSubmit: addComment,
-//                userId: currentUserId,
-//                onClearTextField: clearAddCommentTextField,
-//                context: context,
-//              ),
-//            ),
-          ],
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(),
+        ),
+        body: renderAdvertContent(
+          advertId: advertId,
+          advertTitle: advertTitle,
+          appLanguage: appLanguage,
+          userId: currentUserId,
+          fontSize: fontSize,
         ),
       ),
     );
   }
 
-  renderPostContentAndComments({
+  Widget renderAdvertContent({
     advertId,
     advertTitle,
     appLanguage,
@@ -153,95 +122,178 @@ class _AdvertDetailsState extends State<AdvertDetails>
           Provider.of<PostsProvider>(context).getOnePost('adverts', advertId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Text("Loading..");
+          return wait(appLanguage['wait'], context);
         }
         var advert = snapshot.data;
-        return Card(
-          elevation: 0.0,
-          margin: EdgeInsets.symmetric(
-            vertical: 3.0,
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  cardHeader(advert),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  postTittleHolder(advert['title'].toString(), fontSize),
-                ],
-              ),
-              GestureDetector(
-                onTap: () {
-                  if (advert['images'].length > 0) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FullScreenImage(
-                          images: advert['images'],
-                        ),
+        return Stack(
+          children: <Widget>[
+            SingleChildScrollView(
+              child: Container(
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      constraints: BoxConstraints(
+                        minWidth: MediaQuery.of(context).size.width * 1,
+                        minHeight: MediaQuery.of(context).size.height * 1,
                       ),
-                    );
-                  } else {
-                    return;
-                  }
-                },
-                child: postContent(
-                  text: advert['text'].toString(),
-                  images: advert['images'],
-                  flag: true,
-                  onRevealMoreText: null,
-                  appLanguage: appLanguage,
-                  context: context,
-                  imagesScrollView: Axis.horizontal,
-                  fontSize: fontSize,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              if (advert['images'].length > 0) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FullScreenImage(
+                                      images: advert['images'],
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return;
+                              }
+                            },
+                            child: advert['images'].length > 0
+                                ? postImages(
+                                    images: advert['images'],
+                                    context: context,
+                                    scrollView: Axis.horizontal,
+                                  )
+                                : emptyBox(),
+                          ),
+                          const SizedBox(height: 5.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              postTittleHolder(advert['title'].toString(),
+                                  fontSize, context),
+                              Container(
+                                margin: const EdgeInsets.only(left: 10.0),
+                                child: Text(
+                                  advert['price'],
+                                  style: TextStyle(
+                                    color: Colors.cyan,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          horizontalDividerIndented(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              advertDetails(appLanguage['locationHolder'],
+                                  advert['location']),
+                              advertDetails(
+                                  appLanguage['typeOfDeal'], advert['type']),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              advertDetails(appLanguage['phoneNumber'],
+                                  advert['phone'].toString()),
+                              advertDetails(appLanguage['date'], '11/30/2019'),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              advertDetails(appLanguage['email'],
+                                  advert['email'].toString()),
+                            ],
+                          ),
+                          horizontalDividerIndented(),
+                          Container(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(advert['text'].toString()),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-//              postLikesCommentsCountHolder(
-//                post: advert,
-//                appLanguage: appLanguage,
-//                userId: userId,
-//              ),
-              Divider(
-                color: Colors.grey,
-                height: 1,
+            ),
+            Positioned(
+              bottom: 0.0,
+              right: 0,
+              left: 0,
+              child: advertOwnersDetails(
+                advert['owner'],
+                advert['phone'],
               ),
-              advertActionButtons(
-                onClickComment: addCommentTextFieldFocus,
-                advertId: advertId,
-                userId: userId,
-                advert: advert,
-                advertTitle: advertTitle,
-                flag: 'details',
-                context: context,
-                onDeleteAdvert: deletePost,
-              ),
-              Divider(
-                color: Colors.grey,
-                height: 1,
-              ),
-//              Container(
-//                child: Column(
-//                  children: <Widget>[
-//                    ...individualCommentRenderer(
-//                      comments: advert['comments'],
-//                      likeComment: updateCommentLikes,
-//                      deleteComment: deleteComment,
-//                      userId: userId,
-//                      postOwnerId: advert['owner']['id'],
-//                      context: context,
-//                    ),
-//                  ],
-//                ),
-//              ),
-            ],
-          ),
+            ),
+          ],
         );
       },
+    );
+  }
+
+  Widget advertDetails(forText, text) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.0,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                '$forText:  ',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              text.toString() != 'null' ? Text(text) : Text('---'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget advertOwnersDetails(owner, phoneNumber) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Colors.cyanAccent,
+            width: 0.5,
+          ),
+        ),
+        color: Colors.white,
+      ),
+      height: MediaQuery.of(context).size.height * 0.08,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Text(
+            'User info and user',
+            style: TextStyle(color: Colors.black),
+          ),
+          Material(
+            child: Container(
+              child: IconButton(
+                icon: Icon(FontAwesomeIcons.comments),
+                onPressed: () {},
+              ),
+            ),
+          ),
+          Material(
+            child: Container(
+              child: IconButton(
+                icon: Icon(FontAwesomeIcons.phone),
+                onPressed: () {},
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

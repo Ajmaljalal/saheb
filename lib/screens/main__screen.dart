@@ -115,7 +115,7 @@ class _MainScreenState extends State<MainScreen> {
                 items: [
                   bottomNavBarItem(
                     text: appLanguage['home'],
-                    icon: Icons.home,
+                    icon: Icons.people,
                     fontSize: fontSize,
                   ),
                   bottomNavBarItem(
