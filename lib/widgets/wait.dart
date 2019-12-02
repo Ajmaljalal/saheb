@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget noContent(text, context) {
+Widget wait(text, context) {
   return Container(
     height: MediaQuery.of(context).size.height * 0.6,
     child: Center(

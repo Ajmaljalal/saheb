@@ -1,6 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-const Map dari = {
+Map dari = {
   ///////// General Texts ///////////////////
   'addPhotoVideo': 'تصویر/ ویدیو',
   'select6Images': 'تا ۶ تصویر برګزینید!',
@@ -14,6 +14,8 @@ const Map dari = {
   'postReported': 'راپور به ما رسید، تشکر.',
   'postSaved': 'ګپ در بخش نشاني شده ها ثبت شد.',
   'postHide': 'ګپ از دید شما پنهان شد.',
+  'advertDeleted': 'اعلان شما مؤفقانه حذف شد.',
+  'advertSaved': 'اعلان در بخش نشاني شده ها ثبت شد',
 
   ///////////// Login and sign up /////////////////////////
   'login': 'وارد شوید',
@@ -24,6 +26,7 @@ const Map dari = {
   'haveAnAccount': 'اګر حساب دارید، ',
   'doNotHaveAnAccount': 'اګر حساب ندارید، ',
   'phone': 'نمبر تیلفون (اختیاری)',
+  'phoneNumber': 'تیلفون',
   'name': 'نام کاربری',
   'signinWithFacebook': 'ورود با فیسبوک',
   'signinWithGoogle': 'ورود با ګوګل',
@@ -33,7 +36,7 @@ const Map dari = {
   'more': 'ادامه...',
 
   ///////////////////// ToolBar and Main Screen ////////////////////////
-  'home': 'خانه',
+  'home': 'ګپ',
   'market': 'مارکیت',
   'messages': 'پیام ها',
   'settings': 'تنظیمات',
@@ -59,7 +62,7 @@ const Map dari = {
   'multiComments': 'تبصره',
   'addComment': 'تبصره...',
 
-  'addNewPost': 'پوست جدید بنویس!',
+  'addNewPost': 'ګپ نو',
 
   'jobs': 'وظیفه',
   'send': 'ارسال',
@@ -72,7 +75,7 @@ const Map dari = {
   'postDiscription': 'تشریح...',
   'optionalEmail': 'ایمیل آدرس (اختیاری)',
 
-  'whatPost': 'در باره چه می خواهید بنویسید؟',
+  'whatPost': 'در باره چه مې خواهی ګپ بزنی؟',
   'textForGeneralPost': 'مثلاً در باره حوادث عادی از محل بود و باش خود.',
   'textForAdvertPost': 'مثلاً در باره خرید، فروش و یا به کراه دادن چیزی.',
   'textForEmergencyPost': 'مثلاً ضرورت به خون، راه بندان، و حوادث امنیتی.',
@@ -86,7 +89,10 @@ const Map dari = {
 
   'price': 'قیمت(مثلاً ۳۰۰ افغانی)',
   'free': 'رایګان',
-  'location': 'انتخاب موقعیت(اجباری)!',
+  'location': 'انتخاب موقعیت(اجباری)',
+  'locationHolder': 'موقعیت',
+  'date': 'تاریخ',
+  'noPrice': 'قیمت نامعلوم',
   'emptyForm': 'فورم خالی!',
   'fillOutRequiredSections':
       'لطفا فورم را خانه پری نمائید. انتخاب موقعیت، عنوان و تشریح اجباری است.',
@@ -110,6 +116,8 @@ const Map dari = {
   'alertDialogTitle': 'با معذرت',
   'underConstruction':
       'روی این بخش کار جریان دارد و به زودی در خدمت شما خواهد بود.',
+  'noPhoneNumberProvide':
+      'نمبر تیلفون در اعلان موجود نیست، لطفاً پیام ارسال نمائید.',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'زبان اپلیکشن را تغیر دهید!',
@@ -129,8 +137,9 @@ const Map dari = {
   ///////// Search //////////////////
 
   'search': 'جستجو...',
-  'myPosts': 'نوشته های من',
+  'myPosts': 'ګپ های خودم',
   'myFavorites': 'نشانی شده',
+  'myAdverts': 'اعلانات خودم',
 
   /////////// Services /////////////////
 

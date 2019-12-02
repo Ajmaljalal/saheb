@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
-Widget customButton(
-    {appLanguage, context, onClick, forText, width, height, fontSize}) {
+Widget customButton({
+  appLanguage,
+  context,
+  onClick,
+  forText,
+  width,
+  height,
+  fontSize,
+}) {
   return Padding(
-    padding: EdgeInsets.all(8.0),
+    padding: const EdgeInsets.all(5.0),
     child: Container(
       width: width,
       height: height,

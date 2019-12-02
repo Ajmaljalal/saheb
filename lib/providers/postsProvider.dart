@@ -87,6 +87,8 @@ class PostsProvider with ChangeNotifier {
           'owner': owner,
           'text': text,
           'title': title,
+          'hiddenFrom': [],
+          'favorites': [],
           'phone': phone,
           'email': email,
           'price': price,

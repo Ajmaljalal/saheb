@@ -1,4 +1,4 @@
-const Map pashto = {
+Map pashto = {
   ///////// General texts ///////////////////
   'addPhotoVideo': 'انځور/ ویډیو',
   'select6Images': '۶ انځوره پورته کوی شی.',
@@ -14,6 +14,9 @@ const Map pashto = {
   'postSaved': 'خبره (نشاني شوې) برخه کې ثبت شوه.',
   'postHide': 'خبره ستاسې له نظره پټه شوه.',
 
+  'advertDeleted': 'ستاسې اعلان پاک شو.',
+  'advertSaved': 'اعلان (نشاني شوې) برخه کې ثبت شو.',
+
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځئ',
   'signOut': 'وتل',
@@ -23,6 +26,7 @@ const Map pashto = {
   'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',
   'phone': ' تیلفون شمېره (اختیاری)',
+  'phoneNumber': 'تیلفون',
   'name': 'کارېدونکی نوم',
 
   'signinWithFacebook': 'فیسبوک سره ننوځه',
@@ -33,7 +37,7 @@ const Map pashto = {
   'more': 'نور...',
 
   //////////////// ToolBar and Main Screen //////////////////
-  'home': 'کور',
+  'home': 'خبرې',
   'market': 'مارکیټ',
   'messages': 'پیغامونه',
   'settings': 'تنظیمات',
@@ -57,7 +61,7 @@ const Map pashto = {
   'multiComments': 'تبصرې',
   'addComment': 'تبصره...',
 
-  'addNewPost': 'نوی پوست ولیکه!',
+  'addNewPost': 'نوې خبرې',
   'jobs': 'وظیفه',
   'send': 'لېږل',
   'save': 'ثبت',
@@ -70,7 +74,7 @@ const Map pashto = {
   'postDiscription': 'تشریح...',
   'optionalEmail': 'برېښنالیک (اختیاری)',
 
-  'whatPost': 'د څه شي په اړه غواړی ولیکی؟',
+  'whatPost': 'څه غواړې ووایې؟',
   'textForGeneralPost': 'مثلاً د خپل محل د عادی حوادثو او مسایلو په اړه.',
   'textForAdvertPost': 'مثلاً د کوم شي د اخیستو، کراه، او یا خرڅولو په اړه.',
   'textForEmergencyPost': 'مثلاً د وینې ضرورت، لار بنده ده او عاجل حوادث.',
@@ -85,7 +89,10 @@ const Map pashto = {
 
   'price': 'قیمت(مثلاً ۳۰۰ افغانی)',
   'free': 'وړیا',
-  'location': 'ځای انتخاب کړئ (اجباری)!',
+  'location': 'ځای انتخاب کړئ(اجباری)',
+  'locationHolder': 'ځای',
+  'date': 'نېټه',
+  'noPrice': 'قیمت نشته',
 
   'emptyForm': 'تش فورم!',
   'fillOutRequiredSections':
@@ -110,6 +117,7 @@ const Map pashto = {
   'alertDialogTitle': 'وبښئ',
   'underConstruction':
       'دا برخه تر کار لاندې ده او ژر به ستاسې چوپړ ته آماده شي.',
+  'noPhoneNumberProvide': 'اعلان د تیلفون شمېره نه لري، لطفاً پیغام ولېږۍ.',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',
@@ -128,8 +136,9 @@ const Map pashto = {
 
   ///////// Search //////////////////
   'search': 'پلټنه...',
-  'myPosts': 'زما لیکنې',
+  'myPosts': 'زما خبرې',
   'myFavorites': 'نشاني شوې',
+  'myAdverts': 'زما اعلانات',
 
   /////////// Services /////////////////
   'health': 'روغتیایي',

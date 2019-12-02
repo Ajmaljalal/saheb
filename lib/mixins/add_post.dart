@@ -75,10 +75,12 @@ class AddPostMixin {
     appLanguage,
     onChange,
     fontSize,
+    focusNode,
   }) {
     return Container(
       child: TextField(
         onChanged: onChange,
+        focusNode: focusNode,
         style: TextStyle(
           height: 0.95,
           fontSize: fontSize,
@@ -97,14 +99,11 @@ class AddPostMixin {
     );
   }
 
-  Widget emailAddressArea({
-    appLanguage,
-    onChange,
-    fontSize,
-  }) {
+  Widget emailAddressArea({appLanguage, onChange, fontSize, focusNode}) {
     return Container(
       child: TextField(
         onChanged: onChange,
+        focusNode: focusNode,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
           height: 0.95,
@@ -124,14 +123,11 @@ class AddPostMixin {
     );
   }
 
-  Widget priceArea({
-    appLanguage,
-    onChange,
-    fontSize,
-  }) {
+  Widget priceArea({appLanguage, onChange, fontSize, focusNode}) {
     return Container(
       child: TextField(
         onChanged: onChange,
+        focusNode: focusNode,
         style: TextStyle(
           height: 0.95,
           fontSize: fontSize,

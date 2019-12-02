@@ -5,8 +5,11 @@ import 'package:provider/provider.dart';
 import 'package:saheb/providers/authProvider.dart';
 import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/widgets/noContent.dart';
+import 'package:saheb/widgets/wait.dart';
+import '../../widgets/topScreenFilterOption.dart';
 import 'package:saheb/languages/provinces.dart';
 import '../../providers/postsProvider.dart';
+import '../../util/filterList.dart';
 import '../../languages/index.dart';
 import 'post.dart';
 
@@ -27,90 +30,6 @@ class _PostsState extends State<Posts> {
       currentFilterOption = text;
       currentOptionId = id;
     });
-  }
-
-  filterPosts(List posts, appLanguage, currentUserId, appBarSearchString) {
-    var filteredPosts = posts;
-    if (appBarSearchString != null) {
-      filteredPosts = posts
-          .where(
-            (post) =>
-                post['post']['title']
-                    .toString()
-                    .contains(appBarSearchString.toString()) ||
-                post['post']['text']
-                    .toString()
-                    .contains(appBarSearchString.toString()) ||
-                post['post']['type']
-                    .toString()
-                    .contains(appBarSearchString.toString()),
-          )
-          .toList();
-    }
-    if (currentFilterOption.toLowerCase() == 'افغانستان') {
-      filteredPosts = filteredPosts
-          .where(
-            (post) =>
-                (post['post']['hiddenFrom']
-                    .toList()
-                    .contains(currentUserId.toString())) ==
-                false,
-          )
-          .toList();
-      return filteredPosts;
-    }
-
-    if (currentFilterOption == appLanguage['myPosts']) {
-      filteredPosts = filteredPosts
-          .where(
-            (post) =>
-                post['post']['owner']['id'].toString() ==
-                    currentUserId.toString() &&
-                (post['post']['hiddenFrom']
-                        .toList()
-                        .contains(currentUserId.toString())) ==
-                    false,
-          )
-          .toList();
-      return filteredPosts;
-    }
-
-    if (currentFilterOption.toLowerCase() == appLanguage['myFavorites']) {
-      filteredPosts = filteredPosts
-          .where(
-            (post) =>
-                post['post']['favorites']
-                    .toList()
-                    .contains(currentUserId.toString()) &&
-                (post['post']['hiddenFrom']
-                        .toList()
-                        .contains(currentUserId.toString())) ==
-                    false,
-          )
-          .toList();
-      return filteredPosts;
-    }
-
-    filteredPosts = filteredPosts
-        .where((post) =>
-            post['post']['location'].toString().toLowerCase().contains(
-                  currentFilterOption.toLowerCase(),
-                ) &&
-            (post['post']['hiddenFrom']
-                    .toList()
-                    .contains(currentUserId.toString())) ==
-                false)
-        .toList();
-
-    filteredPosts = filteredPosts
-        .where((post) =>
-            (post['post']['hiddenFrom']
-                .toList()
-                .contains(currentUserId.toString())) ==
-            false)
-        .toList();
-
-    return filteredPosts;
   }
 
   @override
@@ -136,10 +55,10 @@ class _PostsState extends State<Posts> {
             stream: Provider.of<PostsProvider>(context).getAllPosts('posts'),
             builder: (context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
-                return noContent(appLanguage, context);
+                return wait(appLanguage['wait'], context);
               }
               if (snapshot.data.documents.toList().length == 0) {
-                return noContent(appLanguage, context);
+                return noContent(appLanguage['noContent'], context);
               }
               List<DocumentSnapshot> tempList = snapshot.data.documents;
               List<Map<dynamic, dynamic>> posts = List();
@@ -151,8 +70,14 @@ class _PostsState extends State<Posts> {
                 return post;
               }).toList();
 
-              var filteredPosts = filterPosts(
-                  posts, appLanguage, currentUserId, widget.searchBarString);
+              var filteredPosts = filterList(
+                posts: posts,
+                currentFilterOption: currentFilterOption,
+                currentUserId: currentUserId,
+                type: 'posts',
+                appLanguage: appLanguage,
+                appBarSearchString: widget.searchBarString,
+              );
 
               return filteredPosts.length > 0
                   ? ListView.builder(
@@ -163,12 +88,13 @@ class _PostsState extends State<Posts> {
                         final postId = filteredPosts.toList()[index]['postId'];
                         var post = filteredPosts.toList()[index]['post'];
                         return Post(
-                            post: post,
-                            postId: postId,
-                            usersProvince: widget.usersProvince);
+                          post: post,
+                          postId: postId,
+                          usersProvince: widget.usersProvince,
+                        );
                       },
                     )
-                  : noContent(appLanguage, context);
+                  : noContent(appLanguage['noContent'], context);
             },
           ),
         ],
@@ -185,44 +111,37 @@ class _PostsState extends State<Posts> {
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[
-            filterOption(userLocation, 1),
-            filterOption(provinces[widget.usersProvince], 2),
-            filterOption('افغانستان', 3),
-            filterOption(appLanguage['myPosts'], 4),
-            filterOption(appLanguage['myFavorites'], 5),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget filterOption(text, id) {
-    return GestureDetector(
-      onTap: () => handleFilterOptionsChange(text, id),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50.0),
-          border: Border.all(color: Colors.cyan, width: 0.5),
-          color: id == currentOptionId ? Colors.cyan : Colors.white,
-        ),
-        constraints: const BoxConstraints(
-          minWidth: 50.0,
-        ),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 10.0,
-        ),
-        margin: const EdgeInsets.symmetric(
-          horizontal: 3.0,
-          vertical: 3.0,
-        ),
-        child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              color: id == currentOptionId ? Colors.white : Colors.cyan,
-              fontSize: 14.0,
+            topScreenFilterOption(
+              text: userLocation,
+              id: 1,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
             ),
-          ),
+            topScreenFilterOption(
+              text: provinces[widget.usersProvince],
+              id: 2,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+            topScreenFilterOption(
+              text: 'افغانستان',
+              id: 3,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+            topScreenFilterOption(
+              text: appLanguage['myPosts'],
+              id: 4,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+            topScreenFilterOption(
+              text: appLanguage['myFavorites'],
+              id: 5,
+              currentOptionId: currentOptionId,
+              handleFilterOptionsChange: handleFilterOptionsChange,
+            ),
+          ],
         ),
       ),
     );

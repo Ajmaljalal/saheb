@@ -77,7 +77,10 @@ class _MainScreenState extends State<MainScreen> {
         searchBarString: _searchBarString,
         usersProvince: _userProvince,
       ),
-      Market(),
+      Market(
+        searchBarString: _searchBarString,
+        usersProvince: _userProvince,
+      ),
       Services(),
       Settings(),
     ];
@@ -112,7 +115,7 @@ class _MainScreenState extends State<MainScreen> {
                 items: [
                   bottomNavBarItem(
                     text: appLanguage['home'],
-                    icon: Icons.home,
+                    icon: Icons.people,
                     fontSize: fontSize,
                   ),
                   bottomNavBarItem(

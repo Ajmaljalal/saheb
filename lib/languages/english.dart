@@ -1,6 +1,6 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-const Map english = {
+Map english = {
   /////////    General texts ///////////////////
   'addPhotoVideo': 'Photo/video',
   'select6Images': 'Select up to 6 img',
@@ -15,6 +15,8 @@ const Map english = {
   'postReported': 'We received your report.',
   'postSaved': 'Post saved to favorites.',
   'postHide': 'Post is now hidden for you.',
+  'advertDeleted': 'Advert deleted.',
+  'advertSaved': 'Advert saved to favorites.',
 
   ////////////////// Login and sign up //////////////////////
   'login': 'Login',
@@ -25,6 +27,7 @@ const Map english = {
   'haveAnAccount': 'Have an account? ',
   'doNotHaveAnAccount': 'Don\'t have an account? ',
   'phone': 'Phone number (Optional)',
+  'phoneNumber': 'Phone number',
   'name': 'User name',
 
   'signinWithFacebook': 'Sign in with',
@@ -78,16 +81,18 @@ const Map english = {
   'textForLostPost': 'Someone or someting is lost.',
   'textForFoundPost': 'Found someone or something.',
 
-  'typeOfDeal': 'Type of deal',
+  'typeOfDeal': 'Type',
   'sell': 'For sell',
   'rent': 'For rent',
-  'buy': 'For purhchase',
+  'buy': 'For purchase',
   'needPro': 'Professional service',
 
   'price': 'Price',
   'free': 'Free',
   'location': 'location(required)',
-
+  'locationHolder': 'Location',
+  'date': 'Date',
+  'noPrice': 'No price',
   'emptyForm': 'Empty form!',
   'fillOutRequiredSections':
       'Please enter required information accurately. Selecting a location, title and description is required.',
@@ -113,6 +118,8 @@ const Map english = {
   'alertDialogTitle': 'Sorry',
   'underConstruction':
       'This section is under construction and will be updated soon.',
+  'noPhoneNumberProvide':
+      'No phone number provided, please send a message instead',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'Change application\'s language!',
@@ -133,6 +140,7 @@ const Map english = {
   'search': 'search...',
   'myPosts': 'My posts',
   'myFavorites': 'Favorites',
+  'myAdverts': 'My adverts',
 
   /////////// Services /////////////////
   'health': 'Health',

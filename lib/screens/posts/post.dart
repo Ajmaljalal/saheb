@@ -112,6 +112,88 @@ class _PostState extends State<Post> with PostMixin {
 
   closeBottomSheet() {}
 
+  @override
+  Widget build(BuildContext context) {
+    final appLanguage = getLanguages(context);
+    final post = widget.post;
+    final postId = widget.postId;
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
+    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 14.0 : 17.0;
+
+    return Center(
+      child: Container(
+        width: MediaQuery.of(context).size.width * 1,
+        decoration: BoxDecoration(),
+        child: Card(
+          elevation: 0.0,
+          color: Colors.white,
+          margin: const EdgeInsets.symmetric(
+            vertical: 3.0,
+            horizontal: 1.0,
+          ),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: kSpaceBetween,
+                crossAxisAlignment: kStart,
+                children: <Widget>[
+                  cardHeader(post),
+                  postOptions(
+                    context: context,
+                    onOpenOptions: showPostOptions,
+                    appLanguage: appLanguage,
+                    postOwnerId: post['owner']['id'],
+                    currentUserId: currentUserId,
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {
+                  goToDetailsScreen(postId, post['title']);
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    postTittleHolder(post['title'], fontSize, context),
+                    postTypeHolder(context, post['type'], appLanguage),
+                    postContent(
+                        text: post['text'],
+                        images: post['images'],
+                        flag: revealMoreTextFlag,
+                        onRevealMoreText: _revealMoreText,
+                        appLanguage: appLanguage,
+                        context: context,
+                        imagesScrollView: Axis.horizontal,
+                        fontSize: fontSize,
+                        postDate: post['date']),
+                  ],
+                ),
+              ),
+              postLikesCommentsCountHolder(
+                post: post,
+                appLanguage: appLanguage,
+                userId: currentUserId,
+              ),
+              kHorizontalDivider,
+              postActionButtons(
+                onClickComment: goToDetailsScreen,
+                postId: widget.postId,
+                userId: currentUserId,
+                post: post,
+                postTitle: post['title'],
+                flag: 'post',
+                updateLikes: updateLikes,
+                onDeletePost: deletePost,
+                context: context,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   showPostOptions(context, appLanguage, currentUserId, postOwnerId) {
     bool postOwner = currentUserId == postOwnerId ? true : false;
     showModalBottomSheet(
@@ -193,94 +275,6 @@ class _PostState extends State<Post> with PostMixin {
                     })
                 : emptyBox(),
           ],
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appLanguage = getLanguages(context);
-    final post = widget.post;
-    final postId = widget.postId;
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
-
-    return Padding(
-      padding: const EdgeInsets.only(
-//        bottom: 1.0,
-//        top: 2.0,
-          ),
-      child: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 1,
-          decoration: BoxDecoration(),
-          child: Card(
-            elevation: 0.0,
-            color: Colors.white,
-            margin: const EdgeInsets.symmetric(
-              vertical: 3.0,
-              horizontal: 1.0,
-            ),
-            child: Column(
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: kSpaceBetween,
-                  crossAxisAlignment: kStart,
-                  children: <Widget>[
-                    cardHeader(post),
-                    postOptions(
-                      context: context,
-                      onOpenOptions: showPostOptions,
-                      appLanguage: appLanguage,
-                      postOwnerId: post['owner']['id'],
-                      currentUserId: currentUserId,
-                    ),
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    goToDetailsScreen(postId, post['title']);
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      postTittleHolder(post['title'], fontSize),
-                      postTypeHolder(context, post['type'], appLanguage),
-                      postContent(
-                          text: post['text'],
-                          images: post['images'],
-                          flag: revealMoreTextFlag,
-                          onRevealMoreText: _revealMoreText,
-                          appLanguage: appLanguage,
-                          context: context,
-                          imagesScrollView: Axis.horizontal,
-                          fontSize: fontSize,
-                          postDate: post['date']),
-                    ],
-                  ),
-                ),
-                postLikesCommentsCountHolder(
-                  post: post,
-                  appLanguage: appLanguage,
-                  userId: currentUserId,
-                ),
-                kHorizontalDivider,
-                postActionButtons(
-                  onClickComment: goToDetailsScreen,
-                  postId: widget.postId,
-                  userId: currentUserId,
-                  post: post,
-                  postTitle: post['title'],
-                  flag: 'post',
-                  updateLikes: updateLikes,
-                  onDeletePost: deletePost,
-                  context: context,
-                ),
-              ],
-            ),
-          ),
         ),
       ),
     );
