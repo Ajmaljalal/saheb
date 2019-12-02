@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -47,19 +48,10 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     );
   }
 
-  callPhoneNumber(phoneNumber) async {
-    if (await canLaunch("tel://${phoneNumber.toString()}")) {
-      await launch(("tel://${phoneNumber.toString()}"));
-    } else {
-      throw 'Could not call $phoneNumber';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final advert = widget.advert;
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = currentLanguage == 'English' ? 12.0 : 14.0;
     return GestureDetector(
@@ -94,7 +86,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
                   children: <Widget>[
                     advertTitleHolder(advert['title'], fontSize),
                     advertPriceDateHolder(
-                        advert['price'], '10 قوس', appLanguage)
+                        advert['price'], advert['date'], appLanguage)
                   ],
                 ),
               ),
@@ -110,12 +102,16 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
       margin: EdgeInsets.only(top: 3.0),
       child: Text(
         title,
+        maxLines: 2,
         style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
       ),
     );
   }
 
   Widget advertPriceDateHolder(price, date, appLanguage) {
+    final shamsiDate = Jalali.fromDateTime(date.toDate());
+    final advertDate =
+        '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
@@ -139,7 +135,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
         ),
         Container(
           child: Text(
-            date,
+            advertDate,
             style: TextStyle(fontSize: 12.0),
           ),
         ),

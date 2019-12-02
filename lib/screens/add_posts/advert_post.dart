@@ -33,6 +33,12 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   List<File> _images = [];
   List<String> _uploadedFileUrl = [];
 
+  FocusNode titleFieldFocusNode = FocusNode();
+  FocusNode textFieldFocusNode = FocusNode();
+  FocusNode priceFieldFocusNode = FocusNode();
+  FocusNode phoneFieldFocusNode = FocusNode();
+  FocusNode emailFieldFocusNode = FocusNode();
+
   onDropDownChange(value) {
     setState(() {
       dropdownValue = value;
@@ -66,6 +72,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   }
 
   Future chooseFile(source) async {
+    FocusScope.of(context).unfocus();
     try {
       final image = await ImagePicker.pickImage(
         source: source,
@@ -217,12 +224,14 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
                         fontSize: fontSize,
+                        focusNode: titleFieldFocusNode,
                       ),
                       textArea(
                         type: appLanguage['advert'].toString(),
                         appLanguage: appLanguage,
                         onChange: onTextInputChange,
                         fontSize: fontSize,
+                        focusNode: textFieldFocusNode,
                       ),
                       Row(
                         children: <Widget>[
@@ -231,6 +240,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                               appLanguage: appLanguage,
                               onChange: onPriceInputChange,
                               fontSize: fontSize,
+                              focusNode: priceFieldFocusNode,
                             ),
                           ),
                           CustomVerticalDivider(),
@@ -239,6 +249,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                               appLanguage: appLanguage,
                               onChange: onPhoneInputChange,
                               fontSize: fontSize,
+                              focusNode: phoneFieldFocusNode,
                             ),
                           ),
                         ],
@@ -247,6 +258,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                         appLanguage: appLanguage,
                         onChange: onEmailInputChange,
                         fontSize: fontSize,
+                        focusNode: emailFieldFocusNode,
                       ),
                       _images.length != 0
                           ? Row(

@@ -14,6 +14,9 @@ Map pashto = {
   'postSaved': 'خبره (نشاني شوې) برخه کې ثبت شوه.',
   'postHide': 'خبره ستاسې له نظره پټه شوه.',
 
+  'advertDeleted': 'ستاسې اعلان پاک شو.',
+  'advertSaved': 'اعلان (نشاني شوې) برخه کې ثبت شو.',
+
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځئ',
   'signOut': 'وتل',
@@ -58,7 +61,7 @@ Map pashto = {
   'multiComments': 'تبصرې',
   'addComment': 'تبصره...',
 
-  'addNewPost': 'نوی پوست ولیکه!',
+  'addNewPost': 'نوې خبرې',
   'jobs': 'وظیفه',
   'send': 'لېږل',
   'save': 'ثبت',
@@ -71,7 +74,7 @@ Map pashto = {
   'postDiscription': 'تشریح...',
   'optionalEmail': 'برېښنالیک (اختیاری)',
 
-  'whatPost': 'د څه شي په اړه غواړی ولیکی؟',
+  'whatPost': 'څه غواړې ووایې؟',
   'textForGeneralPost': 'مثلاً د خپل محل د عادی حوادثو او مسایلو په اړه.',
   'textForAdvertPost': 'مثلاً د کوم شي د اخیستو، کراه، او یا خرڅولو په اړه.',
   'textForEmergencyPost': 'مثلاً د وینې ضرورت، لار بنده ده او عاجل حوادث.',
@@ -114,6 +117,7 @@ Map pashto = {
   'alertDialogTitle': 'وبښئ',
   'underConstruction':
       'دا برخه تر کار لاندې ده او ژر به ستاسې چوپړ ته آماده شي.',
+  'noPhoneNumberProvide': 'اعلان د تیلفون شمېره نه لري، لطفاً پیغام ولېږۍ.',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'د اپلیکشن ژبه واړوئ!',

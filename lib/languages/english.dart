@@ -15,6 +15,8 @@ Map english = {
   'postReported': 'We received your report.',
   'postSaved': 'Post saved to favorites.',
   'postHide': 'Post is now hidden for you.',
+  'advertDeleted': 'Advert deleted.',
+  'advertSaved': 'Advert saved to favorites.',
 
   ////////////////// Login and sign up //////////////////////
   'login': 'Login',
@@ -79,7 +81,7 @@ Map english = {
   'textForLostPost': 'Someone or someting is lost.',
   'textForFoundPost': 'Found someone or something.',
 
-  'typeOfDeal': 'Type of deal',
+  'typeOfDeal': 'Type',
   'sell': 'For sell',
   'rent': 'For rent',
   'buy': 'For purchase',
@@ -116,6 +118,8 @@ Map english = {
   'alertDialogTitle': 'Sorry',
   'underConstruction':
       'This section is under construction and will be updated soon.',
+  'noPhoneNumberProvide':
+      'No phone number provided, please send a message instead',
 
   ///////////////////////// Settings ///////////////////////////
   'changeAppLanguage': 'Change application\'s language!',

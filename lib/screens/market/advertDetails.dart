@@ -3,15 +3,21 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/widgets/button.dart';
 import 'package:saheb/widgets/emptyBox.dart';
+import 'package:saheb/widgets/errorDialog.dart';
 import 'package:saheb/widgets/horizontalDividerIndented.dart';
+import 'package:saheb/widgets/noContent.dart';
 import 'package:saheb/widgets/wait.dart';
+import 'package:shamsi_date/shamsi_date.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
 import '../../languages/index.dart';
 import 'package:saheb/widgets/fullScreenImage.dart';
+import '../../widgets/showInfoFushbar.dart';
 
 class AdvertDetails extends StatefulWidget {
   final advertTitle;
@@ -24,65 +30,43 @@ class AdvertDetails extends StatefulWidget {
 class _AdvertDetailsState extends State<AdvertDetails>
     with PostMixin, AdvertMixin {
   bool addCommentFocusFlag = false;
-  String _text;
-  FocusNode commentFieldFocusNode = FocusNode();
+  bool advertDeleted = false;
 
-  handleTextInputChange(value) {
-    _text = value;
-  }
-
-  addCommentTextFieldFocus() {
-    FocusScope.of(context).requestFocus(commentFieldFocusNode);
-  }
-
-  addComment() async {
-    final user = await Provider.of<AuthProvider>(context).currentUser;
-    if (_text != null && _text.length != 0) {
-      final currentUserId =
-          Provider.of<AuthProvider>(context, listen: false).userId;
-      await Provider.of<PostsProvider>(context, listen: false).addCommentOnPost(
-        collection: 'adverts',
-        postId: widget.advertId,
-        text: _text,
-        user: {
-          'name': user.displayName,
-          'id': currentUserId,
-          'photo': user.photoUrl,
-          'location': 'some location'
-        },
-      );
-    } else
-      return;
-
-    FocusScope.of(context).unfocus();
-  }
-
-  clearAddCommentTextField() {
-    FocusScope.of(context).unfocus();
-    _text = '';
-  }
-
-  updateCommentLikes(advertComment) async {
-    await Provider.of<PostsProvider>(context, listen: false).updateCommentLikes(
-      collection: 'adverts',
-      postComment: advertComment,
-      postId: widget.advertId,
-    );
-  }
-
-  deleteComment(postComment) async {
-    await Provider.of<PostsProvider>(context, listen: false).deleteComment(
-      collection: 'adverts',
-      postComment: postComment,
-      postId: widget.advertId,
-    );
-  }
-
-  deletePost(context) async {
+  deletePost(context, message) async {
+    setState(() {
+      advertDeleted = true;
+    });
+    Navigator.pop(context);
+    renderFlashBar(message);
     await Provider.of<PostsProvider>(context).deleteOnePost(
-      'advert',
       widget.advertId,
+      'adverts',
     );
+  }
+
+  favoriteAPost(userId, message) async {
+    await Provider.of<PostsProvider>(context)
+        .favoriteAPost(widget.advertId, 'adverts', userId);
+    renderFlashBar(message);
+  }
+
+  renderFlashBar(message) {
+    showInfoFlushbar(
+      context: context,
+      duration: 2,
+      message: message,
+      icon: Icons.check_circle,
+      progressBar: false,
+      positionTop: false,
+    );
+  }
+
+  callPhoneNumber(phoneNumber) async {
+    if (await canLaunch("tel://${phoneNumber.toString()}")) {
+      await launch(("tel://${phoneNumber.toString()}"));
+    } else {
+      throw 'Could not call $phoneNumber';
+    }
   }
 
   @override
@@ -92,7 +76,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     final String advertId = widget.advertId;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
+    double fontSize = currentLanguage == 'English' ? 12.5 : 17.0;
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -117,121 +101,202 @@ class _AdvertDetailsState extends State<AdvertDetails>
     userId,
     fontSize,
   }) {
-    return StreamBuilder(
-      stream:
-          Provider.of<PostsProvider>(context).getOnePost('adverts', advertId),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return wait(appLanguage['wait'], context);
-        }
-        var advert = snapshot.data;
-        return Stack(
-          children: <Widget>[
-            SingleChildScrollView(
-              child: Container(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width * 1,
-                        minHeight: MediaQuery.of(context).size.height * 1,
-                      ),
+    return advertDeleted == false
+        ? StreamBuilder(
+            stream: Provider.of<PostsProvider>(context)
+                .getOnePost('adverts', advertId),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return wait(appLanguage['wait'], context);
+              }
+              if (snapshot.hasError) {
+                return noContent(appLanguage['noContent'], context);
+              }
+              final advert = snapshot.data;
+              final bool isOwner =
+                  advert['owner']['id'] == userId ? true : false;
+
+              final shamsiDate = advert != null
+                  ? Jalali.fromDateTime(advert['date'].toDate())
+                  : null;
+              final advertDate =
+                  '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
+              return Stack(
+                children: <Widget>[
+                  SingleChildScrollView(
+                    child: Container(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          GestureDetector(
-                            onTap: () {
-                              if (advert['images'].length > 0) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FullScreenImage(
-                                      images: advert['images'],
+                          Container(
+                            constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width * 1,
+                              minHeight: MediaQuery.of(context).size.height * 1,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Stack(
+                                  children: <Widget>[
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (advert['images'].length > 0) {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  FullScreenImage(
+                                                images: advert['images'],
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return;
+                                        }
+                                      },
+                                      child: advert['images'].length > 0
+                                          ? postImages(
+                                              images: advert['images'],
+                                              context: context,
+                                              scrollView: Axis.horizontal,
+                                            )
+                                          : Center(
+                                              child: Icon(
+                                                FontAwesomeIcons.camera,
+                                                color: Colors.grey[200],
+                                                size: 140.0,
+                                              ),
+                                            ),
                                     ),
+                                    Positioned(
+                                      bottom: 0.0,
+                                      right: 0,
+                                      left: 0,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: <Widget>[
+                                          !isOwner
+                                              ? advertActionButton(
+                                                  FontAwesomeIcons.heart,
+                                                  Colors.cyan,
+                                                  null,
+                                                  favoriteAPost,
+                                                  context,
+                                                  'favorite',
+                                                  userId,
+                                                  appLanguage['advertSaved'],
+                                                )
+                                              : emptyBox(),
+                                          isOwner
+                                              ? advertActionButton(
+                                                  FontAwesomeIcons.trash,
+                                                  Colors.red,
+                                                  deletePost,
+                                                  null,
+                                                  context,
+                                                  'delete',
+                                                  userId,
+                                                  appLanguage['advertDeleted'],
+                                                )
+                                              : emptyBox(),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 5.0),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: postTittleHolder(
+                                          advert['title'].toString(),
+                                          fontSize,
+                                          context),
+                                    ),
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10.0),
+                                      child: Text(
+                                        advert['price'].toString() != 'null'
+                                            ? advert['price']
+                                            : appLanguage['noPrice'],
+                                        style: TextStyle(
+                                          color: Colors.cyan,
+                                          fontSize:
+                                              advert['price'].toString() !=
+                                                      'null'
+                                                  ? 20.0
+                                                  : 15.0,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                horizontalDividerIndented(),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    advertDetails(appLanguage['locationHolder'],
+                                        advert['location']),
+                                    advertDetails(appLanguage['typeOfDeal'],
+                                        advert['type']),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    advertDetails(appLanguage['phoneNumber'],
+                                        advert['phone'].toString()),
+                                    advertDetails(
+                                        appLanguage['date'], advertDate),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    advertDetails(appLanguage['email'],
+                                        advert['email'].toString()),
+                                  ],
+                                ),
+                                horizontalDividerIndented(),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10.0,
                                   ),
-                                );
-                              } else {
-                                return;
-                              }
-                            },
-                            child: advert['images'].length > 0
-                                ? postImages(
-                                    images: advert['images'],
-                                    context: context,
-                                    scrollView: Axis.horizontal,
-                                  )
-                                : emptyBox(),
-                          ),
-                          const SizedBox(height: 5.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              postTittleHolder(advert['title'].toString(),
-                                  fontSize, context),
-                              Container(
-                                margin: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  advert['price'],
-                                  style: TextStyle(
-                                    color: Colors.cyan,
-                                    fontSize: 20.0,
+                                  child: Text(
+                                    advert['text'].toString(),
+                                    style: TextStyle(fontSize: fontSize),
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                          horizontalDividerIndented(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              advertDetails(appLanguage['locationHolder'],
-                                  advert['location']),
-                              advertDetails(
-                                  appLanguage['typeOfDeal'], advert['type']),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              advertDetails(appLanguage['phoneNumber'],
-                                  advert['phone'].toString()),
-                              advertDetails(appLanguage['date'], '11/30/2019'),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              advertDetails(appLanguage['email'],
-                                  advert['email'].toString()),
-                            ],
-                          ),
-                          horizontalDividerIndented(),
-                          Container(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(advert['text'].toString()),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              right: 0,
-              left: 0,
-              child: advertOwnersDetails(
-                advert['owner'],
-                advert['phone'],
-              ),
-            ),
-          ],
-        );
-      },
-    );
+                  ),
+                  Positioned(
+                    bottom: 0.0,
+                    right: 0,
+                    left: 0,
+                    child: advertOwnersDetails(
+                      advert['owner'],
+                      advert['phone'],
+                      appLanguage,
+                      fontSize,
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
+        : wait(appLanguage['wait'], context);
   }
 
   Widget advertDetails(forText, text) {
@@ -256,9 +321,9 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertOwnersDetails(owner, phoneNumber) {
+  Widget advertOwnersDetails(owner, phoneNumber, appLanguage, fontSize) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
@@ -266,34 +331,84 @@ class _AdvertDetailsState extends State<AdvertDetails>
             width: 0.5,
           ),
         ),
-        color: Colors.white,
+        color: Colors.grey[100],
       ),
-      height: MediaQuery.of(context).size.height * 0.08,
+      height: MediaQuery.of(context).size.height * 0.091,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            'User info and user',
-            style: TextStyle(color: Colors.black),
-          ),
-          Material(
-            child: Container(
-              child: IconButton(
-                icon: Icon(FontAwesomeIcons.comments),
-                onPressed: () {},
+          Row(
+            children: <Widget>[
+              userAvatarHolder(url: owner['photo']),
+              Text(
+                owner['name'],
+                style: TextStyle(color: Colors.black),
               ),
-            ),
+            ],
           ),
-          Material(
-            child: Container(
-              child: IconButton(
-                icon: Icon(FontAwesomeIcons.phone),
-                onPressed: () {},
+          Row(
+            children: <Widget>[
+              customButton(
+                appLanguage: appLanguage,
+                context: context,
+                forText: 'text',
+                onClick: () {},
+                width: 59.0,
+                height: 25.0,
+                fontSize: fontSize,
               ),
-            ),
-          ),
+              customButton(
+                appLanguage: appLanguage,
+                context: context,
+                forText: 'call',
+                onClick: () {
+                  if (phoneNumber != null) {
+                    callPhoneNumber(phoneNumber);
+                  } else
+                    showErrorDialog(
+                      appLanguage['noPhoneNumberProvide'],
+                      context,
+                      appLanguage['alertDialogTitle'],
+                      appLanguage['ok'],
+                    );
+                },
+                width: 59.0,
+                height: 25.0,
+                fontSize: fontSize,
+              ),
+            ],
+          )
         ],
       ),
+    );
+  }
+
+  Widget advertActionButton(
+    icon,
+    iconColor,
+    onDelete,
+    onFavorite,
+    context,
+    actionType,
+    userId,
+    message,
+  ) {
+    return RawMaterialButton(
+      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 36.0),
+      onPressed: () {
+        if (actionType == 'delete') {
+          onDelete(context, message);
+        } else
+          onFavorite(userId, message);
+      },
+      child: Icon(
+        icon,
+        color: iconColor,
+        size: 18.0,
+      ),
+      shape: const CircleBorder(),
+      elevation: 2.0,
+      fillColor: Colors.white,
     );
   }
 }
