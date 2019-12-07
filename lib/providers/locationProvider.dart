@@ -1,62 +1,69 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:geolocator/geolocator.dart';
 import 'dart:convert';
 
 class LocationProvider with ChangeNotifier {
-  String _location;
-  String _province;
+  String _userLocality;
+  String _userProvince;
 
-  get getLocation {
-    return _location;
+  get getUserLocality {
+    return _userLocality;
   }
 
   get getUserProvince {
-    return _province;
+    return _userProvince;
   }
 
   Future<void> setLocation() async {
     final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey('userLocation')) {
+    if (!prefs.containsKey('userProvince')) {
       return;
     }
-    final extractedUserData =
-        json.decode(prefs.getString('userLocation')) as Map<String, Object>;
-    _location = extractedUserData['location'];
+
+    if (!prefs.containsKey('userLocality')) {
+      return;
+    }
+
+    final extractedUserProvinceData = await json
+        .decode(prefs.getString('userProvince')) as Map<String, Object>;
+    final extractedUserLocalityData = await json
+        .decode(prefs.getString('userLocality')) as Map<String, Object>;
+    _userProvince = extractedUserProvinceData['province'];
+    _userLocality = extractedUserLocalityData['locality'];
+    print(_userProvince);
+    print(_userLocality);
     notifyListeners();
   }
 
-  Future<void> changeLocation(location) async {
+  Future<void> changeUserProvince(province) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final userLocation = json.encode(
+      final userProvince = json.encode(
         {
-          'location': location,
+          'province': province,
         },
       );
-      prefs.setString('userLocation', userLocation);
-      _location = location;
+      await prefs.setString('userProvince', userProvince);
+      _userProvince = province;
       notifyListeners();
     } catch (error) {
       print(error.toString());
     }
   }
 
-  Future<String> getProvince() async {
-    var province;
-    if (_province == null) {
-      Position position = await Geolocator()
-          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
-      List<Placemark> placemark = await Geolocator()
-          .placemarkFromCoordinates(position.latitude, position.longitude);
-      province = placemark[0].locality.toString().toLowerCase();
-      if (province == 'sacramento') {
-        province = 'kabul';
-      }
-      _province = province;
+  Future<void> changeUserLocality(locality) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final userLocality = json.encode(
+        {
+          'locality': locality,
+        },
+      );
+      await prefs.setString('userLocality', userLocality);
+      _userLocality = locality;
       notifyListeners();
-      return province;
-    } else
-      return _province;
+    } catch (error) {
+      print(error.toString());
+    }
   }
 }

@@ -16,6 +16,8 @@ Map pashto = {
 
   'advertDeleted': 'ستاسې اعلان پاک شو.',
   'advertSaved': 'اعلان (نشاني شوې) برخه کې ثبت شو.',
+  'province': 'ولایت:',
+  'locality': 'حوزه، ولسوالي او یا ګذر:',
 
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځئ',

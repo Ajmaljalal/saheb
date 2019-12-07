@@ -131,8 +131,8 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
         Provider.of<AuthProvider>(context, listen: false).userId;
-    final userLocation =
-        Provider.of<LocationProvider>(context, listen: false).getLocation;
+    final userLocality =
+        Provider.of<LocationProvider>(context, listen: false).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOnePost(
       type: widget.type,
       text: _text,
@@ -141,7 +141,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       owner: {
         'name': user.displayName,
         'id': currentUserId,
-        'location': userLocation,
+        'location': userLocality,
         'photo': user.photoUrl,
       },
       images: _uploadedFileUrl,

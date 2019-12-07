@@ -38,7 +38,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
 //    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
-    final userLocation = Provider.of<LocationProvider>(context).getLocation;
+    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -49,7 +49,7 @@ class _SettingsState extends State<Settings> {
           children: <Widget>[
             _userProfile(
               getUserProfile,
-              userLocation,
+              userLocality,
             ),
             Container(
               margin: EdgeInsets.only(top: 30.0),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/locations/locations_sublocations.dart';
+import 'package:saheb/locations/provincesList.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import 'package:saheb/widgets/locationPicker.dart';
 import '../providers/locationProvider.dart';
@@ -22,7 +23,8 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   static int _currentScreenIndex = 0;
   static String _searchBarString;
-  static String _userProvince;
+  static String _currentProvince;
+  static String _currentLocality;
 
   handleSearchBarStringChange(value) {
     setState(() {
@@ -30,8 +32,18 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  onChangeLocation(value) async {
-    await Provider.of<LocationProvider>(context).changeLocation(value);
+  onChangeUserProvince(value) {
+    Provider.of<LocationProvider>(context).changeUserProvince(value);
+    setState(() {
+      _currentProvince = value;
+    });
+  }
+
+  onChangeUserLocality(value) {
+    Provider.of<LocationProvider>(context).changeUserLocality(value);
+    setState(() {
+      _currentLocality = value;
+    });
   }
 
   String _getAppBarTitle(context) {
@@ -51,40 +63,28 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  didChangeDependencies() {
-    Provider.of<LocationProvider>(context).getProvince().then((province) {
-      if (this.mounted) {
-        setState(() {
-          _userProvince = province;
-        });
-      }
-    });
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
         _currentScreenIndex == 1 ||
         _currentScreenIndex == 2;
     final appLanguage = getLanguages(context);
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    final userLocation = Provider.of<LocationProvider>(context).getLocation;
+    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
+    final userProvince = Provider.of<LocationProvider>(context).getUserProvince;
     final double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
-    if (userLocation == null) {}
     final List<Widget> screens = [
       Posts(
         searchBarString: _searchBarString,
-        usersProvince: _userProvince,
+        usersProvince: userProvince,
       ),
       Market(
         searchBarString: _searchBarString,
-        usersProvince: _userProvince,
+        usersProvince: userProvince,
       ),
       Services(),
       Settings(),
     ];
-    return userLocation != null
+    return userLocality != null && userProvince != null
         ? Scaffold(
             backgroundColor: Colors.grey[200],
             appBar: PreferredSize(
@@ -137,7 +137,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           )
-        : locationPicker();
+        : locationPicker(provincesList);
   }
 
   BottomNavyBarItem bottomNavBarItem({
@@ -285,47 +285,67 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  Widget locationPicker() {
+  Widget locationPicker(provinces) {
     final appLanguage = getLanguages(context);
     return Scaffold(
       body: SafeArea(
-        child: _userProvince != null
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Center(
-                    child: Text(
-                      appLanguage['chooseYourLocation'],
-                      style: TextStyle(
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-                  FutureBuilder(
-                    future:
-                        Provider.of<LocationProvider>(context).setLocation(),
-                    builder: (ctx, languageResultSnapshot) =>
-                        languageResultSnapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? Center(
-                                child: progressIndicator(),
-                              )
-                            : Container(
-                                child: DropDownPicker(
-                                  onChange: onChangeLocation,
-                                  value: appLanguage['location'],
-                                  items: locations[_userProvince],
-                                  hintText: appLanguage['location'],
-                                  label: appLanguage['location'],
-                                  search: true,
-                                ),
-                              ),
-                  ),
-                ],
-              )
-            : Center(
-                child: progressIndicator(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              Icons.add_location,
+              size: 50.0,
+              color: Colors.cyan,
+            ),
+            Center(
+              child: Text(
+                appLanguage['chooseYourLocation'],
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
               ),
+            ),
+            FutureBuilder(
+              future: Provider.of<LocationProvider>(context).setLocation(),
+              builder: (ctx, locationResultSnapshot) =>
+                  locationResultSnapshot.connectionState ==
+                          ConnectionState.waiting
+                      ? Center(
+                          child: progressIndicator(),
+                        )
+                      : Column(
+                          children: <Widget>[
+                            Container(
+                              child: DropDownPicker(
+                                onChange: onChangeUserProvince,
+                                value: _currentProvince != null
+                                    ? _currentProvince
+                                    : appLanguage['province'],
+                                items: provinces,
+                                hintText: appLanguage['search'],
+                                label: appLanguage['province'],
+                                search: true,
+                              ),
+                            ),
+                            _currentProvince != null
+                                ? Container(
+                                    child: DropDownPicker(
+                                      onChange: onChangeUserLocality,
+                                      value: _currentLocality != null
+                                          ? _currentLocality
+                                          : appLanguage['locality'],
+                                      items: locations[_currentProvince],
+                                      hintText: appLanguage['search'],
+                                      label: appLanguage['locality'],
+                                      search: true,
+                                    ),
+                                  )
+                                : emptyBox(),
+                          ],
+                        ),
+            ),
+          ],
+        ),
       ),
     );
   }
