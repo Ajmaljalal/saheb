@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/languages/provinces.dart';
+import 'package:saheb/languages/provincesTranslator.dart';
 import 'package:saheb/providers/authProvider.dart';
 import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/util/filterList.dart';
@@ -35,17 +35,17 @@ class _MarketState extends State<Market> {
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final userLocation = Provider.of<LocationProvider>(context).getLocation;
+    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
     if (currentFilterOption == null) {
       setState(() {
-        currentFilterOption = userLocation;
+        currentFilterOption = userLocality;
       });
     }
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
-          filterOptions(appLanguage, userLocation),
+          filterOptions(appLanguage, userLocality),
           StreamBuilder(
             stream: Provider.of<PostsProvider>(context).getAllPosts('adverts'),
             builder: (context, snapshot) {
@@ -124,7 +124,7 @@ class _MarketState extends State<Market> {
               handleFilterOptionsChange: handleFilterOptionsChange,
             ),
             topScreenFilterOption(
-              text: provinces[widget.usersProvince],
+              text: provincesTranslator[widget.usersProvince],
               id: 2,
               currentOptionId: currentOptionId,
               handleFilterOptionsChange: handleFilterOptionsChange,

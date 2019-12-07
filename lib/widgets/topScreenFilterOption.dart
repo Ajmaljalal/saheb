@@ -26,7 +26,7 @@ Widget topScreenFilterOption({
       ),
       child: Center(
         child: Text(
-          text,
+          text.toString(),
           style: TextStyle(
             color: id == currentOptionId ? Colors.white : Colors.cyan,
             fontSize: 14.0,

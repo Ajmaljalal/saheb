@@ -17,6 +17,8 @@ Map english = {
   'postHide': 'Post is now hidden for you.',
   'advertDeleted': 'Advert deleted.',
   'advertSaved': 'Advert saved to favorites.',
+  'province': 'Province:',
+  'locality': 'District or local area:',
 
   ////////////////// Login and sign up //////////////////////
   'login': 'Login',

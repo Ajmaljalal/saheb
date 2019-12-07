@@ -7,7 +7,7 @@ import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/widgets/noContent.dart';
 import 'package:saheb/widgets/wait.dart';
 import '../../widgets/topScreenFilterOption.dart';
-import 'package:saheb/languages/provinces.dart';
+import 'package:saheb/languages/provincesTranslator.dart';
 import '../../providers/postsProvider.dart';
 import '../../util/filterList.dart';
 import '../../languages/index.dart';
@@ -36,13 +36,13 @@ class _PostsState extends State<Posts> {
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final userLocation = Provider.of<LocationProvider>(context).getLocation;
+    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
     if (currentFilterOption == null) {
       setState(() {
-        currentFilterOption = userLocation;
+        currentFilterOption = userLocality;
       });
     }
-    return screenContent(appLanguage, currentUserId, userLocation);
+    return screenContent(appLanguage, currentUserId, userLocality);
   }
 
   Widget screenContent(appLanguage, currentUserId, userLocation) {
@@ -118,7 +118,7 @@ class _PostsState extends State<Posts> {
               handleFilterOptionsChange: handleFilterOptionsChange,
             ),
             topScreenFilterOption(
-              text: provinces[widget.usersProvince],
+              text: provincesTranslator[widget.usersProvince],
               id: 2,
               currentOptionId: currentOptionId,
               handleFilterOptionsChange: handleFilterOptionsChange,
