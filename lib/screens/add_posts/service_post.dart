@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/util/mapPostTypes.dart';
 import 'package:saheb/widgets/errorDialog.dart';
 import '../../widgets/verticalDivider.dart';
 import '../../providers/authProvider.dart';
@@ -18,32 +19,33 @@ import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
 
-class AdvertPost extends StatefulWidget {
+class ServicePost extends StatefulWidget {
   @override
-  _AdvertPostState createState() => _AdvertPostState();
+  _ServicePostState createState() => _ServicePostState();
 }
 
-class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
+class _ServicePostState extends State<ServicePost> with AddPostMixin {
   String dropdownValue;
   String locationDropDownValue;
-  String _text;
+  String _desc;
   String _title;
-  String _price;
+  String _fullAddress;
   String _phone;
   String _email;
   List<File> _images = [];
   List<String> _uploadedFileUrl = [];
 
   FocusNode titleFieldFocusNode = FocusNode();
-  FocusNode textFieldFocusNode = FocusNode();
-  FocusNode priceFieldFocusNode = FocusNode();
+  FocusNode descFieldFocusNode = FocusNode();
+  FocusNode fullAddressFieldFocusNode = FocusNode();
   FocusNode phoneFieldFocusNode = FocusNode();
   FocusNode emailFieldFocusNode = FocusNode();
 
-  onDropDownChange(value) {
+  onDropDownChange(value, appLanguage) {
     setState(() {
-      dropdownValue = value;
+      dropdownValue = mapPostType(value.toLowerCase(), appLanguage);
     });
+    print(dropdownValue);
   }
 
   onLocationChange(value) {
@@ -52,8 +54,8 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     });
   }
 
-  onTextInputChange(value) {
-    _text = value;
+  onDescInputChange(value) {
+    _desc = value;
   }
 
   onTitleInputChange(value) {
@@ -68,8 +70,8 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     _phone = value;
   }
 
-  onPriceInputChange(value) {
-    _price = value;
+  onFullAddressInputChange(value) {
+    _fullAddress = value;
   }
 
   Future chooseFile(source) async {
@@ -112,7 +114,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   onSend() async {
     final appLanguage = getLanguages(context);
-    if (_text == null || _title == null || locationDropDownValue == null) {
+    if (_desc == null || _title == null || locationDropDownValue == null) {
       showErrorDialog(appLanguage['fillOutRequiredSections'], context,
           appLanguage['emptyForm'], appLanguage['ok']);
       return;
@@ -133,13 +135,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     final currentUserId =
         Provider.of<AuthProvider>(context, listen: false).userId;
     final userLocation = Provider.of<LocationProvider>(context).getUserLocality;
-    await Provider.of<PostsProvider>(context, listen: false).addOneAdvert(
+    await Provider.of<PostsProvider>(context, listen: false).addOneService(
       type: dropdownValue,
-      text: _text,
+      desc: _desc,
       title: _title,
       phone: _phone,
       email: _email,
-      price: _price.toString(),
+      fullAddress: _fullAddress,
       location: locationDropDownValue,
       owner: {
         'name': user.displayName,
@@ -161,10 +163,22 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     final userProvince = Provider.of<LocationProvider>(context).getUserProvince;
     double fontSize = currentLanguage == 'English' ? 13.0 : 15.0;
 
-    final List<String> dropDownItems = [
-      appLanguage['sell'].toString(),
-      appLanguage['buy'].toString(),
-      appLanguage['rent'].toString(),
+    final List<String> serviceTypDropDownItems = [
+      appLanguage['health'].toString(),
+      appLanguage['education'].toString(),
+      appLanguage['painting'].toString(),
+      appLanguage['construction'].toString(),
+      appLanguage['carpenter'].toString(),
+      appLanguage['electrician'].toString(),
+      appLanguage['mechanic'].toString(),
+      appLanguage['cleaning'].toString(),
+      appLanguage['plumber'].toString(),
+      appLanguage['laundry'].toString(),
+      appLanguage['computer'].toString(),
+      appLanguage['transportation'].toString(),
+      appLanguage['legal'].toString(),
+      appLanguage['decoration'].toString(),
+      appLanguage['cosmetics'].toString(),
     ];
     return Scaffold(
       appBar: PreferredSize(
@@ -174,7 +188,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('${appLanguage['advert'].toString()}'),
+                Text('${appLanguage['services'].toString()}'),
                 customButton(
                   appLanguage: appLanguage,
                   context: context,
@@ -207,10 +221,12 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                       Column(
                         children: <Widget>[
                           DropDownPicker(
-                            onChange: onDropDownChange,
-                            value: appLanguage['typeOfDeal'],
-                            items: dropDownItems,
-                            label: appLanguage['typeOfDeal'],
+                            onChange: (value) {
+                              onDropDownChange(value, appLanguage);
+                            },
+                            value: appLanguage['typeOfService'],
+                            items: serviceTypDropDownItems,
+                            label: appLanguage['typeOfService'],
                             search: false,
                           ),
                           DropDownPicker(
@@ -224,31 +240,30 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                         ],
                       ),
                       postTitle(
-                        type: 'advert',
+                        type: 'service',
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
                         fontSize: fontSize,
                         focusNode: titleFieldFocusNode,
                       ),
                       textArea(
-                        type: 'advert',
+                        type: 'service',
                         appLanguage: appLanguage,
-                        onChange: onTextInputChange,
+                        onChange: onDescInputChange,
                         fontSize: fontSize,
-                        focusNode: textFieldFocusNode,
+                        focusNode: descFieldFocusNode,
                       ),
-                      Row(
+                      Column(
                         children: <Widget>[
-                          Expanded(
-                            child: priceArea(
+                          Container(
+                            child: fullAddressArea(
                               appLanguage: appLanguage,
-                              onChange: onPriceInputChange,
+                              onChange: onFullAddressInputChange,
                               fontSize: fontSize,
-                              focusNode: priceFieldFocusNode,
+                              focusNode: fullAddressFieldFocusNode,
                             ),
                           ),
-                          CustomVerticalDivider(),
-                          Expanded(
+                          Container(
                             child: phoneNumberArea(
                               appLanguage: appLanguage,
                               onChange: onPhoneInputChange,

@@ -62,6 +62,19 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void _openAddPostScreens() {
+    if (_currentScreenIndex == 0) {
+      Navigator.pushNamed(context, '/addPost');
+    }
+    if (_currentScreenIndex == 1) {
+      Navigator.pushNamed(context, '/addAdvertPost');
+    }
+
+    if (_currentScreenIndex == 2) {
+      Navigator.pushNamed(context, '/addServicePost');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
@@ -99,6 +112,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
             body: screens[_currentScreenIndex],
+            floatingActionButton:
+                _currentScreenIndex != 3 ? actionButton() : emptyBox(),
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -138,6 +153,19 @@ class _MainScreenState extends State<MainScreen> {
             ),
           )
         : locationPicker(provincesList);
+  }
+
+  FloatingActionButton actionButton() {
+    return FloatingActionButton(
+      child: Icon(
+        Icons.add,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        _openAddPostScreens();
+      },
+      mini: true,
+    );
   }
 
   BottomNavyBarItem bottomNavBarItem({
@@ -213,7 +241,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       onTap: () {
                         setState(() {
-                          Navigator.pushNamed(context, '/addPost');
+                          _openAddPostScreens();
                         });
                       },
                     ),
@@ -250,7 +278,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       onTap: () {
                         setState(() {
-                          Navigator.pushNamed(context, '/addPost');
+                          _openAddPostScreens();
                         });
                       },
                     ),
@@ -293,7 +321,7 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Icon(
-              Icons.add_location,
+              Icons.location_on,
               size: 50.0,
               color: Colors.cyan,
             ),
@@ -304,6 +332,9 @@ class _MainScreenState extends State<MainScreen> {
                   fontSize: 20.0,
                 ),
               ),
+            ),
+            SizedBox(
+              height: 15.0,
             ),
             FutureBuilder(
               future: Provider.of<LocationProvider>(context).setLocation(),

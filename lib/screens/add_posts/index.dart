@@ -29,8 +29,11 @@ class _AddPostState extends State<AddPost> {
     double fontSize = currentLanguage == 'English' ? 13.0 : 15.0;
     return Scaffold(
       backgroundColor: Colors.grey,
-      appBar: AppBar(
-        title: Text(appLanguage['addNewPost'].toString()),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+          title: Text(appLanguage['addNewPost'].toString()),
+        ),
       ),
       body: Container(
         height: MediaQuery.of(context).size.height * 0.8,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -19,33 +20,34 @@ import '../../languages/index.dart';
 import 'package:saheb/widgets/fullScreenImage.dart';
 import '../../widgets/showInfoFushbar.dart';
 
-class AdvertDetails extends StatefulWidget {
-  final advertTitle;
-  final advertId;
-  AdvertDetails({Key key, this.advertId, this.advertTitle}) : super(key: key);
+class ServiceDetails extends StatefulWidget {
+  final serviceTitle;
+  final serviceId;
+  ServiceDetails({Key key, this.serviceId, this.serviceTitle})
+      : super(key: key);
   @override
-  _AdvertDetailsState createState() => _AdvertDetailsState();
+  _ServiceDetailsState createState() => _ServiceDetailsState();
 }
 
-class _AdvertDetailsState extends State<AdvertDetails>
+class _ServiceDetailsState extends State<ServiceDetails>
     with PostMixin, AdvertMixin {
-  bool advertDeleted = false;
+  bool serviceDeleted = false;
 
   deletePost(context, message) async {
     setState(() {
-      advertDeleted = true;
+      serviceDeleted = true;
     });
     Navigator.pop(context);
     renderFlashBar(message);
     await Provider.of<PostsProvider>(context).deleteOnePost(
-      widget.advertId,
-      'adverts',
+      widget.serviceId,
+      'services',
     );
   }
 
   favoriteAPost(userId, message) async {
     await Provider.of<PostsProvider>(context)
-        .favoriteAPost(widget.advertId, 'adverts', userId);
+        .favoriteAPost(widget.serviceId, 'services', userId);
     renderFlashBar(message);
   }
 
@@ -71,19 +73,19 @@ class _AdvertDetailsState extends State<AdvertDetails>
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
-    final String advertTitle = widget.advertTitle.toString();
-    final String advertId = widget.advertId;
+    final String serviceTitle = widget.serviceTitle.toString();
+    final String serviceId = widget.serviceId;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = currentLanguage == 'English' ? 12.5 : 17.0;
+    double fontSize = currentLanguage == 'English' ? 12.5 : 15.0;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(),
       ),
-      body: renderAdvertContent(
-        advertId: advertId,
-        advertTitle: advertTitle,
+      body: renderServiceContent(
+        serviceId: serviceId,
+        serviceTitle: serviceTitle,
         appLanguage: appLanguage,
         userId: currentUserId,
         fontSize: fontSize,
@@ -91,17 +93,17 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget renderAdvertContent({
-    advertId,
-    advertTitle,
+  Widget renderServiceContent({
+    serviceId,
+    serviceTitle,
     appLanguage,
     userId,
     fontSize,
   }) {
-    return advertDeleted == false
+    return serviceDeleted == false
         ? StreamBuilder(
             stream: Provider.of<PostsProvider>(context)
-                .getOnePost('adverts', advertId),
+                .getOnePost('services', serviceId),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return wait(appLanguage['wait'], context);
@@ -109,14 +111,14 @@ class _AdvertDetailsState extends State<AdvertDetails>
               if (snapshot.hasError) {
                 return noContent(appLanguage['noContent'], context);
               }
-              final advert = snapshot.data;
+              final service = snapshot.data;
               final bool isOwner =
-                  advert['owner']['id'] == userId ? true : false;
+                  service['owner']['id'] == userId ? true : false;
 
-              final shamsiDate = advert != null
-                  ? Jalali.fromDateTime(advert['date'].toDate())
+              final shamsiDate = service != null
+                  ? Jalali.fromDateTime(service['date'].toDate())
                   : null;
-              final advertDate =
+              final serviceDate =
                   '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
               return Stack(
                 children: <Widget>[
@@ -134,8 +136,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
                               children: <Widget>[
                                 Stack(
                                   children: <Widget>[
-                                    advertImagesHolder(advert['images']),
-                                    advertActionButtonsHolder(
+                                    serviceImagesHolder(service['images']),
+                                    serviceActionButtonsHolder(
                                       isOwner: isOwner,
                                       userId: userId,
                                       appLanguage: appLanguage,
@@ -143,24 +145,28 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                   ],
                                 ),
                                 const SizedBox(height: 5.0),
-                                advertTitleAndPriceHolder(
-                                  title: advert['title'],
-                                  price: advert['price'],
+                                serviceTitleAndStatusHolder(
+                                  title: service['title'],
+                                  open: service['open'],
+                                  isOwner: isOwner,
                                   fontSize: fontSize,
-                                  noPrice: appLanguage['noPrice'],
+                                  openText: appLanguage['open'],
+                                  closeText: appLanguage['close'],
+                                  appLanguage: appLanguage,
+                                  userId: userId,
                                 ),
                                 horizontalDividerIndented(),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    advertDetails(
-                                      appLanguage['locationHolder'],
-                                      advert['location'],
+                                    serviceDetails(
+                                      Icons.location_on,
+                                      service['location'],
                                     ),
-                                    advertDetails(
-                                      appLanguage['typeOfDeal'],
-                                      advert['type'],
+                                    serviceDetails(
+                                      Icons.phone_iphone,
+                                      service['phone'].toString(),
                                     ),
                                   ],
                                 ),
@@ -168,22 +174,20 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    advertDetails(
-                                      appLanguage['phoneNumber'],
-                                      advert['phone'].toString(),
+                                    serviceDetails(
+                                      Icons.email,
+                                      service['email'].toString(),
                                     ),
-                                    advertDetails(
-                                        appLanguage['date'], advertDate),
                                   ],
                                 ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    advertDetails(
-                                      appLanguage['email'],
-                                      advert['email'].toString(),
-                                    ),
+                                    serviceDetails(
+                                      Icons.my_location,
+                                      service['fullAddress'].toString(),
+                                    )
                                   ],
                                 ),
                                 horizontalDividerIndented(),
@@ -192,7 +196,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                     horizontal: 10.0,
                                   ),
                                   child: Text(
-                                    advert['text'].toString(),
+                                    service['desc'].toString(),
                                     style: TextStyle(fontSize: fontSize),
                                   ),
                                 ),
@@ -207,9 +211,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
                     bottom: 0.0,
                     right: 0,
                     left: 0,
-                    child: advertOwnersDetails(
-                      advert['owner'],
-                      advert['phone'],
+                    child: serviceContactDetails(
+                      service['phone'],
                       appLanguage,
                       fontSize,
                     ),
@@ -221,7 +224,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
         : wait(appLanguage['wait'], context);
   }
 
-  Widget advertImagesHolder(images) {
+  Widget serviceImagesHolder(images) {
     return GestureDetector(
       onTap: () {
         if (images.length > 0) {
@@ -253,11 +256,15 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertTitleAndPriceHolder({
+  Widget serviceTitleAndStatusHolder({
     title,
-    price,
+    isOwner,
+    open,
     fontSize,
-    noPrice,
+    openText,
+    closeText,
+    appLanguage,
+    userId,
   }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -266,22 +273,70 @@ class _AdvertDetailsState extends State<AdvertDetails>
         Expanded(
           child: postTittleHolder(title.toString(), fontSize, context),
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: Text(
-            price.toString() != 'null' ? price : noPrice,
-            style: TextStyle(
-              color: Colors.cyan,
-              fontSize: price.toString() != 'null' ? 20.0 : 15.0,
-            ),
-          ),
+        openCloseOptions(
+          openCloseText: open ? openText : closeText,
+          isOpen: open,
+          isOwner: isOwner,
+          openText: open ? openText : closeText,
+          userId: userId,
         ),
       ],
     );
   }
 
-  Widget advertDetails(
-    forText,
+  Widget openCloseOptions({openCloseText, isOpen, isOwner, openText, userId}) {
+    if (isOwner) {
+      return Container(
+          height: 25.0,
+          width: 100.0,
+          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Switch(
+                onChanged: (value) async {
+                  await Provider.of<PostsProvider>(context)
+                      .toggleServiceOpenClose(
+                    serviceId: widget.serviceId,
+                    userId: userId,
+                    openClose: value,
+                  );
+                },
+                value: isOpen,
+                activeTrackColor: Colors.lightGreenAccent,
+                activeColor: Colors.green,
+              ),
+              Text(openText)
+            ],
+          ));
+    } else {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 10.0),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 15.0,
+          vertical: 5.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(35.0),
+          border: Border.all(color: Colors.purple),
+        ),
+        child: Center(
+          child: Text(
+            openCloseText,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15.0,
+              height: 0.9,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget serviceDetails(
+    icon,
     text,
   ) {
     return Container(
@@ -293,9 +348,13 @@ class _AdvertDetailsState extends State<AdvertDetails>
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text(
-                '$forText:  ',
-                style: TextStyle(fontWeight: FontWeight.bold),
+              Icon(
+                icon,
+                size: 15.0,
+                color: Colors.purple,
+              ),
+              SizedBox(
+                width: 5.0,
               ),
               text.toString() != 'null' ? Text(text) : Text('---'),
             ],
@@ -305,9 +364,13 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertOwnersDetails(owner, phoneNumber, appLanguage, fontSize) {
+  Widget serviceContactDetails(
+    phoneNumber,
+    appLanguage,
+    fontSize,
+  ) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
+      padding: EdgeInsets.symmetric(horizontal: 70.0),
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
@@ -318,56 +381,45 @@ class _AdvertDetailsState extends State<AdvertDetails>
         color: Colors.grey[100],
       ),
       height: MediaQuery.of(context).size.height * 0.091,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              userAvatarHolder(url: owner['photo']),
-              Text(
-                owner['name'],
-                style: TextStyle(color: Colors.black),
-              ),
-            ],
-          ),
-          Row(
-            children: <Widget>[
-              customButton(
-                appLanguage: appLanguage,
-                context: context,
-                forText: 'text',
-                onClick: () {},
-                width: 59.0,
-                height: 25.0,
-                fontSize: fontSize,
-              ),
-              customButton(
-                appLanguage: appLanguage,
-                context: context,
-                forText: 'call',
-                onClick: () {
-                  if (phoneNumber != null) {
-                    callPhoneNumber(phoneNumber);
-                  } else
-                    showErrorDialog(
-                      appLanguage['noPhoneNumberProvide'],
-                      context,
-                      appLanguage['alertDialogTitle'],
-                      appLanguage['ok'],
-                    );
-                },
-                width: 59.0,
-                height: 25.0,
-                fontSize: fontSize,
-              ),
-            ],
-          )
-        ],
+      child: Container(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            customButton(
+              appLanguage: appLanguage,
+              context: context,
+              forText: 'text',
+              onClick: () {},
+              width: 59.0,
+              height: 30.0,
+              fontSize: fontSize,
+            ),
+            customButton(
+              appLanguage: appLanguage,
+              context: context,
+              forText: 'call',
+              onClick: () {
+                if (phoneNumber != 'null') {
+                  callPhoneNumber(phoneNumber);
+                } else
+                  showErrorDialog(
+                    appLanguage['noPhoneNumberProvide'],
+                    context,
+                    appLanguage['alertDialogTitle'],
+                    appLanguage['ok'],
+                  );
+              },
+              width: 59.0,
+              height: 30.0,
+              fontSize: fontSize,
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget advertActionButtonsHolder({
+  Widget serviceActionButtonsHolder({
     isOwner,
     userId,
     appLanguage,
@@ -380,7 +432,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           !isOwner
-              ? advertActionButton(
+              ? serviceActionButton(
                   FontAwesomeIcons.heart,
                   Colors.cyan,
                   null,
@@ -388,11 +440,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   context,
                   'favorite',
                   userId,
-                  appLanguage['advertSaved'],
+                  appLanguage['serviceSaved'],
                 )
               : emptyBox(),
           isOwner
-              ? advertActionButton(
+              ? serviceActionButton(
                   FontAwesomeIcons.trash,
                   Colors.red,
                   deletePost,
@@ -400,7 +452,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   context,
                   'delete',
                   userId,
-                  appLanguage['advertDeleted'],
+                  appLanguage['serviceDeleted'],
                 )
               : emptyBox(),
         ],
@@ -408,7 +460,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertActionButton(
+  Widget serviceActionButton(
     icon,
     iconColor,
     onDelete,

@@ -15,9 +15,16 @@ class AddPostMixin {
     initialValue,
     focusNode,
   }) {
-    final label = type == appLanguage['advert']
-        ? appLanguage['advertPostTitle']
-        : appLanguage['postTitle'];
+    String label;
+    if (type == 'advert') {
+      label = appLanguage['advertPostTitle'];
+    }
+    if (type == 'service') {
+      label = appLanguage['serviceTitle'];
+    }
+    if (type == 'post') {
+      label = appLanguage['postTitle'];
+    }
     return TextFormField(
       initialValue: initialValue,
       onChanged: onChange,
@@ -46,9 +53,16 @@ class AddPostMixin {
     initialValue,
     focusNode,
   }) {
-    final label = type == appLanguage['advert']
-        ? appLanguage['advertPostDiscription']
-        : appLanguage['postDiscription'];
+    String label;
+    if (type == 'advert') {
+      label = appLanguage['advertPostDiscription'];
+    }
+    if (type == 'service') {
+      label = appLanguage['serviceDesc'];
+    }
+    if (type == 'post') {
+      label = appLanguage['postDiscription'];
+    }
     return TextFormField(
       initialValue: initialValue,
       onChanged: onChange,
@@ -87,6 +101,34 @@ class AddPostMixin {
         ),
         decoration: InputDecoration(
           labelText: appLanguage['phone'],
+          labelStyle: TextStyle(
+            fontSize: fontSize,
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: 10.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget fullAddressArea({
+    appLanguage,
+    onChange,
+    fontSize,
+    focusNode,
+  }) {
+    return Container(
+      child: TextField(
+        onChanged: onChange,
+        focusNode: focusNode,
+        style: TextStyle(
+          height: 0.95,
+          fontSize: fontSize,
+        ),
+        decoration: InputDecoration(
+          labelText: appLanguage['fullAddress'],
           labelStyle: TextStyle(
             fontSize: fontSize,
           ),

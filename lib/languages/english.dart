@@ -17,8 +17,13 @@ Map english = {
   'postHide': 'Post is now hidden for you.',
   'advertDeleted': 'Advert deleted.',
   'advertSaved': 'Advert saved to favorites.',
+  'serviceSaved': 'Service saved to favorites',
+  'serviceDeleted': 'Service deleted',
   'province': 'Province:',
   'locality': 'District or local area:',
+
+  'open': 'Open',
+  'close': 'Close',
 
   ////////////////// Login and sign up //////////////////////
   'login': 'Login',
@@ -145,6 +150,14 @@ Map english = {
   'myAdverts': 'My adverts',
 
   /////////// Services /////////////////
+
+  'typeOfService': 'Type of service',
+  'serviceTitle': 'Title(required): like dentist, carpenter...',
+  'serviceDesc': 'Description(required):',
+
+  'myServices': 'My services',
+  'fullAddress': 'Full address:',
+
   'health': 'Health',
   'education': 'Educational',
   'painting': 'Painting',
@@ -155,9 +168,9 @@ Map english = {
   'cleaning': 'Cleaning',
   'plumber': 'Plumber',
   'laundry': 'Laundry',
-  'computer': 'Computer/Mobile',
+  'computer': 'Computer and   Mobile',
   'transportation': 'Transportation',
-  'legal': 'Law/Legal',
+  'legal': 'Law and Legal',
   'decoration': 'Decoration',
-  'cosmetics': 'Barbarshops',
+  'cosmetics': 'Barbershops and Hair saloons',
 };

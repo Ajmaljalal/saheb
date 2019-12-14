@@ -20,12 +20,13 @@ class NoneAdvertPost extends StatefulWidget {
   final postId;
   final bool edit;
   final province;
-  NoneAdvertPost(
-      {@required this.type,
-      this.postId,
-      @required this.edit,
-      this.post,
-      this.province});
+  NoneAdvertPost({
+    @required this.type,
+    this.postId,
+    @required this.edit,
+    this.post,
+    this.province,
+  });
   @override
   State createState() => _NoneAdvertPostState();
 }
@@ -210,25 +211,28 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final appLanguage = getLanguages(context);
     final imagesMax = _images.length > 5 ? true : false;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context, true),
-        ),
-        title: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('$type'),
-              customButton(
-                appLanguage: appLanguage,
-                context: context,
-                onClick: onSend,
-                forText: edit ? 'save' : 'send',
-                width: MediaQuery.of(context).size.width * 0.2,
-                height: 28.0,
-              ),
-            ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context, true),
+          ),
+          title: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('$type'),
+                customButton(
+                  appLanguage: appLanguage,
+                  context: context,
+                  onClick: onSend,
+                  forText: edit ? 'save' : 'send',
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  height: 28.0,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -255,14 +259,14 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                         search: true,
                       ),
                       postTitle(
-                        type: appLanguage['general'],
+                        type: 'post',
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
                         initialValue: edit ? post['title'] : '',
                         focusNode: titleFieldFocusNode,
                       ),
                       textArea(
-                        type: appLanguage['general'],
+                        type: 'post',
                         appLanguage: appLanguage,
                         onChange: onTextInputChange,
                         initialValue: edit ? post['text'] : '',

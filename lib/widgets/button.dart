@@ -15,7 +15,7 @@ Widget customButton({
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Theme.of(context).accentColor,
+        color: Colors.purple,
         borderRadius: BorderRadius.circular(30),
       ),
       child: FlatButton(
@@ -29,6 +29,7 @@ Widget customButton({
             style: TextStyle(
               fontSize: fontSize,
               color: Colors.white,
+              height: 0.9,
             ),
           ),
         ),

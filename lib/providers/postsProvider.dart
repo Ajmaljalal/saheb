@@ -102,6 +102,41 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
+  addOneService({
+    owner,
+    desc,
+    title,
+    type,
+    email,
+    fullAddress,
+    phone,
+    images,
+    location,
+  }) {
+    try {
+      db.collection('services').add(
+        {
+          'date': DateTime.now(),
+          'owner': owner,
+          'desc': desc,
+          'open': true,
+          'title': title,
+          'note': null,
+          'hiddenFrom': [],
+          'favorites': [],
+          'phone': phone,
+          'email': email,
+          'fullAddress': fullAddress,
+          'type': type,
+          'images': images,
+          'location': location
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   deleteOnePost(postId, collection) async {
     try {
       await db.collection(collection).document(postId).delete();
@@ -259,6 +294,31 @@ class PostsProvider with ChangeNotifier {
               }
             ],
           )
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Stream<QuerySnapshot> getAllServices(type) {
+    final dataStream = db
+        .collection('services')
+        .where("type", isEqualTo: type)
+        .orderBy("date", descending: true)
+        .snapshots();
+    return dataStream;
+  }
+
+  toggleServiceOpenClose({
+    serviceId,
+    userId,
+    openClose,
+  }) {
+    try {
+      db.collection('services').document(serviceId).updateData(
+        {
+          'open': openClose,
         },
       );
     } catch (e) {
