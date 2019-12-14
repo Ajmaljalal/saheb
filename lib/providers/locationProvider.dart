@@ -30,8 +30,6 @@ class LocationProvider with ChangeNotifier {
         .decode(prefs.getString('userLocality')) as Map<String, Object>;
     _userProvince = extractedUserProvinceData['province'];
     _userLocality = extractedUserLocalityData['locality'];
-    print(_userProvince);
-    print(_userLocality);
     notifyListeners();
   }
 

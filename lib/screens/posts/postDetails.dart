@@ -105,48 +105,51 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(title: Text(postTitle)),
-        body: Stack(
-          children: <Widget>[
-            Container(),
-            SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.only(bottom: 65.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 1,
-                      decoration: BoxDecoration(),
-                      child: renderPostContentAndComments(
-                        postId: postId,
-                        postTitle: postTitle,
-                        appLanguage: appLanguage,
-                        userId: currentUserId,
-                        fontSize: fontSize,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 0.0,
-              right: 0,
-              left: 0,
-              child: addCommentTextField(
-                focusNode: commentFieldFocusNode,
-                appLanguage: appLanguage,
-                onChange: handleTextInputChange,
-                onSubmit: addComment,
-                userId: currentUserId,
-                onClearTextField: clearAddCommentTextField,
-                context: context,
-              ),
-            ),
-          ],
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+          title: Text(postTitle),
         ),
+      ),
+      body: Stack(
+        children: <Widget>[
+          Container(),
+          SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 65.0),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    decoration: BoxDecoration(),
+                    child: renderPostContentAndComments(
+                      postId: postId,
+                      postTitle: postTitle,
+                      appLanguage: appLanguage,
+                      userId: currentUserId,
+                      fontSize: fontSize,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0.0,
+            right: 0,
+            left: 0,
+            child: addCommentTextField(
+              focusNode: commentFieldFocusNode,
+              appLanguage: appLanguage,
+              onChange: handleTextInputChange,
+              onSubmit: addComment,
+              userId: currentUserId,
+              onClearTextField: clearAddCommentTextField,
+              context: context,
+            ),
+          ),
+        ],
       ),
     );
   }

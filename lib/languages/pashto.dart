@@ -16,8 +16,13 @@ Map pashto = {
 
   'advertDeleted': 'ستاسې اعلان پاک شو.',
   'advertSaved': 'اعلان (نشاني شوې) برخه کې ثبت شو.',
+  'serviceSaved': 'به بریا سره (نشاني شوې) برخه کې ثبت شو.',
+  'serviceDeleted': 'په بریا سره له منځه لاړ.',
   'province': 'ولایت:',
   'locality': 'حوزه، ولسوالي او یا ګذر:',
+
+  'open': 'پرانیستی',
+  'close': 'بسته',
 
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځئ',
@@ -63,7 +68,7 @@ Map pashto = {
   'multiComments': 'تبصرې',
   'addComment': 'تبصره...',
 
-  'addNewPost': 'نوې خبرې',
+  'addNewPost': 'نوې خبره',
   'jobs': 'وظیفه',
   'send': 'لېږل',
   'save': 'ثبت',
@@ -143,6 +148,13 @@ Map pashto = {
   'myAdverts': 'زما اعلانات',
 
   /////////// Services /////////////////
+
+  'typeOfService': 'د خدمت ډول',
+  'serviceTitle': 'عنوان(اجباری): مثلاً د غاښو ډاکټر، تکړه رنګمال...',
+  'serviceDesc': 'تشریح(اجباری):',
+  'myServices': 'زما خدمات',
+  'fullAddress': 'بشپړ آدرس:',
+
   'health': 'روغتیایي',
   'education': 'تعلیمي او تحصیلي',
   'painting': 'رنګمالي',

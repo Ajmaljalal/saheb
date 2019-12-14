@@ -3,6 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import './providers/locationProvider.dart';
 import './screens/add_posts/index.dart';
+import './screens/add_posts/advert_post.dart';
+import './screens/add_posts/service_post.dart';
 import './screens/startups/language_screen.dart';
 import './widgets/circularProgressIndicator.dart';
 import './providers/languageProvider.dart';
@@ -11,6 +13,8 @@ import './providers/authProvider.dart';
 import './screens/startups/login_screen.dart';
 import './screens/main__screen.dart';
 import './screens/posts/postDetails.dart';
+import './screens/services/servicesList.dart';
+import './screens/services/serviceDetails.dart';
 
 void main() => runApp(MainApp());
 
@@ -85,6 +89,10 @@ class Application extends StatelessWidget {
           '/posts': (context) => MainScreen(),
           '/postDetails': (context) => PostDetails(),
           '/addPost': (context) => AddPost(),
+          '/servicesList': (context) => ServicesList(),
+          '/serviceDetails': (context) => ServiceDetails(),
+          '/addAdvertPost': (context) => AdvertPost(),
+          '/addServicePost': (context) => ServicePost(),
         },
       ),
     );

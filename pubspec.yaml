@@ -42,6 +42,7 @@ dependencies:
   font_awesome_flutter: ^8.5.0
   flushbar: ^1.9.1
   shamsi_date: ^0.7.1
+  cached_network_image: ^2.0.0-rc.1
 
 
 dev_dependencies:

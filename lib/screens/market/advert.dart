@@ -71,7 +71,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
             10.0,
           ),
           border: Border.all(color: Colors.cyanAccent, width: 0.5),
-          color: Colors.cyan.withOpacity(0.1),
+          color: Colors.white,
         ),
         child: Column(
           children: <Widget>[
@@ -120,7 +120,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
             borderRadius: BorderRadius.circular(
               30.0,
             ),
-            color: Colors.cyan,
+            color: Colors.purple,
           ),
           padding: EdgeInsets.symmetric(
             horizontal: 10.0,

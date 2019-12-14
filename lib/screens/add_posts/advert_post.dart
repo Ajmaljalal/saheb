@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/widgets/errorDialog.dart';
 import '../../widgets/verticalDivider.dart';
@@ -131,6 +132,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
         Provider.of<AuthProvider>(context, listen: false).userId;
+    final userLocation = Provider.of<LocationProvider>(context).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOneAdvert(
       type: dropdownValue,
       text: _text,
@@ -142,13 +144,12 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       owner: {
         'name': user.displayName,
         'id': currentUserId,
-        'location': 'Some where in Kabul',
+        'location': userLocation,
         'photo': user.photoUrl,
       },
       images: _uploadedFileUrl,
     );
 
-    Navigator.of(context).pop();
     Navigator.of(context).pop();
   }
 
@@ -157,31 +158,34 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     final appLanguage = getLanguages(context);
     final imagesMax = _images.length > 5 ? true : false;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    final userProvince = Provider.of<LocationProvider>(context).getUserProvince;
     double fontSize = currentLanguage == 'English' ? 13.0 : 15.0;
 
     final List<String> dropDownItems = [
       appLanguage['sell'].toString(),
-      appLanguage['rent'].toString(),
       appLanguage['buy'].toString(),
-      appLanguage['needPro'].toString()
+      appLanguage['rent'].toString(),
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('${appLanguage['advert'].toString()}'),
-              customButton(
-                appLanguage: appLanguage,
-                context: context,
-                onClick: onSend,
-                forText: 'send',
-                width: MediaQuery.of(context).size.width * 0.2,
-                height: 28.0,
-                fontSize: fontSize,
-              ),
-            ],
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(
+          title: Container(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('${appLanguage['advert'].toString()}'),
+                customButton(
+                  appLanguage: appLanguage,
+                  context: context,
+                  onClick: onSend,
+                  forText: 'send',
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  height: 28.0,
+                  fontSize: fontSize,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -200,7 +204,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      Row(
+                      Column(
                         children: <Widget>[
                           DropDownPicker(
                             onChange: onDropDownChange,
@@ -211,7 +215,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                           ),
                           DropDownPicker(
                             search: true,
-                            items: locations['kabul'],
+                            items: locations[userProvince],
                             hintText: appLanguage['location'],
                             label: appLanguage['location'],
                             value: appLanguage['location'],
@@ -220,14 +224,14 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                         ],
                       ),
                       postTitle(
-                        type: appLanguage['advert'].toString(),
+                        type: 'advert',
                         appLanguage: appLanguage,
                         onChange: onTitleInputChange,
                         fontSize: fontSize,
                         focusNode: titleFieldFocusNode,
                       ),
                       textArea(
-                        type: appLanguage['advert'].toString(),
+                        type: 'advert',
                         appLanguage: appLanguage,
                         onChange: onTextInputChange,
                         fontSize: fontSize,

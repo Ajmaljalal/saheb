@@ -29,7 +29,6 @@ class AdvertDetails extends StatefulWidget {
 
 class _AdvertDetailsState extends State<AdvertDetails>
     with PostMixin, AdvertMixin {
-  bool addCommentFocusFlag = false;
   bool advertDeleted = false;
 
   deletePost(context, message) async {
@@ -77,19 +76,17 @@ class _AdvertDetailsState extends State<AdvertDetails>
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = currentLanguage == 'English' ? 12.5 : 17.0;
-    return SafeArea(
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(40.0),
-          child: AppBar(),
-        ),
-        body: renderAdvertContent(
-          advertId: advertId,
-          advertTitle: advertTitle,
-          appLanguage: appLanguage,
-          userId: currentUserId,
-          fontSize: fontSize,
-        ),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0),
+        child: AppBar(),
+      ),
+      body: renderAdvertContent(
+        advertId: advertId,
+        advertTitle: advertTitle,
+        appLanguage: appLanguage,
+        userId: currentUserId,
+        fontSize: fontSize,
       ),
     );
   }
@@ -137,121 +134,44 @@ class _AdvertDetailsState extends State<AdvertDetails>
                               children: <Widget>[
                                 Stack(
                                   children: <Widget>[
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (advert['images'].length > 0) {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  FullScreenImage(
-                                                images: advert['images'],
-                                              ),
-                                            ),
-                                          );
-                                        } else {
-                                          return;
-                                        }
-                                      },
-                                      child: advert['images'].length > 0
-                                          ? postImages(
-                                              images: advert['images'],
-                                              context: context,
-                                              scrollView: Axis.horizontal,
-                                            )
-                                          : Center(
-                                              child: Icon(
-                                                FontAwesomeIcons.camera,
-                                                color: Colors.grey[200],
-                                                size: 140.0,
-                                              ),
-                                            ),
-                                    ),
-                                    Positioned(
-                                      bottom: 0.0,
-                                      right: 0,
-                                      left: 0,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          !isOwner
-                                              ? advertActionButton(
-                                                  FontAwesomeIcons.heart,
-                                                  Colors.cyan,
-                                                  null,
-                                                  favoriteAPost,
-                                                  context,
-                                                  'favorite',
-                                                  userId,
-                                                  appLanguage['advertSaved'],
-                                                )
-                                              : emptyBox(),
-                                          isOwner
-                                              ? advertActionButton(
-                                                  FontAwesomeIcons.trash,
-                                                  Colors.red,
-                                                  deletePost,
-                                                  null,
-                                                  context,
-                                                  'delete',
-                                                  userId,
-                                                  appLanguage['advertDeleted'],
-                                                )
-                                              : emptyBox(),
-                                        ],
-                                      ),
+                                    advertImagesHolder(advert['images']),
+                                    advertActionButtonsHolder(
+                                      isOwner: isOwner,
+                                      userId: userId,
+                                      appLanguage: appLanguage,
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 5.0),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: postTittleHolder(
-                                          advert['title'].toString(),
-                                          fontSize,
-                                          context),
-                                    ),
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 10.0),
-                                      child: Text(
-                                        advert['price'].toString() != 'null'
-                                            ? advert['price']
-                                            : appLanguage['noPrice'],
-                                        style: TextStyle(
-                                          color: Colors.cyan,
-                                          fontSize:
-                                              advert['price'].toString() !=
-                                                      'null'
-                                                  ? 20.0
-                                                  : 15.0,
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                                advertTitleAndPriceHolder(
+                                  title: advert['title'],
+                                  price: advert['price'],
+                                  fontSize: fontSize,
+                                  noPrice: appLanguage['noPrice'],
                                 ),
                                 horizontalDividerIndented(),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    advertDetails(appLanguage['locationHolder'],
-                                        advert['location']),
-                                    advertDetails(appLanguage['typeOfDeal'],
-                                        advert['type']),
+                                    advertDetails(
+                                      appLanguage['locationHolder'],
+                                      advert['location'],
+                                    ),
+                                    advertDetails(
+                                      appLanguage['typeOfDeal'],
+                                      advert['type'],
+                                    ),
                                   ],
                                 ),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    advertDetails(appLanguage['phoneNumber'],
-                                        advert['phone'].toString()),
+                                    advertDetails(
+                                      appLanguage['phoneNumber'],
+                                      advert['phone'].toString(),
+                                    ),
                                     advertDetails(
                                         appLanguage['date'], advertDate),
                                   ],
@@ -260,8 +180,10 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    advertDetails(appLanguage['email'],
-                                        advert['email'].toString()),
+                                    advertDetails(
+                                      appLanguage['email'],
+                                      advert['email'].toString(),
+                                    ),
                                   ],
                                 ),
                                 horizontalDividerIndented(),
@@ -299,7 +221,69 @@ class _AdvertDetailsState extends State<AdvertDetails>
         : wait(appLanguage['wait'], context);
   }
 
-  Widget advertDetails(forText, text) {
+  Widget advertImagesHolder(images) {
+    return GestureDetector(
+      onTap: () {
+        if (images.length > 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => FullScreenImage(
+                images: images,
+              ),
+            ),
+          );
+        } else {
+          return;
+        }
+      },
+      child: images.length > 0
+          ? postImages(
+              images: images,
+              context: context,
+              scrollView: Axis.horizontal,
+            )
+          : Center(
+              child: Icon(
+                FontAwesomeIcons.camera,
+                color: Colors.grey[200],
+                size: 140.0,
+              ),
+            ),
+    );
+  }
+
+  Widget advertTitleAndPriceHolder({
+    title,
+    price,
+    fontSize,
+    noPrice,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          child: postTittleHolder(title.toString(), fontSize, context),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Text(
+            price.toString() != 'null' ? price : noPrice,
+            style: TextStyle(
+              color: Colors.cyan,
+              fontSize: price.toString() != 'null' ? 20.0 : 15.0,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget advertDetails(
+    forText,
+    text,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 10.0,
@@ -378,6 +362,47 @@ class _AdvertDetailsState extends State<AdvertDetails>
               ),
             ],
           )
+        ],
+      ),
+    );
+  }
+
+  Widget advertActionButtonsHolder({
+    isOwner,
+    userId,
+    appLanguage,
+  }) {
+    return Positioned(
+      bottom: 0.0,
+      right: 0,
+      left: 0,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          !isOwner
+              ? advertActionButton(
+                  FontAwesomeIcons.heart,
+                  Colors.cyan,
+                  null,
+                  favoriteAPost,
+                  context,
+                  'favorite',
+                  userId,
+                  appLanguage['advertSaved'],
+                )
+              : emptyBox(),
+          isOwner
+              ? advertActionButton(
+                  FontAwesomeIcons.trash,
+                  Colors.red,
+                  deletePost,
+                  null,
+                  context,
+                  'delete',
+                  userId,
+                  appLanguage['advertDeleted'],
+                )
+              : emptyBox(),
         ],
       ),
     );
