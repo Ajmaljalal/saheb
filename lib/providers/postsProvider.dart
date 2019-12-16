@@ -301,6 +301,7 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
+  ////////////////// service end points ///////////////////////////////
   Stream<QuerySnapshot> getAllServices(type) {
     final dataStream = db
         .collection('services')
@@ -321,6 +322,159 @@ class PostsProvider with ChangeNotifier {
           'open': openClose,
         },
       );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  ///////////////////// messages end points ///////////////////////////
+  Stream<QuerySnapshot> getAllMessages({String userId}) {
+    final dataStream = db
+        .collection('messages')
+        .document(userId)
+        .collection('chat-rooms')
+        .snapshots();
+    return dataStream;
+  }
+
+  replyToAConversation({
+    String userId,
+    String messageReceiverUserId,
+    String messageId,
+    String ownerLocation,
+    String ownerName,
+    String ownerPhoto,
+    String text,
+  }) async {
+    try {
+      await db
+          .collection('messages')
+          .document(userId)
+          .collection('chat-rooms')
+          .document(messageId)
+          .updateData(
+        {
+          'messages': FieldValue.arrayUnion(
+            [
+              {
+                'date': DateTime.now(),
+                'ownerId': userId,
+                'ownerLocation': ownerLocation,
+                'ownerName': ownerName,
+                'ownerPhoto': ownerPhoto,
+                'seen': false,
+                'text': text,
+              }
+            ],
+          ),
+        },
+      );
+
+      await db
+          .collection('messages')
+          .document(messageReceiverUserId)
+          .collection('chat-rooms')
+          .document(messageId)
+          .updateData(
+        {
+          'messages': FieldValue.arrayUnion(
+            [
+              {
+                'date': DateTime.now(),
+                'ownerId': userId,
+                'ownerLocation': ownerLocation,
+                'ownerName': ownerName,
+                'ownerPhoto': ownerPhoto,
+                'seen': false,
+                'text': text,
+              }
+            ],
+          ),
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Stream<DocumentSnapshot> getOneConversation(
+      {chatRoomId, userId, messagesCollection}) {
+    final dataStream = db
+        .collection('messages')
+        .document(userId)
+        .collection('chat-rooms')
+        .document(chatRoomId)
+        .snapshots();
+    return dataStream;
+  }
+
+  startNewConversation({
+    String messageReceiverUserId,
+    String ownerLocation,
+    String userId,
+    String ownerName,
+    String ownerPhoto,
+    String messageId,
+    String text,
+  }) {
+    try {
+      db
+          .collection('messages')
+          .document(userId)
+          .collection('chat-rooms')
+          .document(messageId)
+          .setData(
+        {
+          'messages': [
+            {
+              'date': DateTime.now(),
+              'ownerId': userId,
+              'ownerLocation': ownerLocation,
+              'ownerName': ownerName,
+              'ownerPhoto': ownerPhoto,
+              'seen': false,
+              'text': text,
+            }
+          ],
+        },
+      );
+
+      db
+          .collection('messages')
+          .document(messageReceiverUserId)
+          .collection('chat-rooms')
+          .document(messageId)
+          .setData(
+        {
+          'messages': [
+            {
+              'date': DateTime.now(),
+              'ownerId': userId,
+              'ownerLocation': ownerLocation,
+              'ownerName': ownerName,
+              'ownerPhoto': ownerPhoto,
+              'seen': false,
+              'text': text,
+            }
+          ],
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  deleteAChatRoom({
+    String userId,
+    String messageId,
+  }) async {
+    try {
+      await db
+          .collection('messages')
+          .document(userId)
+          .collection('chat-rooms')
+          .document(messageId)
+          .delete();
     } catch (e) {
       print(e.toString());
     }

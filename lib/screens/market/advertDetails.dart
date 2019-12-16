@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/screens/messages/chatScreen.dart';
 import 'package:saheb/widgets/button.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import 'package:saheb/widgets/errorDialog.dart';
@@ -203,17 +204,19 @@ class _AdvertDetailsState extends State<AdvertDetails>
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0.0,
-                    right: 0,
-                    left: 0,
-                    child: advertOwnersDetails(
-                      advert['owner'],
-                      advert['phone'],
-                      appLanguage,
-                      fontSize,
-                    ),
-                  ),
+                  !isOwner
+                      ? Positioned(
+                          bottom: 0.0,
+                          right: 0,
+                          left: 0,
+                          child: advertOwnersDetails(
+                            advert['owner'],
+                            advert['phone'],
+                            appLanguage,
+                            fontSize,
+                          ),
+                        )
+                      : emptyBox(),
                 ],
               );
             },
@@ -336,7 +339,18 @@ class _AdvertDetailsState extends State<AdvertDetails>
                 appLanguage: appLanguage,
                 context: context,
                 forText: 'text',
-                onClick: () {},
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatScreen(
+                        messageId: null,
+                        receiverId: owner['id'],
+                        messageOwnerName: owner['name'],
+                      ),
+                    ),
+                  );
+                },
                 width: 59.0,
                 height: 25.0,
                 fontSize: fontSize,

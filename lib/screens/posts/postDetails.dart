@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/widgets/fullScreenImage.dart';
+import 'package:saheb/widgets/wait.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
 import 'package:flutter/widgets.dart';
@@ -165,7 +166,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
       stream: Provider.of<PostsProvider>(context).getOnePost('posts', postId),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return Text("Loading..");
+          return wait(appLanguage['wait'], context);
         }
         var post = snapshot.data;
         return Card(
