@@ -637,7 +637,6 @@ class PostMixin {
         color: Colors.white,
         border: Border(
           top: BorderSide(
-            //                    <--- top side
             color: Colors.grey,
             width: .4,
           ),

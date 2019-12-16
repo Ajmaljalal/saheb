@@ -1,0 +1,297 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:saheb/languages/index.dart';
+//import 'package:saheb/languages/index.dart';
+import 'package:saheb/providers/authProvider.dart';
+import 'package:saheb/providers/locationProvider.dart';
+import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/util/uuid.dart';
+import 'package:saheb/widgets/avatar.dart';
+import 'package:saheb/widgets/noContent.dart';
+import 'package:saheb/widgets/wait.dart';
+
+class ChatScreen extends StatefulWidget {
+  final messageId;
+  final receiverId;
+  final messageOwnerName;
+  ChatScreen({this.receiverId, this.messageId, this.messageOwnerName});
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  String _text;
+  String messageId;
+
+  ScrollController _scrollController;
+  TextEditingController _messageInputFieldController;
+  FocusNode _messageInputFieldFocusNode = FocusNode();
+
+  handleTextInputFieldChange(value) {
+    setState(() {
+      _text = value;
+    });
+  }
+
+  onReplyToAConversation() async {
+    if (_text == null || _text.length == 0) {
+      return;
+    }
+    final user = await Provider.of<AuthProvider>(context).currentUser;
+    final currentUserId =
+        Provider.of<AuthProvider>(context, listen: false).userId;
+    final userLocality =
+        Provider.of<LocationProvider>(context, listen: false).getUserLocality;
+    await Provider.of<PostsProvider>(context, listen: false)
+        .replyToAConversation(
+      ownerName: user.displayName,
+      ownerLocation: userLocality,
+      messageReceiverUserId: widget.receiverId,
+      ownerPhoto: user.photoUrl,
+      userId: currentUserId,
+      messageId: messageId,
+      text: _text,
+    );
+  }
+
+  onStartNewConversation() async {
+    if (_text == null || _text.length == 0) {
+      return;
+    }
+    final user = await Provider.of<AuthProvider>(context).currentUser;
+    final newMessageId = Uuid().generateV4();
+    final currentUserId =
+        Provider.of<AuthProvider>(context, listen: false).userId;
+    final userLocality =
+        Provider.of<LocationProvider>(context, listen: false).getUserLocality;
+    await Provider.of<PostsProvider>(context, listen: false)
+        .startNewConversation(
+      ownerName: user.displayName,
+      ownerLocation: userLocality,
+      ownerPhoto: user.photoUrl,
+      userId: currentUserId,
+      messageReceiverUserId: widget.receiverId,
+      messageId: newMessageId,
+      text: _text,
+    );
+    setState(() {
+      messageId = newMessageId;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+    _messageInputFieldController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
+    _messageInputFieldController.dispose();
+    _messageInputFieldFocusNode.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (widget.messageId != null) {
+      setState(() {
+        messageId = widget.messageId;
+      });
+    }
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
+    final appLanguage = getLanguages(context);
+
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40),
+        child: AppBar(
+          title: Text(
+              widget.messageOwnerName != null ? widget.messageOwnerName : ''),
+        ),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height * 1,
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            messageId != null
+                ? Expanded(
+                    child: GestureDetector(
+                      onTap: () => _messageInputFieldFocusNode.unfocus(),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        child: StreamBuilder(
+                          stream: Provider.of<PostsProvider>(context)
+                              .getOneConversation(
+                                  chatRoomId: messageId, userId: currentUserId),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return wait(appLanguage['wait'], context);
+                            }
+                            var conversations = snapshot.data['messages'];
+                            var reversedConversations =
+                                conversations.toList().reversed.toList();
+                            return ListView.builder(
+                              controller: _scrollController,
+                              reverse: true,
+                              shrinkWrap: true,
+                              itemCount: reversedConversations.toList().length,
+                              itemBuilder: (context, index) {
+                                var conversation =
+                                    reversedConversations.toList()[index];
+                                return conversationHolderTile(
+                                  conversation: conversation,
+                                  userId: currentUserId,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: noContent(appLanguage['noMessages'], context)),
+            Container(
+              color: Colors.grey[100],
+              child: TextFormField(
+                controller: _messageInputFieldController,
+                maxLines: null,
+                focusNode: _messageInputFieldFocusNode,
+                onChanged: (value) {
+                  handleTextInputFieldChange(value);
+                },
+                decoration: InputDecoration(
+                    hintText: appLanguage['typeMessage'],
+                    hintStyle: TextStyle(fontSize: 14.0),
+                    prefixIcon: InkWell(
+                      onTap: () {
+                        messageId != null
+                            ? onReplyToAConversation()
+                            : onStartNewConversation();
+                        _messageInputFieldController.clear();
+                        Future.delayed(Duration(microseconds: 100), () {
+                          _scrollController.animateTo(
+                            0.0,
+                            curve: Curves.easeOut,
+                            duration: const Duration(milliseconds: 300),
+                          );
+                        });
+                      },
+                      child: Icon(
+                        Icons.send,
+                        textDirection: TextDirection.ltr,
+                        color: Colors.purple,
+                      ),
+                    )),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget conversationHolderTile({
+    conversation,
+    userId,
+  }) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 1,
+      child: Container(
+        child: messageBubble(
+          message: conversation['text'],
+          ownerId: conversation['ownerId'],
+          userId: userId,
+          ownerPhoto: conversation['ownerPhoto'],
+        ),
+      ),
+    );
+  }
+
+  messageBubble({
+    message,
+    ownerId,
+    userId,
+    ownerPhoto,
+  }) {
+    bool isOwner = ownerId == userId ? true : false;
+
+    if (isOwner) {
+      return Row(
+        mainAxisAlignment:
+            isOwner ? MainAxisAlignment.start : MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          imageRenderer(
+            height: 50.0,
+            width: 50.0,
+            photo: ownerPhoto,
+          ),
+          Flexible(
+            child: Container(
+              constraints: BoxConstraints(
+                minWidth: 50.0,
+                maxWidth: MediaQuery.of(context).size.width * 0.7,
+              ),
+              margin: EdgeInsets.only(bottom: 12.0),
+              padding: EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  topRight: Radius.circular(20.0),
+                  bottomLeft:
+                      isOwner ? Radius.circular(20.0) : Radius.circular(0.0),
+                  bottomRight:
+                      isOwner ? Radius.circular(0.0) : Radius.circular(20.0),
+                ),
+                color: isOwner
+                    ? Colors.cyanAccent.withOpacity(0.2)
+                    : Colors.grey[100],
+              ),
+              child: Text(message),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Row(
+        mainAxisAlignment:
+            isOwner ? MainAxisAlignment.start : MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Container(
+            constraints: BoxConstraints(
+              minWidth: 50.0,
+              maxWidth: MediaQuery.of(context).size.width * 0.7,
+            ),
+            margin: EdgeInsets.only(bottom: 12.0),
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                topRight: Radius.circular(20.0),
+                bottomLeft:
+                    isOwner ? Radius.circular(20.0) : Radius.circular(0.0),
+                bottomRight:
+                    isOwner ? Radius.circular(0.0) : Radius.circular(20.0),
+              ),
+              color: isOwner
+                  ? Colors.cyanAccent.withOpacity(0.2)
+                  : Colors.grey[100],
+            ),
+            child: Text(message),
+          ),
+          imageRenderer(
+            height: 50.0,
+            width: 50.0,
+            photo: ownerPhoto,
+          ),
+        ],
+      );
+    }
+  }
+}

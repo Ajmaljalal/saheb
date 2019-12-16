@@ -173,4 +173,10 @@ Map english = {
   'legal': 'Law and Legal',
   'decoration': 'Decoration',
   'cosmetics': 'Barbershops and Hair saloons',
+
+  ///////////////// messages /////////////////////////
+
+  'messages': 'Messages',
+  'noMessages': 'No message yet',
+  'typeMessage': 'Write your message...',
 };

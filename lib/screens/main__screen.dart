@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/locations/locations_sublocations.dart';
 import 'package:saheb/locations/provincesList.dart';
+import 'package:saheb/providers/authProvider.dart';
+import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/util/filterList.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import 'package:saheb/widgets/locationPicker.dart';
+import 'package:saheb/widgets/noContent.dart';
+import 'package:saheb/widgets/wait.dart';
 import '../providers/locationProvider.dart';
 import '../widgets/emptyBox.dart';
 import '../languages/index.dart';
@@ -14,6 +20,7 @@ import './settings/index.dart';
 import '../widgets/appBarSearch.dart';
 import '../screens/services/index.dart';
 import '../providers/languageProvider.dart';
+import 'messages/index.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -84,6 +91,7 @@ class _MainScreenState extends State<MainScreen> {
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
     final userProvince = Provider.of<LocationProvider>(context).getUserProvince;
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
     final double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
     final List<Widget> screens = [
       Posts(
@@ -106,9 +114,12 @@ class _MainScreenState extends State<MainScreen> {
                 titleSpacing: 0.0,
                 automaticallyImplyLeading: renderSearchAndAdd,
                 title: appBarTitle(
-                    renderSearchAndAdd: renderSearchAndAdd,
-                    currentLanguage: currentLanguage,
-                    handleSearchBarStringChange: handleSearchBarStringChange),
+                  renderSearchAndAdd: renderSearchAndAdd,
+                  currentLanguage: currentLanguage,
+                  handleSearchBarStringChange: handleSearchBarStringChange,
+                  appLanguage: appLanguage,
+                  userId: currentUserId,
+                ),
               ),
             ),
             body: screens[_currentScreenIndex],
@@ -185,10 +196,129 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
+  renderMessagesIconAndCount(appLanguage, userId) {
+    return Container(
+      child: StreamBuilder(
+        stream:
+            Provider.of<PostsProvider>(context).getAllMessages(userId: userId),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (!snapshot.hasData) {
+            return emptyMessageIcon();
+          }
+          if (snapshot.data.documents.toList().length == 0) {
+            return emptyMessageIcon();
+          }
+          List<DocumentSnapshot> tempList = snapshot.data.documents;
+          List messages = List();
+          messages = tempList;
+
+          var filteredMessages = messages;
+          return messageIconWithCount(filteredMessages);
+        },
+      ),
+    );
+  }
+
+  Widget emptyMessageIcon() {
+    return Container(
+      padding: EdgeInsets.only(
+        right: 8.0,
+        left: 8.0,
+      ),
+      child: InkWell(
+        child: Icon(
+          Icons.email,
+          size: 30.0,
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Messages(
+                messages: null,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget messageIconWithCount(messages) {
+    List filteredMessages = messages.map((DocumentSnapshot messagesSnapshot) {
+      var message = {
+        'conversations': messagesSnapshot.data['messages'],
+        'messageId': messagesSnapshot.documentID,
+      };
+      return message;
+    }).toList();
+
+    final unSeenMessages = [];
+    for (var i = 0; i < filteredMessages.length; i++) {
+      var newMessages = (filteredMessages[i]['conversations']);
+      unSeenMessages.add(
+          newMessages.where((message) => message['seen'] == false).toList());
+    }
+
+    return Stack(
+      children: <Widget>[
+        Container(
+          padding: EdgeInsets.only(
+            right: 8.0,
+            left: 8.0,
+          ),
+          child: InkWell(
+            child: Icon(
+              Icons.email,
+              size: 30.0,
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Messages(
+                    messages: filteredMessages,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        Positioned(
+          bottom: 15.0,
+          right: 0,
+          left: 25,
+          child: unSeenMessages.length > 0
+              ? Container(
+                  width: 15,
+                  height: 15,
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      unSeenMessages.length.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              : emptyBox(),
+        ),
+      ],
+    );
+  }
+
   Widget appBarTitle({
     renderSearchAndAdd,
     currentLanguage,
     handleSearchBarStringChange,
+    appLanguage,
+    userId,
   }) {
     if (currentLanguage == 'English') {
       return Row(
@@ -201,19 +331,7 @@ class _MainScreenState extends State<MainScreen> {
                   _getAppBarTitle(context).toString(),
                 ),
           renderSearchAndAdd
-              ? Container(
-                  padding: EdgeInsets.only(
-                    right: 8.0,
-                    left: 8.0,
-                  ),
-                  child: InkWell(
-                    child: Icon(
-                      Icons.message,
-                      size: 30.0,
-                    ),
-                    onTap: () {},
-                  ),
-                )
+              ? renderMessagesIconAndCount(appLanguage, userId)
               : emptyBox(),
           renderSearchAndAdd
               ? AppBarSearch(handleSearchBarStringChange)
@@ -240,9 +358,7 @@ class _MainScreenState extends State<MainScreen> {
                         size: 25.0,
                       ),
                       onTap: () {
-                        setState(() {
-                          _openAddPostScreens();
-                        });
+                        _openAddPostScreens();
                       },
                     ),
                   ),
@@ -277,9 +393,7 @@ class _MainScreenState extends State<MainScreen> {
                         size: 25.0,
                       ),
                       onTap: () {
-                        setState(() {
-                          _openAddPostScreens();
-                        });
+                        _openAddPostScreens();
                       },
                     ),
                   ),
@@ -289,19 +403,7 @@ class _MainScreenState extends State<MainScreen> {
               ? AppBarSearch(handleSearchBarStringChange)
               : emptyBox(),
           renderSearchAndAdd
-              ? Container(
-                  padding: EdgeInsets.only(
-                    right: 8.0,
-                    left: 8.0,
-                  ),
-                  child: InkWell(
-                    child: Icon(
-                      Icons.message,
-                      size: 30.0,
-                    ),
-                    onTap: () {},
-                  ),
-                )
+              ? renderMessagesIconAndCount(appLanguage, userId)
               : emptyBox(),
           renderSearchAndAdd
               ? emptyBox()
