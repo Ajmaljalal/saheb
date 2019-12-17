@@ -61,6 +61,7 @@ Map english = {
   //////////////////// post //////////////////////////
   'advert': 'Advert',
   'general': 'General',
+  'عمومی': 'عمومی',
   'lost': 'Lost',
   'found': 'Found',
   'emergency': 'Emergency',
