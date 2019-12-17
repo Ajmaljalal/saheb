@@ -37,7 +37,8 @@ const TextStyle kUserLocationStyle = TextStyle(
   color: Colors.grey,
   fontSize: 12,
   fontWeight: FontWeight.bold,
-  height: .5,
+  height: .6,
+  fontFamily: 'Muna',
 );
 
 const TextStyle kUserLocationProfileStyle = TextStyle(
@@ -49,6 +50,7 @@ const TextStyle kUserLocationProfileStyle = TextStyle(
 const TextStyle kPostTypeTextStyle = TextStyle(
   fontSize: 13.0,
   color: Colors.grey,
+  fontFamily: 'Muna',
 );
 
 const BoxDecoration kAdvertTypeBoxDecoration = const BoxDecoration(

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:saheb/util/isRTL.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import 'package:shamsi_date/shamsi_date.dart';
-//import 'package:http/http.dart';
 import '../widgets/verticalDivider.dart';
 import '../constants/constants.dart';
 import '../widgets/imageRenderer.dart';
@@ -80,7 +80,7 @@ class PostMixin {
   ) {
     return Container(
       child: Text(
-        location,
+        location.trim(),
         style: kUserLocationStyle,
       ),
     );
@@ -104,7 +104,8 @@ class PostMixin {
       circleColor = Colors.orange;
     }
 
-    if (postType != appLanguage['general']) {
+    if (postType != appLanguage['general'] &&
+        postType != appLanguage['عمومی']) {
       return Container(
         margin: EdgeInsets.symmetric(
           horizontal: 10.0,
@@ -117,7 +118,7 @@ class PostMixin {
               decoration: BoxDecoration(
                 color: circleColor,
                 borderRadius: BorderRadius.circular(
-                  10.0,
+                  12.0,
                 ),
               ),
               child: Text(''),
@@ -131,16 +132,12 @@ class PostMixin {
                 style: kPostTypeTextStyle,
                 textAlign: TextAlign.center,
               ),
-              decoration: BoxDecoration(),
             ),
           ],
         ),
       );
     } else
-      return SizedBox(
-        height: 0.0,
-        width: 0.0,
-      );
+      return emptyBox();
   }
 
   Widget postOptions({
@@ -210,9 +207,10 @@ class PostMixin {
         left: 10.0,
       ),
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.7,
+        width: MediaQuery.of(context).size.width * 0.99,
         child: Text(
-          title,
+          title.trim(),
+          textDirection: isRTL(title) ? TextDirection.rtl : TextDirection.ltr,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: fontSize,
@@ -240,8 +238,11 @@ class PostMixin {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.all(10.0),
+            width: MediaQuery.of(context).size.width * 0.99,
             child: Text(
               text,
+              textDirection:
+                  isRTL(text) ? TextDirection.rtl : TextDirection.ltr,
               maxLines: flag ? 50 : 3,
               style: TextStyle(
                 fontSize: fontSize,
@@ -654,7 +655,7 @@ class PostMixin {
               child: InkWell(
                 child: Icon(
                   FontAwesomeIcons.arrowAltCircleUp,
-                  textDirection: TextDirection.ltr,
+                  textDirection: TextDirection.rtl,
                   color: Colors.cyan,
                   size: 36.0,
                 ),
