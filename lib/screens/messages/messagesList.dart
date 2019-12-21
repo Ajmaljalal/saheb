@@ -8,7 +8,11 @@ import 'package:saheb/widgets/userNameHolder.dart';
 class MessagesListTile extends StatefulWidget {
   final conversations;
   final messageId;
-  MessagesListTile({this.conversations, this.messageId});
+  final about;
+  final initiator;
+
+  MessagesListTile(
+      {this.conversations, this.messageId, this.initiator, this.about});
   @override
   _MessagesListTileState createState() => _MessagesListTileState();
 }
@@ -16,16 +20,9 @@ class MessagesListTile extends StatefulWidget {
 class _MessagesListTileState extends State<MessagesListTile> {
   @override
   Widget build(BuildContext context) {
-    String messageReceiverId;
-    String messageOwnerName;
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
-    for (int i = 0; i < widget.conversations.length; i++) {
-      if (widget.conversations[i]['ownerId'] != currentUserId) {
-        messageReceiverId = widget.conversations[i]['ownerId'];
-        messageOwnerName = widget.conversations[i]['ownerName'];
-        break;
-      }
-    }
+    String messageInitiatorId = widget.initiator['id'];
+    String messageInitiatorName = widget.initiator['name'];
+    String messageInitiatorPhoto = widget.initiator['photoUrl'];
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -33,8 +30,9 @@ class _MessagesListTileState extends State<MessagesListTile> {
           MaterialPageRoute(
             builder: (context) => ChatScreen(
               messageId: widget.messageId,
-              receiverId: messageReceiverId,
-              messageOwnerName: messageOwnerName,
+              initiatorId: messageInitiatorId,
+              initiatorName: messageInitiatorName,
+              initiatorPhoto: messageInitiatorPhoto,
             ),
           ),
         );
@@ -54,8 +52,7 @@ class _MessagesListTileState extends State<MessagesListTile> {
             imageRenderer(
               height: 60.0,
               width: 60.0,
-              photo: widget.conversations[widget.conversations.length - 1]
-                  ['ownerPhoto'],
+              photo: widget.initiator['photo'],
             ),
             Container(
               margin: EdgeInsets.only(
@@ -66,8 +63,7 @@ class _MessagesListTileState extends State<MessagesListTile> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   userNameHolder(
-                    name: widget.conversations[widget.conversations.length - 1]
-                        ['ownerName'],
+                    name: widget.initiator['name'],
                     fontSize: 20.0,
                   ),
                   Container(

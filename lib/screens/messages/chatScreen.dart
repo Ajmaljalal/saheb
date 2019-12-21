@@ -12,9 +12,16 @@ import 'package:saheb/widgets/wait.dart';
 
 class ChatScreen extends StatefulWidget {
   final messageId;
-  final receiverId;
-  final messageOwnerName;
-  ChatScreen({this.receiverId, this.messageId, this.messageOwnerName});
+  final initiatorPhoto;
+  final initiatorId;
+  final initiatorName;
+
+  ChatScreen({
+    this.initiatorId,
+    this.messageId,
+    this.initiatorName,
+    this.initiatorPhoto,
+  });
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -34,7 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   onReplyToAConversation() async {
-    if (_text == null || _text.length == 0) {
+    if (_text == null || _text.trim().length == 0) {
       return;
     }
     final user = await Provider.of<AuthProvider>(context).currentUser;
@@ -46,18 +53,26 @@ class _ChatScreenState extends State<ChatScreen> {
         .replyToAConversation(
       ownerName: user.displayName,
       ownerLocation: userLocality,
-      messageReceiverUserId: widget.receiverId,
+      messageReceiverUserId: widget.initiatorId,
       ownerPhoto: user.photoUrl,
       userId: currentUserId,
       messageId: messageId,
       text: _text,
     );
+    setState(() {
+      _text = null;
+    });
   }
 
   onStartNewConversation() async {
     if (_text == null || _text.length == 0) {
       return;
     }
+    final initiator = {
+      'id': widget.initiatorId,
+      'name': widget.initiatorName,
+      'photo': widget.initiatorPhoto,
+    };
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final newMessageId = Uuid().generateV4();
     final currentUserId =
@@ -66,16 +81,17 @@ class _ChatScreenState extends State<ChatScreen> {
         Provider.of<LocationProvider>(context, listen: false).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false)
         .startNewConversation(
-      ownerName: user.displayName,
-      ownerLocation: userLocality,
-      ownerPhoto: user.photoUrl,
-      userId: currentUserId,
-      messageReceiverUserId: widget.receiverId,
-      messageId: newMessageId,
-      text: _text,
-    );
+            ownerName: user.displayName,
+            ownerLocation: userLocality,
+            ownerPhoto: user.photoUrl,
+            userId: currentUserId,
+            messageReceiverUserId: widget.initiatorId,
+            messageId: newMessageId,
+            text: _text,
+            initiator: initiator);
     setState(() {
       messageId = newMessageId;
+      _text = null;
     });
   }
 
@@ -108,8 +124,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40),
         child: AppBar(
-          title: Text(
-              widget.messageOwnerName != null ? widget.messageOwnerName : ''),
+          title: Text(widget.initiatorName != null ? widget.initiatorName : ''),
         ),
       ),
       body: Container(
@@ -157,36 +172,53 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: noContent(appLanguage['noMessages'], context)),
             Container(
               color: Colors.grey[100],
-              child: TextFormField(
-                controller: _messageInputFieldController,
-                maxLines: null,
-                focusNode: _messageInputFieldFocusNode,
-                onChanged: (value) {
-                  handleTextInputFieldChange(value);
-                },
-                decoration: InputDecoration(
-                    hintText: appLanguage['typeMessage'],
-                    hintStyle: TextStyle(fontSize: 14.0),
-                    prefixIcon: InkWell(
-                      onTap: () {
-                        messageId != null
-                            ? onReplyToAConversation()
-                            : onStartNewConversation();
+              padding: EdgeInsets.symmetric(
+                horizontal: 5.0,
+              ),
+              child: Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      messageId != null
+                          ? onReplyToAConversation()
+                          : onStartNewConversation();
+                      Future.delayed(Duration(milliseconds: 50)).then((_) {
                         _messageInputFieldController.clear();
-                        Future.delayed(Duration(microseconds: 100), () {
+                      });
+                      Future.delayed(Duration(microseconds: 100), () {
+                        if (_scrollController.hasClients) {
                           _scrollController.animateTo(
                             0.0,
                             curve: Curves.easeOut,
                             duration: const Duration(milliseconds: 300),
                           );
-                        });
+                        }
+                      });
+                    },
+                    child: Icon(
+                      Icons.send,
+                      textDirection: TextDirection.ltr,
+                      color: Colors.purple,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 8.0,
+                  ),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _messageInputFieldController,
+                      maxLines: null,
+                      focusNode: _messageInputFieldFocusNode,
+                      onChanged: (value) {
+                        handleTextInputFieldChange(value);
                       },
-                      child: Icon(
-                        Icons.send,
-                        textDirection: TextDirection.ltr,
-                        color: Colors.purple,
+                      decoration: InputDecoration(
+                        hintText: appLanguage['typeMessage'],
+                        hintStyle: TextStyle(fontSize: 14.0),
                       ),
-                    )),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

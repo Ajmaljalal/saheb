@@ -345,8 +345,9 @@ class _AdvertDetailsState extends State<AdvertDetails>
                     MaterialPageRoute(
                       builder: (context) => ChatScreen(
                         messageId: null,
-                        receiverId: owner['id'],
-                        messageOwnerName: owner['name'],
+                        initiatorId: owner['id'],
+                        initiatorName: owner['name'],
+                        initiatorPhoto: owner['photo'],
                       ),
                     ),
                   );

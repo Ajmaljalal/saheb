@@ -249,6 +249,8 @@ class _MainScreenState extends State<MainScreen> {
       var message = {
         'conversations': messagesSnapshot.data['messages'],
         'messageId': messagesSnapshot.documentID,
+        'about': messagesSnapshot.data['about'],
+        'initiator': messagesSnapshot.data['initiator'],
       };
       return message;
     }).toList();

@@ -214,12 +214,12 @@ class _ServiceDetailsState extends State<ServiceDetails>
                           right: 0,
                           left: 0,
                           child: serviceContactDetails(
-                            service['phone'],
-                            appLanguage,
-                            fontSize,
-                            service['owner']['id'],
-                            service['owner']['name'],
-                          ),
+                              service['phone'],
+                              appLanguage,
+                              fontSize,
+                              service['owner']['id'],
+                              service['owner']['name'],
+                              service['owner']['photo']),
                         )
                       : emptyBox(),
                 ],
@@ -381,6 +381,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
     fontSize,
     serviceOwnerId,
     serviceOwnerName,
+    serviceOwnerPhoto,
   ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 70.0),
@@ -408,8 +409,9 @@ class _ServiceDetailsState extends State<ServiceDetails>
                   MaterialPageRoute(
                     builder: (context) => ChatScreen(
                       messageId: null,
-                      receiverId: serviceOwnerId,
-                      messageOwnerName: serviceOwnerName,
+                      initiatorId: serviceOwnerId,
+                      initiatorName: serviceOwnerName,
+                      initiatorPhoto: serviceOwnerPhoto,
                     ),
                   ),
                 );
