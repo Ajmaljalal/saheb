@@ -213,7 +213,12 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  addCommentOnPost({String postId, String text, Map user, String collection}) {
+  addCommentOnPost({
+    String postId,
+    String text,
+    Map user,
+    String collection,
+  }) {
     try {
       db.collection(collection).document(postId).updateData(
         {
@@ -235,7 +240,12 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  updateCommentLikes({String postId, postComment, collection, userId}) async {
+  updateCommentLikes({
+    String postId,
+    postComment,
+    collection,
+    userId,
+  }) async {
     final List commentLikes = new List<String>.from(postComment['likes']);
     commentLikes.add(userId);
     //// add date to work
@@ -302,7 +312,9 @@ class PostsProvider with ChangeNotifier {
   }
 
   ////////////////// service end points ///////////////////////////////
-  Stream<QuerySnapshot> getAllServices(type) {
+  Stream<QuerySnapshot> getAllServices(
+    type,
+  ) {
     final dataStream = db
         .collection('services')
         .where("type", isEqualTo: type)
@@ -328,7 +340,9 @@ class PostsProvider with ChangeNotifier {
   }
 
   ///////////////////// messages end points ///////////////////////////
-  Stream<QuerySnapshot> getAllMessages({String userId}) {
+  Stream<QuerySnapshot> getAllMessages({
+    String userId,
+  }) {
     final dataStream = db
         .collection('messages')
         .document(userId)
@@ -397,8 +411,11 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  Stream<DocumentSnapshot> getOneConversation(
-      {chatRoomId, userId, messagesCollection}) {
+  Stream<DocumentSnapshot> getOneConversation({
+    chatRoomId,
+    userId,
+    messagesCollection,
+  }) {
     final dataStream = db
         .collection('messages')
         .document(userId)
@@ -416,6 +433,7 @@ class PostsProvider with ChangeNotifier {
     String ownerPhoto,
     String messageId,
     String text,
+    initiator,
   }) {
     try {
       db
@@ -436,6 +454,7 @@ class PostsProvider with ChangeNotifier {
               'text': text,
             }
           ],
+          'initiator': initiator
         },
       );
 
@@ -457,6 +476,11 @@ class PostsProvider with ChangeNotifier {
               'text': text,
             }
           ],
+          'initiator': {
+            'id': userId,
+            'name': ownerName,
+            'photo': ownerPhoto,
+          }
         },
       );
     } catch (e) {

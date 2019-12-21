@@ -35,6 +35,10 @@ class _MessagesState extends State<Messages> {
                       widget.messages.toList()[index]['messageId'];
                   var conversations =
                       widget.messages.toList()[index]['conversations'];
+                  final about = widget.messages.toList()[index]['about'];
+                  final initiator =
+                      widget.messages.toList()[index]['initiator'];
+
                   return Dismissible(
                     onDismissed: (direction) {
                       widget.messages.removeAt(index);
@@ -46,6 +50,8 @@ class _MessagesState extends State<Messages> {
                     child: MessagesListTile(
                       conversations: conversations,
                       messageId: messageId,
+                      about: about,
+                      initiator: initiator,
                     ),
                   );
                 },
