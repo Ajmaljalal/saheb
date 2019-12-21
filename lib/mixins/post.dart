@@ -107,14 +107,15 @@ class PostMixin {
     if (postType != appLanguage['general'] &&
         postType != appLanguage['عمومی']) {
       return Container(
+//        color: Colors.green,
         margin: EdgeInsets.symmetric(
           horizontal: 10.0,
         ),
         child: Row(
           children: <Widget>[
             Container(
-              height: 7.0,
-              width: 7.0,
+              height: 8.0,
+              width: 8.0,
               decoration: BoxDecoration(
                 color: circleColor,
                 borderRadius: BorderRadius.circular(
@@ -129,6 +130,8 @@ class PostMixin {
               ),
               child: Text(
                 postType,
+                textDirection:
+                    isRTL(postType) ? TextDirection.rtl : TextDirection.ltr,
                 style: kPostTypeTextStyle,
                 textAlign: TextAlign.center,
               ),

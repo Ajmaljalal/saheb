@@ -251,6 +251,7 @@ class _LoginState extends State<Login> {
             hintStyle: TextStyle(
               color: Colors.grey,
               fontSize: fontSize,
+              fontFamily: lang != 'English' ? 'Muna' : '',
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30),

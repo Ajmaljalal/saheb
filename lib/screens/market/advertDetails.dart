@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/screens/messages/chatScreen.dart';
+import 'package:saheb/util/isRTL.dart';
 import 'package:saheb/widgets/button.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import 'package:saheb/widgets/errorDialog.dart';
@@ -76,7 +77,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     final String advertId = widget.advertId;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = currentLanguage == 'English' ? 12.5 : 17.0;
+    double fontSize = currentLanguage == 'English' ? 12.5 : 15.0;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
@@ -182,7 +183,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     advertDetails(
-                                      appLanguage['email'],
+                                      appLanguage['emailLabel'],
                                       advert['email'].toString(),
                                     ),
                                   ],
@@ -194,6 +195,9 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                   ),
                                   child: Text(
                                     advert['text'].toString(),
+                                    textDirection: isRTL(advert['text'])
+                                        ? TextDirection.rtl
+                                        : TextDirection.ltr,
                                     style: TextStyle(fontSize: fontSize),
                                   ),
                                 ),
@@ -275,7 +279,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
             price.toString() != 'null' ? price : noPrice,
             style: TextStyle(
               color: Colors.cyan,
-              fontSize: price.toString() != 'null' ? 20.0 : 15.0,
+              fontSize: price.toString() != 'null' ? 17.0 : 15.0,
             ),
           ),
         ),
@@ -297,8 +301,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
           Row(
             children: <Widget>[
               Text(
-                '$forText:  ',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                '$forText: ',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0,
+                ),
               ),
               text.toString() != 'null' ? Text(text) : Text('---'),
             ],
@@ -308,7 +315,12 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertOwnersDetails(owner, phoneNumber, appLanguage, fontSize) {
+  Widget advertOwnersDetails(
+    owner,
+    phoneNumber,
+    appLanguage,
+    fontSize,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(

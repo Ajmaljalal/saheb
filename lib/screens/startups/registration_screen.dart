@@ -249,6 +249,7 @@ class _RegistrationState extends State<Registration> {
               hintStyle: TextStyle(
                 color: Colors.grey,
                 fontSize: fontSize,
+                fontFamily: lang != 'English' ? 'Muna' : '',
               ),
               errorStyle: TextStyle(
                 color: Colors.white,

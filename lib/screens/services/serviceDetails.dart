@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/screens/messages/chatScreen.dart';
+import 'package:saheb/util/isRTL.dart';
 import 'package:saheb/widgets/button.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import 'package:saheb/widgets/errorDialog.dart';
@@ -193,11 +194,15 @@ class _ServiceDetailsState extends State<ServiceDetails>
                                 ),
                                 horizontalDividerIndented(),
                                 Container(
+                                  width: MediaQuery.of(context).size.width * 1,
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 10.0,
                                   ),
                                   child: Text(
                                     service['desc'].toString(),
+                                    textDirection: isRTL(service['desc'])
+                                        ? TextDirection.rtl
+                                        : TextDirection.ltr,
                                     style: TextStyle(fontSize: fontSize),
                                   ),
                                 ),
@@ -367,7 +372,14 @@ class _ServiceDetailsState extends State<ServiceDetails>
               SizedBox(
                 width: 5.0,
               ),
-              text.toString() != 'null' ? Text(text) : Text('---'),
+              text.toString() != 'null'
+                  ? Text(
+                      text,
+                      style: TextStyle(
+                        fontSize: 13.0,
+                      ),
+                    )
+                  : Text('---'),
             ],
           ),
         ],
