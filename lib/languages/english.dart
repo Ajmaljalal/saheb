@@ -26,21 +26,21 @@ Map english = {
   'close': 'Close',
 
   ////////////////// Login and sign up //////////////////////
-  'login': 'Login',
-  'signOut': 'Sign out',
-  'email': 'Email',
-  'password': 'Password',
-  'register': 'Register!',
-  'haveAnAccount': 'Have an account? ',
-  'doNotHaveAnAccount': 'Don\'t have an account? ',
+  'login': 'LOGIN',
+  'signOut': 'SIGN OUT',
+  'email': 'EMAIL',
+  'password': 'PASSWORD',
+  'register': 'REGISTER!',
+  'haveAnAccount': 'HAVE AN ACCOUNT? ',
+  'doNotHaveAnAccount': 'DON\'T HAVE AN ACCOUNT? ',
   'phone': 'Phone number (Optional)',
   'phoneNumber': 'Phone number',
-  'name': 'User name',
+  'name': 'USER NAME',
 
-  'signinWithFacebook': 'Sign in with',
-  'signinWithGoogle': 'Sign in with',
-  'registerWithFacebook': 'Register with',
-  'registerWithGoogle': 'Register with',
+  'signinWithFacebook': 'LOGIN WITH',
+  'signinWithGoogle': 'LOGIN WITH',
+  'registerWithFacebook': 'REG WITH',
+  'registerWithGoogle': 'REG WITH',
 
   'more': 'more...',
 

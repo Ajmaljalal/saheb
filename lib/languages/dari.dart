@@ -26,8 +26,8 @@ Map dari = {
   ///////////// Login and sign up /////////////////////////
   'login': 'وارد شوید',
   'signOut': 'خروج',
-  'email': 'ایمیل آدرس',
-  'password': 'پسورد',
+  'email': 'ایمیل آدرس (تنها حروف انګلیسی)',
+  'password': 'پسورد (تنها حروف انګلیسی)',
   'register': 'راجستر نمائید!',
   'haveAnAccount': 'اګر حساب دارید، ',
   'doNotHaveAnAccount': 'اګر حساب ندارید، ',

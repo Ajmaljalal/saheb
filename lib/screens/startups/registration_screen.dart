@@ -116,7 +116,7 @@ class _RegistrationState extends State<Registration> {
   @override
   Widget build(BuildContext context) {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = _language == 'English' ? 15.0 : 17.0;
+    double fontSize = _language == 'English' ? 13.0 : 15.0;
     Map appLanguage = getLanguages(context);
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
@@ -186,8 +186,13 @@ class _RegistrationState extends State<Registration> {
                     ),
                   ),
                   Center(
-                      child: haveAnAccountText(
-                          _language, appLanguage, fontSize, widget.swapScreens))
+                    child: haveAnAccountText(
+                      _language,
+                      appLanguage,
+                      fontSize,
+                      widget.swapScreens,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -223,6 +228,7 @@ class _RegistrationState extends State<Registration> {
             return null;
           },
           textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
           autocorrect: false,
           obscureText: isPassword,
           keyboardType: TextInputType.emailAddress,
@@ -230,7 +236,7 @@ class _RegistrationState extends State<Registration> {
           style: TextStyle(
             color: Colors.black,
             fontSize: fontSize,
-            letterSpacing: 3,
+//            letterSpacing: 3,
           ),
           decoration: InputDecoration(
               filled: true,
@@ -268,7 +274,12 @@ class _RegistrationState extends State<Registration> {
   }
 
   Widget registrationButton(
-      String lang, appLanguage, onSubmit, _isRegistering, fontSize) {
+    String lang,
+    appLanguage,
+    onSubmit,
+    _isRegistering,
+    fontSize,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
@@ -304,7 +315,11 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Widget thirdPartyLoginButtons(appLanguage, language, fontSize) {
+  Widget thirdPartyLoginButtons(
+    appLanguage,
+    language,
+    fontSize,
+  ) {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -392,28 +407,36 @@ class _RegistrationState extends State<Registration> {
     );
   }
 
-  Widget haveAnAccountText(lang, appLanguage, fontSize, swapScreens) {
+  Widget haveAnAccountText(
+    lang,
+    appLanguage,
+    fontSize,
+    swapScreens,
+  ) {
     if (lang == 'English') {
       return Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'Have an account?',
+              appLanguage['haveAnAccount'],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: fontSize,
               ),
             ),
-            FlatButton(
-              onPressed: () {
-                swapScreens();
-              },
-              child: Text(
-                'Login',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: fontSize,
+            Container(
+              width: 70.0,
+              child: FlatButton(
+                onPressed: () {
+                  swapScreens();
+                },
+                child: Text(
+                  appLanguage['login'],
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: fontSize,
+                  ),
                 ),
               ),
             )
@@ -431,16 +454,19 @@ class _RegistrationState extends State<Registration> {
               fontSize: fontSize,
             ),
           ),
-          FlatButton(
-            onPressed: () {
-              swapScreens();
-            },
-            padding: EdgeInsets.all(0),
-            child: Text(
-              appLanguage['login'],
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: fontSize,
+          Container(
+            width: 40.0,
+            child: FlatButton(
+              onPressed: () {
+                swapScreens();
+              },
+              padding: EdgeInsets.all(0),
+              child: Text(
+                appLanguage['login'],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: fontSize,
+                ),
               ),
             ),
           ),

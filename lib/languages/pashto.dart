@@ -25,10 +25,10 @@ Map pashto = {
   'close': 'بسته',
 
   /////////////////// Login and sign up  ////////////////
-  'login': 'ننوځئ',
+  'login': 'ننوځه!',
   'signOut': 'وتل',
-  'email': 'برېښنالیک',
-  'password': 'پسورد',
+  'email': 'برېښنالیک (یواځې انګلیسی حروف)',
+  'password': 'پسورد (یواځې انګلیسی حروف)',
   'register': 'حساب جوړ کړه!',
   'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',

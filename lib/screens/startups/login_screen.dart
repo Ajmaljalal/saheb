@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = _language == 'English' ? 15.0 : 17.0;
+    double fontSize = _language == 'English' ? 13.0 : 15.0;
     Map appLanguage = getLanguages(context);
     return screen == 'login'
         ? Scaffold(
@@ -171,7 +171,11 @@ class _LoginState extends State<Login> {
                         ),
                         SizedBox(height: 80),
                         thirdPartyLoginButtons(
-                            appLanguage, _language, onGoogleLogin, fontSize),
+                          appLanguage,
+                          _language,
+                          onGoogleLogin,
+                          fontSize,
+                        ),
                         Center(
                           child: Divider(
                             color: Colors.white,
@@ -180,8 +184,13 @@ class _LoginState extends State<Login> {
                           ),
                         ),
                         Center(
-                            child: haveAnAccountText(
-                                _language, appLanguage, fontSize, swapScreens))
+                          child: haveAnAccountText(
+                            _language,
+                            appLanguage,
+                            fontSize,
+                            swapScreens,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -218,6 +227,7 @@ class _LoginState extends State<Login> {
             return null;
           },
           textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
           autocorrect: false,
           obscureText: isPassword,
           keyboardType: TextInputType.emailAddress,
@@ -225,7 +235,6 @@ class _LoginState extends State<Login> {
           style: TextStyle(
             color: Colors.black,
             fontSize: fontSize,
-            letterSpacing: 3,
           ),
           decoration: InputDecoration(
             filled: true,
@@ -300,7 +309,11 @@ class _LoginState extends State<Login> {
   }
 
   Widget thirdPartyLoginButtons(
-      appLanguage, language, onGoogleLogin, fontSize) {
+    appLanguage,
+    language,
+    onGoogleLogin,
+    fontSize,
+  ) {
     return Center(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -400,15 +413,18 @@ class _LoginState extends State<Login> {
                 fontSize: fontSize,
               ),
             ),
-            FlatButton(
-              onPressed: () {
-                swapScreens();
-              },
-              child: Text(
-                'Register',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: fontSize,
+            Container(
+              width: 100.0,
+              child: FlatButton(
+                onPressed: () {
+                  swapScreens();
+                },
+                child: Text(
+                  appLanguage['register'],
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: fontSize,
+                  ),
                 ),
               ),
             )
