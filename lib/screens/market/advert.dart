@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:saheb/util/isRTL.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
@@ -65,7 +66,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
           right: 3.0,
           bottom: 8.0,
         ),
-        padding: EdgeInsets.only(bottom: 10.0),
+        padding: EdgeInsets.only(bottom: 5.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(
             10.0,
@@ -103,7 +104,11 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
       child: Text(
         title,
         maxLines: 2,
-        style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+        textDirection: isRTL(title) ? TextDirection.rtl : TextDirection.ltr,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -112,7 +117,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
     final shamsiDate = Jalali.fromDateTime(date.toDate());
     final advertDate =
         '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Container(
@@ -123,20 +128,30 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
             color: Colors.purple,
           ),
           padding: EdgeInsets.symmetric(
-            horizontal: 10.0,
+            horizontal: 5.0,
             vertical: 2.0,
           ),
           child: Center(
             child: Text(
-              price == 'null' ? appLanguage['noPrice'] : price,
-              style: TextStyle(color: Colors.white),
+              price.toString() == 'null' ? appLanguage['noPrice'] : price,
+              textDirection: isRTL(price.toString())
+                  ? TextDirection.rtl
+                  : TextDirection.ltr,
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
         ),
         Container(
           child: Text(
             advertDate,
-            style: TextStyle(fontSize: 12.0),
+            textDirection: isRTL(advertDate.toString())
+                ? TextDirection.rtl
+                : TextDirection.ltr,
+            style: TextStyle(
+              fontSize: 10.0,
+            ),
           ),
         ),
       ],

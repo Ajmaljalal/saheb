@@ -24,11 +24,13 @@ Map pashto = {
   'open': 'پرانیستی',
   'close': 'بسته',
 
+  'emailLabel': 'برېښنالیک',
+
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځه!',
   'signOut': 'وتل',
   'email': 'برېښنالیک (یواځې انګلیسی حروف)',
-  'password': 'پسورد (یواځې انګلیسی حروف)',
+  'password': 'رمز (یواځې انګلیسی حروف)',
   'register': 'حساب جوړ کړه!',
   'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',

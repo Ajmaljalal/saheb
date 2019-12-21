@@ -166,11 +166,17 @@ class AddPostMixin {
     );
   }
 
-  Widget priceArea({appLanguage, onChange, fontSize, focusNode}) {
+  Widget priceArea({
+    appLanguage,
+    onChange,
+    fontSize,
+    focusNode,
+  }) {
     return Container(
       child: TextField(
         onChanged: onChange,
         focusNode: focusNode,
+        maxLength: 18,
         style: TextStyle(
           height: 0.95,
           fontSize: fontSize,

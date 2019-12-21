@@ -85,10 +85,10 @@ class _MarketState extends State<Market> {
                         left: 3.0,
                         right: 3.0,
                         top: 0,
-                        bottom: 5.0,
+                        bottom: 0.0,
                       ),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 0.63),
+                          crossAxisCount: 2, childAspectRatio: 0.61),
                       itemBuilder: (context, index) {
                         final advertId =
                             filteredPosts.toList()[index]['advertId'];

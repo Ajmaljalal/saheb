@@ -25,6 +25,8 @@ Map english = {
   'open': 'Open',
   'close': 'Close',
 
+  'emailLabel': 'Email',
+
   ////////////////// Login and sign up //////////////////////
   'login': 'LOGIN',
   'signOut': 'SIGN OUT',
