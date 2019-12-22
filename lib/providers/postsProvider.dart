@@ -145,17 +145,31 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  favoriteAPost(postId, collection, userId) async {
-    try {
-      db.collection(collection).document(postId).updateData(
-        {
-          'favorites': FieldValue.arrayUnion(
-            [userId],
-          ),
-        },
-      );
-    } catch (e) {
-      print(e.toString());
+  favoriteAPost(postId, collection, userId, isFavorite) async {
+    if (isFavorite) {
+      try {
+        db.collection(collection).document(postId).updateData(
+          {
+            'favorites': FieldValue.arrayRemove(
+              [userId],
+            ),
+          },
+        );
+      } catch (e) {
+        print(e.toString());
+      }
+    } else {
+      try {
+        db.collection(collection).document(postId).updateData(
+          {
+            'favorites': FieldValue.arrayUnion(
+              [userId],
+            ),
+          },
+        );
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 
@@ -199,17 +213,36 @@ class PostsProvider with ChangeNotifier {
     return dataStream;
   }
 
-  updatePostLikes(String postId, collection, userId) {
-    try {
-      db.collection(collection).document(postId).updateData(
-        {
-          'likes': FieldValue.arrayUnion(
-            [userId],
-          ),
-        },
-      );
-    } catch (e) {
-      print(e.toString());
+  updatePostLikes(
+    String postId,
+    collection,
+    userId,
+    isLiked,
+  ) {
+    if (isLiked) {
+      try {
+        db.collection(collection).document(postId).updateData(
+          {
+            'likes': FieldValue.arrayRemove(
+              [userId],
+            ),
+          },
+        );
+      } catch (e) {
+        print(e.toString());
+      }
+    } else {
+      try {
+        db.collection(collection).document(postId).updateData(
+          {
+            'likes': FieldValue.arrayUnion(
+              [userId],
+            ),
+          },
+        );
+      } catch (e) {
+        print(e.toString());
+      }
     }
   }
 

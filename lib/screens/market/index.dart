@@ -160,12 +160,6 @@ class _MarketState extends State<Market> {
               handleFilterOptionsChange: handleFilterOptionsChange,
             ),
             topScreenFilterOption(
-              text: appLanguage['needPro'],
-              id: 8,
-              currentOptionId: currentOptionId,
-              handleFilterOptionsChange: handleFilterOptionsChange,
-            ),
-            topScreenFilterOption(
               text: appLanguage['myFavorites'],
               id: 9,
               currentOptionId: currentOptionId,

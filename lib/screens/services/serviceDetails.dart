@@ -47,10 +47,20 @@ class _ServiceDetailsState extends State<ServiceDetails>
     );
   }
 
-  favoriteAPost(userId, message) async {
-    await Provider.of<PostsProvider>(context)
-        .favoriteAPost(widget.serviceId, 'services', userId);
-    renderFlashBar(message);
+  favoriteAPost(
+    userId,
+    message,
+    isLiked,
+  ) async {
+    await Provider.of<PostsProvider>(context).favoriteAPost(
+      widget.serviceId,
+      'services',
+      userId,
+      isLiked,
+    );
+    if (!isLiked) {
+      renderFlashBar(message);
+    }
   }
 
   renderFlashBar(message) {
@@ -117,11 +127,11 @@ class _ServiceDetailsState extends State<ServiceDetails>
               final bool isOwner =
                   service['owner']['id'] == userId ? true : false;
 
-              final shamsiDate = service != null
-                  ? Jalali.fromDateTime(service['date'].toDate())
-                  : null;
-              final serviceDate =
-                  '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
+//              final shamsiDate = service != null
+//                  ? Jalali.fromDateTime(service['date'].toDate())
+//                  : null;
+//              final serviceDate =
+//                  '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
               return Stack(
                 children: <Widget>[
                   SingleChildScrollView(
@@ -143,6 +153,8 @@ class _ServiceDetailsState extends State<ServiceDetails>
                                       isOwner: isOwner,
                                       userId: userId,
                                       appLanguage: appLanguage,
+                                      isLiked:
+                                          service['favorites'].contains(userId),
                                     ),
                                   ],
                                 ),
@@ -461,6 +473,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
     isOwner,
     userId,
     appLanguage,
+    isLiked,
   }) {
     return Positioned(
       bottom: 0.0,
@@ -472,13 +485,14 @@ class _ServiceDetailsState extends State<ServiceDetails>
           !isOwner
               ? serviceActionButton(
                   FontAwesomeIcons.heart,
-                  Colors.cyan,
+                  Colors.white,
                   null,
                   favoriteAPost,
                   context,
                   'favorite',
                   userId,
                   appLanguage['serviceSaved'],
+                  isLiked,
                 )
               : emptyBox(),
           isOwner
@@ -491,6 +505,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
                   'delete',
                   userId,
                   appLanguage['serviceDeleted'],
+                  isLiked,
                 )
               : emptyBox(),
         ],
@@ -507,6 +522,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
     actionType,
     userId,
     message,
+    isLiked,
   ) {
     return RawMaterialButton(
       constraints: const BoxConstraints(minWidth: 40.0, minHeight: 36.0),
@@ -514,7 +530,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
         if (actionType == 'delete') {
           onDelete(context, message);
         } else
-          onFavorite(userId, message);
+          onFavorite(userId, message, isLiked);
       },
       child: Icon(
         icon,
@@ -523,7 +539,9 @@ class _ServiceDetailsState extends State<ServiceDetails>
       ),
       shape: const CircleBorder(),
       elevation: 2.0,
-      fillColor: Colors.white,
+      fillColor: isLiked
+          ? Colors.purple
+          : actionType == 'delete' ? Colors.white : Colors.grey,
     );
   }
 }
