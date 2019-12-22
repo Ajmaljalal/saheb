@@ -45,10 +45,16 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  favoriteAPost(userId, message) async {
-    await Provider.of<PostsProvider>(context)
-        .favoriteAPost(widget.advertId, 'adverts', userId);
-    renderFlashBar(message);
+  favoriteAPost(userId, message, isFavorite) async {
+    await Provider.of<PostsProvider>(context).favoriteAPost(
+      widget.advertId,
+      'adverts',
+      userId,
+      isFavorite,
+    );
+    if (!isFavorite) {
+      renderFlashBar(message);
+    }
   }
 
   renderFlashBar(message) {
@@ -141,6 +147,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                       isOwner: isOwner,
                                       userId: userId,
                                       appLanguage: appLanguage,
+                                      isFavorite:
+                                          advert['favorites'].contains(userId),
                                     ),
                                   ],
                                 ),
@@ -398,6 +406,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     isOwner,
     userId,
     appLanguage,
+    isFavorite,
   }) {
     return Positioned(
       bottom: 0.0,
@@ -409,13 +418,14 @@ class _AdvertDetailsState extends State<AdvertDetails>
           !isOwner
               ? advertActionButton(
                   FontAwesomeIcons.heart,
-                  Colors.cyan,
+                  Colors.white,
                   null,
                   favoriteAPost,
                   context,
                   'favorite',
                   userId,
                   appLanguage['advertSaved'],
+                  isFavorite,
                 )
               : emptyBox(),
           isOwner
@@ -428,6 +438,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   'delete',
                   userId,
                   appLanguage['advertDeleted'],
+                  isFavorite,
                 )
               : emptyBox(),
         ],
@@ -444,6 +455,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     actionType,
     userId,
     message,
+    isFavorite,
   ) {
     return RawMaterialButton(
       constraints: const BoxConstraints(minWidth: 40.0, minHeight: 36.0),
@@ -451,7 +463,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
         if (actionType == 'delete') {
           onDelete(context, message);
         } else
-          onFavorite(userId, message);
+          onFavorite(userId, message, isFavorite);
       },
       child: Icon(
         icon,
@@ -460,7 +472,9 @@ class _AdvertDetailsState extends State<AdvertDetails>
       ),
       shape: const CircleBorder(),
       elevation: 2.0,
-      fillColor: Colors.white,
+      fillColor: isFavorite
+          ? Colors.purple
+          : actionType == 'English' ? Colors.white : Colors.grey,
     );
   }
 }

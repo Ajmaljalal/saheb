@@ -149,6 +149,7 @@ class PostMixin {
     appLanguage,
     postOwnerId,
     currentUserId,
+    isFavorite,
   }) {
     return Container(
       width: 45.0,
@@ -161,6 +162,7 @@ class PostMixin {
             appLanguage,
             currentUserId,
             postOwnerId,
+            isFavorite,
           );
         },
         child: Container(
@@ -359,6 +361,7 @@ class PostMixin {
     post,
     appLanguage,
     userId,
+    isLiked,
   }) {
     final comments = post['comments'];
     final likes = post['likes'];
@@ -397,9 +400,10 @@ class PostMixin {
               const SizedBox(
                 width: 5,
               ),
-              const Icon(
-                FontAwesomeIcons.heart,
+              Icon(
+                isLiked ? Icons.favorite : Icons.favorite_border,
                 size: 13.0,
+                color: Colors.purple,
               ),
             ],
           )
@@ -417,6 +421,7 @@ class PostMixin {
     flag,
     updateLikes,
     onDeletePost,
+    isLiked,
     context,
   }) {
     return Container(
@@ -429,15 +434,16 @@ class PostMixin {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           InkResponse(
-            splashColor: Colors.grey[200],
+            splashColor: Colors.purple[200],
             radius: 25.0,
             child: Icon(
               FontAwesomeIcons.thumbsUp,
-              color: Colors.grey,
+              color: isLiked ? Colors.purple : Colors.grey,
               size: 20,
             ),
             onTap: () {
-              updateLikes(postLikes: post['likes'], userId: userId);
+              updateLikes(
+                  postLikes: post['likes'], userId: userId, isLiked: isLiked);
             },
           ),
           SizedBox(

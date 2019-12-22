@@ -182,6 +182,7 @@ class AddPostMixin {
           fontSize: fontSize,
         ),
         decoration: InputDecoration(
+          counterText: "",
           labelText: appLanguage['price'],
           labelStyle: TextStyle(
             fontSize: fontSize,

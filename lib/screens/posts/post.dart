@@ -57,13 +57,17 @@ class _PostState extends State<Post> with PostMixin {
     );
   }
 
-  updateLikes({List postLikes, userId}) {
-    if (postLikes.contains(userId)) {
-      return;
-    } else {
-      Provider.of<PostsProvider>(context)
-          .updatePostLikes(widget.postId, 'posts', userId);
-    }
+  updateLikes({
+    List postLikes,
+    userId,
+    isLiked,
+  }) {
+    Provider.of<PostsProvider>(context).updatePostLikes(
+      widget.postId,
+      'posts',
+      userId,
+      isLiked,
+    );
   }
 
   deletePost(message) {
@@ -72,9 +76,9 @@ class _PostState extends State<Post> with PostMixin {
     renderFlashBar(message);
   }
 
-  favoriteAPost(userId, message) {
+  favoriteAPost(userId, message, isFavorite) {
     Provider.of<PostsProvider>(context)
-        .favoriteAPost(widget.postId, 'posts', userId);
+        .favoriteAPost(widget.postId, 'posts', userId, isFavorite);
     Navigator.pop(context);
     renderFlashBar(message);
   }
@@ -145,6 +149,7 @@ class _PostState extends State<Post> with PostMixin {
                     appLanguage: appLanguage,
                     postOwnerId: post['owner']['id'],
                     currentUserId: currentUserId,
+                    isFavorite: post['favorites'].contains(currentUserId),
                   ),
                 ],
               ),
@@ -174,6 +179,8 @@ class _PostState extends State<Post> with PostMixin {
                 post: post,
                 appLanguage: appLanguage,
                 userId: currentUserId,
+                isLiked:
+                    widget.post['likes'].contains(currentUserId) ? true : false,
               ),
               kHorizontalDivider,
               postActionButtons(
@@ -186,6 +193,8 @@ class _PostState extends State<Post> with PostMixin {
                 updateLikes: updateLikes,
                 onDeletePost: deletePost,
                 context: context,
+                isLiked:
+                    widget.post['likes'].contains(currentUserId) ? true : false,
               ),
             ],
           ),
@@ -194,7 +203,13 @@ class _PostState extends State<Post> with PostMixin {
     );
   }
 
-  showPostOptions(context, appLanguage, currentUserId, postOwnerId) {
+  showPostOptions(
+    context,
+    appLanguage,
+    currentUserId,
+    postOwnerId,
+    isFavorite,
+  ) {
     bool postOwner = currentUserId == postOwnerId ? true : false;
     showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -231,7 +246,11 @@ class _PostState extends State<Post> with PostMixin {
               icon: Icons.bookmark,
               color: Colors.green,
               onPressed: () {
-                this.favoriteAPost(currentUserId, appLanguage['postSaved']);
+                this.favoriteAPost(
+                  currentUserId,
+                  appLanguage['postSaved'],
+                  isFavorite,
+                );
               },
             ),
             postOwner
