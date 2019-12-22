@@ -159,24 +159,47 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
   }
 
   Widget advertImageHolder(images) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(
-        10.0,
-      ),
-      child: images.length > 0
-          ? Image.network(
-              images[0],
-              fit: BoxFit.cover,
-              height: 150.0,
-              width: 168.0,
-            )
-          : Center(
-              child: Icon(
-                FontAwesomeIcons.camera,
-                color: Colors.grey[200],
-                size: 120.0,
+//    return ClipRRect(
+//        borderRadius: BorderRadius.circular(
+//          10.0,
+//        ),
+//        child: images.length > 0
+//            ? Image.network(
+//                images[0],
+//                fit: BoxFit.fill,
+////                height: 150.0,
+//                width: 168.0,
+//              )
+//            : Center(
+//                child: Icon(
+//                  FontAwesomeIcons.camera,
+//                  color: Colors.grey[200],
+//                  size: 120.0,
+//                ),
+//              ),
+//      );
+
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(
+          10.0,
+        ),
+        child: images.length > 0
+            ? Image.network(
+                images[0],
+                fit: BoxFit.cover,
+                height: 150.0,
+                width: constraints.maxWidth,
+              )
+            : Center(
+                child: Icon(
+                  FontAwesomeIcons.camera,
+                  color: Colors.grey[200],
+                  size: 120.0,
+                ),
               ),
-            ),
-    );
+      );
+    });
   }
 }
