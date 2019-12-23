@@ -7,7 +7,7 @@ import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/util/mapPostTypes.dart';
 import 'package:saheb/widgets/errorDialog.dart';
-import '../../widgets/verticalDivider.dart';
+//import '../../widgets/verticalDivider.dart';
 import '../../providers/authProvider.dart';
 import '../../locations/locations_sublocations.dart';
 import '../../util/uploadImage.dart';
@@ -102,7 +102,7 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
   uploadAllImages(images) {
     var futures = List<Future>();
     for (var imageFile in images) {
-      futures.add(uploadImage(image: imageFile, collection: 'posts')
+      futures.add(uploadImage(image: imageFile, collection: 'services')
           .then((downloadUrl) {
         _uploadedFileUrl.add(downloadUrl);
       }).catchError((err) {

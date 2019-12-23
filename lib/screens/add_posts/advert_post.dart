@@ -100,7 +100,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   uploadAllImages(images) {
     var futures = List<Future>();
     for (var imageFile in images) {
-      futures.add(uploadImage(image: imageFile, collection: 'posts')
+      futures.add(uploadImage(image: imageFile, collection: 'adverts')
           .then((downloadUrl) {
         _uploadedFileUrl.add(downloadUrl);
       }).catchError((err) {

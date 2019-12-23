@@ -84,7 +84,6 @@ class Application extends StatelessWidget {
                           : Login(),
                     ),
                   ),
-//      initialRoute: '/',
         routes: {
           '/posts': (context) => MainScreen(),
           '/postDetails': (context) => PostDetails(),

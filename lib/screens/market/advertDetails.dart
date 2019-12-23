@@ -33,16 +33,14 @@ class _AdvertDetailsState extends State<AdvertDetails>
     with PostMixin, AdvertMixin {
   bool advertDeleted = false;
 
-  deletePost(context, message) async {
+  deletePost(context, message, images) async {
     setState(() {
       advertDeleted = true;
     });
     Navigator.pop(context);
     renderFlashBar(message);
-    await Provider.of<PostsProvider>(context).deleteOnePost(
-      widget.advertId,
-      'adverts',
-    );
+    await Provider.of<PostsProvider>(context)
+        .deleteOneRecord(widget.advertId, 'adverts', images);
   }
 
   favoriteAPost(userId, message, isFavorite) async {
@@ -149,6 +147,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                       appLanguage: appLanguage,
                                       isFavorite:
                                           advert['favorites'].contains(userId),
+                                      advertImages: advert['images'],
                                     ),
                                   ],
                                 ),
@@ -402,12 +401,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertActionButtonsHolder({
-    isOwner,
-    userId,
-    appLanguage,
-    isFavorite,
-  }) {
+  Widget advertActionButtonsHolder(
+      {isOwner, userId, appLanguage, isFavorite, advertImages}) {
     return Positioned(
       bottom: 0.0,
       right: 0,
@@ -426,6 +421,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   userId,
                   appLanguage['advertSaved'],
                   isFavorite,
+                  null,
                 )
               : emptyBox(),
           isOwner
@@ -439,6 +435,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   userId,
                   appLanguage['advertDeleted'],
                   isFavorite,
+                  advertImages,
                 )
               : emptyBox(),
         ],
@@ -456,12 +453,13 @@ class _AdvertDetailsState extends State<AdvertDetails>
     userId,
     message,
     isFavorite,
+    advertImages,
   ) {
     return RawMaterialButton(
       constraints: const BoxConstraints(minWidth: 40.0, minHeight: 36.0),
       onPressed: () {
         if (actionType == 'delete') {
-          onDelete(context, message);
+          onDelete(context, message, advertImages);
         } else
           onFavorite(userId, message, isFavorite);
       },

@@ -95,13 +95,6 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     );
   }
 
-  deletePost(context) async {
-    await Provider.of<PostsProvider>(context).deleteOnePost(
-      'posts',
-      widget.postId,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
@@ -238,7 +231,6 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                 flag: 'details',
                 updateLikes: updateLikes,
                 context: context,
-                onDeletePost: deletePost,
                 isLiked: post['likes'].contains(userId),
               ),
               Divider(

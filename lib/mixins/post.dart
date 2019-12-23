@@ -143,14 +143,14 @@ class PostMixin {
       return emptyBox();
   }
 
-  Widget postOptions({
-    context,
-    onOpenOptions,
-    appLanguage,
-    postOwnerId,
-    currentUserId,
-    isFavorite,
-  }) {
+  Widget postOptions(
+      {context,
+      onOpenOptions,
+      appLanguage,
+      postOwnerId,
+      currentUserId,
+      isFavorite,
+      postImages}) {
     return Container(
       width: 45.0,
       child: FlatButton(
@@ -163,6 +163,7 @@ class PostMixin {
             currentUserId,
             postOwnerId,
             isFavorite,
+            postImages,
           );
         },
         child: Container(
@@ -420,7 +421,6 @@ class PostMixin {
     String postTitle,
     flag,
     updateLikes,
-    onDeletePost,
     isLiked,
     context,
   }) {

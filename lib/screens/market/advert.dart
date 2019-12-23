@@ -1,16 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:saheb/util/isRTL.dart';
 import 'package:shamsi_date/shamsi_date.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import '../../providers/languageProvider.dart';
-import '../../constants/constants.dart';
-import '../../providers/authProvider.dart';
+//import '../../constants/constants.dart';
+//import '../../providers/authProvider.dart';
 import 'advertDetails.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
@@ -43,9 +43,10 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
   }
 
   deleteAdvert(context) {
-    Provider.of<PostsProvider>(context).deleteOnePost(
+    Provider.of<PostsProvider>(context).deleteOneRecord(
       'adverts',
       widget.advert.documentID,
+      widget.advert['images'],
     );
   }
 

@@ -12,7 +12,7 @@ import 'package:saheb/widgets/errorDialog.dart';
 import 'package:saheb/widgets/horizontalDividerIndented.dart';
 import 'package:saheb/widgets/noContent.dart';
 import 'package:saheb/widgets/wait.dart';
-import 'package:shamsi_date/shamsi_date.dart';
+//import 'package:shamsi_date/shamsi_date.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
@@ -35,15 +35,16 @@ class _ServiceDetailsState extends State<ServiceDetails>
     with PostMixin, AdvertMixin {
   bool serviceDeleted = false;
 
-  deletePost(context, message) async {
+  deletePost(context, message, images) async {
     setState(() {
       serviceDeleted = true;
     });
     Navigator.pop(context);
     renderFlashBar(message);
-    await Provider.of<PostsProvider>(context).deleteOnePost(
+    await Provider.of<PostsProvider>(context).deleteOneRecord(
       widget.serviceId,
       'services',
+      images,
     );
   }
 
@@ -150,12 +151,12 @@ class _ServiceDetailsState extends State<ServiceDetails>
                                   children: <Widget>[
                                     serviceImagesHolder(service['images']),
                                     serviceActionButtonsHolder(
-                                      isOwner: isOwner,
-                                      userId: userId,
-                                      appLanguage: appLanguage,
-                                      isLiked:
-                                          service['favorites'].contains(userId),
-                                    ),
+                                        isOwner: isOwner,
+                                        userId: userId,
+                                        appLanguage: appLanguage,
+                                        isLiked: service['favorites']
+                                            .contains(userId),
+                                        serviceImages: service['images']),
                                   ],
                                 ),
                                 const SizedBox(height: 5.0),
@@ -474,6 +475,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
     userId,
     appLanguage,
     isLiked,
+    serviceImages,
   }) {
     return Positioned(
       bottom: 0.0,
@@ -493,6 +495,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
                   userId,
                   appLanguage['serviceSaved'],
                   isLiked,
+                  null,
                 )
               : emptyBox(),
           isOwner
@@ -506,6 +509,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
                   userId,
                   appLanguage['serviceDeleted'],
                   isLiked,
+                  serviceImages,
                 )
               : emptyBox(),
         ],
@@ -523,12 +527,13 @@ class _ServiceDetailsState extends State<ServiceDetails>
     userId,
     message,
     isLiked,
+    serviceImages,
   ) {
     return RawMaterialButton(
       constraints: const BoxConstraints(minWidth: 40.0, minHeight: 36.0),
       onPressed: () {
         if (actionType == 'delete') {
-          onDelete(context, message);
+          onDelete(context, message, serviceImages);
         } else
           onFavorite(userId, message, isLiked);
       },
