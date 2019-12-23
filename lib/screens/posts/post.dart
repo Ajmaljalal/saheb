@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/util/deleteImages.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import '../../widgets/showInfoFushbar.dart';
 import '../../providers/authProvider.dart';
@@ -70,8 +71,9 @@ class _PostState extends State<Post> with PostMixin {
     );
   }
 
-  deletePost(message) {
-    Provider.of<PostsProvider>(context).deleteOnePost(widget.postId, 'posts');
+  deletePost(message, images) {
+    Provider.of<PostsProvider>(context)
+        .deleteOneRecord(widget.postId, 'posts', images);
     Navigator.pop(context);
     renderFlashBar(message);
   }
@@ -150,6 +152,7 @@ class _PostState extends State<Post> with PostMixin {
                     postOwnerId: post['owner']['id'],
                     currentUserId: currentUserId,
                     isFavorite: post['favorites'].contains(currentUserId),
+                    postImages: post['images'],
                   ),
                 ],
               ),
@@ -191,7 +194,6 @@ class _PostState extends State<Post> with PostMixin {
                 postTitle: post['title'],
                 flag: 'post',
                 updateLikes: updateLikes,
-                onDeletePost: deletePost,
                 context: context,
                 isLiked:
                     widget.post['likes'].contains(currentUserId) ? true : false,
@@ -209,6 +211,7 @@ class _PostState extends State<Post> with PostMixin {
     currentUserId,
     postOwnerId,
     isFavorite,
+    postImages,
   ) {
     bool postOwner = currentUserId == postOwnerId ? true : false;
     showModalBottomSheet(
@@ -288,9 +291,9 @@ class _PostState extends State<Post> with PostMixin {
                     text: appLanguage['deletePost'],
                     subText: appLanguage['deletePostSubText'],
                     icon: Icons.delete,
-                    color: Colors.blueAccent,
+                    color: Colors.red,
                     onPressed: () {
-                      this.deletePost(appLanguage['postDeleted']);
+                      this.deletePost(appLanguage['postDeleted'], postImages);
                     })
                 : emptyBox(),
           ],
