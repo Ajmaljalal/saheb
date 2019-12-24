@@ -265,7 +265,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
       },
       child: images.length > 0
           ? postImages(
-              images: images,
+              image: images[0],
               context: context,
               scrollView: Axis.horizontal,
             )

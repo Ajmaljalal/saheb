@@ -141,6 +141,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
                                 Stack(
                                   children: <Widget>[
                                     advertImagesHolder(advert['images']),
+                                    advertMoreImageIndicator(
+                                      appLanguage: appLanguage,
+                                      length: (advert['images'].length) - 1,
+                                      context: context,
+                                    ),
                                     advertActionButtonsHolder(
                                       isOwner: isOwner,
                                       userId: userId,
@@ -253,7 +258,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
       },
       child: images.length > 0
           ? postImages(
-              images: images,
+              image: images[0],
               context: context,
               scrollView: Axis.horizontal,
             )
@@ -264,6 +269,38 @@ class _AdvertDetailsState extends State<AdvertDetails>
                 size: 140.0,
               ),
             ),
+    );
+  }
+
+  Widget advertMoreImageIndicator({
+    appLanguage,
+    length,
+    context,
+  }) {
+    final userLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    return Positioned(
+      bottom: 6.0,
+      right: userLanguage == 'English' ? 0.0 : 265.0,
+      left: userLanguage == 'English' ? 265.0 : 0.0,
+      child: Container(
+        color: Colors.white.withOpacity(0.5),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Icon(
+              FontAwesomeIcons.images,
+              size: 18.0,
+            ),
+            SizedBox(
+              width: 5.0,
+            ),
+            Text(
+              '+${length.toString()}',
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -401,8 +438,13 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertActionButtonsHolder(
-      {isOwner, userId, appLanguage, isFavorite, advertImages}) {
+  Widget advertActionButtonsHolder({
+    isOwner,
+    userId,
+    appLanguage,
+    isFavorite,
+    advertImages,
+  }) {
     return Positioned(
       bottom: 0.0,
       right: 0,
@@ -472,7 +514,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
       elevation: 2.0,
       fillColor: isFavorite
           ? Colors.purple
-          : actionType == 'English' ? Colors.white : Colors.grey,
+          : actionType == 'delete' ? Colors.white : Colors.grey,
     );
   }
 }
