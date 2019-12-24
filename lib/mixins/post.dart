@@ -318,7 +318,7 @@ class PostMixin {
             image,
             context,
             imagesWidth,
-            BoxFit.fill,
+            BoxFit.cover,
           )),
     );
   }

@@ -47,7 +47,7 @@ class Application extends StatelessWidget {
 
     return Consumer<AuthProvider>(
       builder: (context, auth, _) => MaterialApp(
-        title: 'PYWAST',
+        title: 'پیوست',
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
@@ -55,14 +55,11 @@ class Application extends StatelessWidget {
         supportedLocales: [
           Locale("ps", "AF"),
           Locale("fa", "IR"),
-          Locale("en", "US") // OR Locale('ar', 'AE') OR Other RTL locales
+          Locale("en", "US")
         ],
         locale: _language == 'English'
             ? Locale("en", "US")
-            : _language == 'dari'
-                ? Locale("fa", "IR")
-                : Locale(
-                    "ps", "AF"), // OR Locale('ar', 'AE') OR Other RTL locales,
+            : _language == 'dari' ? Locale("fa", "IR") : Locale("ps", "AF"),
         theme: ThemeData(
           primaryColor: Colors.cyan[800],
           accentColor: Colors.cyanAccent[700],

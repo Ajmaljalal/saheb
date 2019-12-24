@@ -43,14 +43,15 @@ class FullScreenImage extends StatelessWidget with PostMixin {
     return Center(
       child: Container(
         height: MediaQuery.of(context).size.height * 1,
-        child: new Swiper(
+        child: Swiper(
           itemBuilder: (BuildContext context, int index) {
             return singleImageRenderer(
                 images[index], context, imagesWidth, boxFitValue);
           },
           itemCount: images.length,
-          pagination: SwiperPagination(),
-          control: SwiperControl(),
+          pagination: const SwiperPagination(),
+          control: const SwiperControl(),
+          loop: false,
         ),
       ),
     );
