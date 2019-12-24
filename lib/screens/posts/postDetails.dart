@@ -194,6 +194,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                       MaterialPageRoute(
                         builder: (context) => FullScreenImage(
                           images: post['images'],
+                          boxFitValue: BoxFit.fitWidth,
                         ),
                       ),
                     );

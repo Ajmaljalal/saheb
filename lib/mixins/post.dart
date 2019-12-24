@@ -7,6 +7,7 @@ import 'package:shamsi_date/shamsi_date.dart';
 import '../widgets/verticalDivider.dart';
 import '../constants/constants.dart';
 import '../widgets/imageRenderer.dart';
+import '../widgets/gridViewImagesRenderer.dart';
 
 class PostMixin {
   Widget cardHeader(
@@ -243,10 +244,10 @@ class PostMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             width: MediaQuery.of(context).size.width * 0.99,
             child: Text(
-              text,
+              text.trim(),
               textDirection:
                   isRTL(text) ? TextDirection.rtl : TextDirection.ltr,
               maxLines: flag ? 50 : 3,
@@ -256,105 +257,69 @@ class PostMixin {
               ),
             ),
           ),
-          InkWell(
-            onTap: onRevealMoreText,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                text.toString().length < 120
-                    ? Text(
-                        '',
-                        style: TextStyle(
-                          fontSize: 0.000001,
-                        ),
-                      )
-                    : flag
-                        ? Text(
-                            '',
-                            style: TextStyle(
-                              fontSize: 0.000001,
-                            ),
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(
-                              left: 8.0,
-                              bottom: 3.0,
-                              top: 0.0,
-                              right: 8.0,
-                            ),
-                            child: Text(
-                              appLanguage['more'],
-                              style: TextStyle(color: Colors.blueAccent),
-                            ),
-                          ),
-              ],
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              price.toString() != 'null'
-                  ? Container(
-                      color: Colors.purple,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.0,
-                      ),
-                      child: Text(
-                        price,
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 2.0,
-                        ),
-                      ),
-                    )
-                  : const SizedBox(
-                      width: 0.0,
-                      height: 0.0,
-                    ),
-            ],
-          ),
+          revealMoreText(text, flag, onRevealMoreText, appLanguage['more']),
           images.length > 0
-              ? postImages(
-                  images: images,
-                  context: context,
-                  scrollView: imagesScrollView,
-                )
+              ? GridViewImageRenderer(images: images)
               : emptyBox(),
         ],
       ),
     );
   }
 
+  Widget revealMoreText(
+    text,
+    flag,
+    onRevealMoreText,
+    moreText,
+  ) {
+    return text.toString().length < 120
+        ? emptyBox()
+        : !flag
+            ? Container(
+                height: 20.0,
+                child: InkWell(
+                  onTap: onRevealMoreText,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 8.0,
+                          bottom: 0.0,
+                          top: 0.0,
+                          right: 8.0,
+                        ),
+                        child: Text(
+                          moreText,
+                          style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontSize: 15.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : emptyBox();
+  }
+
   Widget postImages({
-    List images,
+    image,
     context,
     scrollView,
   }) {
-    double imagesWidth;
-    switch (images.length) {
-      case 1:
-        imagesWidth = MediaQuery.of(context).size.width * 1;
-        break;
-      default:
-        imagesWidth = MediaQuery.of(context).size.width * 0.7;
-        break;
-    }
+    double imagesWidth = MediaQuery.of(context).size.width * 1;
     return Center(
       child: Container(
-        height: 280.0,
-        child: ListView.builder(
-          scrollDirection: scrollView,
-          itemCount: images.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (images[index] != null) {
-              return singleImageRenderer(images[index], context, imagesWidth);
-            } else
-              return emptyBox();
-          },
-        ),
-      ),
+          height: 280.0,
+          child: singleImageRenderer(
+            image,
+            context,
+            imagesWidth,
+            BoxFit.fill,
+          )),
     );
   }
 
@@ -731,33 +696,6 @@ class PostMixin {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget renderFullScreenImages({
-    images,
-    context,
-  }) {
-    double imagesWidth;
-    switch (images.length) {
-      case 1:
-        imagesWidth = MediaQuery.of(context).size.width * 1;
-        break;
-      default:
-        imagesWidth = MediaQuery.of(context).size.width * 1;
-        break;
-    }
-    return Center(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 1,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: images.length,
-          itemBuilder: (BuildContext context, int index) {
-            return singleImageRenderer(images[index], context, imagesWidth);
-          },
         ),
       ),
     );
