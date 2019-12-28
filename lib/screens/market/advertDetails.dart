@@ -278,7 +278,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     context,
   }) {
     final userLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    return length != 0
+    return length > 0
         ? Positioned(
             bottom: 6.0,
             right: userLanguage == 'English' ? 0.0 : 265.0,

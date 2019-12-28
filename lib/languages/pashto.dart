@@ -50,6 +50,7 @@ Map pashto = {
   'market': 'مارکیټ',
   'messages': 'پیغامونه',
   'settings': 'تنظیمات',
+  'profile': 'زما حساب',
   'services': 'خدمات',
 
   ////////////////// post/advert actions buttons ////////////////

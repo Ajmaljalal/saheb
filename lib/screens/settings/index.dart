@@ -1,7 +1,14 @@
+import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/locationProvider.dart';
+import 'package:saheb/providers/postsProvider.dart';
+import 'package:saheb/screens/settings/changeLocation.dart';
+import 'package:saheb/util/uploadImage.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
+import 'package:saheb/widgets/emptyBox.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/userNameHolder.dart';
 import '../../widgets/userLocationHolder.dart';
@@ -9,6 +16,7 @@ import '../../widgets/button.dart';
 import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -17,6 +25,113 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   String appLanguageOption;
+  File userImage;
+  String userPhotoUrl;
+  String locality;
+  String province;
+
+  Future chooseFile({source, userId}) async {
+    FocusScope.of(context).unfocus();
+    try {
+      final image = await ImagePicker.pickImage(
+        source: source,
+        maxWidth: 100,
+        maxHeight: 100,
+        imageQuality: 80,
+      );
+      if (image != null) {
+        updateUserPhoto(imageFile: image, userId: userId);
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  updateUserPhoto({imageFile, userId}) {
+    uploadImage(image: imageFile, collection: 'users').then(
+      (downloadUrl) async {
+        await Provider.of<PostsProvider>(context).updateUserInfo(
+          userId: userId,
+          field: 'photoUrl',
+          value: downloadUrl,
+          context: context,
+        );
+      },
+    ).catchError(
+      (err) {
+        print(err);
+      },
+    );
+  }
+
+  onChangeUserLocality(value) {
+    setState(() {
+      locality = value;
+    });
+  }
+
+  onChangeUserProvince(value) {
+    setState(() {
+      province = value;
+    });
+  }
+
+  void updateUserLocation({
+    userLocality,
+    userProvince,
+  }) async {
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
+    await Provider.of<LocationProvider>(context)
+        .changeUserLocality(userLocality);
+    await Provider.of<LocationProvider>(context)
+        .changeUserProvince(userProvince);
+    await Provider.of<PostsProvider>(context).updateUserInfo(
+      userId: currentUserId,
+      field: 'location',
+      value: userLocality,
+      context: context,
+    );
+  }
+
+  renderLocationPicker(appLanguage) {
+    Alert(
+      context: context,
+      title: appLanguage['locationHolder'],
+      content: ChangeLocation(
+        onChangeUserLocality: onChangeUserLocality,
+        onChangeUserProvince: onChangeUserProvince,
+      ),
+      buttons: [
+        DialogButton(
+          onPressed: () {
+            Navigator.pop(context);
+            updateUserLocation(
+              userLocality: locality,
+              userProvince: province,
+            );
+          },
+          child: Text(
+            appLanguage['save'],
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        DialogButton(
+          color: Colors.grey[200],
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            appLanguage['cancel'],
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ],
+    ).show();
+  }
 
   onChangeAppLanguage(value) async {
     setState(() {
@@ -29,16 +144,12 @@ class _SettingsState extends State<Settings> {
     await Provider.of<AuthProvider>(context).logout();
   }
 
-  Future getUserProfile() async {
-    final user = await Provider.of<AuthProvider>(context).currentUser;
-    return user;
-  }
-
   @override
   Widget build(BuildContext context) {
-//    final _language = Provider.of<LanguageProvider>(context).getLanguage;
     final appLanguage = getLanguages(context);
-    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
+    final userCurrentLocality =
+        Provider.of<LocationProvider>(context).getUserLocality;
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -48,11 +159,12 @@ class _SettingsState extends State<Settings> {
         child: Column(
           children: <Widget>[
             _userProfile(
-              getUserProfile,
-              userLocality,
+              userCurrentLocality,
+              currentUserId,
+              appLanguage,
             ),
             Container(
-              margin: EdgeInsets.only(top: 30.0),
+              margin: EdgeInsets.only(top: 10.0),
               child: _settingsOptions(appLanguage),
             ),
             Divider(color: Colors.black),
@@ -61,8 +173,8 @@ class _SettingsState extends State<Settings> {
               context: context,
               onClick: onSignOut,
               forText: 'signOut',
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: 45.0,
+              width: MediaQuery.of(context).size.width * 0.3,
+              height: 30.0,
             ),
           ],
         ),
@@ -70,29 +182,78 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget _userProfile(currentUser, userLocation) {
+  Widget _userProfile(
+    userLocation,
+    currentUserId,
+    appLanguage,
+  ) {
     var user;
-    return FutureBuilder(
-      future: currentUser(),
+    return StreamBuilder(
+      stream:
+          Provider.of<PostsProvider>(context).getOneUser(userId: currentUserId),
       builder: (context, userSnapshot) {
         user = userSnapshot.data;
         if (user != null) {
           return Center(
             child: Column(
               children: <Widget>[
-                imageRenderer(
-                  height: 80.0,
-                  width: 80.0,
-                  photo: user.photoUrl,
+                user['photoUrl'] != null
+                    ? userAvatarHolder(user['photoUrl'], currentUserId)
+                    : emptyBox(),
+                userNameHolder(name: user['name'], fontSize: 30.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    userLocationEditor(
+                        onTap: renderLocationPicker,
+                        context: context,
+                        appLanguage: appLanguage),
+                    userLocationHolder(userLocation),
+                  ],
                 ),
-                userNameHolder(name: user.displayName, fontSize: 30.0),
-                userLocationHolder(userLocation),
               ],
             ),
           );
         } else
           return Center(child: progressIndicator());
       },
+    );
+  }
+
+  Widget userAvatarHolder(
+    userPhoto,
+    userId,
+  ) {
+    return Stack(
+      children: <Widget>[
+        userAvatar(
+          height: 80.0,
+          width: 80.0,
+          photo: userPhoto,
+        ),
+        Positioned(
+          bottom: 5.0,
+          right: 5.0,
+          child: InkWell(
+            onTap: () {
+              chooseFile(source: ImageSource.gallery, userId: userId);
+            },
+            child: Container(
+              padding: EdgeInsets.all(2.0),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    30.0,
+                  ),
+                  color: Colors.white),
+              child: Icon(
+                Icons.photo_camera,
+                color: Colors.green,
+                size: 18.0,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

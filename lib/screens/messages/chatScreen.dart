@@ -258,7 +258,7 @@ class _ChatScreenState extends State<ChatScreen> {
             isOwner ? MainAxisAlignment.start : MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          imageRenderer(
+          userAvatar(
             height: 50.0,
             width: 50.0,
             photo: ownerPhoto,
@@ -317,7 +317,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: Text(message),
           ),
-          imageRenderer(
+          userAvatar(
             height: 50.0,
             width: 50.0,
             photo: ownerPhoto,

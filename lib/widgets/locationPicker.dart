@@ -42,6 +42,35 @@ class _DropDownPickerState extends State<DropDownPicker> {
           widget.onChange(value);
         },
         selectedItem: widget.value.toString(),
+        dropdownBuilder: (BuildContext context, item) {
+          return Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: 10.0,
+              vertical: 2.0,
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(color: Theme.of(context).dividerColor),
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    item.toString(),
+                    style: TextStyle(
+                      fontSize: 14.0,
+                    ),
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_drop_down,
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

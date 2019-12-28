@@ -150,6 +150,11 @@ class _ServiceDetailsState extends State<ServiceDetails>
                                 Stack(
                                   children: <Widget>[
                                     serviceImagesHolder(service['images']),
+                                    serviceMoreImageIndicator(
+                                      appLanguage: appLanguage,
+                                      length: service['images'].length - 1,
+                                      context: context,
+                                    ),
                                     serviceActionButtonsHolder(
                                         isOwner: isOwner,
                                         userId: userId,
@@ -277,6 +282,40 @@ class _ServiceDetailsState extends State<ServiceDetails>
               ),
             ),
     );
+  }
+
+  Widget serviceMoreImageIndicator({
+    appLanguage,
+    length,
+    context,
+  }) {
+    final userLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    return length > 0
+        ? Positioned(
+            bottom: 6.0,
+            right: userLanguage == 'English' ? 0.0 : 265.0,
+            left: userLanguage == 'English' ? 265.0 : 0.0,
+            child: Container(
+              color: Colors.white.withOpacity(0.5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    FontAwesomeIcons.images,
+                    size: 18.0,
+                  ),
+                  SizedBox(
+                    width: 5.0,
+                  ),
+                  Text(
+                    '+${length.toString()}',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                ],
+              ),
+            ),
+          )
+        : emptyBox();
   }
 
   Widget serviceTitleAndStatusHolder({

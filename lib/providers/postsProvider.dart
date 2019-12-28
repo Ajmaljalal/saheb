@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+import 'package:saheb/providers/authProvider.dart';
 import 'package:saheb/util/deleteImages.dart';
 import '../util/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -534,6 +536,40 @@ class PostsProvider with ChangeNotifier {
           .collection('chat-rooms')
           .document(messageId)
           .delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  ///////////////// Users //////////////////////////////
+  Stream<DocumentSnapshot> getOneUser({userId}) {
+    var dataStream;
+    try {
+      dataStream = db.collection('users').document(userId).snapshots();
+    } catch (e) {
+      print(e.toString());
+    }
+    return dataStream;
+  }
+
+  Future<void> updateUserInfo({
+    userId,
+    field,
+    value,
+    context,
+  }) async {
+    try {
+      final user = await db.collection('users').document(userId);
+      if (user != null) {
+        user.setData(
+          {'$field': value},
+          merge: true,
+        );
+      }
+      if (field == 'photoUrl') {
+        await Provider.of<AuthProvider>(context)
+            .updateUserPhoto(photoUrl: value);
+      }
     } catch (e) {
       print(e.toString());
     }

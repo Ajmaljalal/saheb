@@ -47,7 +47,6 @@ class AuthProvider with ChangeNotifier {
         "email": email,
         "photoUrl": photo,
         "location": '',
-        "hiddenPosts": []
       });
     } else {
       await _userRef.updateData({
@@ -56,7 +55,6 @@ class AuthProvider with ChangeNotifier {
         "email": email,
         "photoUrl": photo,
         "location": '',
-        "hiddenPosts": []
       });
     }
   }
@@ -69,14 +67,14 @@ class AuthProvider with ChangeNotifier {
         _user = (await _auth.createUserWithEmailAndPassword(
                 email: email, password: password))
             .user;
-
+        const photoUrl =
+            'https://firebasestorage.googleapis.com/v0/b/saheb-mobile.appspot.com/o/users%2Fuser.png?alt=media&token=0f61b161-14a4-49ca-af9e-cef6ba8a80ca';
         UserUpdateInfo info = new UserUpdateInfo();
         info.displayName = name;
-        info.photoUrl =
-            'https://firebasestorage.googleapis.com/v0/b/saheb-mobile.appspot.com/o/users%2Fuser.png?alt=media&token=0f61b161-14a4-49ca-af9e-cef6ba8a80ca';
+        info.photoUrl = photoUrl;
         await _user.updateProfile(info);
 
-        await registerUserToDb(_user.uid, name, email, _user.photoUrl);
+        await registerUserToDb(_user.uid, name, email, photoUrl);
       } else {
         _user = (await _auth.signInWithEmailAndPassword(
                 email: email, password: password))
@@ -151,17 +149,6 @@ class AuthProvider with ChangeNotifier {
     try {
       final FacebookLoginResult _result =
           await _facebookLogin.logIn(['email', 'public_profile']);
-//      switch (_result.status) {
-//        case FacebookLoginStatus.loggedIn:
-//          _status = 'success';
-//          break;
-//        case FacebookLoginStatus.cancelledByUser:
-//          _status = 'user cancelled loging in';
-//          break;
-//        case FacebookLoginStatus.error:
-//          _status = 'Error happened';
-//          break;
-//      }
       FacebookAccessToken _facebookToken = _result.accessToken;
       AuthCredential _credential =
           FacebookAuthProvider.getCredential(accessToken: _facebookToken.token);
@@ -214,5 +201,12 @@ class AuthProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('userData');
     prefs.clear();
+  }
+
+  Future<void> updateUserPhoto({String photoUrl}) async {
+    final FirebaseUser user = await _auth.currentUser();
+    UserUpdateInfo info = UserUpdateInfo();
+    info.photoUrl = photoUrl;
+    await user.updateProfile(info);
   }
 }
