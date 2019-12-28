@@ -47,6 +47,7 @@ Map dari = {
   'market': 'مارکیت',
   'messages': 'پیام ها',
   'settings': 'تنظیمات',
+  'profile': 'حساب من',
   'services': 'خدمات',
 
   ////////////////////// post/advert actions buttons ////////////////////////

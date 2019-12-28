@@ -34,34 +34,38 @@ class LocationProvider with ChangeNotifier {
   }
 
   Future<void> changeUserProvince(province) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final userProvince = json.encode(
-        {
-          'province': province,
-        },
-      );
-      await prefs.setString('userProvince', userProvince);
-      _userProvince = province;
-      notifyListeners();
-    } catch (error) {
-      print(error.toString());
+    if (province != null) {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final userProvince = json.encode(
+          {
+            'province': province,
+          },
+        );
+        await prefs.setString('userProvince', userProvince);
+        _userProvince = province;
+        notifyListeners();
+      } catch (error) {
+        print(error.toString());
+      }
     }
   }
 
   Future<void> changeUserLocality(locality) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final userLocality = json.encode(
-        {
-          'locality': locality,
-        },
-      );
-      await prefs.setString('userLocality', userLocality);
-      _userLocality = locality;
-      notifyListeners();
-    } catch (error) {
-      print(error.toString());
+    if (locality != null) {
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final userLocality = json.encode(
+          {
+            'locality': locality,
+          },
+        );
+        await prefs.setString('userLocality', userLocality);
+        _userLocality = locality;
+        notifyListeners();
+      } catch (error) {
+        print(error.toString());
+      }
     }
   }
 }

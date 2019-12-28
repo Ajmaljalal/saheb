@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/locations/locations_sublocations.dart';
 import 'package:saheb/locations/provincesList.dart';
 import 'package:saheb/providers/authProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/util/filterList.dart';
+//import 'package:saheb/util/filterList.dart';
 import 'package:saheb/widgets/circularProgressIndicator.dart';
 import 'package:saheb/widgets/locationPicker.dart';
-import 'package:saheb/widgets/noContent.dart';
-import 'package:saheb/widgets/wait.dart';
+//import 'package:saheb/widgets/noContent.dart';
+//import 'package:saheb/widgets/wait.dart';
 import '../providers/locationProvider.dart';
 import '../widgets/emptyBox.dart';
 import '../languages/index.dart';
@@ -155,8 +156,8 @@ class _MainScreenState extends State<MainScreen> {
                     fontSize: fontSize,
                   ),
                   bottomNavBarItem(
-                    text: appLanguage['settings'],
-                    icon: Icons.settings,
+                    text: appLanguage['profile'],
+                    icon: Icons.person,
                     fontSize: fontSize,
                   ),
                 ],

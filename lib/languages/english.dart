@@ -51,6 +51,7 @@ Map english = {
   'market': 'Market',
   'messages': 'Messages',
   'settings': 'Settings',
+  'profile': 'Profile',
   'services': 'Services',
 
   //////////////////////// post/advert actions buttons ////////////////

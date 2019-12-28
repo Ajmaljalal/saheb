@@ -49,7 +49,7 @@ class _MessagesListTileState extends State<MessagesListTile> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            imageRenderer(
+            userAvatar(
               height: 60.0,
               width: 60.0,
               photo: widget.initiator['photo'],
