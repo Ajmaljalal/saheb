@@ -275,7 +275,8 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                       _images.length != 0
                           ? Row(
                               children: <Widget>[
-                                ...photoVideoArea(_images, deleteSelectedImage),
+                                ...selectedPhotosVideosHolder(
+                                    _images, deleteSelectedImage),
                               ],
                             )
                           : SizedBox(

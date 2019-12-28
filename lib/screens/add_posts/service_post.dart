@@ -282,7 +282,8 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
                       _images.length != 0
                           ? Row(
                               children: <Widget>[
-                                ...photoVideoArea(_images, deleteSelectedImage),
+                                ...selectedPhotosVideosHolder(
+                                    _images, deleteSelectedImage),
                               ],
                             )
                           : SizedBox(
