@@ -143,7 +143,7 @@ class PostsProvider with ChangeNotifier {
   deleteOneRecord(postId, collection, images) async {
     try {
       await db.collection(collection).document(postId).delete();
-      await deleteImages(images: images, collection: collection);
+      await deleteImagesFromDB(images: images, collection: collection);
     } catch (e) {
       print(e.toString());
     }

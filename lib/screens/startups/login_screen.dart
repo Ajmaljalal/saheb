@@ -6,7 +6,7 @@ import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
 import '../../widgets/errorDialog.dart';
-import '../../widgets/circularProgressIndicator.dart';
+import '../../widgets/progressIndicators.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -298,7 +298,7 @@ class _LoginState extends State<Login> {
           },
           child: Center(
             child: _isLoggingIn == true
-                ? progressIndicator()
+                ? circularProgressIndicator()
                 : Text(
                     appLanguage['login'],
                     style: TextStyle(fontSize: 18, color: Colors.white),
@@ -336,7 +336,7 @@ class _LoginState extends State<Login> {
                     color: Colors.deepPurpleAccent,
                   ),
                   child: _isFacebookLogingIn
-                      ? Center(child: progressIndicator())
+                      ? Center(child: circularProgressIndicator())
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -372,7 +372,7 @@ class _LoginState extends State<Login> {
                     color: Colors.deepPurpleAccent,
                   ),
                   child: _isGoogleLogingIn
-                      ? Center(child: progressIndicator())
+                      ? Center(child: circularProgressIndicator())
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

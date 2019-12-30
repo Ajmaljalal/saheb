@@ -116,8 +116,6 @@ class _PostState extends State<Post> with PostMixin {
     );
   }
 
-  closeBottomSheet() {}
-
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);

@@ -6,7 +6,7 @@ import './screens/add_posts/index.dart';
 import './screens/add_posts/advert_post.dart';
 import './screens/add_posts/service_post.dart';
 import './screens/startups/language_screen.dart';
-import './widgets/circularProgressIndicator.dart';
+import './widgets/progressIndicators.dart';
 import './providers/languageProvider.dart';
 import './providers/postsProvider.dart';
 import './providers/authProvider.dart';
@@ -76,7 +76,7 @@ class Application extends StatelessWidget {
                       body: authResultSnapshot.connectionState ==
                               ConnectionState.waiting
                           ? Center(
-                              child: progressIndicator(),
+                              child: circularProgressIndicator(),
                             )
                           : Login(),
                     ),

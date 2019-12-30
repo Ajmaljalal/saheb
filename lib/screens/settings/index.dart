@@ -7,7 +7,7 @@ import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/screens/settings/changeLocation.dart';
 import 'package:saheb/util/uploadImage.dart';
-import 'package:saheb/widgets/circularProgressIndicator.dart';
+import 'package:saheb/widgets/progressIndicators.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/userNameHolder.dart';
@@ -215,7 +215,7 @@ class _SettingsState extends State<Settings> {
             ),
           );
         } else
-          return Center(child: progressIndicator());
+          return Center(child: circularProgressIndicator());
       },
     );
   }

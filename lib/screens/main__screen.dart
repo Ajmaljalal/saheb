@@ -8,7 +8,7 @@ import 'package:saheb/locations/provincesList.dart';
 import 'package:saheb/providers/authProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 //import 'package:saheb/util/filterList.dart';
-import 'package:saheb/widgets/circularProgressIndicator.dart';
+import 'package:saheb/widgets/progressIndicators.dart';
 import 'package:saheb/widgets/locationPicker.dart';
 //import 'package:saheb/widgets/noContent.dart';
 //import 'package:saheb/widgets/wait.dart';
@@ -447,7 +447,7 @@ class _MainScreenState extends State<MainScreen> {
                   locationResultSnapshot.connectionState ==
                           ConnectionState.waiting
                       ? Center(
-                          child: progressIndicator(),
+                          child: circularProgressIndicator(),
                         )
                       : Column(
                           children: <Widget>[

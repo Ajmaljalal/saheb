@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/widgets/circularProgressIndicator.dart';
+import 'package:saheb/widgets/progressIndicators.dart';
 import '../../providers/languageProvider.dart';
 
 class Language extends StatefulWidget {
@@ -19,7 +19,7 @@ class LanguageState extends State<Language> {
           builder: (ctx, languageResultSnapshot) =>
               languageResultSnapshot.connectionState == ConnectionState.waiting
                   ? Center(
-                      child: progressIndicator(),
+                      child: circularProgressIndicator(),
                     )
                   : Stack(
                       children: <Widget>[

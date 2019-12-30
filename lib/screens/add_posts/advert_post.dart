@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/widgets/errorDialog.dart';
+import 'package:saheb/widgets/progressIndicators.dart';
 import '../../widgets/verticalDivider.dart';
 import '../../providers/authProvider.dart';
 import '../../locations/locations_sublocations.dart';
 import '../../util/uploadImage.dart';
 import '../../widgets/locationPicker.dart';
-//import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
 import '../../widgets/showInfoFushbar.dart';
 import '../../providers/languageProvider.dart';
@@ -39,6 +40,8 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
   FocusNode priceFieldFocusNode = FocusNode();
   FocusNode phoneFieldFocusNode = FocusNode();
   FocusNode emailFieldFocusNode = FocusNode();
+
+  bool advertSavingInProgress = false;
 
   onDropDownChange(value) {
     setState(() {
@@ -112,22 +115,14 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   onSend() async {
     final appLanguage = getLanguages(context);
-    if (_text == null || _title == null || locationDropDownValue == null) {
+    if ((_text == null || _title == null) || locationDropDownValue == null) {
       showErrorDialog(appLanguage['fillOutRequiredSections'], context,
           appLanguage['emptyForm'], appLanguage['ok']);
       return;
     }
-
-    final flashBarDuration =
-        _images.length == 0 ? _images.length : _images.length + 1;
-    showInfoFlushbar(
-      context: context,
-      duration: flashBarDuration,
-      message: appLanguage['wait'],
-      icon: Icons.file_upload,
-      progressBar: true,
-      positionTop: true,
-    );
+    setState(() {
+      advertSavingInProgress = true;
+    });
     await Future.wait(uploadAllImages(_images));
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
@@ -280,6 +275,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
               ),
             ),
             Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
@@ -288,13 +284,15 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                   ),
                 ),
               ),
-              child: bottomBar(
-                onSend: onSend,
-                onOpenPhotoVideo: chooseFile,
-                maxImageSize: imagesMax,
-                context: context,
-                edit: false,
-              ),
+              child: advertSavingInProgress
+                  ? linearProgressIndicator()
+                  : bottomBar(
+                      onSend: onSend,
+                      onOpenPhotoVideo: chooseFile,
+                      maxImageSize: imagesMax,
+                      context: context,
+                      edit: false,
+                    ),
             ),
           ],
         ),

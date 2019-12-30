@@ -208,23 +208,26 @@ class PostMixin {
     fontSize,
     context,
   ) {
-    return Padding(
-      padding: const EdgeInsets.only(
-        right: 10.0,
-        left: 10.0,
-      ),
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.99,
-        child: Text(
-          title.trim(),
-          textDirection: isRTL(title) ? TextDirection.rtl : TextDirection.ltr,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: fontSize,
-          ),
-        ),
-      ),
-    );
+    return title != null
+        ? Padding(
+            padding: const EdgeInsets.only(
+              right: 10.0,
+              left: 10.0,
+            ),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.99,
+              child: Text(
+                title.toString().trim(),
+                textDirection:
+                    isRTL(title) ? TextDirection.rtl : TextDirection.ltr,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize,
+                ),
+              ),
+            ),
+          )
+        : emptyBox();
   }
 
   Widget postContent({
@@ -246,16 +249,18 @@ class PostMixin {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             width: MediaQuery.of(context).size.width * 0.99,
-            child: Text(
-              text.trim(),
-              textDirection:
-                  isRTL(text) ? TextDirection.rtl : TextDirection.ltr,
-              maxLines: flag ? 50 : 3,
-              style: TextStyle(
-                fontSize: fontSize,
-                color: Colors.black,
-              ),
-            ),
+            child: text != null
+                ? Text(
+                    text.toString().trim(),
+                    textDirection:
+                        isRTL(text) ? TextDirection.rtl : TextDirection.ltr,
+                    maxLines: flag ? 50 : 3,
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      color: Colors.black,
+                    ),
+                  )
+                : emptyBox(),
           ),
           revealMoreText(text, flag, onRevealMoreText, appLanguage['more']),
           images.length > 0

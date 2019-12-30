@@ -282,7 +282,7 @@ class AddPostMixin {
           children: <Widget>[
             maxImageSize
                 ? Text(appLanguage['6ImagesSelected'].toString())
-                : Text(appLanguage['select6Images'].toString()),
+                : emptyBox(),
             IconButton(
               icon: Icon(
                 Icons.photo_camera,
