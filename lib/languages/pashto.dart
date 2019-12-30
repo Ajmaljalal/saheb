@@ -106,8 +106,11 @@ Map pashto = {
   'noPrice': 'قیمت نشته',
 
   'emptyForm': 'تش فورم!',
-  'fillOutRequiredSections':
-      'لطفاً ضروری معلومات سم ولیکئ. د ځای، عنوان او تشریحاتو برخه اجباري ده.',
+  'fillOutRequiredSectionsPost':
+      'لطفاً ضروری معلومات ولیکئ. د ځای او تشریح برخه اجباري ده.',
+  'fillOutRequiredSectionsOther':
+      'لطفاً ضروری معلومات ولیکئ. د ځای، عنوان او تشریح برخه اجباري ده.',
+  'selectLocation': 'لطفا ځای وټاکئ.',
 
   ////////// Sign in/up error messages ///////////////////////
   'invalidEmail':

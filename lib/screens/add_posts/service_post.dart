@@ -115,9 +115,23 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
 
   onSend() async {
     final appLanguage = getLanguages(context);
-    if (_desc == null || _title == null || locationDropDownValue == null) {
-      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
-          appLanguage['emptyForm'], appLanguage['ok']);
+    if (locationDropDownValue == null) {
+      showErrorDialog(
+        appLanguage['selectLocation'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
+      return;
+    }
+    if ((_desc == null || _desc.trim().length == 0) ||
+        (_title == null || _title.trim().length == 0)) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSectionsOther'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
       return;
     }
 

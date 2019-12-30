@@ -115,9 +115,23 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   onSend() async {
     final appLanguage = getLanguages(context);
-    if ((_text == null || _title == null) || locationDropDownValue == null) {
-      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
-          appLanguage['emptyForm'], appLanguage['ok']);
+    if (locationDropDownValue == null) {
+      showErrorDialog(
+        appLanguage['selectLocation'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
+      return;
+    }
+    if ((_text == null || _text.trim().length == 0) ||
+        (_title == null || _title.trim().length == 0)) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSectionsOther'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
       return;
     }
     setState(() {
