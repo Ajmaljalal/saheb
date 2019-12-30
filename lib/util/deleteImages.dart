@@ -1,16 +1,19 @@
 import 'package:firebase_storage/firebase_storage.dart';
-//import 'package:path/path.dart' as Path;
-//import 'dart:io';
 
-Future deleteImages({
-  images,
+Future deleteImagesFromDB({
+  List images,
   String collection,
 }) async {
-  if (images != null || images.lenght != 0) {
+  if (images != null || images.length != 0) {
+    var tempList = images.toSet().toList(); // to remove duplicates if any
     FirebaseStorage storage = FirebaseStorage.instance;
-    images.forEach((image) async {
-      StorageReference ref = await storage.getReferenceFromUrl(image);
-      await ref.delete();
-    });
+    for (var i = 0; i < tempList.length; i++) {
+      StorageReference ref = await storage.getReferenceFromUrl(tempList[i]);
+      try {
+        await ref.delete();
+      } catch (error) {
+        continue;
+      }
+    }
   }
 }

@@ -142,7 +142,12 @@ class AddPostMixin {
     );
   }
 
-  Widget emailAddressArea({appLanguage, onChange, fontSize, focusNode}) {
+  Widget emailAddressArea({
+    appLanguage,
+    onChange,
+    fontSize,
+    focusNode,
+  }) {
     return Container(
       child: TextField(
         onChanged: onChange,
@@ -196,7 +201,7 @@ class AddPostMixin {
     );
   }
 
-  List photoVideoArea(
+  List selectedPhotosVideosHolder(
     images,
     deleteSelectedImage,
   ) {
@@ -205,19 +210,19 @@ class AddPostMixin {
       if (image != null) {
         return Container(
           margin: EdgeInsets.only(
-            top: 10.0,
+            top: 5.0,
           ),
           child: Stack(
             children: <Widget>[
               Container(
                 padding: EdgeInsets.symmetric(
                   vertical: 5.0,
-                  horizontal: 5.0,
+                  horizontal: 4.0,
                 ),
                 child: Image.file(
                   image,
-                  height: 50,
-                  width: 50,
+                  height: 40,
+                  width: 40,
                   filterQuality: FilterQuality.low,
                   fit: BoxFit.cover,
                 ),
@@ -229,14 +234,17 @@ class AddPostMixin {
                 child: Container(
                   width: 20.0,
                   height: 20.0,
-//                padding: EdgeInsets.only(right: 10.0, top: 5.0),
-                  color: Colors.purple,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      30.0,
+                    ),
+                    color: Colors.purple,
+                  ),
                   child: Center(
                     child: Text(
-                      'X',
+                      'x',
                       style: TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -274,7 +282,7 @@ class AddPostMixin {
           children: <Widget>[
             maxImageSize
                 ? Text(appLanguage['6ImagesSelected'].toString())
-                : Text(appLanguage['select6Images'].toString()),
+                : emptyBox(),
             IconButton(
               icon: Icon(
                 Icons.photo_camera,

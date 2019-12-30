@@ -4,9 +4,8 @@ import 'dart:io';
 
 Future uploadImage({File image, String collection}) async {
   if (image != null) {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('$collection/${Path.basename(image.path)}}');
+    StorageReference storageReference = FirebaseStorage.instance.ref().child(
+        '$collection/${Path.basename('${image.path} ${DateTime.now().toString()}')}');
     StorageUploadTask uploadTask = storageReference.putFile(image);
     await uploadTask.onComplete;
     final fileURL = await storageReference.getDownloadURL();

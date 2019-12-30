@@ -1,17 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:saheb/locations/locations_sublocations.dart';
 import 'package:saheb/locations/provincesList.dart';
 import 'package:saheb/providers/authProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
-//import 'package:saheb/util/filterList.dart';
-import 'package:saheb/widgets/circularProgressIndicator.dart';
+import 'package:saheb/widgets/progressIndicators.dart';
 import 'package:saheb/widgets/locationPicker.dart';
-//import 'package:saheb/widgets/noContent.dart';
-//import 'package:saheb/widgets/wait.dart';
 import '../providers/locationProvider.dart';
 import '../widgets/emptyBox.dart';
 import '../languages/index.dart';
@@ -142,22 +139,22 @@ class _MainScreenState extends State<MainScreen> {
                 items: [
                   bottomNavBarItem(
                     text: appLanguage['home'],
-                    icon: Icons.people,
+                    icon: AntDesign.aliwangwang,
                     fontSize: fontSize,
                   ),
                   bottomNavBarItem(
                     text: appLanguage['market'],
-                    icon: Icons.monetization_on,
+                    icon: FontAwesome.dollar,
                     fontSize: fontSize,
                   ),
                   bottomNavBarItem(
                     text: appLanguage['services'],
-                    icon: Icons.work,
+                    icon: FontAwesome.briefcase,
                     fontSize: fontSize,
                   ),
                   bottomNavBarItem(
                     text: appLanguage['profile'],
-                    icon: Icons.person,
+                    icon: Octicons.person,
                     fontSize: fontSize,
                   ),
                 ],
@@ -447,7 +444,7 @@ class _MainScreenState extends State<MainScreen> {
                   locationResultSnapshot.connectionState ==
                           ConnectionState.waiting
                       ? Center(
-                          child: progressIndicator(),
+                          child: circularProgressIndicator(),
                         )
                       : Column(
                           children: <Widget>[

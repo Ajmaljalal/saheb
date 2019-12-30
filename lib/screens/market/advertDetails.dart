@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/screens/messages/chatScreen.dart';
 import 'package:saheb/util/isRTL.dart';
-import 'package:saheb/widgets/button.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import 'package:saheb/widgets/errorDialog.dart';
 import 'package:saheb/widgets/horizontalDividerIndented.dart';
@@ -384,56 +384,63 @@ class _AdvertDetailsState extends State<AdvertDetails>
         children: <Widget>[
           Row(
             children: <Widget>[
-              userAvatarHolder(url: owner['photo']),
+              userAvatarHolder(
+                url: owner['photo'],
+              ),
               Text(
                 owner['name'],
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                ),
               ),
             ],
           ),
-          Row(
-            children: <Widget>[
-              customButton(
-                appLanguage: appLanguage,
-                context: context,
-                forText: 'text',
-                onClick: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ChatScreen(
-                        messageId: null,
-                        initiatorId: owner['id'],
-                        initiatorName: owner['name'],
-                        initiatorPhoto: owner['photo'],
-                      ),
-                    ),
-                  );
-                },
-                width: 59.0,
-                height: 25.0,
-                fontSize: fontSize,
-              ),
-              customButton(
-                appLanguage: appLanguage,
-                context: context,
-                forText: 'call',
-                onClick: () {
-                  if (phoneNumber != null) {
-                    callPhoneNumber(phoneNumber);
-                  } else
-                    showErrorDialog(
-                      appLanguage['noPhoneNumberProvide'],
+          Container(
+            width: 110.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                InkWell(
+                  child: Icon(
+                    Entypo.message,
+                    size: 38.0,
+                    color: Colors.purple,
+                  ),
+                  onTap: () {
+                    Navigator.push(
                       context,
-                      appLanguage['alertDialogTitle'],
-                      appLanguage['ok'],
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                          messageId: null,
+                          initiatorId: owner['id'],
+                          initiatorName: owner['name'],
+                          initiatorPhoto: owner['photo'],
+                        ),
+                      ),
                     );
-                },
-                width: 59.0,
-                height: 25.0,
-                fontSize: fontSize,
-              ),
-            ],
+                  },
+                ),
+                InkWell(
+                  child: Icon(
+                    FontAwesome.phone_square,
+                    size: 30.0,
+                    color: Colors.purple,
+                  ),
+                  onTap: () {
+                    if (phoneNumber != null) {
+                      callPhoneNumber(phoneNumber);
+                    } else
+                      showErrorDialog(
+                        appLanguage['noPhoneNumberProvide'],
+                        context,
+                        appLanguage['alertDialogTitle'],
+                        appLanguage['ok'],
+                      );
+                  },
+                ),
+              ],
+            ),
           )
         ],
       ),

@@ -50,21 +50,21 @@ class _MessagesListTileState extends State<MessagesListTile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             userAvatar(
-              height: 60.0,
-              width: 60.0,
+              height: 40.0,
+              width: 40.0,
               photo: widget.initiator['photo'],
             ),
+            SizedBox(
+              width: 5.0,
+            ),
             Container(
-              margin: EdgeInsets.only(
-                top: 5.0,
-              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   userNameHolder(
                     name: widget.initiator['name'],
-                    fontSize: 20.0,
+                    fontSize: 25.0,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.75,

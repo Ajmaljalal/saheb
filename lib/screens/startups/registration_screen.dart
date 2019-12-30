@@ -5,7 +5,7 @@ import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
 import '../../widgets/errorDialog.dart';
-import '../../widgets/circularProgressIndicator.dart';
+import '../../widgets/progressIndicators.dart';
 
 class Registration extends StatefulWidget {
   final swapScreens;
@@ -305,7 +305,7 @@ class _RegistrationState extends State<Registration> {
           },
           child: Center(
             child: _isRegistering == true
-                ? progressIndicator()
+                ? circularProgressIndicator()
                 : Text(
                     appLanguage['register'],
                     style: TextStyle(fontSize: 18, color: Colors.white),
@@ -343,7 +343,7 @@ class _RegistrationState extends State<Registration> {
                     color: Colors.deepPurpleAccent,
                   ),
                   child: _isFacebookRegistering
-                      ? Center(child: progressIndicator())
+                      ? Center(child: circularProgressIndicator())
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
@@ -379,7 +379,7 @@ class _RegistrationState extends State<Registration> {
                     color: Colors.deepPurpleAccent,
                   ),
                   child: _isGoogleRegistering
-                      ? Center(child: progressIndicator())
+                      ? Center(child: circularProgressIndicator())
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

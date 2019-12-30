@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/util/deleteImages.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import '../../widgets/showInfoFushbar.dart';
 import '../../providers/authProvider.dart';
@@ -115,8 +114,6 @@ class _PostState extends State<Post> with PostMixin {
       ),
     );
   }
-
-  closeBottomSheet() {}
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,7 @@ import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:saheb/widgets/errorDialog.dart';
+import 'package:saheb/widgets/progressIndicators.dart';
 import '../../widgets/showInfoFushbar.dart';
 import '../../providers/authProvider.dart';
 import '../../widgets/locationPicker.dart';
@@ -40,6 +41,8 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
   FocusNode titleFieldFocusNode = FocusNode();
   FocusNode textFieldFocusNode = FocusNode();
+
+  bool postSavingInProgress = false;
 
   @override
   initState() {
@@ -107,23 +110,29 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
   onSend() async {
     final appLanguage = getLanguages(context);
-
-    if (_text == null || _title == null || _location == null) {
-      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
-          appLanguage['emptyForm'], appLanguage['ok']);
+    if (_location == null) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSections'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
       return;
     }
 
-    final flashBarDuration =
-        _images.length == 0 ? _images.length : _images.length + 1;
-    showInfoFlushbar(
-      context: context,
-      duration: flashBarDuration,
-      message: appLanguage['wait'],
-      icon: Icons.file_upload,
-      progressBar: true,
-      positionTop: true,
-    );
+    if (_text == null && _images.length == 0) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSections'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
+      return;
+    }
+
+    setState(() {
+      postSavingInProgress = true;
+    });
 
     if (_images.length > 0) {
       await Future.wait(uploadAllImages(_images));
@@ -155,27 +164,29 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   onEdit() async {
     final appLanguage = getLanguages(context);
 
-    if (_text == null ||
-        _text.length == 0 ||
-        _title == null ||
-        _title.length == 0 ||
-        _location.length == 0 ||
-        _location == null) {
-      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
-          appLanguage['emptyForm'], appLanguage['ok']);
+    if (_location == null || _location.length == 0) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSections'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
       return;
     }
 
-    final flashBarDuration =
-        _images.length == 0 ? _images.length : _images.length + 1;
-    showInfoFlushbar(
-      context: context,
-      duration: flashBarDuration,
-      message: appLanguage['wait'],
-      icon: Icons.file_upload,
-      progressBar: true,
-      positionTop: true,
-    );
+    if ((_text == null || _text.length == 0) && _images.length == 0) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSections'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
+      return;
+    }
+
+    setState(() {
+      postSavingInProgress = true;
+    });
 
     if (_images.length > 0) {
       await Future.wait(uploadAllImages(_images));
@@ -198,7 +209,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       date: post['date'],
     );
 
-    Navigator.of(context).pop();
     Navigator.of(context).pop();
   }
 
@@ -275,7 +285,8 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                       _images.length != 0
                           ? Row(
                               children: <Widget>[
-                                ...photoVideoArea(_images, deleteSelectedImage),
+                                ...selectedPhotosVideosHolder(
+                                    _images, deleteSelectedImage),
                               ],
                             )
                           : SizedBox(
@@ -286,16 +297,18 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                 ),
               ),
             ),
-            Container(
-              child: bottomBar(
-                onSend: edit ? onEdit : onSend,
-                onOpenPhotoVideo: chooseFile,
-                context: context,
-                maxImageSize: imagesMax,
-                appLanguage: appLanguage,
-                edit: edit,
-              ),
-            ),
+            postSavingInProgress
+                ? linearProgressIndicator()
+                : Container(
+                    child: bottomBar(
+                      onSend: edit ? onEdit : onSend,
+                      onOpenPhotoVideo: chooseFile,
+                      context: context,
+                      maxImageSize: imagesMax,
+                      appLanguage: appLanguage,
+                      edit: edit,
+                    ),
+                  ),
           ],
         ),
       ),

@@ -7,12 +7,11 @@ import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/util/mapPostTypes.dart';
 import 'package:saheb/widgets/errorDialog.dart';
-//import '../../widgets/verticalDivider.dart';
+import 'package:saheb/widgets/progressIndicators.dart';
 import '../../providers/authProvider.dart';
 import '../../locations/locations_sublocations.dart';
 import '../../util/uploadImage.dart';
 import '../../widgets/locationPicker.dart';
-//import 'package:provider/provider.dart';
 import '../../widgets/button.dart';
 import '../../widgets/showInfoFushbar.dart';
 import '../../providers/languageProvider.dart';
@@ -40,6 +39,8 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
   FocusNode fullAddressFieldFocusNode = FocusNode();
   FocusNode phoneFieldFocusNode = FocusNode();
   FocusNode emailFieldFocusNode = FocusNode();
+
+  bool serviceSavingInProgress = false;
 
   onDropDownChange(value, appLanguage) {
     setState(() {
@@ -120,16 +121,9 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
       return;
     }
 
-    final flashBarDuration =
-        _images.length == 0 ? _images.length : _images.length + 1;
-    showInfoFlushbar(
-      context: context,
-      duration: flashBarDuration,
-      message: appLanguage['wait'],
-      icon: Icons.file_upload,
-      progressBar: true,
-      positionTop: true,
-    );
+    setState(() {
+      serviceSavingInProgress = true;
+    });
     await Future.wait(uploadAllImages(_images));
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
@@ -282,7 +276,8 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
                       _images.length != 0
                           ? Row(
                               children: <Widget>[
-                                ...photoVideoArea(_images, deleteSelectedImage),
+                                ...selectedPhotosVideosHolder(
+                                    _images, deleteSelectedImage),
                               ],
                             )
                           : SizedBox(
@@ -293,23 +288,26 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
                 ),
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.cyanAccent,
-                    width: 0.3,
+            serviceSavingInProgress
+                ? linearProgressIndicator()
+                : Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          color: Colors.cyanAccent,
+                          width: 0.3,
+                        ),
+                      ),
+                    ),
+                    child: bottomBar(
+                      onSend: onSend,
+                      onOpenPhotoVideo: chooseFile,
+                      maxImageSize: imagesMax,
+                      context: context,
+                      edit: false,
+                    ),
                   ),
-                ),
-              ),
-              child: bottomBar(
-                onSend: onSend,
-                onOpenPhotoVideo: chooseFile,
-                maxImageSize: imagesMax,
-                context: context,
-                edit: false,
-              ),
-            ),
           ],
         ),
       ),

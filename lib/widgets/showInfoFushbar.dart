@@ -23,7 +23,7 @@ void showInfoFlushbar({
     duration: Duration(seconds: duration),
     icon: Icon(
       icon,
-      color: Colors.green,
+      color: Colors.purple,
     ),
     showProgressIndicator: progressBar,
     progressIndicatorBackgroundColor: Colors.blueGrey,

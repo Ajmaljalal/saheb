@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/providers/postsProvider.dart';
@@ -463,11 +464,13 @@ class _ServiceDetailsState extends State<ServiceDetails>
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            customButton(
-              appLanguage: appLanguage,
-              context: context,
-              forText: 'text',
-              onClick: () {
+            InkWell(
+              child: Icon(
+                Entypo.message,
+                size: 38.0,
+                color: Colors.purple,
+              ),
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -480,15 +483,14 @@ class _ServiceDetailsState extends State<ServiceDetails>
                   ),
                 );
               },
-              width: 59.0,
-              height: 30.0,
-              fontSize: fontSize,
             ),
-            customButton(
-              appLanguage: appLanguage,
-              context: context,
-              forText: 'call',
-              onClick: () {
+            InkWell(
+              child: Icon(
+                FontAwesome.phone_square,
+                size: 30.0,
+                color: Colors.purple,
+              ),
+              onTap: () {
                 if (phoneNumber != 'null') {
                   callPhoneNumber(phoneNumber);
                 } else
@@ -499,9 +501,6 @@ class _ServiceDetailsState extends State<ServiceDetails>
                     appLanguage['ok'],
                   );
               },
-              width: 59.0,
-              height: 30.0,
-              fontSize: fontSize,
             ),
           ],
         ),
