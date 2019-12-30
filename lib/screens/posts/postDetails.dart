@@ -107,7 +107,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),
         child: AppBar(
-          title: Text(postTitle),
+          title: Text(postTitle != null ? postTitle : ''),
         ),
       ),
       body: Stack(
@@ -176,7 +176,6 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   cardHeader(post),
-//                  postTypeHolder(context, post['type'], appLanguage),
                 ],
               ),
               Row(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:saheb/languages/index.dart';
 //import 'package:saheb/languages/index.dart';
@@ -7,6 +8,7 @@ import 'package:saheb/providers/locationProvider.dart';
 import 'package:saheb/providers/postsProvider.dart';
 import 'package:saheb/util/uuid.dart';
 import 'package:saheb/widgets/avatar.dart';
+import 'package:saheb/widgets/emptyBox.dart';
 import 'package:saheb/widgets/noContent.dart';
 import 'package:saheb/widgets/wait.dart';
 
@@ -196,8 +198,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       });
                     },
                     child: Icon(
-                      Icons.send,
+                      MaterialCommunityIcons.send_circle,
                       textDirection: TextDirection.ltr,
+                      size: 30.0,
                       color: Colors.purple,
                     ),
                   ),
@@ -233,6 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }) {
     return Container(
       width: MediaQuery.of(context).size.width * 1,
+      margin: EdgeInsets.symmetric(horizontal: 5.0),
       child: Container(
         child: messageBubble(
           message: conversation['text'],
@@ -256,12 +260,16 @@ class _ChatScreenState extends State<ChatScreen> {
       return Row(
         mainAxisAlignment:
             isOwner ? MainAxisAlignment.start : MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          userAvatar(
-            height: 50.0,
-            width: 50.0,
-            photo: ownerPhoto,
+          isOwner
+              ? emptyBox()
+              : userAvatar(
+                  height: 35.0,
+                  width: 35.0,
+                  photo: ownerPhoto,
+                ),
+          SizedBox(
+            width: 5.0,
           ),
           Flexible(
             child: Container(
@@ -293,7 +301,6 @@ class _ChatScreenState extends State<ChatScreen> {
       return Row(
         mainAxisAlignment:
             isOwner ? MainAxisAlignment.start : MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           Container(
             constraints: BoxConstraints(
@@ -317,11 +324,16 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: Text(message),
           ),
-          userAvatar(
-            height: 50.0,
-            width: 50.0,
-            photo: ownerPhoto,
+          SizedBox(
+            width: 5.0,
           ),
+          isOwner
+              ? emptyBox()
+              : userAvatar(
+                  height: 35.0,
+                  width: 35.0,
+                  photo: ownerPhoto,
+                ),
         ],
       );
     }

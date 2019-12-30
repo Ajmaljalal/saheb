@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:saheb/util/isRTL.dart';
+import 'package:saheb/widgets/avatar.dart';
 import 'package:saheb/widgets/emptyBox.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import '../widgets/verticalDivider.dart';
@@ -20,6 +22,7 @@ class PostMixin {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         userAvatarHolder(url: post['owner']['photo']),
+//        userAvatar(height: 40.0, width: 40.0, photo: post['owner']['photo']),
         Container(
           margin: const EdgeInsets.only(
             top: 5.0,
@@ -53,15 +56,12 @@ class PostMixin {
     url,
   }) {
     return Container(
-      width: 60.0,
-      height: 60.0,
       padding: EdgeInsets.all(10),
-      child: CircleAvatar(
-          backgroundImage: NetworkImage(
-        url != null
-            ? url
-            : 'https://cdn.pixabay.com/photo/2014/03/24/17/19/teacher-295387_1280.png',
-      )),
+      child: userAvatar(
+        height: 40.0,
+        width: 40.0,
+        photo: url,
+      ),
     );
   }
 
@@ -248,7 +248,7 @@ class PostMixin {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            width: MediaQuery.of(context).size.width * 0.99,
+            width: MediaQuery.of(context).size.width * 1,
             child: text != null
                 ? Text(
                     text.toString().trim(),
@@ -264,7 +264,10 @@ class PostMixin {
           ),
           revealMoreText(text, flag, onRevealMoreText, appLanguage['more']),
           images.length > 0
-              ? GridViewImageRenderer(images: images)
+              ? Container(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: GridViewImageRenderer(images: images),
+                )
               : emptyBox(),
         ],
       ),
@@ -633,9 +636,9 @@ class PostMixin {
               ),
               child: InkWell(
                 child: Icon(
-                  FontAwesomeIcons.arrowAltCircleUp,
+                  MaterialCommunityIcons.send_circle,
                   textDirection: TextDirection.rtl,
-                  color: Colors.cyan,
+                  color: Colors.purple,
                   size: 36.0,
                 ),
                 onTap: () {
@@ -691,7 +694,7 @@ class PostMixin {
               ),
               child: InkWell(
                 child: Icon(
-                  FontAwesomeIcons.arrowAltCircleDown,
+                  MaterialIcons.cancel,
                   color: Colors.grey,
                   size: 36.0,
                 ),

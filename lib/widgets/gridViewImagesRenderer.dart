@@ -12,7 +12,7 @@ class GridViewImageRenderer extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 4,
       children: images.map<Widget>((image) {
-        return singleImageRenderer(image, context, 250.0, BoxFit.fitWidth);
+        return singleImageRenderer(image, context, 250.0, BoxFit.fill);
       }).toList(),
       staggeredTiles: [...buildTiles(images.length)],
       mainAxisSpacing: 2.0,
