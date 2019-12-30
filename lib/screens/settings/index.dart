@@ -93,46 +93,6 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  renderLocationPicker(appLanguage) {
-    Alert(
-      context: context,
-      title: appLanguage['locationHolder'],
-      content: ChangeLocation(
-        onChangeUserLocality: onChangeUserLocality,
-        onChangeUserProvince: onChangeUserProvince,
-      ),
-      buttons: [
-        DialogButton(
-          onPressed: () {
-            Navigator.pop(context);
-            updateUserLocation(
-              userLocality: locality,
-              userProvince: province,
-            );
-          },
-          child: Text(
-            appLanguage['save'],
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-            ),
-          ),
-        ),
-        DialogButton(
-          color: Colors.grey[200],
-          onPressed: () => Navigator.pop(context),
-          child: Text(
-            appLanguage['cancel'],
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 15,
-            ),
-          ),
-        ),
-      ],
-    ).show();
-  }
-
   onChangeAppLanguage(value) async {
     setState(() {
       appLanguageOption = value;
@@ -318,5 +278,45 @@ class _SettingsState extends State<Settings> {
         )
       ],
     );
+  }
+
+  renderLocationPicker(appLanguage) {
+    Alert(
+      context: context,
+      title: appLanguage['locationHolder'],
+      content: ChangeLocation(
+        onChangeUserLocality: onChangeUserLocality,
+        onChangeUserProvince: onChangeUserProvince,
+      ),
+      buttons: [
+        DialogButton(
+          onPressed: () {
+            Navigator.pop(context);
+            updateUserLocation(
+              userLocality: locality,
+              userProvince: province,
+            );
+          },
+          child: Text(
+            appLanguage['save'],
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+            ),
+          ),
+        ),
+        DialogButton(
+          color: Colors.grey[200],
+          onPressed: () => Navigator.pop(context),
+          child: Text(
+            appLanguage['cancel'],
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ],
+    ).show();
   }
 }

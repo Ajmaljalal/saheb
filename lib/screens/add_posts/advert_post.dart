@@ -14,7 +14,6 @@ import '../../locations/locations_sublocations.dart';
 import '../../util/uploadImage.dart';
 import '../../widgets/locationPicker.dart';
 import '../../widgets/button.dart';
-import '../../widgets/showInfoFushbar.dart';
 import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
@@ -25,8 +24,8 @@ class AdvertPost extends StatefulWidget {
 }
 
 class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
-  String dropdownValue;
-  String locationDropDownValue;
+  String _typOfDeal;
+  String _location;
   String _text;
   String _title;
   String _price;
@@ -45,13 +44,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   onDropDownChange(value) {
     setState(() {
-      dropdownValue = value;
+      _typOfDeal = value;
     });
   }
 
   onLocationChange(value) {
     setState(() {
-      locationDropDownValue = value;
+      _location = value;
     });
   }
 
@@ -115,9 +114,24 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
 
   onSend() async {
     final appLanguage = getLanguages(context);
-    if ((_text == null || _title == null) || locationDropDownValue == null) {
-      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
-          appLanguage['emptyForm'], appLanguage['ok']);
+    if (_location == null) {
+      showErrorDialog(
+        appLanguage['selectLocation'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
+      return;
+    }
+    if ((_text == null || _text.trim().length == 0) ||
+        (_title == null || _title.trim().length == 0) ||
+        _typOfDeal == null) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSectionsOther'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
       return;
     }
     setState(() {
@@ -129,13 +143,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
         Provider.of<AuthProvider>(context, listen: false).userId;
     final userLocation = Provider.of<LocationProvider>(context).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOneAdvert(
-      type: dropdownValue,
+      type: _typOfDeal,
       text: _text,
       title: _title,
       phone: _phone,
       email: _email,
       price: _price.toString(),
-      location: locationDropDownValue,
+      location: _location,
       owner: {
         'name': user.displayName,
         'id': currentUserId,

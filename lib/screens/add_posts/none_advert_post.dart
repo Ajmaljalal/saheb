@@ -112,7 +112,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final appLanguage = getLanguages(context);
     if (_location == null) {
       showErrorDialog(
-        appLanguage['fillOutRequiredSections'],
+        appLanguage['selectLocation'],
         context,
         appLanguage['emptyForm'],
         appLanguage['ok'],
@@ -120,9 +120,9 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       return;
     }
 
-    if (_text == null && _images.length == 0) {
+    if ((_text == null || _text.trim().length == 0) && _images.length == 0) {
       showErrorDialog(
-        appLanguage['fillOutRequiredSections'],
+        appLanguage['fillOutRequiredSectionsPost'],
         context,
         appLanguage['emptyForm'],
         appLanguage['ok'],

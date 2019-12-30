@@ -13,7 +13,6 @@ import '../../locations/locations_sublocations.dart';
 import '../../util/uploadImage.dart';
 import '../../widgets/locationPicker.dart';
 import '../../widgets/button.dart';
-import '../../widgets/showInfoFushbar.dart';
 import '../../providers/languageProvider.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
@@ -24,8 +23,8 @@ class ServicePost extends StatefulWidget {
 }
 
 class _ServicePostState extends State<ServicePost> with AddPostMixin {
-  String dropdownValue;
-  String locationDropDownValue;
+  String _typeOfService;
+  String _location;
   String _desc;
   String _title;
   String _fullAddress;
@@ -44,14 +43,13 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
 
   onDropDownChange(value, appLanguage) {
     setState(() {
-      dropdownValue = mapPostType(value.toLowerCase(), appLanguage);
+      _typeOfService = mapPostType(value.toLowerCase(), appLanguage);
     });
-    print(dropdownValue);
   }
 
   onLocationChange(value) {
     setState(() {
-      locationDropDownValue = value;
+      _location = value;
     });
   }
 
@@ -115,9 +113,24 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
 
   onSend() async {
     final appLanguage = getLanguages(context);
-    if (_desc == null || _title == null || locationDropDownValue == null) {
-      showErrorDialog(appLanguage['fillOutRequiredSections'], context,
-          appLanguage['emptyForm'], appLanguage['ok']);
+    if (_location == null) {
+      showErrorDialog(
+        appLanguage['selectLocation'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
+      return;
+    }
+    if ((_desc == null || _desc.trim().length == 0) ||
+        (_title == null || _title.trim().length == 0) ||
+        _typeOfService == null) {
+      showErrorDialog(
+        appLanguage['fillOutRequiredSectionsOther'],
+        context,
+        appLanguage['emptyForm'],
+        appLanguage['ok'],
+      );
       return;
     }
 
@@ -130,13 +143,13 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
         Provider.of<AuthProvider>(context, listen: false).userId;
     final userLocation = Provider.of<LocationProvider>(context).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOneService(
-      type: dropdownValue,
+      type: _typeOfService,
       desc: _desc,
       title: _title,
       phone: _phone,
       email: _email,
       fullAddress: _fullAddress,
-      location: locationDropDownValue,
+      location: _location,
       owner: {
         'name': user.displayName,
         'id': currentUserId,

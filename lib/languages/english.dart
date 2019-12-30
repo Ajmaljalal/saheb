@@ -105,8 +105,11 @@ Map english = {
   'date': 'Date',
   'noPrice': 'No price',
   'emptyForm': 'Empty form!',
-  'fillOutRequiredSections':
-      'Please enter required information accurately. Selecting a location, title and description is required.',
+  'fillOutRequiredSectionsPost':
+      'Please enter required information. Location and description is required.',
+  'fillOutRequiredSectionsOther':
+      'Please enter required information. Location, type of deal, title and description is required.',
+  'selectLocation': 'Please select a location',
 
   ////////// Sign in/up error messages ///////////////////////
   'invalidEmail':
