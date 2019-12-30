@@ -159,6 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               itemBuilder: (context, index) {
                                 var conversation =
                                     reversedConversations.toList()[index];
+                                conversation['seen'] = true;
                                 return conversationHolderTile(
                                   conversation: conversation,
                                   userId: currentUserId,

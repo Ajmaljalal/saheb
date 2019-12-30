@@ -211,7 +211,7 @@ class _MainScreenState extends State<MainScreen> {
           messages = tempList;
 
           var filteredMessages = messages;
-          return messageIconWithCount(filteredMessages);
+          return messageIconWithCount(filteredMessages, userId);
         },
       ),
     );
@@ -242,7 +242,7 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget messageIconWithCount(messages) {
+  Widget messageIconWithCount(messages, userId) {
     List filteredMessages = messages.map((DocumentSnapshot messagesSnapshot) {
       var message = {
         'conversations': messagesSnapshot.data['messages'],
@@ -253,11 +253,13 @@ class _MainScreenState extends State<MainScreen> {
       return message;
     }).toList();
 
-    final unSeenMessages = [];
+    List unSeenMessages;
     for (var i = 0; i < filteredMessages.length; i++) {
       var newMessages = (filteredMessages[i]['conversations']);
-      unSeenMessages.add(
-          newMessages.where((message) => message['seen'] == false).toList());
+      unSeenMessages = newMessages
+          .where((message) =>
+              message['ownerId'] != userId && message['seen'] == false)
+          .toList();
     }
 
     return Stack(

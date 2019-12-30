@@ -46,7 +46,7 @@ class _MessagesState extends State<Messages> {
                           userId: currentUserId, messageId: messageId);
                     },
                     key: UniqueKey(),
-                    background: stackBehindDismiss(),
+                    background: messageSwipeDeleteButton(),
                     child: MessagesListTile(
                       conversations: conversations,
                       messageId: messageId,
@@ -61,7 +61,7 @@ class _MessagesState extends State<Messages> {
     );
   }
 
-  Widget stackBehindDismiss() {
+  Widget messageSwipeDeleteButton() {
     return Container(
       alignment: Alignment.centerRight,
       padding: EdgeInsets.only(right: 20.0),
