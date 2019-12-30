@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/providers/locationProvider.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/screens/settings/changeLocation.dart';
-import 'package:saheb/util/uploadImage.dart';
-import 'package:saheb/widgets/progressIndicators.dart';
-import 'package:saheb/widgets/emptyBox.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../providers/locationProvider.dart';
+import '../../providers/postsProvider.dart';
+import '../../screens/settings/changeLocation.dart';
+import '../../util/uploadImage.dart';
+import '../../widgets/progressIndicators.dart';
+import '../../widgets/emptyBox.dart';
 import '../../widgets/avatar.dart';
 import '../../widgets/userNameHolder.dart';
 import '../../widgets/userLocationHolder.dart';
@@ -16,7 +17,7 @@ import '../../widgets/button.dart';
 import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
+
 
 class Settings extends StatefulWidget {
   @override

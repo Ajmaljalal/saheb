@@ -1,12 +1,9 @@
 import 'dart:math';
 
-///     final String id = Uuid().generateV4();
 class Uuid {
   final Random _random = Random();
 
   String generateV4() {
-//    final int special = 8 + _random.nextInt(4);
-
     return '${_bitsDigits(16, 4)}${_bitsDigits(16, 4)}-'
         '${_bitsDigits(16, 4)}-'
         '4${_bitsDigits(12, 3)}';

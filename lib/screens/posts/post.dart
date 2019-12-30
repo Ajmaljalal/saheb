@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/widgets/emptyBox.dart';
+import 'postDetails.dart';
+import '../../providers/postsProvider.dart';
+import '../../widgets/emptyBox.dart';
 import '../../widgets/showInfoFushbar.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
-
 import '../../constants/constants.dart';
 import '../../widgets/flatButtonWithIconAndText.dart';
-import 'postDetails.dart';
 import '../add_posts/none_advert_post.dart';
 import '../../mixins/post.dart';
 import '../../languages/index.dart';

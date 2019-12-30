@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class LocationProvider with ChangeNotifier {
   String _userLocality;

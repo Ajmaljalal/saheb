@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/widgets/progressIndicators.dart';
+import '../../widgets/progressIndicators.dart';
 import '../../providers/languageProvider.dart';
 
 class Language extends StatefulWidget {

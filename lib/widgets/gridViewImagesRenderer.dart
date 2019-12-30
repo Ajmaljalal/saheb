@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:saheb/widgets/imageRenderer.dart';
+import '../widgets/imageRenderer.dart';
 
 class GridViewImageRenderer extends StatelessWidget {
   final List images;

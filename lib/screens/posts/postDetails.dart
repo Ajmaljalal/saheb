@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/widgets/fullScreenImage.dart';
-import 'package:saheb/widgets/wait.dart';
+import 'package:flutter/widgets.dart';
+import '../../providers/postsProvider.dart';
+import '../../widgets/fullScreenImage.dart';
+import '../../widgets/wait.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
-import 'package:flutter/widgets.dart';
 import '../../mixins/post.dart';
 import '../../languages/index.dart';
 

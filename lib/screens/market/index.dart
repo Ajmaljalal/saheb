@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/languages/provincesTranslator.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/providers/locationProvider.dart';
-import 'package:saheb/util/filterList.dart';
-import 'package:saheb/widgets/noContent.dart';
-import 'package:saheb/widgets/topScreenFilterOption.dart';
-import 'package:saheb/widgets/wait.dart';
+import 'advert.dart';
+import '../../languages/provincesTranslator.dart';
+import '../../providers/authProvider.dart';
+import '../../providers/locationProvider.dart';
+import '../../util/filterList.dart';
+import '../../widgets/noContent.dart';
+import '../../widgets/topScreenFilterOption.dart';
+import '../../widgets/wait.dart';
 import '../../providers/postsProvider.dart';
 import '../../languages/index.dart';
-import 'advert.dart';
 
 class Market extends StatefulWidget {
   final searchBarString;

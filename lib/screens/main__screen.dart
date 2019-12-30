@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:saheb/locations/locations_sublocations.dart';
-import 'package:saheb/locations/provincesList.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/widgets/progressIndicators.dart';
-import 'package:saheb/widgets/locationPicker.dart';
+import '../locations/locations_sublocations.dart';
+import '../locations/provincesList.dart';
+import '../providers/authProvider.dart';
+import '../providers/postsProvider.dart';
+import '../widgets/progressIndicators.dart';
+import '../widgets/locationPicker.dart';
 import '../providers/locationProvider.dart';
 import '../widgets/emptyBox.dart';
 import '../languages/index.dart';
 import './market/index.dart';
 import './posts/index.dart';
 import './settings/index.dart';
+import './messages/index.dart';
 import '../widgets/appBarSearch.dart';
 import '../screens/services/index.dart';
 import '../providers/languageProvider.dart';
-import 'messages/index.dart';
+
 
 class MainScreen extends StatefulWidget {
   @override

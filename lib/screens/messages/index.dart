@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/languages/index.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/screens/messages/messagesList.dart';
-import 'package:saheb/widgets/noContent.dart';
+import '../../languages/index.dart';
+import '../../providers/authProvider.dart';
+import '../../providers/postsProvider.dart';
+import '../../screens/messages/messagesList.dart';
+import '../../widgets/noContent.dart';
 
 class Messages extends StatefulWidget {
   final messages;
