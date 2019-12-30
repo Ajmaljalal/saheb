@@ -440,17 +440,37 @@ class PostMixin {
           SizedBox(
             width: 80.0,
           ),
-          InkResponse(
-            splashColor: Colors.grey[200],
-            radius: 25.0,
-            child: Icon(
-              FontAwesomeIcons.share,
-              color: Colors.grey,
-              size: 20,
-            ),
-            onTap: () {},
-          ),
+          postHotnessIndicator(post['likes'].length),
         ],
+      ),
+    );
+  }
+
+  Widget postHotnessIndicator(postLikes) {
+    IconData icon;
+    if (postLikes == 0) {
+      icon = MaterialCommunityIcons.signal_cellular_outline;
+    }
+    if (postLikes > 0 && postLikes <= 5) {
+      icon = MaterialCommunityIcons.signal_cellular_1;
+    }
+
+    if (postLikes > 5 && postLikes <= 10) {
+      icon = MaterialCommunityIcons.signal_cellular_2;
+    }
+
+    if (postLikes > 10 && postLikes <= 15) {
+      icon = MaterialCommunityIcons.signal_cellular_3;
+    }
+
+    if (postLikes > 15) {
+      icon = MaterialCommunityIcons.fire;
+    }
+
+    return Container(
+      child: Icon(
+        icon,
+        color: postLikes > 15 ? Colors.red : Colors.purple,
       ),
     );
   }
