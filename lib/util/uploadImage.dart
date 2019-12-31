@@ -1,6 +1,6 @@
+import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as Path;
-import 'dart:io';
 
 Future uploadImage({File image, String collection}) async {
   if (image != null) {

@@ -1,11 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:saheb/util/isRTL.dart';
-import 'package:saheb/widgets/avatar.dart';
-import 'package:saheb/widgets/emptyBox.dart';
 import 'package:shamsi_date/shamsi_date.dart';
+import '../util/isRTL.dart';
+import '../widgets/avatar.dart';
+import '../widgets/emptyBox.dart';
 import '../widgets/verticalDivider.dart';
 import '../constants/constants.dart';
 import '../widgets/imageRenderer.dart';
@@ -22,7 +21,6 @@ class PostMixin {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         userAvatarHolder(url: post['owner']['photo']),
-//        userAvatar(height: 40.0, width: 40.0, photo: post['owner']['photo']),
         Container(
           margin: const EdgeInsets.only(
             top: 5.0,

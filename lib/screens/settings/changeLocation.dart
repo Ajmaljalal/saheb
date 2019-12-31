@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/languages/index.dart';
-import 'package:saheb/locations/locations_sublocations.dart';
-import 'package:saheb/providers/locationProvider.dart';
-import 'package:saheb/widgets/locationPicker.dart';
-import 'package:saheb/locations/provincesList.dart';
+import '../../languages/index.dart';
+import '../../locations/locations_sublocations.dart';
+import '../../providers/locationProvider.dart';
+import '../../widgets/locationPicker.dart';
+import '../../locations/provincesList.dart';
 
 class ChangeLocation extends StatefulWidget {
   final onChangeUserLocality;

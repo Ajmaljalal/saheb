@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/screens/messages/chatScreen.dart';
-import 'package:saheb/util/isRTL.dart';
-import 'package:saheb/widgets/emptyBox.dart';
-import 'package:saheb/widgets/errorDialog.dart';
-import 'package:saheb/widgets/horizontalDividerIndented.dart';
-import 'package:saheb/widgets/noContent.dart';
-import 'package:saheb/widgets/wait.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../providers/postsProvider.dart';
+import '../../screens/messages/chatScreen.dart';
+import '../../util/isRTL.dart';
+import '../../widgets/emptyBox.dart';
+import '../../widgets/errorDialog.dart';
+import '../../widgets/horizontalDividerIndented.dart';
+import '../../widgets/noContent.dart';
+import '../../widgets/wait.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/languageProvider.dart';
 import '../../mixins/post.dart';
 import '../../mixins/advert.dart';
 import '../../languages/index.dart';
-import 'package:saheb/widgets/fullScreenImage.dart';
+import '../../widgets/fullScreenImage.dart';
 import '../../widgets/showInfoFushbar.dart';
 
 class AdvertDetails extends StatefulWidget {

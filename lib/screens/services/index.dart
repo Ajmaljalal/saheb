@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:saheb/util/mapPostTypes.dart';
-import '../../languages/index.dart';
 import 'servicesList.dart';
+import '../../util/mapPostTypes.dart';
+import '../../languages/index.dart';
+
 
 class Services extends StatefulWidget {
   @override

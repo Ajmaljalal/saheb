@@ -2,16 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/providers/locationProvider.dart';
-import 'package:saheb/widgets/noContent.dart';
-import 'package:saheb/widgets/wait.dart';
+import 'post.dart';
+import '../../providers/authProvider.dart';
+import '../../providers/locationProvider.dart';
+import '../../widgets/noContent.dart';
+import '../../widgets/wait.dart';
 import '../../widgets/topScreenFilterOption.dart';
-import 'package:saheb/languages/provincesTranslator.dart';
+import '../../languages/provincesTranslator.dart';
 import '../../providers/postsProvider.dart';
 import '../../util/filterList.dart';
 import '../../languages/index.dart';
-import 'post.dart';
+
 
 class Posts extends StatefulWidget {
   final searchBarString;

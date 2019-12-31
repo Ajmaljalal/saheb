@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/providers/locationProvider.dart';
-import 'package:saheb/providers/postsProvider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:saheb/widgets/errorDialog.dart';
-import 'package:saheb/widgets/progressIndicators.dart';
-import '../../widgets/showInfoFushbar.dart';
+import '../../providers/locationProvider.dart';
+import '../../providers/postsProvider.dart';
+import '../../widgets/errorDialog.dart';
+import '../../widgets/progressIndicators.dart';
 import '../../providers/authProvider.dart';
 import '../../widgets/locationPicker.dart';
 import '../../locations/locations_sublocations.dart';

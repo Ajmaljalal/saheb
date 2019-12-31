@@ -2,16 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/languages/provincesTranslator.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/providers/locationProvider.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/screens/services/serviceDetails.dart';
-import 'package:saheb/util/filterList.dart';
-import 'package:saheb/widgets/emptyBox.dart';
-import 'package:saheb/widgets/noContent.dart';
-import 'package:saheb/widgets/topScreenFilterOption.dart';
-import 'package:saheb/widgets/wait.dart';
+import '../../languages/provincesTranslator.dart';
+import '../../providers/authProvider.dart';
+import '../../providers/locationProvider.dart';
+import '../../providers/postsProvider.dart';
+import '../../screens/services/serviceDetails.dart';
+import '../../util/filterList.dart';
+import '../../widgets/emptyBox.dart';
+import '../../widgets/noContent.dart';
+import '../../widgets/topScreenFilterOption.dart';
+import '../../widgets/wait.dart';
 import '../../languages/index.dart';
 
 class ServicesList extends StatefulWidget {

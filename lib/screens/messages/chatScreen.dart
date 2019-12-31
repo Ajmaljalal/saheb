@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/languages/index.dart';
-//import 'package:saheb/languages/index.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/providers/locationProvider.dart';
-import 'package:saheb/providers/postsProvider.dart';
-import 'package:saheb/util/uuid.dart';
-import 'package:saheb/widgets/avatar.dart';
-import 'package:saheb/widgets/emptyBox.dart';
-import 'package:saheb/widgets/noContent.dart';
-import 'package:saheb/widgets/wait.dart';
+import '../../languages/index.dart';
+import '../../providers/authProvider.dart';
+import '../../providers/locationProvider.dart';
+import '../../providers/postsProvider.dart';
+import '../../util/uuid.dart';
+import '../../widgets/avatar.dart';
+import '../../widgets/emptyBox.dart';
+import '../../widgets/noContent.dart';
+import '../../widgets/wait.dart';
 
 class ChatScreen extends StatefulWidget {
   final messageId;

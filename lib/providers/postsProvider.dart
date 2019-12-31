@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/util/deleteImages.dart';
-import '../util/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../providers/authProvider.dart';
+import '../util/deleteImages.dart';
+import '../util/uuid.dart';
 
 final Firestore db = Firestore.instance;
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:saheb/providers/locationProvider.dart';
 import 'advert_post.dart';
 import 'none_advert_post.dart';
+import '../../providers/locationProvider.dart';
 import '../../languages/index.dart';
 import '../../providers/languageProvider.dart';
 

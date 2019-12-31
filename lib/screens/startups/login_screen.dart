@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:saheb/screens/startups/registration_screen.dart';
+import '../../screens/startups/registration_screen.dart';
 import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:saheb/providers/authProvider.dart';
-import 'package:saheb/screens/messages/chatScreen.dart';
-import 'package:saheb/widgets/avatar.dart';
-import 'package:saheb/widgets/userNameHolder.dart';
+import '../../screens/messages/chatScreen.dart';
+import '../../widgets/avatar.dart';
+import '../../widgets/userNameHolder.dart';
 
 class MessagesListTile extends StatefulWidget {
   final conversations;
