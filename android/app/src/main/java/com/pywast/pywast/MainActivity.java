@@ -1,4 +1,4 @@
-package com.saheb.saheb;
+package com.pywast.pywast;
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity;
