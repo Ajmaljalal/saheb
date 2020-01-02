@@ -18,7 +18,6 @@ import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
 
-
 class Settings extends StatefulWidget {
   @override
   _SettingsState createState() => _SettingsState();
@@ -153,6 +152,9 @@ class _SettingsState extends State<Settings> {
       stream:
           Provider.of<PostsProvider>(context).getOneUser(userId: currentUserId),
       builder: (context, userSnapshot) {
+        if (!userSnapshot.hasData) {
+          return emptyBox();
+        }
         user = userSnapshot.data;
         if (user != null) {
           return Center(
