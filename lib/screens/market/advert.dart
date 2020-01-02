@@ -99,7 +99,7 @@ class _AdvertState extends State<Advert> with PostMixin, AdvertMixin {
       margin: EdgeInsets.only(top: 3.0),
       child: Text(
         title,
-        maxLines: 2,
+        maxLines: 1,
         textDirection: isRTL(title) ? TextDirection.rtl : TextDirection.ltr,
         style: TextStyle(
           fontSize: fontSize,

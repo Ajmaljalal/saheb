@@ -1,3 +1,4 @@
+import 'package:com.pywast.pywast/widgets/imageRenderer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
@@ -16,12 +17,18 @@ class ChatScreen extends StatefulWidget {
   final initiatorPhoto;
   final initiatorId;
   final initiatorName;
+  final aboutId;
+  final aboutTitle;
+  final aboutPhotoUrl;
 
   ChatScreen({
     this.initiatorId,
     this.messageId,
     this.initiatorName,
     this.initiatorPhoto,
+    this.aboutId,
+    this.aboutTitle,
+    this.aboutPhotoUrl,
   });
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -74,6 +81,11 @@ class _ChatScreenState extends State<ChatScreen> {
       'name': widget.initiatorName,
       'photo': widget.initiatorPhoto,
     };
+    final aboutWhat = {
+      'id': widget.aboutId,
+      'title': widget.aboutTitle,
+      'photoUrl': widget.aboutPhotoUrl
+    };
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final newMessageId = Uuid().generateV4();
     final currentUserId =
@@ -82,14 +94,16 @@ class _ChatScreenState extends State<ChatScreen> {
         Provider.of<LocationProvider>(context, listen: false).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false)
         .startNewConversation(
-            ownerName: user.displayName,
-            ownerLocation: userLocality,
-            ownerPhoto: user.photoUrl,
-            userId: currentUserId,
-            messageReceiverUserId: widget.initiatorId,
-            messageId: newMessageId,
-            text: _text,
-            initiator: initiator);
+      ownerName: user.displayName,
+      ownerLocation: userLocality,
+      ownerPhoto: user.photoUrl,
+      userId: currentUserId,
+      messageReceiverUserId: widget.initiatorId,
+      messageId: newMessageId,
+      text: _text,
+      initiator: initiator,
+      aboutWhat: aboutWhat,
+    );
     setState(() {
       messageId = newMessageId;
       _text = null;
@@ -133,6 +147,31 @@ class _ChatScreenState extends State<ChatScreen> {
         color: Colors.white,
         child: Column(
           children: <Widget>[
+            Container(
+              color: Colors.grey[100],
+              padding: EdgeInsets.all(
+                5.0,
+              ),
+              child: Row(
+                children: <Widget>[
+                  singleImageRenderer(
+                    widget.aboutPhotoUrl,
+                    context,
+                    40.0,
+                    BoxFit.fill,
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Text(
+                      widget.aboutTitle,
+                      style: TextStyle(
+                        fontSize: 15.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             messageId != null
                 ? Expanded(
                     child: GestureDetector(
@@ -158,7 +197,6 @@ class _ChatScreenState extends State<ChatScreen> {
                               itemBuilder: (context, index) {
                                 var conversation =
                                     reversedConversations.toList()[index];
-                                conversation['seen'] = true;
                                 return conversationHolderTile(
                                   conversation: conversation,
                                   userId: currentUserId,
@@ -171,7 +209,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   )
                 : Expanded(
-                    child: noContent(appLanguage['noMessages'], context)),
+                    child: noContent(appLanguage['noMessages'], context),
+                  ),
             Container(
               color: Colors.grey[100],
               padding: EdgeInsets.symmetric(

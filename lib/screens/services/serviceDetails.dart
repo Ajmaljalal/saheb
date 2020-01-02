@@ -126,12 +126,6 @@ class _ServiceDetailsState extends State<ServiceDetails>
               final service = snapshot.data;
               final bool isOwner =
                   service['owner']['id'] == userId ? true : false;
-
-//              final shamsiDate = service != null
-//                  ? Jalali.fromDateTime(service['date'].toDate())
-//                  : null;
-//              final serviceDate =
-//                  '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
               return Stack(
                 children: <Widget>[
                   SingleChildScrollView(
@@ -236,12 +230,14 @@ class _ServiceDetailsState extends State<ServiceDetails>
                           right: 0,
                           left: 0,
                           child: serviceContactDetails(
-                              service['phone'],
-                              appLanguage,
-                              fontSize,
-                              service['owner']['id'],
-                              service['owner']['name'],
-                              service['owner']['photo']),
+                            service['phone'],
+                            appLanguage,
+                            fontSize,
+                            service['owner']['id'],
+                            service['owner']['name'],
+                            service['owner']['photo'],
+                            service['images'][0],
+                          ),
                         )
                       : emptyBox(),
                 ],
@@ -445,6 +441,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
     serviceOwnerId,
     serviceOwnerName,
     serviceOwnerPhoto,
+    servicePhoto,
   ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 70.0),
@@ -477,6 +474,9 @@ class _ServiceDetailsState extends State<ServiceDetails>
                       initiatorId: serviceOwnerId,
                       initiatorName: serviceOwnerName,
                       initiatorPhoto: serviceOwnerPhoto,
+                      aboutId: widget.serviceId,
+                      aboutTitle: widget.serviceTitle,
+                      aboutPhotoUrl: servicePhoto,
                     ),
                   ),
                 );

@@ -20,7 +20,6 @@ import '../widgets/appBarSearch.dart';
 import '../screens/services/index.dart';
 import '../providers/languageProvider.dart';
 
-
 class MainScreen extends StatefulWidget {
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -248,7 +247,7 @@ class _MainScreenState extends State<MainScreen> {
       var message = {
         'conversations': messagesSnapshot.data['messages'],
         'messageId': messagesSnapshot.documentID,
-        'about': messagesSnapshot.data['about'],
+        'aboutWhat': messagesSnapshot.data['aboutWhat'],
         'initiator': messagesSnapshot.data['initiator'],
       };
       return message;

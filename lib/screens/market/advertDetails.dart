@@ -229,6 +229,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                             advert['phone'],
                             appLanguage,
                             fontSize,
+                            advert['images'][0],
                           ),
                         )
                       : emptyBox(),
@@ -365,6 +366,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     phoneNumber,
     appLanguage,
     fontSize,
+    advertPhoto,
   ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.0),
@@ -415,6 +417,9 @@ class _AdvertDetailsState extends State<AdvertDetails>
                           initiatorId: owner['id'],
                           initiatorName: owner['name'],
                           initiatorPhoto: owner['photo'],
+                          aboutId: widget.advertId,
+                          aboutTitle: widget.advertTitle,
+                          aboutPhotoUrl: advertPhoto,
                         ),
                       ),
                     );
