@@ -9,8 +9,12 @@ class MessagesListTile extends StatefulWidget {
   final about;
   final initiator;
 
-  MessagesListTile(
-      {this.conversations, this.messageId, this.initiator, this.about});
+  MessagesListTile({
+    this.conversations,
+    this.messageId,
+    this.initiator,
+    this.about,
+  });
   @override
   _MessagesListTileState createState() => _MessagesListTileState();
 }
@@ -31,6 +35,9 @@ class _MessagesListTileState extends State<MessagesListTile> {
               initiatorId: messageInitiatorId,
               initiatorName: messageInitiatorName,
               initiatorPhoto: messageInitiatorPhoto,
+              aboutId: widget.about['id'],
+              aboutTitle: widget.about['title'],
+              aboutPhotoUrl: widget.about['photoUrl'],
             ),
           ),
         );

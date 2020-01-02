@@ -35,7 +35,7 @@ class _MessagesState extends State<Messages> {
                       widget.messages.toList()[index]['messageId'];
                   var conversations =
                       widget.messages.toList()[index]['conversations'];
-                  final about = widget.messages.toList()[index]['about'];
+                  final about = widget.messages.toList()[index]['aboutWhat'];
                   final initiator =
                       widget.messages.toList()[index]['initiator'];
 

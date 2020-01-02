@@ -15,7 +15,11 @@ import '../../languages/index.dart';
 class Market extends StatefulWidget {
   final searchBarString;
   final usersProvince;
-  Market({Key key, this.searchBarString, this.usersProvince}) : super(key: key);
+  Market({
+    Key key,
+    this.searchBarString,
+    this.usersProvince,
+  }) : super(key: key);
   @override
   _MarketState createState() => _MarketState();
 }
@@ -88,7 +92,9 @@ class _MarketState extends State<Market> {
                         bottom: 0.0,
                       ),
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 0.61),
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.65,
+                      ),
                       itemBuilder: (context, index) {
                         final advertId =
                             filteredPosts.toList()[index]['advertId'];

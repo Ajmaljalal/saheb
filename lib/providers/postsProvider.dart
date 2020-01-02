@@ -471,6 +471,7 @@ class PostsProvider with ChangeNotifier {
     String messageId,
     String text,
     initiator,
+    aboutWhat,
   }) {
     try {
       db
@@ -491,7 +492,8 @@ class PostsProvider with ChangeNotifier {
               'text': text,
             }
           ],
-          'initiator': initiator
+          'initiator': initiator,
+          'aboutWhat': aboutWhat,
         },
       );
 
@@ -517,7 +519,8 @@ class PostsProvider with ChangeNotifier {
             'id': userId,
             'name': ownerName,
             'photo': ownerPhoto,
-          }
+          },
+          'aboutWhat': aboutWhat,
         },
       );
     } catch (e) {
