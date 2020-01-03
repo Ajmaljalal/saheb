@@ -17,7 +17,10 @@ import '../../languages/index.dart';
 class ServicesList extends StatefulWidget {
   final serviceType;
   final serviceTypeString;
-  ServicesList({this.serviceType, this.serviceTypeString});
+  ServicesList({
+    this.serviceType,
+    this.serviceTypeString,
+  });
   @override
   _ServicesListState createState() => _ServicesListState();
 }
@@ -61,7 +64,7 @@ class _ServicesListState extends State<ServicesList> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           title: Text(widget.serviceTypeString),
         ),
@@ -117,7 +120,7 @@ class _ServicesListState extends State<ServicesList> {
               );
               return filteredPosts.length > 0
                   ? ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: filteredPosts.length,
                       itemBuilder: (context, index) {
@@ -148,7 +151,7 @@ class _ServicesListState extends State<ServicesList> {
       child: Container(
         height: 40.0,
         color: Colors.white,
-        margin: EdgeInsets.only(bottom: 2.0),
+        margin: const EdgeInsets.only(bottom: 2.0),
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[
@@ -198,8 +201,8 @@ class _ServicesListState extends State<ServicesList> {
         goToServicesDetailsScreen(serviceId, service['title']);
       },
       child: Container(
-        margin: EdgeInsets.only(top: 5, left: 5.0, right: 5.0),
-        padding: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.only(top: 5, left: 5.0, right: 5.0),
+        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           color: Colors.white,
           border: Border.all(
@@ -216,7 +219,7 @@ class _ServicesListState extends State<ServicesList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 serviceTitleHolder(service['title']),
-                SizedBox(
+                const SizedBox(
                   height: 15.0,
                 ),
                 serviceDetailsHolder(
@@ -248,10 +251,11 @@ class _ServicesListState extends State<ServicesList> {
       child: Text(
         title,
         maxLines: 2,
-        style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.cyan,
-            fontFamily: 'Muna'),
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          color: Colors.cyan,
+          fontFamily: 'Muna',
+        ),
       ),
     );
   }
@@ -275,7 +279,7 @@ class _ServicesListState extends State<ServicesList> {
                 size: 15.0,
                 color: Colors.purple,
               ),
-              SizedBox(width: 5.0),
+              const SizedBox(width: 5.0),
               Text(firstOption),
             ],
           ),
@@ -287,7 +291,7 @@ class _ServicesListState extends State<ServicesList> {
                       size: 15.0,
                       color: Colors.purple,
                     ),
-                    SizedBox(width: 5.0),
+                    const SizedBox(width: 5.0),
                     Text(secondOption),
                   ],
                 )

@@ -13,11 +13,14 @@ import '../../providers/postsProvider.dart';
 import '../../util/filterList.dart';
 import '../../languages/index.dart';
 
-
 class Posts extends StatefulWidget {
   final searchBarString;
   final usersProvince;
-  Posts({Key key, this.searchBarString, this.usersProvince}) : super(key: key);
+  Posts({
+    Key key,
+    this.searchBarString,
+    this.usersProvince,
+  }) : super(key: key);
   @override
   _PostsState createState() => _PostsState();
 }
@@ -108,7 +111,7 @@ class _PostsState extends State<Posts> {
       child: Container(
         height: 40.0,
         color: Colors.white,
-        margin: EdgeInsets.only(bottom: 2.0),
+        margin: const EdgeInsets.only(bottom: 2.0),
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[

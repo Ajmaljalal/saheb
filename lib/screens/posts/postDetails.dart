@@ -13,7 +13,11 @@ class PostDetails extends StatefulWidget {
   final postTitle;
   final postId;
 
-  PostDetails({Key key, this.postTitle, this.postId}) : super(key: key);
+  PostDetails({
+    Key key,
+    this.postTitle,
+    this.postId,
+  }) : super(key: key);
   @override
   _PostDetailsState createState() => _PostDetailsState();
 }
@@ -218,7 +222,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                 userId: userId,
                 isLiked: post['likes'].contains(userId),
               ),
-              Divider(
+              const Divider(
                 color: Colors.grey,
                 height: 1,
               ),
@@ -233,7 +237,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
                 context: context,
                 isLiked: post['likes'].contains(userId),
               ),
-              Divider(
+              const Divider(
                 color: Colors.grey,
                 height: 1,
               ),

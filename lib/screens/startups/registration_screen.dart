@@ -170,16 +170,16 @@ class _RegistrationState extends State<Registration> {
                           true,
                           fontSize,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         registrationButton(_language, appLanguage, onSubmit,
                             _isRegistering, fontSize),
                       ],
                     ),
                   ),
-                  SizedBox(height: 80),
+                  const SizedBox(height: 80),
                   thirdPartyLoginButtons(appLanguage, _language, fontSize),
-                  Center(
-                    child: Divider(
+                  const Center(
+                    child: const Divider(
                       color: Colors.white,
                       indent: 50.0,
                       endIndent: 50.0,
@@ -236,7 +236,6 @@ class _RegistrationState extends State<Registration> {
           style: TextStyle(
             color: Colors.black,
             fontSize: fontSize,
-//            letterSpacing: 3,
           ),
           decoration: InputDecoration(
               filled: true,
@@ -257,14 +256,14 @@ class _RegistrationState extends State<Registration> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.cyan,
                   width: 2.0,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.white,
                   width: 2.0,
                 ),
@@ -308,7 +307,10 @@ class _RegistrationState extends State<Registration> {
                 ? circularProgressIndicator()
                 : Text(
                     appLanguage['register'],
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
           ),
         ),
@@ -354,10 +356,10 @@ class _RegistrationState extends State<Registration> {
                                 fontSize: fontSize,
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 4.0,
                             ),
-                            Icon(
+                            const Icon(
                               FontAwesomeIcons.facebook,
                               color: Colors.white,
                             )

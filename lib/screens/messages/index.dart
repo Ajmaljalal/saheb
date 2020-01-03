@@ -8,7 +8,9 @@ import '../../widgets/noContent.dart';
 
 class Messages extends StatefulWidget {
   final messages;
-  Messages({this.messages});
+  Messages({
+    this.messages,
+  });
   @override
   _MessagesState createState() => _MessagesState();
 }
@@ -20,7 +22,7 @@ class _MessagesState extends State<Messages> {
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           title: Text(appLanguage['messages']),
         ),
@@ -64,9 +66,9 @@ class _MessagesState extends State<Messages> {
   Widget messageSwipeDeleteButton() {
     return Container(
       alignment: Alignment.centerRight,
-      padding: EdgeInsets.only(right: 20.0),
+      padding: const EdgeInsets.only(right: 20.0),
       color: Colors.red,
-      child: Icon(
+      child: const Icon(
         Icons.delete,
         color: Colors.white,
       ),

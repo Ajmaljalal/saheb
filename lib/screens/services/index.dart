@@ -4,7 +4,6 @@ import 'servicesList.dart';
 import '../../util/mapPostTypes.dart';
 import '../../languages/index.dart';
 
-
 class Services extends StatefulWidget {
   @override
   _ServicesState createState() => _ServicesState();
@@ -189,7 +188,11 @@ class _ServicesState extends State<Services> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(height: 64.0, width: 64.0, child: icon),
+              Container(
+                height: 64.0,
+                width: 64.0,
+                child: icon,
+              ),
               const SizedBox(
                 height: 10.0,
               ),

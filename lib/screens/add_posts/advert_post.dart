@@ -201,7 +201,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       body: Card(
         color: Colors.white,
         elevation: 10.0,
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           vertical: 5.0,
           horizontal: 5.0,
         ),
@@ -280,7 +280,7 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
                                     _images, deleteSelectedImage),
                               ],
                             )
-                          : SizedBox(
+                          : const SizedBox(
                               width: 0.0,
                             ),
                     ],
@@ -291,8 +291,8 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
+                border: const Border(
+                  top: const BorderSide(
                     color: Colors.cyanAccent,
                     width: 0.3,
                   ),

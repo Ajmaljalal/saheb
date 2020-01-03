@@ -23,7 +23,11 @@ import '../../widgets/showInfoFushbar.dart';
 class AdvertDetails extends StatefulWidget {
   final advertTitle;
   final advertId;
-  AdvertDetails({Key key, this.advertId, this.advertTitle}) : super(key: key);
+  AdvertDetails({
+    Key key,
+    this.advertId,
+    this.advertTitle,
+  }) : super(key: key);
   @override
   _AdvertDetailsState createState() => _AdvertDetailsState();
 }
@@ -288,11 +292,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(
+                  const Icon(
                     FontAwesomeIcons.images,
                     size: 18.0,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5.0,
                   ),
                   Text(
@@ -348,12 +352,12 @@ class _AdvertDetailsState extends State<AdvertDetails>
             children: <Widget>[
               Text(
                 '$forText: ',
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 12.0,
                 ),
               ),
-              text.toString() != 'null' ? Text(text) : Text('---'),
+              text.toString() != 'null' ? Text(text) : const Text('---'),
             ],
           ),
         ],
@@ -371,8 +375,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
+        border: const Border(
+          top: const BorderSide(
             color: Colors.cyanAccent,
             width: 0.5,
           ),
@@ -390,7 +394,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
               ),
               Text(
                 owner['name'],
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.black,
                   fontSize: 20.0,
                 ),
@@ -403,7 +407,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 InkWell(
-                  child: Icon(
+                  child: const Icon(
                     Entypo.message,
                     size: 38.0,
                     color: Colors.purple,
@@ -426,7 +430,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   },
                 ),
                 InkWell(
-                  child: Icon(
+                  child: const Icon(
                     FontAwesome.phone_square,
                     size: 30.0,
                     color: Colors.purple,
@@ -511,7 +515,10 @@ class _AdvertDetailsState extends State<AdvertDetails>
     advertImages,
   ) {
     return RawMaterialButton(
-      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 36.0),
+      constraints: const BoxConstraints(
+        minWidth: 40.0,
+        minHeight: 36.0,
+      ),
       onPressed: () {
         if (actionType == 'delete') {
           onDelete(context, message, advertImages);

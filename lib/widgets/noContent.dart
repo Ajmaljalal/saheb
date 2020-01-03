@@ -6,7 +6,7 @@ Widget noContent(text, context) {
     child: Center(
       child: Text(
         text,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 25.0,
           color: Colors.cyan,
         ),

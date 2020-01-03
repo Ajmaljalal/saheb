@@ -18,7 +18,12 @@ class Post extends StatefulWidget {
   final post;
   final postId;
   final usersProvince;
-  Post({Key key, this.post, this.postId, this.usersProvince}) : super(key: key);
+  Post({
+    Key key,
+    this.post,
+    this.postId,
+    this.usersProvince,
+  }) : super(key: key);
 
   @override
   _PostState createState() => _PostState();
@@ -223,7 +228,7 @@ class _PostState extends State<Post> with PostMixin {
         ),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topRight: Radius.circular(10.0),
             topLeft: Radius.circular(10.0),
           ),
@@ -235,7 +240,7 @@ class _PostState extends State<Post> with PostMixin {
               width: 50.0,
               height: 5.0,
               color: Colors.grey,
-              margin: EdgeInsets.only(
+              margin: const EdgeInsets.only(
                 bottom: 15.0,
               ),
             ),

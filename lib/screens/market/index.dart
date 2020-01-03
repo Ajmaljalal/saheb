@@ -84,7 +84,7 @@ class _MarketState extends State<Market> {
                   ? GridView.builder(
                       itemCount: filteredPosts.length,
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.only(
                         left: 3.0,
                         right: 3.0,
@@ -119,7 +119,7 @@ class _MarketState extends State<Market> {
       child: Container(
         height: 40.0,
         color: Colors.white,
-        margin: EdgeInsets.only(bottom: 2.0),
+        margin: const EdgeInsets.only(bottom: 2.0),
         child: ListView(
           scrollDirection: Axis.horizontal,
           children: <Widget>[

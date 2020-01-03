@@ -5,7 +5,7 @@ Widget circularProgressIndicator() {
     child: Container(
       width: 30.0,
       height: 30.0,
-      child: CircularProgressIndicator(
+      child: const CircularProgressIndicator(
         backgroundColor: Colors.white,
       ),
     ),
@@ -13,7 +13,7 @@ Widget circularProgressIndicator() {
 }
 
 Widget linearProgressIndicator() {
-  return LinearProgressIndicator(
+  return const LinearProgressIndicator(
     backgroundColor: Colors.white,
   );
 }

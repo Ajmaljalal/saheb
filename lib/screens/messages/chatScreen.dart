@@ -149,7 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             Container(
               color: Colors.grey[100],
-              padding: EdgeInsets.all(
+              padding: const EdgeInsets.all(
                 5.0,
               ),
               child: Row(
@@ -164,7 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: EdgeInsets.symmetric(horizontal: 10.0),
                     child: Text(
                       widget.aboutTitle,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 15.0,
                       ),
                     ),
@@ -236,14 +236,14 @@ class _ChatScreenState extends State<ChatScreen> {
                         }
                       });
                     },
-                    child: Icon(
+                    child: const Icon(
                       MaterialCommunityIcons.send_circle,
                       textDirection: TextDirection.ltr,
                       size: 30.0,
                       color: Colors.purple,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8.0,
                   ),
                   Expanded(
@@ -256,7 +256,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       },
                       decoration: InputDecoration(
                         hintText: appLanguage['typeMessage'],
-                        hintStyle: TextStyle(fontSize: 14.0),
+                        hintStyle: const TextStyle(fontSize: 14.0),
                       ),
                     ),
                   ),
@@ -307,7 +307,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   width: 35.0,
                   photo: ownerPhoto,
                 ),
-          SizedBox(
+          const SizedBox(
             width: 5.0,
           ),
           Flexible(
@@ -316,8 +316,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 minWidth: 50.0,
                 maxWidth: MediaQuery.of(context).size.width * 0.7,
               ),
-              margin: EdgeInsets.only(bottom: 12.0),
-              padding: EdgeInsets.all(10.0),
+              margin: const EdgeInsets.only(bottom: 12.0),
+              padding: const EdgeInsets.all(10.0),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20.0),
@@ -346,16 +346,18 @@ class _ChatScreenState extends State<ChatScreen> {
               minWidth: 50.0,
               maxWidth: MediaQuery.of(context).size.width * 0.7,
             ),
-            margin: EdgeInsets.only(bottom: 12.0),
-            padding: EdgeInsets.all(10.0),
+            margin: const EdgeInsets.only(bottom: 12.0),
+            padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20.0),
-                topRight: Radius.circular(20.0),
-                bottomLeft:
-                    isOwner ? Radius.circular(20.0) : Radius.circular(0.0),
-                bottomRight:
-                    isOwner ? Radius.circular(0.0) : Radius.circular(20.0),
+                topLeft: const Radius.circular(20.0),
+                topRight: const Radius.circular(20.0),
+                bottomLeft: isOwner
+                    ? const Radius.circular(20.0)
+                    : const Radius.circular(0.0),
+                bottomRight: isOwner
+                    ? const Radius.circular(0.0)
+                    : const Radius.circular(20.0),
               ),
               color: isOwner
                   ? Colors.cyanAccent.withOpacity(0.2)
@@ -363,7 +365,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             child: Text(message),
           ),
-          SizedBox(
+          const SizedBox(
             width: 5.0,
           ),
           isOwner

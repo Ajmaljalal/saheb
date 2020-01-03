@@ -221,10 +221,10 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final imagesMax = _images.length > 5 ? true : false;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context, true),
           ),
           title: Container(
@@ -288,7 +288,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                                     _images, deleteSelectedImage),
                               ],
                             )
-                          : SizedBox(
+                          : const SizedBox(
                               width: 0.0,
                             ),
                     ],

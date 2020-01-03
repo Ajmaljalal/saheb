@@ -48,7 +48,7 @@ class _MessagesListTileState extends State<MessagesListTile> {
             bottom: BorderSide(color: Colors.grey[300]),
           ),
         ),
-        padding: EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(5.0),
         width: MediaQuery.of(context).size.width * 1,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -59,7 +59,7 @@ class _MessagesListTileState extends State<MessagesListTile> {
               width: 40.0,
               photo: widget.initiator['photo'],
             ),
-            SizedBox(
+            const SizedBox(
               width: 5.0,
             ),
             Container(

@@ -44,15 +44,14 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  onChangeUserLocality(value) {
-    Provider.of<LocationProvider>(context).changeUserLocality(value);
+  onChangeUserLocality(value) async {
+    await Provider.of<LocationProvider>(context).changeUserLocality(value);
     setState(() {
       _currentLocality = value;
     });
   }
 
-  String _getAppBarTitle(context) {
-    final appLanguage = getLanguages(context);
+  String _getAppBarTitle(appLanguage) {
     switch (_currentScreenIndex) {
       case 3:
         return appLanguage['settings'];
@@ -80,6 +79,28 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  _returnCurrentScreen(currentIndex, userProvince) {
+    if (currentIndex == 0) {
+      return Posts(
+        searchBarString: _searchBarString,
+        usersProvince: userProvince,
+      );
+    }
+    if (currentIndex == 1) {
+      return Market(
+        searchBarString: _searchBarString,
+        usersProvince: userProvince,
+      );
+    }
+    if (currentIndex == 2) {
+      return Services();
+    }
+
+    if (currentIndex == 3) {
+      return Settings();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
@@ -91,23 +112,11 @@ class _MainScreenState extends State<MainScreen> {
     final userProvince = Provider.of<LocationProvider>(context).getUserProvince;
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
-    final List<Widget> screens = [
-      Posts(
-        searchBarString: _searchBarString,
-        usersProvince: userProvince,
-      ),
-      Market(
-        searchBarString: _searchBarString,
-        usersProvince: userProvince,
-      ),
-      Services(),
-      Settings(),
-    ];
     return userLocality != null && userProvince != null
         ? Scaffold(
             backgroundColor: Colors.grey[200],
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(45.0),
+              preferredSize: const Size.fromHeight(45.0),
               child: AppBar(
                 titleSpacing: 0.0,
                 automaticallyImplyLeading: renderSearchAndAdd,
@@ -120,13 +129,13 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-            body: screens[_currentScreenIndex],
+            body: _returnCurrentScreen(_currentScreenIndex, userProvince),
             floatingActionButton:
                 _currentScreenIndex != 3 ? actionButton() : emptyBox(),
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
+                border: const Border(
+                  top: const BorderSide(
                     color: Colors.cyanAccent,
                     width: .3,
                   ),
@@ -166,7 +175,7 @@ class _MainScreenState extends State<MainScreen> {
 
   FloatingActionButton actionButton() {
     return FloatingActionButton(
-      child: Icon(
+      child: const Icon(
         Icons.add,
         color: Colors.white,
       ),
@@ -219,12 +228,12 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget emptyMessageIcon() {
     return Container(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         right: 8.0,
         left: 8.0,
       ),
       child: InkWell(
-        child: Icon(
+        child: const Icon(
           Icons.email,
           size: 30.0,
         ),
@@ -265,12 +274,12 @@ class _MainScreenState extends State<MainScreen> {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             right: 8.0,
             left: 8.0,
           ),
           child: InkWell(
-            child: Icon(
+            child: const Icon(
               Icons.email,
               size: 30.0,
             ),
@@ -294,14 +303,14 @@ class _MainScreenState extends State<MainScreen> {
               ? Container(
                   width: 15,
                   height: 15,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.redAccent,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
                     child: Text(
                       unSeenMessages.length.toString(),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 10.0,
                         fontWeight: FontWeight.bold,
@@ -330,7 +339,7 @@ class _MainScreenState extends State<MainScreen> {
           renderSearchAndAdd
               ? emptyBox()
               : Text(
-                  _getAppBarTitle(context).toString(),
+                  _getAppBarTitle(appLanguage).toString(),
                 ),
           renderSearchAndAdd
               ? renderMessagesIconAndCount(appLanguage, userId)
@@ -349,13 +358,13 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     borderRadius: BorderRadius.circular(50.0),
                   ),
-                  margin: EdgeInsets.only(
+                  margin: const EdgeInsets.only(
                     left: 8.0,
                     right: 8.0,
                   ),
                   child: Center(
                     child: InkWell(
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         size: 25.0,
                       ),
@@ -384,13 +393,13 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     borderRadius: BorderRadius.circular(50.0),
                   ),
-                  margin: EdgeInsets.only(
+                  margin: const EdgeInsets.only(
                     left: 8.0,
                     right: 8.0,
                   ),
                   child: Center(
                     child: InkWell(
-                      child: Icon(
+                      child: const Icon(
                         Icons.add,
                         size: 25.0,
                       ),
@@ -410,7 +419,7 @@ class _MainScreenState extends State<MainScreen> {
           renderSearchAndAdd
               ? emptyBox()
               : Text(
-                  _getAppBarTitle(context).toString(),
+                  _getAppBarTitle(appLanguage).toString(),
                 ),
         ],
       );
@@ -424,7 +433,7 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
+            const Icon(
               Icons.location_on,
               size: 50.0,
               color: Colors.cyan,
@@ -432,12 +441,12 @@ class _MainScreenState extends State<MainScreen> {
             Center(
               child: Text(
                 appLanguage['chooseYourLocation'],
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20.0,
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 15.0,
             ),
             FutureBuilder(

@@ -124,10 +124,10 @@ class _SettingsState extends State<Settings> {
               appLanguage,
             ),
             Container(
-              margin: EdgeInsets.only(top: 10.0),
+              margin: const EdgeInsets.only(top: 10.0),
               child: _settingsOptions(appLanguage),
             ),
-            Divider(color: Colors.black),
+            const Divider(color: Colors.black),
             customButton(
               appLanguage: appLanguage,
               context: context,
@@ -202,13 +202,14 @@ class _SettingsState extends State<Settings> {
               chooseFile(source: ImageSource.gallery, userId: userId);
             },
             child: Container(
-              padding: EdgeInsets.all(2.0),
+              padding: const EdgeInsets.all(2.0),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    30.0,
-                  ),
-                  color: Colors.white),
-              child: Icon(
+                borderRadius: BorderRadius.circular(
+                  30.0,
+                ),
+                color: Colors.white,
+              ),
+              child: const Icon(
                 Icons.photo_camera,
                 color: Colors.green,
                 size: 18.0,
@@ -230,7 +231,7 @@ class _SettingsState extends State<Settings> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Divider(color: Colors.black),
+        const Divider(color: Colors.black),
         Text(
           appLanguage['changeAppLanguage'],
           style: TextStyle(fontSize: 18.0),
@@ -247,7 +248,7 @@ class _SettingsState extends State<Settings> {
                     onChanged: onChangeAppLanguage,
                     activeColor: Theme.of(context).accentColor,
                   ),
-                  Text('پښتو'),
+                  const Text('پښتو'),
                 ],
               ),
             ),
@@ -260,7 +261,7 @@ class _SettingsState extends State<Settings> {
                     onChanged: onChangeAppLanguage,
                     activeColor: Theme.of(context).accentColor,
                   ),
-                  Text('دری'),
+                  const Text('دری'),
                 ],
               ),
             ),
@@ -273,7 +274,7 @@ class _SettingsState extends State<Settings> {
                     onChanged: onChangeAppLanguage,
                     activeColor: Theme.of(context).accentColor,
                   ),
-                  Text('English'),
+                  const Text('English'),
                 ],
               ),
             ),
@@ -302,7 +303,7 @@ class _SettingsState extends State<Settings> {
           },
           child: Text(
             appLanguage['save'],
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
             ),
@@ -313,7 +314,7 @@ class _SettingsState extends State<Settings> {
           onPressed: () => Navigator.pop(context),
           child: Text(
             appLanguage['cancel'],
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 15,
             ),

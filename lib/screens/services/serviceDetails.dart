@@ -92,7 +92,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
     double fontSize = currentLanguage == 'English' ? 12.5 : 15.0;
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(),
       ),
       body: renderServiceContent(
@@ -295,11 +295,11 @@ class _ServiceDetailsState extends State<ServiceDetails>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(
+                  const Icon(
                     FontAwesomeIcons.images,
                     size: 18.0,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 5.0,
                   ),
                   Text(
@@ -356,7 +356,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Switch(
+              Switch.adaptive(
                 onChanged: (value) async {
                   await Provider.of<PostsProvider>(context)
                       .toggleServiceOpenClose(
@@ -387,7 +387,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
           child: Text(
             openCloseText,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 15.0,
               height: 0.9,
@@ -416,17 +416,17 @@ class _ServiceDetailsState extends State<ServiceDetails>
                 size: 15.0,
                 color: Colors.purple,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5.0,
               ),
               text.toString() != 'null'
                   ? Text(
                       text,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 13.0,
                       ),
                     )
-                  : Text('---'),
+                  : const Text('---'),
             ],
           ),
         ],
@@ -446,8 +446,8 @@ class _ServiceDetailsState extends State<ServiceDetails>
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 70.0),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
+        border: const Border(
+          top: const BorderSide(
             color: Colors.cyanAccent,
             width: 0.5,
           ),
@@ -460,7 +460,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             InkWell(
-              child: Icon(
+              child: const Icon(
                 Entypo.message,
                 size: 38.0,
                 color: Colors.purple,
@@ -483,7 +483,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
               },
             ),
             InkWell(
-              child: Icon(
+              child: const Icon(
                 FontAwesome.phone_square,
                 size: 30.0,
                 color: Colors.purple,

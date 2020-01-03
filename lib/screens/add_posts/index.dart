@@ -30,7 +30,7 @@ class _AddPostState extends State<AddPost> {
     return Scaffold(
       backgroundColor: Colors.grey,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
+        preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
           title: Text(appLanguage['addNewPost'].toString()),
         ),
@@ -39,13 +39,13 @@ class _AddPostState extends State<AddPost> {
         height: MediaQuery.of(context).size.height * 0.8,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20.0),
-            topLeft: Radius.circular(20.0),
+          borderRadius: const BorderRadius.only(
+            topRight: const Radius.circular(20.0),
+            topLeft: const Radius.circular(20.0),
           ),
         ),
-        padding: EdgeInsets.only(top: 15.0),
-        margin: EdgeInsets.only(
+        padding: const EdgeInsets.only(top: 15.0),
+        margin: const EdgeInsets.only(
           top: 100.0,
         ),
         child: SingleChildScrollView(
@@ -53,11 +53,11 @@ class _AddPostState extends State<AddPost> {
             children: <Widget>[
               Text(
                 appLanguage['whatPost'].toString(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 22.0,
                 ),
               ),
-              SizedBox(height: 20.0),
+              const SizedBox(height: 20.0),
               _postTypeOption(
                 type: appLanguage['general'],
                 text: appLanguage['textForGeneralPost'],
@@ -153,7 +153,7 @@ class _AddPostState extends State<AddPost> {
             isThreeLine: false,
             title: Text(
               appLanguageText,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 17.0,
                 height: 0.5,
               ),
