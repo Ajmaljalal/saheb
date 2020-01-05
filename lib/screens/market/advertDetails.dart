@@ -373,7 +373,6 @@ class _AdvertDetailsState extends State<AdvertDetails>
     advertPhoto,
   ) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
         border: const Border(
           top: const BorderSide(
@@ -394,9 +393,9 @@ class _AdvertDetailsState extends State<AdvertDetails>
               ),
               Text(
                 owner['name'],
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.black,
-                  fontSize: 20.0,
+                  fontSize: fontSize,
                 ),
               ),
             ],

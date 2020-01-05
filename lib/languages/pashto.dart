@@ -35,13 +35,15 @@ Map pashto = {
   'haveAnAccount': 'که حساب لرې،',
   'doNotHaveAnAccount': 'که حساب نه لرې، ',
   'phone': ' تیلفون شمېره (اختیاری)',
-  'phoneNumber': 'تیلفون',
+  'phoneNumber': 'تیلفون  ',
   'name': 'کارېدونکی نوم',
 
   'signinWithFacebook': 'فیسبوک سره ننوځه',
   'signinWithGoogle': 'ګوګل  سره  ننوځه ',
-  'registerWithFacebook': 'فیسبوکي ثبت نام',
-  'registerWithGoogle': 'ګوګل  ثبت  نام ',
+  'signinWithPhone': 'د تیلفون په شمېره ننوځه',
+  'signinWithEmail': 'ایمیل او رمز سره ننوځه',
+  'enterPasscode': 'کوم کوډ مو چې د پیغام له لارې لاسته راوړ دلته ولیکئ',
+  'code': '...',
 
   'more': 'نور...',
 
@@ -122,6 +124,7 @@ Map pashto = {
       ' په دې نوم حساب نه شته، که حساب نه لرئ لطفاً اول ثبت نام وکړئ. ',
   'loginFailed': 'پروګرام ته ننوتل ناکام شول، بیا هڅه وکړئ.',
   'registrationFailed': 'ثبت نام و نه شو، لطفاً له سره هڅه وکړئ.',
+  'phoneSignInError': 'لطفاً د تیلفون شمېره چک کړی او بیا هڅه وکړی',
 
   'enter': ' ولیکئ!',
 

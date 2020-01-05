@@ -54,7 +54,7 @@ filterList({
       return filteredPosts;
     }
 
-    if (currentFilterOption.toLowerCase() == appLanguage['myFavorites']) {
+    if (currentFilterOption == appLanguage['myFavorites']) {
       filteredPosts = filteredPosts
           .where(
             (post) =>
@@ -73,10 +73,8 @@ filterList({
     const String sellString = 'پلورل فروشی for sell';
     const String buyString = 'اخیستل خرید for purchase';
     const String rentString = 'کرایی for rent';
-    const String needProString =
-        'professional service مسلکي خدمتونه خدمات مسلکی';
 
-    if (sellString.contains(currentFilterOption)) {
+    if (sellString.contains(currentFilterOption.toLowerCase())) {
       filteredPosts = filteredPosts
           .where(
             (post) =>
@@ -91,7 +89,7 @@ filterList({
       return filteredPosts;
     }
 
-    if (buyString.contains(currentFilterOption)) {
+    if (buyString.contains(currentFilterOption.toLowerCase())) {
       filteredPosts = filteredPosts
           .where(
             (post) =>
@@ -105,26 +103,11 @@ filterList({
           .toList();
       return filteredPosts;
     }
-    if (rentString.contains(currentFilterOption)) {
+    if (rentString.contains(currentFilterOption.toLowerCase())) {
       filteredPosts = filteredPosts
           .where(
             (post) =>
                 (rentString.contains(
-                    post['advert']['type'].toString().toLowerCase())) &&
-                (post['advert']['hiddenFrom']
-                        .toList()
-                        .contains(currentUserId.toLowerCase())) ==
-                    false,
-          )
-          .toList();
-      return filteredPosts;
-    }
-
-    if (needProString.contains(currentFilterOption)) {
-      filteredPosts = filteredPosts
-          .where(
-            (post) =>
-                (needProString.contains(
                     post['advert']['type'].toString().toLowerCase())) &&
                 (post['advert']['hiddenFrom']
                         .toList()
@@ -290,7 +273,8 @@ filterList({
       return filteredPosts;
     }
 
-    if (currentFilterOption.toLowerCase() == appLanguage['myFavorites']) {
+    if (currentFilterOption.toLowerCase() ==
+        appLanguage['myFavorites'].toLowerCase()) {
       filteredPosts = filteredPosts
           .where(
             (post) =>

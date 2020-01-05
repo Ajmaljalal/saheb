@@ -49,6 +49,19 @@ class _MainScreenState extends State<MainScreen> {
     setState(() {
       _currentLocality = value;
     });
+    updateUserLocation(userLocality: value);
+  }
+
+  void updateUserLocation({
+    userLocality,
+  }) async {
+    final currentUserId = Provider.of<AuthProvider>(context).userId;
+    await Provider.of<PostsProvider>(context).updateUserInfo(
+      userId: currentUserId,
+      field: 'location',
+      value: userLocality,
+      context: context,
+    );
   }
 
   String _getAppBarTitle(appLanguage) {

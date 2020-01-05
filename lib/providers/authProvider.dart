@@ -33,6 +33,9 @@ class AuthProvider with ChangeNotifier {
     return _userId;
   }
 
+  static const photoUrl =
+      'https://firebasestorage.googleapis.com/v0/b/saheb-mobile.appspot.com/o/users%2Fuser.png?alt=media&token=0f61b161-14a4-49ca-af9e-cef6ba8a80ca';
+
   Future<FirebaseUser> get currentUser async {
     final FirebaseUser user = await _auth.currentUser();
     return user;
@@ -60,15 +63,17 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future<String> _authenticate(
-      String email, String password, name, actionType) async {
+    String email,
+    String password,
+    name,
+    actionType,
+  ) async {
     try {
       FirebaseUser _user;
       if (actionType == 'register') {
         _user = (await _auth.createUserWithEmailAndPassword(
                 email: email, password: password))
             .user;
-        const photoUrl =
-            'https://firebasestorage.googleapis.com/v0/b/saheb-mobile.appspot.com/o/users%2Fuser.png?alt=media&token=0f61b161-14a4-49ca-af9e-cef6ba8a80ca';
         UserUpdateInfo info = new UserUpdateInfo();
         info.displayName = name;
         info.photoUrl = photoUrl;
@@ -101,12 +106,68 @@ class AuthProvider with ChangeNotifier {
     return _userId;
   }
 
+  signInWithPhone({
+    verificationId,
+    smsCode,
+    userName,
+    actionType,
+  }) {
+    try {
+      if (verificationId != null && smsCode != null) {
+        final AuthCredential credential = PhoneAuthProvider.getCredential(
+          verificationId: verificationId,
+          smsCode: smsCode,
+        );
+        FirebaseAuth.instance
+            .signInWithCredential(credential)
+            .then((AuthResult result) async {
+          if (actionType == 'register') {
+            UserUpdateInfo info = new UserUpdateInfo();
+            info.displayName = userName;
+            info.photoUrl = photoUrl;
+            await result.user.updateProfile(info);
+            await registerUserToDb(result.user.uid, userName, null, photoUrl);
+          }
+
+          // save user token and save user info to local
+          _token = (await result.user.getIdToken()).token;
+          _userId = result.user.uid;
+
+          notifyListeners();
+          final prefs = await SharedPreferences.getInstance();
+          final userData = json.encode(
+            {
+              'token': _token,
+              'userId': _userId,
+            },
+          );
+
+          prefs.setString('userData', userData);
+        }).catchError(
+          (error) {
+            throw error;
+          },
+        );
+      }
+    } catch (error) {}
+  }
+
   Future register(String email, String password, String name) async {
-    return _authenticate(email, password, name, 'register');
+    return _authenticate(
+      email,
+      password,
+      name,
+      'register',
+    );
   }
 
   Future login(String email, String password) async {
-    return _authenticate(email, password, '', 'login');
+    return _authenticate(
+      email,
+      password,
+      '',
+      'login',
+    );
   }
 
   Future<String> googleSignIn(actionType) async {
@@ -127,7 +188,11 @@ class AuthProvider with ChangeNotifier {
 
       if (actionType == 'register') {
         registerUserToDb(
-            _user.uid, _user.displayName, _user.email, _user.photoUrl);
+          _user.uid,
+          _user.displayName,
+          _user.email,
+          _user.photoUrl,
+        );
       }
 
       notifyListeners();
@@ -160,7 +225,11 @@ class AuthProvider with ChangeNotifier {
 
       if (actionType == 'register') {
         registerUserToDb(
-            _user.uid, _user.displayName, _user.email, _user.photoUrl);
+          _user.uid,
+          _user.displayName,
+          _user.email,
+          _user.photoUrl,
+        );
       }
 
       notifyListeners();

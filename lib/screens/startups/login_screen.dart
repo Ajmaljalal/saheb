@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../screens/startups/registration_screen.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import '../../screens/startups/phoneNumberSigninScreen.dart';
+import '../../widgets/emptyBox.dart';
+import '../../widgets/emptySpace.dart';
 import '../../providers/languageProvider.dart';
 import '../../providers/authProvider.dart';
 import '../../languages/index.dart';
@@ -14,14 +18,36 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  String _name;
   String _email;
   String _password;
   bool _isLoggingIn = false;
-  bool _isGoogleLogingIn = false;
-  bool _isFacebookLogingIn = false;
-  String screen = 'login';
+  bool _isGoogleLoginIn = false;
+  bool _isFacebookLoginIn = false;
+  String _phoneNo;
+  String _smsCode;
+  String _verificationId;
+  String _screen = 'login';
+  bool _isCodeSent = false;
+  bool _isPhoneSignIn = false;
 
   final _formKey = GlobalKey<FormState>();
+
+  void handleNameInputChange(value) {
+    _name = value.toString().trim();
+  }
+
+  void handlePhoneNoInputChange(value) {
+    setState(() {
+      _phoneNo = value.toString().trim();
+    });
+  }
+
+  void handleSmsCodeInputChange(value) {
+    setState(() {
+      _smsCode = value.toString().trim();
+    });
+  }
 
   void handleEmailInputChange(value) {
     _email = value.toString().trim();
@@ -31,23 +57,56 @@ class _LoginState extends State<Login> {
     _password = value.toString().trim();
   }
 
-  void swapScreens() {
-    if (screen == 'login') {
+  void swapScreensBetweenSignInAndRegister() {
+    if (_screen == 'login') {
       setState(() {
-        screen = 'register';
+        _screen = 'register';
       });
     } else {
       setState(() {
-        screen = 'login';
+        _screen = 'login';
       });
     }
   }
 
-  Future<void> onLogin(appLanguage) async {
+  void swapScreenToPhoneSignIn() {
+    setState(() {
+      _isPhoneSignIn = !_isPhoneSignIn;
+    });
+  }
+
+  Future<void> onRegisterWithEmailAndPassword(appLanguage) async {
     setState(() {
       _isLoggingIn = true;
     });
+    try {
+      await Provider.of<AuthProvider>(context, listen: false)
+          .register(_email, _password, _name);
+    } catch (error) {
+      var errorMessage = appLanguage['registrationFailed'];
+      if (error.toString().contains('ERROR_EMAIL_ALREADY_IN_USE')) {
+        errorMessage = appLanguage['inUseEmail'];
+      } else if (error.toString().contains('ERROR_INVALID_EMAIL')) {
+        errorMessage = appLanguage['invalidEmail'];
+      } else if (error.toString().contains('ERROR_WEAK_PASSWORD')) {
+        errorMessage = appLanguage['weakPassword'];
+      }
+      showErrorDialog(
+        errorMessage,
+        context,
+        appLanguage['errorDialogTitle'],
+        appLanguage['ok'],
+      );
+      setState(() {
+        _isLoggingIn = false;
+      });
+    }
+  }
 
+  Future<void> onEmailAndPasswordLogin(appLanguage) async {
+    setState(() {
+      _isLoggingIn = true;
+    });
     try {
       await Provider.of<AuthProvider>(context).login(_email, _password);
     } catch (error) {
@@ -75,10 +134,11 @@ class _LoginState extends State<Login> {
 
   Future<void> onGoogleLogin(appLanguage) async {
     setState(() {
-      _isGoogleLogingIn = true;
+      _isGoogleLoginIn = true;
     });
     try {
-      await Provider.of<AuthProvider>(context).googleSignIn('login');
+      await Provider.of<AuthProvider>(context)
+          .googleSignIn(_screen == 'login' ? 'login' : 'register');
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       showErrorDialog(
@@ -88,17 +148,18 @@ class _LoginState extends State<Login> {
         appLanguage['ok'],
       );
       setState(() {
-        _isGoogleLogingIn = false;
+        _isGoogleLoginIn = false;
       });
     }
   }
 
   Future<void> onFacebookLogIn(appLanguage) async {
     setState(() {
-      _isFacebookLogingIn = true;
+      _isFacebookLoginIn = true;
     });
     try {
-      await Provider.of<AuthProvider>(context).facebookSignIn('login');
+      await Provider.of<AuthProvider>(context)
+          .facebookSignIn(_screen == 'login' ? 'login' : 'register');
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       showErrorDialog(
@@ -108,9 +169,46 @@ class _LoginState extends State<Login> {
         appLanguage['ok'],
       );
       setState(() {
-        _isFacebookLogingIn = false;
+        _isFacebookLoginIn = false;
       });
     }
+  }
+
+  Future<void> verifyPhone(appLanguage) async {
+    String phoneNumber = _phoneNo;
+    if (_phoneNo.toString().startsWith('0')) {
+      phoneNumber = '+93${_phoneNo.substring(1)}';
+    }
+    print(phoneNumber);
+    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+      setState(() {
+        this._verificationId = verId;
+      });
+    };
+    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
+      setState(() {
+        this._verificationId = verId;
+      });
+      enterCodeDialog(appLanguage);
+    };
+    final PhoneVerificationCompleted success = (AuthCredential user) {
+      print('verified');
+    };
+    final PhoneVerificationFailed failed = (AuthException exception) {
+      showErrorDialog(appLanguage['phoneSignInError'], context,
+          appLanguage['errorDialogTitle'], appLanguage['ok']);
+    };
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: phoneNumber,
+      timeout: const Duration(seconds: 0),
+      verificationCompleted: success,
+      verificationFailed: failed,
+      codeSent: smsCodeSent,
+      codeAutoRetrievalTimeout: autoRetrieve,
+    );
+    setState(() {
+      _isCodeSent = true;
+    });
   }
 
   @override
@@ -118,87 +216,154 @@ class _LoginState extends State<Login> {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = _language == 'English' ? 13.0 : 15.0;
     Map appLanguage = getLanguages(context);
-    return screen == 'login'
-        ? Scaffold(
-            backgroundColor: Theme.of(context).primaryColor,
-            body: SafeArea(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Theme.of(context).accentColor,
-                      Theme.of(context).primaryColor,
-                    ],
+    return Scaffold(
+      backgroundColor: Theme.of(context).primaryColor,
+      body: SafeArea(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 1,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).accentColor,
+                Theme.of(context).primaryColor,
+              ],
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              right: 10,
+              left: 10,
+              top: MediaQuery.of(context).size.height * 0.13,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  signInForm(
+                    appLanguage,
+                    _language,
+                    fontSize,
                   ),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    right: 10,
-                    left: 10,
-                    top: MediaQuery.of(context).size.height * 0.13,
+                  const EmptySpace(height: 70.0),
+                  loginButton(
+                    appLanguage,
+                    swapScreenToPhoneSignIn,
+                    fontSize,
+                    'phoneAuth',
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: <Widget>[
-                              loginInputs(
-                                appLanguage['email'],
-                                _language,
-                                handleEmailInputChange,
-                                appLanguage['enter'],
-                                false,
-                                fontSize,
-                              ),
-                              loginInputs(
-                                appLanguage['password'],
-                                _language,
-                                handlePasswordInputChange,
-                                appLanguage['enter'],
-                                true,
-                                fontSize,
-                              ),
-                              const SizedBox(height: 20),
-                              loginButton(
-                                  _language, appLanguage, onLogin, fontSize),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 80),
-                        thirdPartyLoginButtons(
-                          appLanguage,
-                          _language,
-                          onGoogleLogin,
-                          fontSize,
-                        ),
-                        const Center(
-                          child: const Divider(
-                            color: Colors.white,
-                            indent: 45.0,
-                            endIndent: 45.0,
-                          ),
-                        ),
-                        Center(
-                          child: haveAnAccountText(
-                            _language,
-                            appLanguage,
-                            fontSize,
-                            swapScreens,
-                          ),
-                        ),
-                      ],
+                  const EmptySpace(height: 10.0),
+                  thirdPartyLoginButtons(
+                    appLanguage,
+                    _language,
+                    onGoogleLogin,
+                    fontSize,
+                  ),
+                  const Center(
+                    child: const Divider(
+                      color: Colors.white,
+                      indent: 45.0,
+                      endIndent: 45.0,
                     ),
                   ),
-                ),
+                  haveAnAccountText(
+                    _language,
+                    appLanguage,
+                    fontSize,
+                    swapScreensBetweenSignInAndRegister,
+                  ),
+                ],
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Form signInForm(
+    Map appLanguage,
+    String _language,
+    double fontSize,
+  ) {
+    final onClickForEmailAndPassword = _screen == 'login'
+        ? onEmailAndPasswordLogin
+        : onRegisterWithEmailAndPassword;
+    return !_isPhoneSignIn
+        ? Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                _screen == 'register'
+                    ? loginInputs(
+                        appLanguage['name'],
+                        _language,
+                        handleNameInputChange,
+                        appLanguage['enter'],
+                        false,
+                        fontSize,
+                        false,
+                      )
+                    : emptyBox(),
+                loginInputs(
+                    appLanguage['email'],
+                    _language,
+                    handleEmailInputChange,
+                    appLanguage['enter'],
+                    false,
+                    fontSize,
+                    false),
+                loginInputs(
+                    appLanguage['password'],
+                    _language,
+                    handlePasswordInputChange,
+                    appLanguage['enter'],
+                    true,
+                    fontSize,
+                    false),
+                const EmptySpace(height: 10.0),
+                loginButton(
+                  appLanguage,
+                  onClickForEmailAndPassword,
+                  fontSize,
+                  'notPhoneAuth',
+                ),
+              ],
+            ),
           )
-        : Registration(swapScreens);
+        : Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                _screen == 'register'
+                    ? loginInputs(
+                        appLanguage['name'],
+                        _language,
+                        handleNameInputChange,
+                        appLanguage['enter'],
+                        false,
+                        fontSize,
+                        false)
+                    : emptyBox(),
+                loginInputs(
+                  appLanguage['phoneNumber'],
+                  _language,
+                  handlePhoneNoInputChange,
+                  appLanguage['enter'],
+                  false,
+                  fontSize,
+                  true,
+                ),
+                const EmptySpace(height: 10.0),
+                loginButton(
+                  appLanguage,
+                  verifyPhone,
+                  fontSize,
+                  'notPhoneAuth',
+                ),
+              ],
+            ),
+          );
   }
 
   Widget loginInputs(
@@ -208,6 +373,7 @@ class _LoginState extends State<Login> {
     error,
     isPassword,
     fontSize,
+    isPhone,
   ) {
     return Center(
       child: Padding(
@@ -226,11 +392,12 @@ class _LoginState extends State<Login> {
             }
             return null;
           },
-          textAlign: TextAlign.center,
+          textAlign: isPhone ? TextAlign.left : TextAlign.center,
           textDirection: TextDirection.ltr,
           autocorrect: false,
           obscureText: isPassword,
-          keyboardType: TextInputType.emailAddress,
+          keyboardType:
+              isPhone ? TextInputType.phone : TextInputType.emailAddress,
           cursorColor: Colors.black,
           style: TextStyle(
             color: Colors.black,
@@ -245,6 +412,10 @@ class _LoginState extends State<Login> {
             ),
             errorStyle: TextStyle(
               color: Colors.white,
+              fontSize: fontSize,
+            ),
+            suffixText: isPhone ? '0093' : '',
+            suffixStyle: TextStyle(
               fontSize: fontSize,
             ),
             hintText: type,
@@ -273,16 +444,28 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget loginButton(String lang, appLanguage, onLogin, fontSize) {
+  Widget loginButton(
+    appLanguage,
+    onClick,
+    fontSize,
+    action,
+  ) {
+    final isLoginScreen = _screen == 'login' ? true : false;
+    final isPhoneLogin = action == 'phoneAuth' ? true : false;
+    final loginWithPhoneButtonText = !_isPhoneSignIn
+        ? appLanguage['signinWithPhone']
+        : appLanguage['signinWithEmail'];
+    final loginOrRegisterButtonText =
+        isLoginScreen ? appLanguage['login'] : appLanguage['register'];
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20.0,
       ),
       child: Container(
         width: MediaQuery.of(context).size.width * 1,
-        height: 50,
+        height: 45,
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: !isPhoneLogin ? Theme.of(context).accentColor : Colors.purple,
           border: Border.all(
             color: Colors.white,
             width: 2.0,
@@ -291,18 +474,33 @@ class _LoginState extends State<Login> {
         ),
         child: FlatButton(
           onPressed: () {
-            if (_formKey.currentState.validate()) {
-              onLogin(appLanguage);
-            } else
-              return;
+            if (!isPhoneLogin) {
+              if (_formKey.currentState.validate()) {
+                onClick(appLanguage);
+              } else
+                return;
+            } else {
+              onClick();
+            }
           },
           child: Center(
-            child: _isLoggingIn == true
-                ? circularProgressIndicator()
-                : Text(
-                    appLanguage['login'],
-                    style: const TextStyle(fontSize: 18, color: Colors.white),
-                  ),
+            child: isPhoneLogin
+                ? Text(
+                    loginWithPhoneButtonText,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  )
+                : _isLoggingIn == true
+                    ? circularProgressIndicator()
+                    : Text(
+                        loginOrRegisterButtonText,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
           ),
         ),
       ),
@@ -335,7 +533,7 @@ class _LoginState extends State<Login> {
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
                   ),
-                  child: _isFacebookLogingIn
+                  child: _isFacebookLoginIn
                       ? Center(child: circularProgressIndicator())
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -371,7 +569,7 @@ class _LoginState extends State<Login> {
                     borderRadius: BorderRadius.circular(40.0),
                     color: Colors.deepPurpleAccent,
                   ),
-                  child: _isGoogleLogingIn
+                  child: _isGoogleLoginIn
                       ? Center(child: circularProgressIndicator())
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -401,27 +599,36 @@ class _LoginState extends State<Login> {
     );
   }
 
-  Widget haveAnAccountText(lang, appLanguage, fontSize, swapScreens) {
+  Widget haveAnAccountText(
+    lang,
+    appLanguage,
+    fontSize,
+    swapScreens,
+  ) {
     if (lang == 'English') {
       return Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              appLanguage['doNotHaveAnAccount'],
+              _screen == 'login'
+                  ? appLanguage['doNotHaveAnAccount']
+                  : appLanguage['haveAnAccount'],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: fontSize,
               ),
             ),
             Container(
-              width: 100.0,
+              width: _screen == 'register' ? 80.0 : 97.0,
               child: FlatButton(
                 onPressed: () {
                   swapScreens();
                 },
                 child: Text(
-                  appLanguage['register'],
+                  _screen == 'login'
+                      ? appLanguage['register']
+                      : appLanguage['login'],
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: fontSize,
@@ -437,27 +644,78 @@ class _LoginState extends State<Login> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            appLanguage['doNotHaveAnAccount'],
+            _screen == 'login'
+                ? appLanguage['doNotHaveAnAccount']
+                : appLanguage['haveAnAccount'],
             style: TextStyle(
               color: Colors.white,
               fontSize: fontSize,
             ),
           ),
-          FlatButton(
-            onPressed: () {
-              swapScreens();
-            },
-            padding: const EdgeInsets.all(0),
-            child: Text(
-              appLanguage['register'],
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: fontSize,
+          Container(
+            width: _screen == 'register' ? 40.0 : 80.0,
+            child: FlatButton(
+              onPressed: () {
+                swapScreens();
+              },
+              padding: const EdgeInsets.all(0),
+              child: Text(
+                _screen == 'login'
+                    ? appLanguage['register']
+                    : appLanguage['login'],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: fontSize,
+                ),
               ),
             ),
           ),
         ],
       );
     }
+  }
+
+  enterCodeDialog(appLanguage) {
+    final isLoginScreen = _screen == 'login' ? true : false;
+    final actionType = isLoginScreen ? ' login' : 'register';
+    Alert(
+      context: context,
+      title: appLanguage['enterPasscode'],
+      style: const AlertStyle(
+        titleStyle: const TextStyle(
+          fontSize: 20.0,
+          color: Colors.black,
+        ),
+        isCloseButton: false,
+      ),
+      content: PhoneNumberSignIn(
+        isLoginScreen: isLoginScreen,
+        onSmsCodeInputChanged: handleSmsCodeInputChange,
+      ),
+      buttons: [
+        DialogButton(
+          color: Colors.purple,
+          onPressed: () async {
+            if (_phoneNo == null || _phoneNo.trim().length == 0) {
+              return;
+            }
+            await Provider.of<AuthProvider>(context).signInWithPhone(
+              verificationId: _verificationId,
+              smsCode: _smsCode,
+              userName: _name,
+              actionType: actionType,
+            );
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            appLanguage['login'],
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ],
+    ).show();
   }
 }
