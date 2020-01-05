@@ -269,7 +269,8 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('userData');
-    prefs.clear();
+    await prefs.clear();
+    await _auth.signOut();
   }
 
   Future<void> updateUserPhoto({String photoUrl}) async {

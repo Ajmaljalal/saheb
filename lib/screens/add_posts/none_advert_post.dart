@@ -206,6 +206,10 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       favorites: post['favorites'],
       hiddenFrom: post['hiddenFrom'],
       date: post['date'],
+      promoted: post['promoted'],
+      promoStartDate: post['promoStartDate'],
+      promoEndDate: post['promoEndDate'],
+      promoMoneyAmount: post['promoMoneyAmount'],
     );
 
     Navigator.of(context).pop();

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:com.pywast.pywast/widgets/emptySpace.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -163,14 +164,15 @@ class _SettingsState extends State<Settings> {
                 user['photoUrl'] != null
                     ? userAvatarHolder(user['photoUrl'], currentUserId)
                     : emptyBox(),
-                userNameHolder(name: user['name'], fontSize: 30.0),
+                userNameHolder(name: user['name'], fontSize: 25.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     userLocationEditor(
-                        onTap: renderLocationPicker,
-                        context: context,
-                        appLanguage: appLanguage),
+                      onTap: renderLocationPicker,
+                      context: context,
+                      appLanguage: appLanguage,
+                    ),
                     userLocationHolder(userLocation),
                   ],
                 ),

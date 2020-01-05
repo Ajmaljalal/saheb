@@ -30,6 +30,10 @@ class PostsProvider with ChangeNotifier {
           'type': type,
           'images': images,
           'location': location,
+          'promoted': false,
+          'promoStartDate': null,
+          'promoEndDate': null,
+          'promoMoneyAmount': 0,
         },
       );
     } catch (e) {
@@ -50,6 +54,10 @@ class PostsProvider with ChangeNotifier {
     hiddenFrom,
     likes,
     favorites,
+    promoted,
+    promoStartDate,
+    promoEndDate,
+    promoMoneyAmount,
   }) {
     try {
       db.collection('posts').document(postId).setData(
@@ -65,6 +73,10 @@ class PostsProvider with ChangeNotifier {
           'type': type,
           'images': images,
           'location': location,
+          'promoted': promoted,
+          'promoStartDate': promoStartDate,
+          'promoEndDate': promoEndDate,
+          'promoMoneyAmount': promoMoneyAmount,
         },
       );
     } catch (e) {
@@ -97,7 +109,11 @@ class PostsProvider with ChangeNotifier {
           'price': price,
           'type': type,
           'images': images,
-          'location': location
+          'location': location,
+          'promoted': false,
+          'promoStartDate': null,
+          'promoEndDate': null,
+          'promoMoneyAmount': 0,
         },
       );
     } catch (e) {
@@ -132,7 +148,11 @@ class PostsProvider with ChangeNotifier {
           'fullAddress': fullAddress,
           'type': type,
           'images': images,
-          'location': location
+          'location': location,
+          'promoted': false,
+          'promoStartDate': null,
+          'promoEndDate': null,
+          'promoMoneyAmount': 0,
         },
       );
     } catch (e) {
