@@ -39,8 +39,11 @@ Map english = {
 
   'signinWithFacebook': 'LOGIN WITH',
   'signinWithGoogle': 'LOGIN WITH',
-  'registerWithFacebook': 'REG WITH',
-  'registerWithGoogle': 'REG WITH',
+
+  'signinWithPhone': 'LOGIN WITH PHONE',
+  'signinWithEmail': 'LOGIN WITH EMAIL',
+  'enterPasscode': 'Enter the code you just recieved in here',
+  'code': '...',
 
   'more': 'more...',
 
@@ -94,7 +97,6 @@ Map english = {
   'sell': 'For sell',
   'rent': 'For rent',
   'buy': 'For purchase',
-  'needPro': 'Professional service',
 
   'price': 'Price',
   'free': 'Free',
@@ -121,6 +123,7 @@ Map english = {
       ' No user found, if you have no account please register first.',
   'loginFailed': 'Login failed, please try again.',
   'registrationFailed': 'Registration failed, please try again.',
+  'phoneSignInError': 'Please check the phone number and try again.',
 
   'enter': 'Enter',
 

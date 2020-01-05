@@ -31,12 +31,14 @@ Map dari = {
   'haveAnAccount': 'اګر حساب دارید، ',
   'doNotHaveAnAccount': 'اګر حساب ندارید، ',
   'phone': 'نمبر تیلفون (اختیاری)',
-  'phoneNumber': 'تیلفون',
+  'phoneNumber': 'تیلفون  ',
   'name': 'نام کاربری',
   'signinWithFacebook': 'ورود با فیسبوک',
   'signinWithGoogle': 'ورود با ګوګل',
-  'registerWithFacebook': 'ثبت نام با فیسبوک',
-  'registerWithGoogle': 'ثبت نام با ګوګل',
+  'signinWithPhone': 'ورود با نمبر تیلفون',
+  'enterPasscode': 'کود را که در بیام کتبی بدست آوردید اینجا وارد نمائید.',
+  'signinWithEmail': 'ورود با ایمیل و رمز',
+  'code': '...',
 
   'more': 'ادامه...',
 
@@ -92,7 +94,6 @@ Map dari = {
   'sell': 'فروشی',
   'rent': 'کرایی',
   'buy': 'خرید',
-  'needPro': 'خدمات مسلکی',
 
   'price': 'قیمت(مثلاً ۳۰۰ افغانی)',
   'free': 'رایګان',
@@ -118,6 +119,7 @@ Map dari = {
   'loginFailed': 'ورود به برنامه ناکام شد، دوباره کوشش نمائید.',
   'registrationFailed': 'ثبت نام موفق نه بود، دوباره کوشش نمائید.',
   'enter': ' وارد نمائید!',
+  'phoneSignInError': 'لطفاً نمبر تیلفون را چک نموده دوباره کوشش نمائید',
 
   /////////////// Error Dialog ///////////////////
 

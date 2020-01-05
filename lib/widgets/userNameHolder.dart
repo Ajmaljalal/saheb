@@ -4,7 +4,7 @@ Widget userNameHolder({name, fontSize}) {
   return Container(
     height: 35.0,
     child: Text(
-      name,
+      name.toString(),
       style: TextStyle(
         fontSize: fontSize,
       ),
