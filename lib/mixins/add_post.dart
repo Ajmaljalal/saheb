@@ -287,7 +287,7 @@ class AddPostMixin {
               ),
               onPressed: () async {
                 if (maxImageSize == false) {
-                  await onOpenPhotoVideo(ImageSource.camera);
+                  await onOpenPhotoVideo(ImageSource.camera, 'image');
                 } else {
                   return;
                 }
@@ -300,12 +300,25 @@ class AddPostMixin {
               ),
               onPressed: () async {
                 if (maxImageSize == false) {
-                  await onOpenPhotoVideo(ImageSource.gallery);
+                  await onOpenPhotoVideo(ImageSource.gallery, 'image');
                 } else {
                   return;
                 }
               },
             ),
+//            IconButton(
+//              icon: Icon(
+//                Icons.video_library,
+//                color: maxImageSize ? Colors.grey : Colors.black,
+//              ),
+//              onPressed: () async {
+//                if (maxImageSize == false) {
+//                  await onOpenPhotoVideo(ImageSource.gallery, 'video');
+//                } else {
+//                  return;
+//                }
+//              },
+//            ),
           ],
         ),
       ],

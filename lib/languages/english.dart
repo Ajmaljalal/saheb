@@ -124,6 +124,7 @@ Map english = {
   'loginFailed': 'Login failed, please try again.',
   'registrationFailed': 'Registration failed, please try again.',
   'phoneSignInError': 'Please check the phone number and try again.',
+  'playingVideoError': 'Could not play video',
 
   'enter': 'Enter',
 

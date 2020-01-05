@@ -67,9 +67,11 @@ class _ChatScreenState extends State<ChatScreen> {
       messageId: messageId,
       text: _text,
     );
-    setState(() {
-      _text = null;
-    });
+    if (this.mounted) {
+      setState(() {
+        _text = null;
+      });
+    }
   }
 
   onStartNewConversation() async {

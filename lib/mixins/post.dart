@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shamsi_date/shamsi_date.dart';
+import '../screens/posts/videoPlayer.dart';
 import '../util/isRTL.dart';
 import '../widgets/avatar.dart';
 import '../widgets/emptyBox.dart';
@@ -239,6 +241,7 @@ class PostMixin {
     price,
     fontSize,
     postDate,
+    postVideo,
   }) {
     return Container(
       child: Column(
@@ -265,6 +268,13 @@ class PostMixin {
               ? Container(
                   padding: const EdgeInsets.only(top: 5.0),
                   child: GridViewImageRenderer(images: images),
+                )
+              : emptyBox(),
+          postVideo != null
+              ? VideoHolder(
+                  videoPlayerController: VideoPlayerController.network(
+                    postVideo,
+                  ),
                 )
               : emptyBox(),
         ],

@@ -8,14 +8,7 @@ import '../util/uuid.dart';
 final Firestore db = Firestore.instance;
 
 class PostsProvider with ChangeNotifier {
-  addOnePost({
-    owner,
-    text,
-    title,
-    location,
-    type,
-    images,
-  }) {
+  addOnePost({owner, text, title, location, type, images, video}) {
     try {
       db.collection('posts').add(
         {
@@ -29,6 +22,7 @@ class PostsProvider with ChangeNotifier {
           'title': title,
           'type': type,
           'images': images,
+          'video': video,
           'location': location,
         },
       );

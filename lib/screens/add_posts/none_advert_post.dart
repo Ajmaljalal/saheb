@@ -36,7 +36,9 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   String _title;
   String _location;
   List<File> _images = [];
+  File _video;
   List _uploadedFileUrl = [];
+  String _uploadedVideoUrl;
 
   FocusNode titleFieldFocusNode = FocusNode();
   FocusNode textFieldFocusNode = FocusNode();
@@ -69,19 +71,30 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     _location = value;
   }
 
-  Future chooseFile(source) async {
+  Future chooseFile(source, type) async {
     FocusScope.of(context).unfocus();
     try {
-      final image = await ImagePicker.pickImage(
-        source: source,
-        imageQuality: 50,
-        maxWidth: 600,
-        maxHeight: 700,
-      );
-      if (image != null) {
-        setState(() {
-          _images.add(image);
-        });
+      if (type == 'image') {
+        final image = await ImagePicker.pickImage(
+          source: source,
+          imageQuality: 50,
+          maxWidth: 600,
+          maxHeight: 700,
+        );
+        if (image != null) {
+          setState(() {
+            _images.add(image);
+          });
+        }
+      } else {
+        final video = await ImagePicker.pickVideo(
+          source: source,
+        );
+        if (video != null) {
+          setState(() {
+            _video = video;
+          });
+        }
       }
     } catch (error) {
       print(error.toString());
@@ -107,8 +120,18 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     return futures;
   }
 
+  uploadVideo(video) async {
+    await uploadImage(image: video, collection: 'postsVideos')
+        .then((downloadUrl) {
+      _uploadedVideoUrl = downloadUrl;
+    }).catchError((err) {
+      throw err;
+    });
+  }
+
   onSend() async {
     final appLanguage = getLanguages(context);
+    print(_uploadedVideoUrl);
     if (_location == null) {
       showErrorDialog(
         appLanguage['selectLocation'],
@@ -132,6 +155,9 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     setState(() {
       postSavingInProgress = true;
     });
+    if (_video != null) {
+      await uploadVideo(_video);
+    }
 
     if (_images.length > 0) {
       await Future.wait(uploadAllImages(_images));
@@ -154,6 +180,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
         'photo': user.photoUrl,
       },
       images: _uploadedFileUrl,
+      video: _uploadedVideoUrl,
     );
 
     Navigator.of(context).pop();
@@ -246,7 +273,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(
+        margin: const EdgeInsets.symmetric(
           vertical: 5.0,
           horizontal: 15.0,
         ),
