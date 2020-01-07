@@ -41,9 +41,20 @@ class MainApp extends StatelessWidget {
 }
 
 class Application extends StatelessWidget {
+  static var _local;
   @override
   Widget build(BuildContext context) {
     String _language = Provider.of<LanguageProvider>(context).getLanguage;
+
+    if (_language == 'English') {
+      _local = Locale("en", "US");
+    }
+    if (_language == 'dari') {
+      _local = Locale("fa", "IR");
+    }
+    if (_language == 'pashto') {
+      _local = Locale("ps", "AF");
+    }
 
     return Consumer<AuthProvider>(
       builder: (context, auth, _) => MaterialApp(
@@ -57,9 +68,7 @@ class Application extends StatelessWidget {
           Locale("fa", "IR"),
           Locale("en", "US")
         ],
-        locale: _language == 'English'
-            ? Locale("en", "US")
-            : _language == 'dari' ? Locale("fa", "IR") : Locale("ps", "AF"),
+        locale: _local,
         theme: ThemeData(
           primaryColor: Colors.cyan[800],
           accentColor: Colors.cyanAccent[700],
