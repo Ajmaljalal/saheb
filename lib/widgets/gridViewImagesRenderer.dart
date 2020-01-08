@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../widgets/imageRenderer.dart';
@@ -12,7 +13,7 @@ class GridViewImageRenderer extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       crossAxisCount: 4,
       children: images.map<Widget>((image) {
-        return singleImageRenderer(image, context, 250.0, BoxFit.fill);
+        return singleImageRenderer(image, context, 250.0, BoxFit.cover);
       }).toList(),
       staggeredTiles: [...buildTiles(images.length)],
       mainAxisSpacing: 2.0,

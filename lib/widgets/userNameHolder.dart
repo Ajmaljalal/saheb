@@ -7,6 +7,7 @@ Widget userNameHolder({name, fontSize}) {
       name.toString(),
       style: TextStyle(
         fontSize: fontSize,
+        fontWeight: FontWeight.bold,
       ),
     ),
   );
