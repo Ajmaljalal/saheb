@@ -69,7 +69,7 @@ class _MessagesListTileState extends State<MessagesListTile> {
                 children: <Widget>[
                   userNameHolder(
                     name: widget.initiator['name'],
-                    fontSize: 25.0,
+                    fontSize: 20.0,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.75,
