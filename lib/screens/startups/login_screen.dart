@@ -28,7 +28,6 @@ class _LoginState extends State<Login> {
   String _smsCode;
   String _verificationId;
   String _screen = 'login';
-  bool _isCodeSent = false;
   bool _isPhoneSignIn = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -81,7 +80,7 @@ class _LoginState extends State<Login> {
     });
     try {
       await Provider.of<AuthProvider>(context, listen: false)
-          .register(_email, _password, _name);
+          .register(_email, _password, _name, context);
     } catch (error) {
       var errorMessage = appLanguage['registrationFailed'];
       if (error.toString().contains('ERROR_EMAIL_ALREADY_IN_USE')) {
@@ -108,7 +107,10 @@ class _LoginState extends State<Login> {
       _isLoggingIn = true;
     });
     try {
-      await Provider.of<AuthProvider>(context).login(_email, _password);
+      await Provider.of<AuthProvider>(context).login(
+        _email,
+        _password,
+      );
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       if (error.toString().contains('ERROR_WRONG_PASSWORD')) {
@@ -138,7 +140,7 @@ class _LoginState extends State<Login> {
     });
     try {
       await Provider.of<AuthProvider>(context)
-          .googleSignIn(_screen == 'login' ? 'login' : 'register');
+          .googleSignIn(_screen == 'login' ? 'login' : 'register', context);
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       showErrorDialog(
@@ -159,7 +161,7 @@ class _LoginState extends State<Login> {
     });
     try {
       await Provider.of<AuthProvider>(context)
-          .facebookSignIn(_screen == 'login' ? 'login' : 'register');
+          .facebookSignIn(_screen == 'login' ? 'login' : 'register', context);
     } catch (error) {
       var errorMessage = appLanguage['loginFailed'];
       showErrorDialog(
@@ -179,7 +181,6 @@ class _LoginState extends State<Login> {
     if (_phoneNo.toString().startsWith('0')) {
       phoneNumber = '+93${_phoneNo.substring(1)}';
     }
-    print(phoneNumber);
     final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
       setState(() {
         this._verificationId = verId;
@@ -206,9 +207,6 @@ class _LoginState extends State<Login> {
       codeSent: smsCodeSent,
       codeAutoRetrievalTimeout: autoRetrieve,
     );
-    setState(() {
-      _isCodeSent = true;
-    });
   }
 
   @override
@@ -704,6 +702,7 @@ class _LoginState extends State<Login> {
               smsCode: _smsCode,
               userName: _name,
               actionType: actionType,
+              context: context,
             );
             Navigator.of(context).pop();
           },

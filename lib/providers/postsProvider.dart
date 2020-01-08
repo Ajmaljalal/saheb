@@ -582,7 +582,7 @@ class PostsProvider with ChangeNotifier {
     context,
   }) async {
     try {
-      final user = await db.collection('users').document(userId);
+      final user = db.collection('users').document(userId);
       if (user != null) {
         user.setData(
           {'$field': value},

@@ -1,4 +1,3 @@
-import 'package:com.pywast.pywast/widgets/emptyBox.dart';
 import 'package:flutter/material.dart';
 import '../../languages/index.dart';
 

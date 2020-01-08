@@ -7,6 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../providers/locationProvider.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -41,15 +43,26 @@ class AuthProvider with ChangeNotifier {
     return user;
   }
 
-  Future<void> registerUserToDb(id, name, email, photo) async {
+//  updateUserLocation(context, userId) async {
+//    await Provider.of<PostsProvider>(context).updateUserInfo(
+//      userId: userId,
+//      field: 'location',
+//      value: Provider.of<LocationProvider>(context).getUserLocality,
+//      context: context,
+//    );
+//  }
+
+  Future<void> registerUserToDb(id, name, email, photo, context) async {
     final _userRef = db.collection("users").document(id);
+    final userLocality =
+        await Provider.of<LocationProvider>(context).getUserLocality;
     if (_userRef.documentID.toString().isNotEmpty) {
       await _userRef.setData({
         "id": id,
         "name": name,
         "email": email,
         "photoUrl": photo,
-        "location": '',
+        "location": userLocality
       });
     } else {
       await _userRef.updateData({
@@ -57,7 +70,7 @@ class AuthProvider with ChangeNotifier {
         "name": name,
         "email": email,
         "photoUrl": photo,
-        "location": '',
+        "location": userLocality,
       });
     }
   }
@@ -67,19 +80,22 @@ class AuthProvider with ChangeNotifier {
     String password,
     name,
     actionType,
+    context,
   ) async {
     try {
       FirebaseUser _user;
       if (actionType == 'register') {
         _user = (await _auth.createUserWithEmailAndPassword(
-                email: email, password: password))
+          email: email,
+          password: password,
+        ))
             .user;
         UserUpdateInfo info = new UserUpdateInfo();
         info.displayName = name;
         info.photoUrl = photoUrl;
         await _user.updateProfile(info);
 
-        await registerUserToDb(_user.uid, name, email, photoUrl);
+        await registerUserToDb(_user.uid, name, email, photoUrl, context);
       } else {
         _user = (await _auth.signInWithEmailAndPassword(
                 email: email, password: password))
@@ -111,6 +127,7 @@ class AuthProvider with ChangeNotifier {
     smsCode,
     userName,
     actionType,
+    context,
   }) {
     try {
       if (verificationId != null && smsCode != null) {
@@ -126,7 +143,8 @@ class AuthProvider with ChangeNotifier {
             info.displayName = userName;
             info.photoUrl = photoUrl;
             await result.user.updateProfile(info);
-            await registerUserToDb(result.user.uid, userName, null, photoUrl);
+            await registerUserToDb(
+                result.user.uid, userName, null, photoUrl, context);
           }
 
           // save user token and save user info to local
@@ -152,25 +170,21 @@ class AuthProvider with ChangeNotifier {
     } catch (error) {}
   }
 
-  Future register(String email, String password, String name) async {
+  Future register(String email, String password, String name, context) async {
     return _authenticate(
       email,
       password,
       name,
       'register',
+      context,
     );
   }
 
   Future login(String email, String password) async {
-    return _authenticate(
-      email,
-      password,
-      '',
-      'login',
-    );
+    return _authenticate(email, password, '', 'login', null);
   }
 
-  Future<String> googleSignIn(actionType) async {
+  Future<String> googleSignIn(actionType, context) async {
     try {
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
@@ -192,6 +206,7 @@ class AuthProvider with ChangeNotifier {
           _user.displayName,
           _user.email,
           _user.photoUrl,
+          context,
         );
       }
 
@@ -204,13 +219,14 @@ class AuthProvider with ChangeNotifier {
         },
       );
       prefs.setString('userData', userData);
+
       return _user.uid;
     } catch (error) {
       throw error;
     }
   }
 
-  Future<String> facebookSignIn(actionType) async {
+  Future<String> facebookSignIn(actionType, context) async {
     try {
       final FacebookLoginResult _result =
           await _facebookLogin.logIn(['email', 'public_profile']);
@@ -225,11 +241,7 @@ class AuthProvider with ChangeNotifier {
 
       if (actionType == 'register') {
         registerUserToDb(
-          _user.uid,
-          _user.displayName,
-          _user.email,
-          _user.photoUrl,
-        );
+            _user.uid, _user.displayName, _user.email, _user.photoUrl, context);
       }
 
       notifyListeners();
