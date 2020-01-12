@@ -66,6 +66,7 @@ Map dari = {
   'lost': 'مفقودی',
   'found': 'پیدا شده',
   'emergency': 'عاجل',
+  'needBlood': 'ضرورت به خون',
 
   'singleComment': 'تبصره',
   'multiComments': 'تبصره',
@@ -86,8 +87,9 @@ Map dari = {
 
   'whatPost': 'در باره چه مې خواهی ګپ بزنی؟',
   'textForGeneralPost': 'مثلاً در باره حوادث عادی از محل بود و باش خود.',
-  'textForAdvertPost': 'مثلاً در باره خرید، فروش و یا به کراه دادن چیزی.',
-  'textForEmergencyPost': 'مثلاً ضرورت به خون، راه بندان، و حوادث امنیتی.',
+  'textForNeedBloodPost': 'مثلاً کسی مریض است و به خون ضرورت دارد.',
+  'textForEmergencyPost':
+      'مثلاً کمک عاجل می خواهید، راه بندان است و حوادث امنیتی.',
   'textForLostPost': 'مثلاً چیزی یا شخصی مفقود ګردیده.',
   'textForFoundPost': 'مثلاً چیزی یا شخصی دریافت ګردیده.',
   'typeOfDeal': 'نوع معامله',

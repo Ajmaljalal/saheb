@@ -69,6 +69,7 @@ Map english = {
   'lost': 'Lost',
   'found': 'Found',
   'emergency': 'Emergency',
+  'needBlood': 'Need blood',
 
   'singleComment': 'Comment',
   'multiComments': 'Comments',
@@ -88,7 +89,7 @@ Map english = {
 
   'whatPost': 'What do you want to post?',
   'textForGeneralPost': 'Normal events or matters around you.',
-  'textForAdvertPost': 'Want to sell, rent or buy something.',
+  'textForNeedBloodPost': 'Someone needs blood donation.',
   'textForEmergencyPost': 'Need blood, traffic, or security issues',
   'textForLostPost': 'Someone or someting is lost.',
   'textForFoundPost': 'Found someone or something.',

@@ -91,7 +91,11 @@ class PostMixin {
     appLanguage,
   ) {
     Color circleColor;
-    if (postType == 'مفقودی' || postType == 'Lost') {
+    if (postType == 'مفقودی' ||
+        postType == 'Lost' ||
+        postType == 'وینه په کار ده' ||
+        postType == 'ضرورت به خون' ||
+        postType == 'Need blood') {
       circleColor = Colors.red;
     }
     if (postType == 'پیدا شوی' ||

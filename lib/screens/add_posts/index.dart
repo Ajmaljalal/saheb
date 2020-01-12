@@ -68,9 +68,9 @@ class _AddPostState extends State<AddPost> {
                 usersProvince: usersProvince,
               ),
               _postTypeOption(
-                type: appLanguage['advert'],
-                text: appLanguage['textForAdvertPost'],
-                appLanguageText: appLanguage['advert'],
+                type: appLanguage['needBlood'],
+                text: appLanguage['textForNeedBloodPost'],
+                appLanguageText: appLanguage['needBlood'],
                 bgColor: false,
                 context: context,
                 fontSize: fontSize,
