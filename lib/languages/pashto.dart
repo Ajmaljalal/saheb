@@ -71,6 +71,7 @@ Map pashto = {
   'lost': 'مفقودی',
   'found': 'پیدا شوی',
   'emergency': 'عاجل',
+  'needBlood': 'وینه په کار ده',
 
   'singleComment': 'تبصره',
   'multiComments': 'تبصرې',
@@ -91,9 +92,9 @@ Map pashto = {
 
   'whatPost': 'څه غواړې ووایې؟',
   'textForGeneralPost': 'مثلاً د خپل محل د عادی حوادثو او مسایلو په اړه.',
-  'textForAdvertPost': 'مثلاً د کوم شي د اخیستو، کراه، او یا خرڅولو په اړه.',
-  'textForEmergencyPost': 'مثلاً د وینې ضرورت، لار بنده ده او عاجل حوادث.',
-  'textForLostPost': 'مثلاً کوم شی او یا شخص ورک دی.',
+  'textForNeedBloodPost': 'مثلاً څوک مریض دی او عاجلې وینې  ته اړتیا لري.',
+  'textForEmergencyPost': 'مثلاً عاجلې مرسته غواړی، لار بنده ده او نور حوادث.',
+  'textForLostPost': 'مثلاً کوم شی او یا شخص ورک شوی دی.',
   'textForFoundPost': 'مثلاً کوم لادرکه شی او یا شخص پیدا شوی دی.',
 
   'typeOfDeal': 'د معاملې ډول',
