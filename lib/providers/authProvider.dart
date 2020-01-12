@@ -15,7 +15,6 @@ final GoogleSignIn _googleSignIn = GoogleSignIn();
 final FacebookLogin _facebookLogin = FacebookLogin();
 final Firestore db = Firestore.instance;
 
-/////////////// TODO: Make sure the get token is taking the expiration date into account //////////////
 class AuthProvider with ChangeNotifier {
   String _token;
   String _userId;
@@ -54,6 +53,10 @@ class AuthProvider with ChangeNotifier {
 
   Future<void> registerUserToDb(id, name, email, photo, context) async {
     final _userRef = db.collection("users").document(id);
+    final _user = await _userRef.get();
+    if (_user.exists) {
+      return;
+    }
     final userLocality =
         await Provider.of<LocationProvider>(context).getUserLocality;
     if (_userRef.documentID.toString().isNotEmpty) {
@@ -122,30 +125,33 @@ class AuthProvider with ChangeNotifier {
     return _userId;
   }
 
-  signInWithPhone({
+  Future signInWithPhone({
     verificationId,
     smsCode,
     userName,
     actionType,
     context,
-  }) {
+  }) async {
     try {
       if (verificationId != null && smsCode != null) {
         final AuthCredential credential = PhoneAuthProvider.getCredential(
           verificationId: verificationId,
           smsCode: smsCode,
         );
-        FirebaseAuth.instance
+        return FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((AuthResult result) async {
-          if (actionType == 'register') {
-            UserUpdateInfo info = new UserUpdateInfo();
-            info.displayName = userName;
-            info.photoUrl = photoUrl;
-            await result.user.updateProfile(info);
-            await registerUserToDb(
-                result.user.uid, userName, null, photoUrl, context);
-          }
+          UserUpdateInfo info = new UserUpdateInfo();
+          info.displayName = userName;
+          info.photoUrl = photoUrl;
+          await result.user.updateProfile(info);
+          await registerUserToDb(
+            result.user.uid,
+            userName,
+            null,
+            photoUrl,
+            context,
+          );
 
           // save user token and save user info to local
           _token = (await result.user.getIdToken()).token;
@@ -161,13 +167,20 @@ class AuthProvider with ChangeNotifier {
           );
 
           prefs.setString('userData', userData);
+          return true;
         }).catchError(
           (error) {
-            throw error;
+            if (error.toString().contains('ERROR_INVALID_VERIFICATION_CODE')) {
+              return false;
+            } else
+              return true;
           },
         );
       }
-    } catch (error) {}
+      return false;
+    } catch (error) {
+      throw error;
+    }
   }
 
   Future register(String email, String password, String name, context) async {
@@ -181,7 +194,13 @@ class AuthProvider with ChangeNotifier {
   }
 
   Future login(String email, String password) async {
-    return _authenticate(email, password, '', 'login', null);
+    return _authenticate(
+      email,
+      password,
+      '',
+      'login',
+      null,
+    );
   }
 
   Future<String> googleSignIn(actionType, context) async {
@@ -199,16 +218,13 @@ class AuthProvider with ChangeNotifier {
           (await _auth.signInWithCredential(credential)).user;
       _token = (await _user.getIdToken()).token;
       _userId = _user.uid;
-
-      if (actionType == 'register') {
-        registerUserToDb(
-          _user.uid,
-          _user.displayName,
-          _user.email,
-          _user.photoUrl,
-          context,
-        );
-      }
+      await registerUserToDb(
+        _user.uid,
+        _user.displayName,
+        _user.email,
+        _user.photoUrl,
+        context,
+      );
 
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
@@ -226,7 +242,10 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  Future<String> facebookSignIn(actionType, context) async {
+  Future<String> facebookSignIn(
+    actionType,
+    context,
+  ) async {
     try {
       final FacebookLoginResult _result =
           await _facebookLogin.logIn(['email', 'public_profile']);
@@ -239,10 +258,13 @@ class AuthProvider with ChangeNotifier {
       _token = (await _user.getIdToken()).token;
       _userId = _user.uid;
 
-      if (actionType == 'register') {
-        registerUserToDb(
-            _user.uid, _user.displayName, _user.email, _user.photoUrl, context);
-      }
+      await registerUserToDb(
+        _user.uid,
+        _user.displayName,
+        _user.email,
+        _user.photoUrl,
+        context,
+      );
 
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
@@ -280,7 +302,6 @@ class AuthProvider with ChangeNotifier {
     _userId = null;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    // prefs.remove('userData');
     await prefs.clear();
     await _auth.signOut();
   }

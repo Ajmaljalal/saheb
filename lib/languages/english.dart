@@ -124,7 +124,9 @@ Map english = {
   'loginFailed': 'Login failed, please try again.',
   'registrationFailed': 'Registration failed, please try again.',
   'phoneSignInError': 'Please check the phone number and try again.',
-
+  'invalidPasscode': 'Invalide code, please try again.',
+  'invalidPhoneNo':
+      'Invalide phone number, please try again. Please do not type (0093), it will be added automatically.',
   'enter': 'Enter',
 
   /////////////// Error Dialog ///////////////////

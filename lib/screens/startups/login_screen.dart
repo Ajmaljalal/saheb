@@ -29,7 +29,6 @@ class _LoginState extends State<Login> {
   String _verificationId;
   String _screen = 'login';
   bool _isPhoneSignIn = false;
-
   final _formKey = GlobalKey<FormState>();
 
   void handleNameInputChange(value) {
@@ -177,36 +176,63 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> verifyPhone(appLanguage) async {
-    String phoneNumber = _phoneNo;
-    if (_phoneNo.toString().startsWith('0')) {
-      phoneNumber = '+93${_phoneNo.substring(1)}';
+    setState(() {
+      _isLoggingIn = true;
+    });
+    try {
+      String phoneNumber = _phoneNo;
+      if (_phoneNo.toString().startsWith('0')) {
+        phoneNumber = '+93${_phoneNo.substring(1)}';
+      } else {
+        phoneNumber = '+93$_phoneNo';
+      }
+      final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
+        setState(() {
+          this._verificationId = verId;
+        });
+      };
+      final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
+        setState(() {
+          this._verificationId = verId;
+        });
+        enterCodeDialog(appLanguage);
+      };
+      final PhoneVerificationCompleted success = (AuthCredential user) {
+        print('verified');
+      };
+      final PhoneVerificationFailed failed = (AuthException exception) {
+        if (exception.message
+            .contains('The format of the phone number provided is incorrect')) {
+          showErrorDialog(
+            appLanguage['invalidPhoneNo'],
+            context,
+            appLanguage['errorDialogTitle'],
+            appLanguage['ok'],
+          );
+        } else {
+          showErrorDialog(
+            appLanguage['phoneSignInError'],
+            context,
+            appLanguage['errorDialogTitle'],
+            appLanguage['ok'],
+          );
+        }
+      };
+      try {
+        await FirebaseAuth.instance.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          timeout: const Duration(seconds: 0),
+          verificationCompleted: success,
+          verificationFailed: failed,
+          codeSent: smsCodeSent,
+          codeAutoRetrievalTimeout: autoRetrieve,
+        );
+      } catch (error) {
+        throw error;
+      }
+    } catch (error) {
+      throw error;
     }
-    final PhoneCodeAutoRetrievalTimeout autoRetrieve = (String verId) {
-      setState(() {
-        this._verificationId = verId;
-      });
-    };
-    final PhoneCodeSent smsCodeSent = (String verId, [int forceCodeResend]) {
-      setState(() {
-        this._verificationId = verId;
-      });
-      enterCodeDialog(appLanguage);
-    };
-    final PhoneVerificationCompleted success = (AuthCredential user) {
-      print('verified');
-    };
-    final PhoneVerificationFailed failed = (AuthException exception) {
-      showErrorDialog(appLanguage['phoneSignInError'], context,
-          appLanguage['errorDialogTitle'], appLanguage['ok']);
-    };
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      timeout: const Duration(seconds: 0),
-      verificationCompleted: success,
-      verificationFailed: failed,
-      codeSent: smsCodeSent,
-      codeAutoRetrievalTimeout: autoRetrieve,
-    );
   }
 
   @override
@@ -304,21 +330,23 @@ class _LoginState extends State<Login> {
                       )
                     : emptyBox(),
                 loginInputs(
-                    appLanguage['email'],
-                    _language,
-                    handleEmailInputChange,
-                    appLanguage['enter'],
-                    false,
-                    fontSize,
-                    false),
+                  appLanguage['email'],
+                  _language,
+                  handleEmailInputChange,
+                  appLanguage['enter'],
+                  false,
+                  fontSize,
+                  false,
+                ),
                 loginInputs(
-                    appLanguage['password'],
-                    _language,
-                    handlePasswordInputChange,
-                    appLanguage['enter'],
-                    true,
-                    fontSize,
-                    false),
+                  appLanguage['password'],
+                  _language,
+                  handlePasswordInputChange,
+                  appLanguage['enter'],
+                  true,
+                  fontSize,
+                  false,
+                ),
                 const EmptySpace(height: 10.0),
                 loginButton(
                   appLanguage,
@@ -333,16 +361,15 @@ class _LoginState extends State<Login> {
             key: _formKey,
             child: Column(
               children: <Widget>[
-                _screen == 'register'
-                    ? loginInputs(
-                        appLanguage['name'],
-                        _language,
-                        handleNameInputChange,
-                        appLanguage['enter'],
-                        false,
-                        fontSize,
-                        false)
-                    : emptyBox(),
+                loginInputs(
+                  appLanguage['name'],
+                  _language,
+                  handleNameInputChange,
+                  appLanguage['enter'],
+                  false,
+                  fontSize,
+                  false,
+                ),
                 loginInputs(
                   appLanguage['phoneNumber'],
                   _language,
@@ -471,14 +498,14 @@ class _LoginState extends State<Login> {
           borderRadius: BorderRadius.circular(30),
         ),
         child: FlatButton(
-          onPressed: () {
+          onPressed: () async {
             if (!isPhoneLogin) {
               if (_formKey.currentState.validate()) {
-                onClick(appLanguage);
+                await onClick(appLanguage);
               } else
                 return;
             } else {
-              onClick();
+              await onClick();
             }
           },
           child: Center(
@@ -687,24 +714,44 @@ class _LoginState extends State<Login> {
         isCloseButton: false,
       ),
       content: PhoneNumberSignIn(
-        isLoginScreen: isLoginScreen,
         onSmsCodeInputChanged: handleSmsCodeInputChange,
       ),
       buttons: [
         DialogButton(
           color: Colors.purple,
-          onPressed: () async {
+          onPressed: () {
             if (_phoneNo == null || _phoneNo.trim().length == 0) {
               return;
             }
-            await Provider.of<AuthProvider>(context).signInWithPhone(
+            if (_name == null || _name.trim().length == 0) {
+              return;
+            }
+            Provider.of<AuthProvider>(context)
+                .signInWithPhone(
               verificationId: _verificationId,
               smsCode: _smsCode,
               userName: _name,
               actionType: actionType,
               context: context,
-            );
-            Navigator.of(context).pop();
+            )
+                .then((value) {
+              if (value == false) {
+                showErrorDialog(
+                  appLanguage['invalidPasscode'],
+                  context,
+                  appLanguage['errorDialogTitle'],
+                  appLanguage['ok'],
+                );
+                return;
+              } else {
+                setState(() {
+                  _isLoggingIn = true;
+                });
+                Navigator.of(context).pop();
+              }
+            }).catchError((error) {
+              print('error');
+            });
           },
           child: Text(
             appLanguage['login'],
