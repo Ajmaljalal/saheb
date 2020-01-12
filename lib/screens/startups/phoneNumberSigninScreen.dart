@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import '../../languages/index.dart';
 
 class PhoneNumberSignIn extends StatefulWidget {
-  final isLoginScreen;
-  final isCodeSent;
   final onSmsCodeInputChanged;
   PhoneNumberSignIn({
-    this.isLoginScreen,
-    this.isCodeSent,
     this.onSmsCodeInputChanged,
   });
   @override
