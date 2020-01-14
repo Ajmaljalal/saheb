@@ -80,7 +80,7 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
         source: source,
         maxWidth: 600,
         maxHeight: 700,
-        imageQuality: 50,
+        imageQuality: 80,
       );
       if (image != null) {
         setState(() {
