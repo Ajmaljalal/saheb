@@ -127,6 +127,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   : null;
               final advertDate =
                   '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
+              final advertFirstImage =
+                  advert['images'].length > 0 ? advert['images'][0] : 'null';
               return Stack(
                 children: <Widget>[
                   SingleChildScrollView(
@@ -233,7 +235,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                             advert['phone'],
                             appLanguage,
                             fontSize,
-                            advert['images'][0],
+                            advertFirstImage,
                           ),
                         )
                       : emptyBox(),
