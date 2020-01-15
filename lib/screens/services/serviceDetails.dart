@@ -126,6 +126,8 @@ class _ServiceDetailsState extends State<ServiceDetails>
               final service = snapshot.data;
               final bool isOwner =
                   service['owner']['id'] == userId ? true : false;
+              final serviceFirstImage =
+                  service['images'].length > 0 ? service['images'][0] : 'null';
               return Stack(
                 children: <Widget>[
                   SingleChildScrollView(
@@ -176,33 +178,35 @@ class _ServiceDetailsState extends State<ServiceDetails>
                                     serviceDetails(
                                       Icons.location_on,
                                       service['location'],
+                                      false,
                                     ),
                                     serviceDetails(
                                       Icons.phone_iphone,
                                       service['phone'].toString(),
+                                      false,
                                     ),
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    serviceDetails(
-                                      Icons.email,
-                                      service['email'].toString(),
-                                    ),
-                                  ],
+                                serviceDetails(Icons.email,
+                                    service['email'].toString(), false),
+                                serviceDetails(
+                                  Icons.my_location,
+                                  service['fullAddress'].toString(),
+                                  true,
                                 ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    serviceDetails(
-                                      Icons.my_location,
-                                      service['fullAddress'].toString(),
-                                    )
-                                  ],
-                                ),
+//                                Container(
+//                                  width: MediaQuery.of(context).size.width * 1,
+//                                  padding: const EdgeInsets.symmetric(
+//                                    horizontal: 10.0,
+//                                  ),
+//                                  child: Text(
+//                                    service['fullAddress'].toString(),
+//                                    textDirection: isRTL(service['fullAddress'])
+//                                        ? TextDirection.rtl
+//                                        : TextDirection.ltr,
+//                                    style: TextStyle(fontSize: fontSize),
+//                                  ),
+//                                ),
                                 horizontalDividerIndented(),
                                 Container(
                                   width: MediaQuery.of(context).size.width * 1,
@@ -236,7 +240,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
                             service['owner']['id'],
                             service['owner']['name'],
                             service['owner']['photo'],
-                            service['images'][0],
+                            serviceFirstImage,
                           ),
                         )
                       : emptyBox(),
@@ -401,34 +405,36 @@ class _ServiceDetailsState extends State<ServiceDetails>
   Widget serviceDetails(
     icon,
     text,
+    isFullAddress,
   ) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 10.0,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(
-                icon,
-                size: 15.0,
-                color: Colors.purple,
-              ),
-              const SizedBox(
-                width: 5.0,
-              ),
-              text.toString() != 'null'
-                  ? Text(
-                      text,
-                      style: const TextStyle(
-                        fontSize: 13.0,
-                      ),
-                    )
-                  : const Text('---'),
-            ],
+          Icon(
+            icon,
+            size: 15.0,
+            color: Colors.purple,
           ),
+          const SizedBox(
+            width: 5.0,
+          ),
+          text.toString() != 'null'
+              ? Container(
+                  width: isFullAddress
+                      ? MediaQuery.of(context).size.width * 0.9
+                      : null,
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                      fontSize: 13.0,
+                    ),
+                  ),
+                )
+              : const Text('---'),
         ],
       ),
     );
