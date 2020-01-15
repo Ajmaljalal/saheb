@@ -425,7 +425,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
           text.toString() != 'null'
               ? Container(
                   width: isFullAddress
-                      ? MediaQuery.of(context).size.width * 0.9
+                      ? MediaQuery.of(context).size.width * 0.87
                       : null,
                   child: Text(
                     text,
