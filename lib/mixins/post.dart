@@ -85,66 +85,54 @@ class PostMixin {
     );
   }
 
-  Widget postTypeHolder(
-    context,
-    postType,
-    appLanguage,
-  ) {
-    Color circleColor;
-    if (postType == 'مفقودی' ||
-        postType == 'Lost' ||
-        postType == 'وینه په کار ده' ||
-        postType == 'ضرورت به خون' ||
-        postType == 'Need blood') {
-      circleColor = Colors.red;
-    }
-    if (postType == 'پیدا شوی' ||
-        postType == 'پیدا شده' ||
-        postType == 'Found') {
-      circleColor = Colors.green;
-    }
-    if (postType == 'عاجل' || postType == 'Emergency') {
-      circleColor = Colors.orange;
-    }
-
-    if (postType != appLanguage['general'] &&
-        postType != appLanguage['عمومی']) {
-      return Container(
-//        color: Colors.green,
-        margin: EdgeInsets.symmetric(
-          horizontal: 10.0,
-        ),
-        child: Row(
-          children: <Widget>[
-            Container(
-              height: 8.0,
-              width: 8.0,
-              decoration: BoxDecoration(
-                color: circleColor,
-                borderRadius: BorderRadius.circular(
-                  12.0,
-                ),
-              ),
-              child: Text(''),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 3,
-              ),
-              child: Text(
-                postType,
-                textDirection:
-                    isRTL(postType) ? TextDirection.rtl : TextDirection.ltr,
-                style: kPostTypeTextStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
-      );
-    } else
-      return emptyBox();
-  }
+//  Widget postTypeHolder(
+//    context,
+//    postType,
+//    appLanguage,
+//  ) {
+//    Color circleColor;
+//    if (postType == 'مفقودی' ||
+//        postType == 'Lost' ||
+//        postType == 'وینه په کار ده' ||
+//        postType == 'ضرورت به خون' ||
+//        postType == 'Need blood') {
+//      circleColor = Colors.red;
+//    }
+//    if (postType == 'پیدا شوی' ||
+//        postType == 'پیدا شده' ||
+//        postType == 'Found') {
+//      circleColor = Colors.green;
+//    }
+//    if (postType == 'عاجل' || postType == 'Emergency') {
+//      circleColor = Colors.orange;
+//    }
+//
+//    if (postType != appLanguage['general'] &&
+//        postType != appLanguage['عمومی']) {
+//      return Container(
+////        color: Colors.green,
+//        margin: EdgeInsets.symmetric(
+//          horizontal: 10.0,
+//        ),
+//        child: Row(
+//          children: <Widget>[
+//            Container(
+//              height: 8.0,
+//              width: 8.0,
+//              decoration: BoxDecoration(
+//                color: circleColor,
+//                borderRadius: BorderRadius.circular(
+//                  12.0,
+//                ),
+//              ),
+//              child: Text(''),
+//            ),
+//          ],
+//        ),
+//      );
+//    } else
+//      return emptyBox();
+//  }
 
   Widget postOptions(
       {context,

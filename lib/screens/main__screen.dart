@@ -19,6 +19,7 @@ import './messages/index.dart';
 import '../widgets/appBarSearch.dart';
 import '../screens/services/index.dart';
 import '../providers/languageProvider.dart';
+import '../screens/add_posts/none_advert_post.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -56,6 +57,7 @@ class _MainScreenState extends State<MainScreen> {
     userLocality,
   }) async {
     final currentUserId = Provider.of<AuthProvider>(context).userId;
+
     await Provider.of<PostsProvider>(context).updateUserInfo(
       userId: currentUserId,
       field: 'location',
@@ -79,9 +81,17 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  void _openAddPostScreens() {
+  void _openAddPostScreens(usersProvince) {
     if (_currentScreenIndex == 0) {
-      Navigator.pushNamed(context, '/addPost');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => NoneAdvertPost(
+            edit: false,
+            province: usersProvince,
+          ),
+        ),
+      );
     }
     if (_currentScreenIndex == 1) {
       Navigator.pushNamed(context, '/addAdvertPost');
@@ -139,12 +149,14 @@ class _MainScreenState extends State<MainScreen> {
                   handleSearchBarStringChange: handleSearchBarStringChange,
                   appLanguage: appLanguage,
                   userId: currentUserId,
+                  usersProvince: userProvince,
                 ),
               ),
             ),
             body: _returnCurrentScreen(_currentScreenIndex, userProvince),
-            floatingActionButton:
-                _currentScreenIndex != 3 ? actionButton() : emptyBox(),
+            floatingActionButton: _currentScreenIndex != 3
+                ? actionButton(userProvince)
+                : emptyBox(),
             bottomNavigationBar: Container(
               decoration: BoxDecoration(
                 border: const Border(
@@ -186,14 +198,14 @@ class _MainScreenState extends State<MainScreen> {
         : locationPicker(provincesList);
   }
 
-  FloatingActionButton actionButton() {
+  FloatingActionButton actionButton(usersProvince) {
     return FloatingActionButton(
       child: const Icon(
         Icons.add,
         color: Colors.white,
       ),
       onPressed: () {
-        _openAddPostScreens();
+        _openAddPostScreens(usersProvince);
       },
       mini: true,
     );
@@ -343,6 +355,7 @@ class _MainScreenState extends State<MainScreen> {
     handleSearchBarStringChange,
     appLanguage,
     userId,
+    usersProvince,
   }) {
     if (currentLanguage == 'English') {
       return Row(
@@ -382,7 +395,7 @@ class _MainScreenState extends State<MainScreen> {
                         size: 25.0,
                       ),
                       onTap: () {
-                        _openAddPostScreens();
+                        _openAddPostScreens(usersProvince);
                       },
                     ),
                   ),
@@ -417,7 +430,7 @@ class _MainScreenState extends State<MainScreen> {
                         size: 25.0,
                       ),
                       onTap: () {
-                        _openAddPostScreens();
+                        _openAddPostScreens(usersProvince);
                       },
                     ),
                   ),

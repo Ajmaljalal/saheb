@@ -13,15 +13,14 @@ import '../../widgets/button.dart';
 import '../../util/uploadImage.dart';
 import '../../languages/index.dart';
 import '../../mixins/add_post.dart';
+import '../../widgets/emptyBox.dart';
 
 class NoneAdvertPost extends StatefulWidget {
-  final String type;
   final Map post;
   final postId;
   final bool edit;
   final province;
   NoneAdvertPost({
-    @required this.type,
     this.postId,
     @required this.edit,
     this.post,
@@ -33,7 +32,6 @@ class NoneAdvertPost extends StatefulWidget {
 
 class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
   String _text;
-  String _title;
   String _location;
   List<File> _images = [];
   List _uploadedFileUrl = [];
@@ -49,7 +47,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     if (widget.edit == true) {
       setState(() {
         _text = widget.post['text'];
-        _title = widget.post['title'];
         _location = widget.post['location'];
         _uploadedFileUrl = List.from(widget.post['images']);
       });
@@ -59,10 +56,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
   onTextInputChange(value) {
     _text = value;
-  }
-
-  onTitleInputChange(value) {
-    _title = value;
   }
 
   onLocationChange(value) {
@@ -75,8 +68,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       final image = await ImagePicker.pickImage(
         source: source,
         imageQuality: 80,
-        maxWidth: 600,
-        maxHeight: 700,
       );
       if (image != null) {
         setState(() {
@@ -143,9 +134,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final userLocality =
         Provider.of<LocationProvider>(context, listen: false).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOnePost(
-      type: widget.type,
       text: _text,
-      title: _title,
       location: _location,
       owner: {
         'name': user.displayName,
@@ -156,7 +145,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       images: _uploadedFileUrl,
     );
 
-    Navigator.of(context).pop();
     Navigator.of(context).pop();
   }
 
@@ -195,10 +183,8 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
     Provider.of<PostsProvider>(context, listen: false).editOnePost(
       postId: widget.postId,
-      type: widget.type,
-      text: _text,
-      title: _title,
       location: _location,
+      text: _text,
       owner: post['owner'],
       images: _uploadedFileUrl,
       comments: post['comments'],
@@ -217,7 +203,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
 
   @override
   Widget build(BuildContext context) {
-    final type = widget.type;
     final edit = widget.edit;
     final post = widget.post;
     final userProvince = widget.province;
@@ -235,7 +220,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('$type'),
+                Text(appLanguage['addNewPost']),
                 customButton(
                   appLanguage: appLanguage,
                   context: context,
@@ -271,13 +256,6 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                         label: appLanguage['location'],
                         search: true,
                       ),
-                      postTitle(
-                        type: 'post',
-                        appLanguage: appLanguage,
-                        onChange: onTitleInputChange,
-                        initialValue: edit ? post['title'] : '',
-                        focusNode: titleFieldFocusNode,
-                      ),
                       textArea(
                         type: 'post',
                         appLanguage: appLanguage,
@@ -292,9 +270,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
                                     _images, deleteSelectedImage),
                               ],
                             )
-                          : const SizedBox(
-                              width: 0.0,
-                            ),
+                          : emptyBox(),
                     ],
                   ),
                 ),

@@ -11,9 +11,7 @@ class PostsProvider with ChangeNotifier {
   addOnePost({
     owner,
     text,
-    title,
     location,
-    type,
     images,
   }) {
     try {
@@ -26,8 +24,6 @@ class PostsProvider with ChangeNotifier {
           'likes': [],
           'owner': owner,
           'text': text,
-          'title': title,
-          'type': type,
           'images': images,
           'location': location,
           'promoted': false,
