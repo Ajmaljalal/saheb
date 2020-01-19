@@ -1,8 +1,8 @@
+import 'package:com.pywast.pywast/screens/add_posts/none_advert_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import './providers/locationProvider.dart';
-import './screens/add_posts/index.dart';
 import './screens/add_posts/advert_post.dart';
 import './screens/add_posts/service_post.dart';
 import './screens/startups/language_screen.dart';
@@ -93,7 +93,7 @@ class Application extends StatelessWidget {
         routes: {
           '/posts': (context) => MainScreen(),
           '/postDetails': (context) => PostDetails(),
-          '/addPost': (context) => AddPost(),
+          '/addNoneAdvertPost': (context) => NoneAdvertPost(),
           '/servicesList': (context) => ServicesList(),
           '/serviceDetails': (context) => ServiceDetails(),
           '/addAdvertPost': (context) => AdvertPost(),

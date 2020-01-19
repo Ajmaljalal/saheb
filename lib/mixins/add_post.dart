@@ -59,7 +59,7 @@ class AddPostMixin {
       label = appLanguage['serviceDesc'];
     }
     if (type == 'post') {
-      label = appLanguage['postDiscription'];
+      label = appLanguage['whatPost'];
     }
     return TextFormField(
       initialValue: initialValue,
