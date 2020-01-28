@@ -51,7 +51,8 @@ class _MarketState extends State<Market> {
         children: <Widget>[
           filterOptions(appLanguage, userLocality),
           StreamBuilder(
-            stream: Provider.of<PostsProvider>(context).getAllPosts('adverts'),
+            stream: Provider.of<PostsProvider>(context)
+                .getAllPosts('adverts', null, null),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return wait(appLanguage['wait'], context);

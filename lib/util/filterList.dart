@@ -8,6 +8,8 @@ filterList({
   context,
 }) {
   ///////////////// for adverts only ////////////////////////
+  print('fillterd called');
+  print(posts.length);
   if (type == 'adverts') {
     var filteredPosts = posts;
     if (appBarSearchString != null) {
@@ -169,6 +171,7 @@ filterList({
                 false,
           )
           .toList();
+      print('end');
       return filteredPosts;
     }
 
@@ -221,7 +224,7 @@ filterList({
                 .contains(currentUserId.toString())) ==
             false)
         .toList();
-
+    print('end');
     return filteredPosts;
   }
 

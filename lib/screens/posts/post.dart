@@ -66,7 +66,7 @@ class _PostState extends State<Post> with PostMixin {
     userId,
     isLiked,
   }) {
-    Provider.of<PostsProvider>(context).updatePostLikes(
+    Provider.of<PostsProvider>(context, listen: false).updatePostLikes(
       widget.postId,
       'posts',
       userId,
@@ -82,21 +82,21 @@ class _PostState extends State<Post> with PostMixin {
   }
 
   favoriteAPost(userId, message, isFavorite) {
-    Provider.of<PostsProvider>(context)
+    Provider.of<PostsProvider>(context, listen: false)
         .favoriteAPost(widget.postId, 'posts', userId, isFavorite);
     Navigator.pop(context);
     renderFlashBar(message);
   }
 
   hideAPost(userId, message) async {
-    await Provider.of<PostsProvider>(context)
+    await Provider.of<PostsProvider>(context, listen: false)
         .hideAPost(widget.postId, 'posts', userId);
     Navigator.pop(context);
     renderFlashBar(message);
   }
 
   reportAPost(message) async {
-    await Provider.of<PostsProvider>(context)
+    await Provider.of<PostsProvider>(context, listen: false)
         .reportAPost(widget.post, widget.postId);
     Navigator.pop(context);
     renderFlashBar(message);
@@ -123,8 +123,10 @@ class _PostState extends State<Post> with PostMixin {
     final appLanguage = getLanguages(context);
     final post = widget.post;
     final postId = widget.postId;
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
+    final currentUserId =
+        Provider.of<AuthProvider>(context, listen: false).userId;
+    final currentLanguage =
+        Provider.of<LanguageProvider>(context, listen: false).getLanguage;
     double fontSize = currentLanguage == 'English' ? 14.0 : 17.0;
 
     return Center(

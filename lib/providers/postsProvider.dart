@@ -217,9 +217,29 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  Stream<QuerySnapshot> getAllPosts(String collection) {
-    final dataStream =
-        db.collection(collection).orderBy("date", descending: true).snapshots();
+  Stream<QuerySnapshot> getAllPosts(
+    String collection,
+    int numberOfPosts,
+    currentLastPostId,
+  ) {
+    final dataStream = db
+        .collection(collection)
+        .orderBy("date", descending: true)
+        .startAfterDocument(currentLastPostId)
+        .limit(numberOfPosts)
+        .snapshots();
+    return dataStream;
+  }
+
+  Stream<QuerySnapshot> getInitialPosts(
+    String collection,
+    int numberOfPosts,
+  ) {
+    final dataStream = db
+        .collection(collection)
+        .orderBy("date", descending: true)
+        .limit(numberOfPosts)
+        .snapshots();
     return dataStream;
   }
 
