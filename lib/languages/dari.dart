@@ -21,6 +21,10 @@ Map dari = {
   'open': 'باز',
   'close': 'بسته',
   'emailLabel': 'ایمیل',
+  'stillAvailable': 'سلام،  قیمت جور آمد دارد یا ثابت است؟',
+  'sendFastMessage': 'پیام سریع به صاحب اعلان',
+  'messageSent': 'پیام ارسال شد، در بخش پیام های خود می توانید ادامه دهید.',
+  'description': 'مشخصات',
 
   ///////////// Login and sign up /////////////////////////
   'login': 'ورود',

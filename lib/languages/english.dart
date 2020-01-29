@@ -24,7 +24,11 @@ Map english = {
   'close': 'Close',
 
   'emailLabel': 'Email',
+  'stillAvailable': 'Is this a fixed price or negotiatable?',
+  'sendFastMessage': 'Send seller a message',
 
+  'messageSent': 'Message sent, please follow up in the messages section.',
+  'description': 'Description',
   ////////////////// Login and sign up //////////////////////
   'login': 'LOGIN',
   'signOut': 'SIGN OUT',
