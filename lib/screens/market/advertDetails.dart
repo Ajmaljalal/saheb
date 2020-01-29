@@ -378,7 +378,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
             child: Card(
               child: Container(
                 padding: const EdgeInsets.all(10.0),
-                width: MediaQuery.of(context).size.width * 0.95,
+                width: MediaQuery.of(context).size.width * 1,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -629,7 +629,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     fontSize,
   }) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.95,
+      width: MediaQuery.of(context).size.width * 1,
       margin: EdgeInsets.symmetric(
         horizontal: 8.0,
       ),
