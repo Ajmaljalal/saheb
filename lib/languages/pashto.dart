@@ -29,6 +29,7 @@ Map pashto = {
   'stillAvailable': 'سلام،  قیمت ثابت دی که جورآمد لري؟',
   'sendFastMessage': 'د اعلان خاوند ته چټک پیغام',
   'messageSent': 'پیغام واستول شو، د پیغامونو برخه کې ادامه ورکړئ.',
+  'description': 'مشخصات',
 
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځه!',
