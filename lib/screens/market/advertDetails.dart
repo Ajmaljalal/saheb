@@ -269,6 +269,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                               fontSize: fontSize,
                             )
                           : emptyBox(),
+                      const EmptySpace(height: 10.0),
                     ],
                   ),
                 ),

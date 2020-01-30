@@ -1,14 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../providers/postsProvider.dart';
 import '../../screens/messages/chatScreen.dart';
 import '../../util/isRTL.dart';
-import '../../widgets/emptyBox.dart';
 import '../../widgets/errorDialog.dart';
 import '../../widgets/horizontalDividerIndented.dart';
 import '../../widgets/noContent.dart';
@@ -20,6 +18,11 @@ import '../../mixins/advert.dart';
 import '../../languages/index.dart';
 import '../../widgets/fullScreenImage.dart';
 import '../../widgets/showInfoFushbar.dart';
+import '../../util/close_screen.dart';
+import '../../widgets/circled_button.dart';
+import '../../widgets/emptyBox.dart';
+import '../../widgets/emptySpace.dart';
+import '../../widgets/image_slider.dart';
 
 class ServiceDetails extends StatefulWidget {
   final serviceTitle;
@@ -33,6 +36,7 @@ class ServiceDetails extends StatefulWidget {
 class _ServiceDetailsState extends State<ServiceDetails>
     with PostMixin, AdvertMixin {
   bool serviceDeleted = false;
+  bool fastMessageSent = false;
 
   deletePost(context, message, images) async {
     setState(() {
@@ -87,15 +91,35 @@ class _ServiceDetailsState extends State<ServiceDetails>
     final appLanguage = getLanguages(context);
     final String serviceTitle = widget.serviceTitle.toString();
     final String serviceId = widget.serviceId;
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = currentLanguage == 'English' ? 12.5 : 15.0;
+    final currentUserId =
+        Provider.of<AuthProvider>(context, listen: false).userId;
+    final currentLanguage =
+        Provider.of<LanguageProvider>(context, listen: false).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 13.5 : 16.0;
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(40.0),
-        child: AppBar(),
+        preferredSize: Size.fromHeight(35.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          automaticallyImplyLeading: false,
+          titleSpacing: 0.0,
+          centerTitle: false,
+          title: CircledButton(
+            icon: Icons.close,
+            fillColor: Colors.white,
+            iconColor: Colors.purple,
+            width: 25.0,
+            height: 25.0,
+            onPressed: () => closeScreen(context),
+            iconSize: 18.0,
+          ),
+        ),
       ),
-      body: renderServiceContent(
+      body: _buildContent(
         serviceId: serviceId,
         serviceTitle: serviceTitle,
         appLanguage: appLanguage,
@@ -105,7 +129,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
     );
   }
 
-  Widget renderServiceContent({
+  Widget _buildContent({
     serviceId,
     serviceTitle,
     appLanguage,
@@ -114,7 +138,7 @@ class _ServiceDetailsState extends State<ServiceDetails>
   }) {
     return serviceDeleted == false
         ? StreamBuilder(
-            stream: Provider.of<PostsProvider>(context)
+            stream: Provider.of<PostsProvider>(context, listen: false)
                 .getOnePost('services', serviceId),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -126,132 +150,89 @@ class _ServiceDetailsState extends State<ServiceDetails>
               final service = snapshot.data;
               final bool isOwner =
                   service['owner']['id'] == userId ? true : false;
+
+              final shamsiDate = service != null
+                  ? Jalali.fromDateTime(service['date'].toDate())
+                  : null;
+              final serviceDate =
+                  '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
               final serviceFirstImage =
                   service['images'].length > 0 ? service['images'][0] : 'null';
-              return Stack(
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            constraints: BoxConstraints(
-                              minWidth: MediaQuery.of(context).size.width * 1,
-                              minHeight: MediaQuery.of(context).size.height * 1,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Stack(
-                                  children: <Widget>[
-                                    serviceImagesHolder(service['images']),
-                                    serviceMoreImageIndicator(
-                                      appLanguage: appLanguage,
-                                      length: service['images'].length - 1,
-                                      context: context,
-                                    ),
-                                    serviceActionButtonsHolder(
-                                        isOwner: isOwner,
-                                        userId: userId,
-                                        appLanguage: appLanguage,
-                                        isLiked: service['favorites']
-                                            .contains(userId),
-                                        serviceImages: service['images']),
-                                  ],
-                                ),
-                                const SizedBox(height: 5.0),
-                                serviceTitleAndStatusHolder(
-                                  title: service['title'],
-                                  open: service['open'],
-                                  isOwner: isOwner,
-                                  fontSize: fontSize,
-                                  openText: appLanguage['open'],
-                                  closeText: appLanguage['close'],
-                                  appLanguage: appLanguage,
-                                  userId: userId,
-                                ),
-                                horizontalDividerIndented(),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    serviceDetails(
-                                      Icons.location_on,
-                                      service['location'],
-                                      false,
-                                    ),
-                                    serviceDetails(
-                                      Icons.phone_iphone,
-                                      service['phone'].toString(),
-                                      false,
-                                    ),
-                                  ],
-                                ),
-                                serviceDetails(Icons.email,
-                                    service['email'].toString(), false),
-                                serviceDetails(
-                                  Icons.my_location,
-                                  service['fullAddress'].toString(),
-                                  true,
-                                ),
-//                                Container(
-//                                  width: MediaQuery.of(context).size.width * 1,
-//                                  padding: const EdgeInsets.symmetric(
-//                                    horizontal: 10.0,
-//                                  ),
-//                                  child: Text(
-//                                    service['fullAddress'].toString(),
-//                                    textDirection: isRTL(service['fullAddress'])
-//                                        ? TextDirection.rtl
-//                                        : TextDirection.ltr,
-//                                    style: TextStyle(fontSize: fontSize),
-//                                  ),
-//                                ),
-                                horizontalDividerIndented(),
-                                Container(
-                                  width: MediaQuery.of(context).size.width * 1,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0,
-                                  ),
-                                  child: Text(
-                                    service['desc'].toString(),
-                                    textDirection: isRTL(service['desc'])
-                                        ? TextDirection.rtl
-                                        : TextDirection.ltr,
-                                    style: TextStyle(fontSize: fontSize),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+              return SingleChildScrollView(
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width * 1,
+                    minHeight: MediaQuery.of(context).size.height * 1,
                   ),
-                  !isOwner
-                      ? Positioned(
-                          bottom: 0.0,
-                          right: 0,
-                          left: 0,
-                          child: serviceContactDetails(
-                            service['phone'],
-                            appLanguage,
-                            fontSize,
-                            service['owner']['id'],
-                            service['owner']['name'],
-                            service['owner']['photo'],
-                            serviceFirstImage,
-                          ),
-                        )
-                      : emptyBox(),
-                ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildServiceImages(service['images']),
+                      const EmptySpace(height: 5.0),
+                      _buildServiceTitle(
+                        title: service['title'],
+                        fontSize: fontSize,
+                      ),
+                      _buildServiceDateAndLocation(
+                        Icons.my_location,
+                        service['location'],
+                        serviceDate,
+                        service['fullAddress'],
+                      ),
+                      const EmptySpace(height: 15.0),
+                      _buildServiceOpenCloseState(
+                        isOwner: isOwner,
+                        open: service['open'],
+                        openText: appLanguage['openNow'],
+                        closeText: appLanguage['closeNow'],
+                        userId: userId,
+                        serviceType: service['type'],
+                      ),
+                      const EmptySpace(height: 15.0),
+                      isOwner
+                          ? _buildCallToActionButtonsForOwner(
+                              context: context,
+                              appLanguage: appLanguage,
+                              onDelete: deletePost,
+                              serviceImages: service['images'],
+                            )
+                          : _buildCallToActionButtons(
+                              context: context,
+                              owner: service['owner'],
+                              userId: userId,
+                              appLanguage: appLanguage,
+                              servicePhoto: serviceFirstImage,
+                              isFavorite: service['favorites'].contains(userId),
+                              phoneNumber: service['phone'],
+                              onFavorite: favoriteAPost,
+                            ),
+                      const EmptySpace(height: 10.0),
+                      horizontalDividerIndented(),
+                      _buildServiceDescription(
+                        appLanguage['serviceDescription'],
+                        service['desc'],
+                        fontSize,
+                      ),
+                      const EmptySpace(height: 10.0),
+                      !isOwner
+                          ? _buildServiceOwnerDetails(
+                              owner: service['owner'],
+                              appLanguage: appLanguage,
+                              fontSize: fontSize,
+                            )
+                          : emptyBox(),
+                      const EmptySpace(height: 10.0),
+                    ],
+                  ),
+                ),
               );
             },
           )
         : wait(appLanguage['wait'], context);
   }
 
-  Widget serviceImagesHolder(images) {
+  Widget _buildServiceImages(List<dynamic> images) {
+    List<String> postImages = images.cast<String>();
     return GestureDetector(
       onTap: () {
         if (images.length > 0) {
@@ -268,10 +249,8 @@ class _ServiceDetailsState extends State<ServiceDetails>
         }
       },
       child: images.length > 0
-          ? postImages(
-              image: images[0],
-              context: context,
-              scrollView: Axis.horizontal,
+          ? ImageSlider(
+              imageUrls: postImages,
             )
           : Center(
               child: Icon(
@@ -283,86 +262,115 @@ class _ServiceDetailsState extends State<ServiceDetails>
     );
   }
 
-  Widget serviceMoreImageIndicator({
-    appLanguage,
-    length,
-    context,
-  }) {
-    final userLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    return length > 0
-        ? Positioned(
-            bottom: 6.0,
-            right: userLanguage == 'English' ? 0.0 : 265.0,
-            left: userLanguage == 'English' ? 265.0 : 0.0,
-            child: Container(
-              color: Colors.white.withOpacity(0.5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Icon(
-                    FontAwesomeIcons.images,
-                    size: 18.0,
-                  ),
-                  const SizedBox(
-                    width: 5.0,
-                  ),
-                  Text(
-                    '+${length.toString()}',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ],
-              ),
-            ),
-          )
-        : emptyBox();
-  }
-
-  Widget serviceTitleAndStatusHolder({
+  Widget _buildServiceTitle({
     title,
-    isOwner,
-    open,
     fontSize,
-    openText,
-    closeText,
-    appLanguage,
-    userId,
   }) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Expanded(
-          child: postTittleHolder(title.toString(), fontSize, context),
-        ),
-        openCloseOptions(
+        postTittleHolder(title.toString(), 20.0, context),
+      ],
+    );
+  }
+
+  Widget _buildServiceDateAndLocation(
+    icon,
+    serviceLocation,
+    serviceDate,
+    serviceFullAddress,
+  ) {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                serviceDate.toString(),
+                textDirection:
+                    isRTL(serviceDate) ? TextDirection.rtl : TextDirection.ltr,
+              ),
+              Text(' --  '),
+              Text(
+                serviceLocation.toString(),
+                textDirection: isRTL(serviceLocation)
+                    ? TextDirection.rtl
+                    : TextDirection.ltr,
+              ),
+            ],
+          ),
+          Text(
+            serviceFullAddress,
+            textDirection: isRTL(serviceFullAddress)
+                ? TextDirection.rtl
+                : TextDirection.ltr,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildServiceOpenCloseState({
+    isOwner,
+    open,
+    openText,
+    closeText,
+    userId,
+    serviceType,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        _buildToggleOpenCloseOptions(
           openCloseText: open ? openText : closeText,
           isOpen: open,
           isOwner: isOwner,
           openText: open ? openText : closeText,
           userId: userId,
+          context: context,
+          serviceType: serviceType,
         ),
       ],
     );
   }
 
-  Widget openCloseOptions({
+  Widget _buildToggleOpenCloseOptions({
     openCloseText,
     isOpen,
     isOwner,
     openText,
     userId,
+    context,
+    serviceType,
   }) {
     if (isOwner) {
       return Container(
-          height: 25.0,
-          width: 100.0,
-          margin: EdgeInsets.symmetric(horizontal: 5.0),
+          margin: const EdgeInsets.symmetric(horizontal: 10.0),
+          width: MediaQuery.of(context).size.width * 0.8,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15.0,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(color: isOpen ? Colors.green : Colors.red),
+            color: isOpen
+                ? Colors.green.withOpacity(0.1)
+                : Colors.red.withOpacity(0.1),
+          ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              Text(openCloseText),
               Switch.adaptive(
                 onChanged: (value) async {
-                  await Provider.of<PostsProvider>(context)
+                  await Provider.of<PostsProvider>(context, listen: false)
                       .toggleServiceOpenClose(
                     serviceId: widget.serviceId,
                     userId: userId,
@@ -370,22 +378,26 @@ class _ServiceDetailsState extends State<ServiceDetails>
                   );
                 },
                 value: isOpen,
-                activeTrackColor: Colors.lightGreenAccent,
-                activeColor: Colors.green,
+                activeTrackColor: Colors.purpleAccent,
+                activeColor: Colors.purple,
               ),
-              Text(openText)
             ],
           ));
     } else {
       return Container(
+        height: 50.0,
         margin: const EdgeInsets.symmetric(horizontal: 10.0),
+        width: MediaQuery.of(context).size.width * 0.8,
         padding: const EdgeInsets.symmetric(
           horizontal: 15.0,
           vertical: 5.0,
         ),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(35.0),
-          border: Border.all(color: Colors.purple),
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: isOpen ? Colors.green : Colors.red),
+          color: isOpen
+              ? Colors.green.withOpacity(0.1)
+              : Colors.red.withOpacity(0.2),
         ),
         child: Center(
           child: Text(
@@ -402,193 +414,189 @@ class _ServiceDetailsState extends State<ServiceDetails>
     }
   }
 
-  Widget serviceDetails(
-    icon,
-    text,
-    isFullAddress,
-  ) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 10.0,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Icon(
-            icon,
-            size: 15.0,
-            color: Colors.purple,
-          ),
-          const SizedBox(
-            width: 5.0,
-          ),
-          text.toString() != 'null'
-              ? Container(
-                  width: isFullAddress
-                      ? MediaQuery.of(context).size.width * 0.87
-                      : null,
-                  child: Text(
-                    text,
-                    style: const TextStyle(
-                      fontSize: 13.0,
-                    ),
-                  ),
-                )
-              : const Text('---'),
-        ],
-      ),
-    );
-  }
-
-  Widget serviceContactDetails(
+  Widget _buildCallToActionButtons({
+    context,
+    owner,
     phoneNumber,
     appLanguage,
-    fontSize,
-    serviceOwnerId,
-    serviceOwnerName,
-    serviceOwnerPhoto,
     servicePhoto,
-  ) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 70.0),
-      decoration: BoxDecoration(
-        border: const Border(
-          top: const BorderSide(
-            color: Colors.cyanAccent,
-            width: 0.5,
-          ),
-        ),
-        color: Colors.grey[100],
-      ),
-      height: MediaQuery.of(context).size.height * 0.091,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            InkWell(
-              child: const Icon(
-                Entypo.message,
-                size: 38.0,
-                color: Colors.purple,
-              ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                      messageId: null,
-                      initiatorId: serviceOwnerId,
-                      initiatorName: serviceOwnerName,
-                      initiatorPhoto: serviceOwnerPhoto,
-                      aboutId: widget.serviceId,
-                      aboutTitle: widget.serviceTitle,
-                      aboutPhotoUrl: servicePhoto,
-                    ),
-                  ),
-                );
-              },
-            ),
-            InkWell(
-              child: const Icon(
-                FontAwesome.phone_square,
-                size: 30.0,
-                color: Colors.purple,
-              ),
-              onTap: () {
-                if (phoneNumber != 'null') {
-                  callPhoneNumber(phoneNumber);
-                } else
-                  showErrorDialog(
-                    appLanguage['noPhoneNumberProvide'],
-                    context,
-                    appLanguage['alertDialogTitle'],
-                    appLanguage['ok'],
-                  );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget serviceActionButtonsHolder({
-    isOwner,
     userId,
-    appLanguage,
-    isLiked,
-    serviceImages,
+    isFavorite,
+    onFavorite,
   }) {
-    return Positioned(
-      bottom: 0.0,
-      right: 0,
-      left: 0,
+    return Container(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          !isOwner
-              ? serviceActionButton(
-                  FontAwesomeIcons.heart,
-                  Colors.white,
-                  null,
-                  favoriteAPost,
+          CircledButton(
+            icon: Icons.call,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.black,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () {
+              if (phoneNumber != null) {
+                callPhoneNumber(phoneNumber);
+              } else
+                showErrorDialog(
+                  appLanguage['noPhoneNumberProvide'],
                   context,
-                  'favorite',
-                  userId,
-                  appLanguage['serviceSaved'],
-                  isLiked,
-                  null,
-                )
-              : emptyBox(),
-          isOwner
-              ? serviceActionButton(
-                  FontAwesomeIcons.trash,
-                  Colors.red,
-                  deletePost,
-                  null,
-                  context,
-                  'delete',
-                  userId,
-                  appLanguage['serviceDeleted'],
-                  isLiked,
-                  serviceImages,
-                )
-              : emptyBox(),
+                  appLanguage['alertDialogTitle'],
+                  appLanguage['ok'],
+                );
+            },
+            iconSize: 16.0,
+          ),
+          CircledButton(
+            icon: Icons.message,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.black,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatScreen(
+                    messageId: null,
+                    initiatorId: owner['id'],
+                    initiatorName: owner['name'],
+                    initiatorPhoto: owner['photo'],
+                    aboutId: widget.serviceId,
+                    aboutTitle: widget.serviceTitle,
+                    aboutPhotoUrl: servicePhoto,
+                  ),
+                ),
+              );
+            },
+            iconSize: 16.0,
+          ),
+          CircledButton(
+            icon: Icons.favorite,
+            fillColor: isFavorite ? Colors.purple : Colors.grey[300],
+            iconColor: isFavorite ? Colors.white : Colors.black,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () =>
+                onFavorite(userId, appLanguage['serviceSaved'], isFavorite),
+            iconSize: 16.0,
+          ),
         ],
       ),
     );
   }
 
-  Widget serviceActionButton(
-    icon,
-    iconColor,
-    onDelete,
-    onFavorite,
+  Widget _buildCallToActionButtonsForOwner({
     context,
-    actionType,
-    userId,
-    message,
-    isLiked,
+    appLanguage,
+    onDelete,
     serviceImages,
-  ) {
-    return RawMaterialButton(
-      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 36.0),
-      onPressed: () {
-        if (actionType == 'delete') {
-          onDelete(context, message, serviceImages);
-        } else
-          onFavorite(userId, message, isLiked);
-      },
-      child: Icon(
-        icon,
-        color: iconColor,
-        size: 18.0,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(top: 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CircledButton(
+            icon: Icons.edit,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.green,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () => null,
+            iconSize: 16.0,
+          ),
+          CircledButton(
+            icon: Icons.delete,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.red,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () =>
+                onDelete(context, appLanguage['serviceDeleted'], serviceImages),
+            iconSize: 16.0,
+          ),
+        ],
       ),
-      shape: const CircleBorder(),
-      elevation: 2.0,
-      fillColor: isLiked
-          ? Colors.purple
-          : actionType == 'delete' ? Colors.white : Colors.grey,
+    );
+  }
+
+  Widget _buildServiceDescription(
+    titleText,
+    serviceDesc,
+    fontSize,
+  ) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10.0,
+        vertical: 5.0,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            titleText,
+            style: TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            serviceDesc,
+            textDirection:
+                isRTL(serviceDesc) ? TextDirection.rtl : TextDirection.ltr,
+            style: TextStyle(
+              fontSize: fontSize,
+              height: 1.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildServiceOwnerDetails({
+    owner,
+    appLanguage,
+    fontSize,
+  }) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 1,
+      margin: EdgeInsets.symmetric(
+        horizontal: 8.0,
+      ),
+      child: Card(
+        elevation: 4.0,
+        child: Container(
+          child: Row(
+            children: <Widget>[
+              userAvatarHolder(
+                url: owner['photo'],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    owner['name'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    owner['location'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
