@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 Widget singleImageRenderer(
   url,
@@ -8,34 +11,15 @@ Widget singleImageRenderer(
 ) {
   return Container(
     width: imagesWidth,
-    child: Image.network(
-      url,
+    child: CachedNetworkImage(
+      imageUrl: url,
+      placeholder: (context, url) => Center(
+        child: Platform.isIOS
+            ? CupertinoActivityIndicator()
+            : CircularProgressIndicator(),
+      ),
+      errorWidget: (context, url, error) => Icon(Icons.error),
       fit: boxFitValue,
-      semanticLabel: "post's images",
-      frameBuilder: (BuildContext context, Widget child, int frame,
-          bool wasSynchronouslyLoaded) {
-        if (wasSynchronouslyLoaded) {
-          return child;
-        }
-        return AnimatedOpacity(
-          child: child,
-          opacity: frame == null ? 0 : 1,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeOut,
-        );
-      },
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes
-                : null,
-          ),
-        );
-      },
     ),
   );
 }

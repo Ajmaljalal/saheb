@@ -20,6 +20,8 @@ Map english = {
   'province': 'Province:',
   'locality': 'District or local area:',
 
+  'openNow': 'Open now and accepts customers.',
+  'closeNow': 'Attention! Now closed, does not accept custumers.',
   'open': 'Open',
   'close': 'Close',
 
@@ -29,6 +31,8 @@ Map english = {
 
   'messageSent': 'Message sent, please follow up in the messages section.',
   'description': 'Description',
+  'serviceDescription': 'More information',
+
   ////////////////// Login and sign up //////////////////////
   'login': 'LOGIN',
   'signOut': 'SIGN OUT',
