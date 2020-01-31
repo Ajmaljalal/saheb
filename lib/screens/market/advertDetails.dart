@@ -1,20 +1,12 @@
-import 'package:com.pywast.pywast/providers/locationProvider.dart';
-import 'package:com.pywast.pywast/util/uuid.dart';
-import 'package:com.pywast.pywast/widgets/button.dart';
-import 'package:com.pywast.pywast/widgets/emptyBox.dart';
-import 'package:com.pywast.pywast/widgets/emptySpace.dart';
-import 'package:com.pywast.pywast/widgets/image_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../providers/postsProvider.dart';
 import '../../screens/messages/chatScreen.dart';
 import '../../util/isRTL.dart';
-//import '../../widgets/emptyBox.dart';
 import '../../widgets/errorDialog.dart';
 import '../../widgets/horizontalDividerIndented.dart';
 import '../../widgets/noContent.dart';
@@ -28,6 +20,12 @@ import '../../widgets/fullScreenImage.dart';
 import '../../widgets/showInfoFushbar.dart';
 import '../../util/close_screen.dart';
 import '../../widgets/circled_button.dart';
+import '../../providers/locationProvider.dart';
+import '../../util/uuid.dart';
+import '../../widgets/button.dart';
+import '../../widgets/emptyBox.dart';
+import '../../widgets/emptySpace.dart';
+import '../../widgets/image_slider.dart';
 
 class AdvertDetails extends StatefulWidget {
   final advertTitle;
@@ -88,9 +86,12 @@ class _AdvertDetailsState extends State<AdvertDetails>
     }
   }
 
-  onSendFastMessage(text, owner, advertPhoto) async {
-    if (text == null || text.length == 0) {
+  onSendFastMessage(text, owner, advertPhoto, sampleText) async {
+    if (text != null && text.length == 0) {
       return;
+    }
+    if(text == null) {
+      text = sampleText;
     }
     final initiator = {
       'id': owner['id'],
@@ -399,7 +400,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         _buildSendMessageInputField(
-                            appLanguage['stillAvailable']),
+                            appLanguage['stillAvailable'],),
                         customButton(
                           appLanguage: appLanguage,
                           context: context,
@@ -407,6 +408,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
                             _fastMessageText,
                             owner,
                             advertPhoto,
+                            appLanguage['stillAvailable'],
                           ),
                           forText: 'send',
                           width: MediaQuery.of(context).size.width * 0.2,
