@@ -1,13 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../providers/postsProvider.dart';
 import '../../screens/messages/chatScreen.dart';
 import '../../util/isRTL.dart';
-import '../../widgets/emptyBox.dart';
 import '../../widgets/errorDialog.dart';
 import '../../widgets/horizontalDividerIndented.dart';
 import '../../widgets/noContent.dart';
@@ -19,6 +18,14 @@ import '../../mixins/advert.dart';
 import '../../languages/index.dart';
 import '../../widgets/fullScreenImage.dart';
 import '../../widgets/showInfoFushbar.dart';
+import '../../util/close_screen.dart';
+import '../../widgets/circled_button.dart';
+import '../../providers/locationProvider.dart';
+import '../../util/uuid.dart';
+import '../../widgets/button.dart';
+import '../../widgets/emptyBox.dart';
+import '../../widgets/emptySpace.dart';
+import '../../widgets/image_slider.dart';
 
 class AdvertDetails extends StatefulWidget {
   final advertTitle;
@@ -35,6 +42,8 @@ class AdvertDetails extends StatefulWidget {
 class _AdvertDetailsState extends State<AdvertDetails>
     with PostMixin, AdvertMixin {
   bool advertDeleted = false;
+  bool fastMessageSent = false;
+  String _fastMessageText;
 
   deletePost(context, message, images) async {
     setState(() {
@@ -77,20 +86,86 @@ class _AdvertDetailsState extends State<AdvertDetails>
     }
   }
 
+  onSendFastMessage(text, owner, advertPhoto, sampleText) async {
+    if (text != null && text.length == 0) {
+      return;
+    }
+    if(text == null) {
+      text = sampleText;
+    }
+    final initiator = {
+      'id': owner['id'],
+      'name': owner['name'],
+      'photo': owner['photo'],
+    };
+    final aboutWhat = {
+      'id': widget.advertId,
+      'title': widget.advertTitle,
+      'photoUrl': advertPhoto
+    };
+    final user = await Provider.of<AuthProvider>(context).currentUser;
+    final newMessageId = Uuid().generateV4();
+    final currentUserId =
+        Provider.of<AuthProvider>(context, listen: false).userId;
+    final userLocality =
+        Provider.of<LocationProvider>(context, listen: false).getUserLocality;
+    await Provider.of<PostsProvider>(context, listen: false)
+        .startNewConversation(
+      ownerName: user.displayName,
+      ownerLocation: userLocality,
+      ownerPhoto: user.photoUrl,
+      userId: currentUserId,
+      messageReceiverUserId: owner['id'],
+      messageId: newMessageId,
+      text: text,
+      initiator: initiator,
+      aboutWhat: aboutWhat,
+    );
+    setState(() {
+      fastMessageSent = true;
+    });
+  }
+
+  _handleFastMessageTextChange(value) {
+    setState(() {
+      _fastMessageText = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLanguage = getLanguages(context);
     final String advertTitle = widget.advertTitle.toString();
     final String advertId = widget.advertId;
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    double fontSize = currentLanguage == 'English' ? 12.5 : 15.0;
+    final currentUserId =
+        Provider.of<AuthProvider>(context, listen: false).userId;
+    final currentLanguage =
+        Provider.of<LanguageProvider>(context, listen: false).getLanguage;
+    double fontSize = currentLanguage == 'English' ? 13.5 : 16.0;
+
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
-        child: AppBar(),
+        preferredSize: Size.fromHeight(35.0),
+        child: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          automaticallyImplyLeading: false,
+          titleSpacing: 0.0,
+          centerTitle: false,
+          title: CircledButton(
+            icon: Icons.close,
+            fillColor: Colors.white,
+            iconColor: Colors.purple,
+            width: 25.0,
+            height: 25.0,
+            onPressed: () => closeScreen(context),
+            iconSize: 18.0,
+          ),
+        ),
       ),
-      body: renderAdvertContent(
+      body: _buildContent(
         advertId: advertId,
         advertTitle: advertTitle,
         appLanguage: appLanguage,
@@ -100,7 +175,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget renderAdvertContent({
+  Widget _buildContent({
     advertId,
     advertTitle,
     appLanguage,
@@ -109,7 +184,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
   }) {
     return advertDeleted == false
         ? StreamBuilder(
-            stream: Provider.of<PostsProvider>(context)
+            stream: Provider.of<PostsProvider>(context, listen: false)
                 .getOnePost('adverts', advertId),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -129,124 +204,84 @@ class _AdvertDetailsState extends State<AdvertDetails>
                   '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
               final advertFirstImage =
                   advert['images'].length > 0 ? advert['images'][0] : 'null';
-              return Stack(
-                children: <Widget>[
-                  SingleChildScrollView(
-                    child: Container(
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            constraints: BoxConstraints(
-                              minWidth: MediaQuery.of(context).size.width * 1,
-                              minHeight: MediaQuery.of(context).size.height * 1,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Stack(
-                                  children: <Widget>[
-                                    advertImagesHolder(advert['images']),
-                                    advertMoreImageIndicator(
-                                      appLanguage: appLanguage,
-                                      length: (advert['images'].length) - 1,
-                                      context: context,
-                                    ),
-                                    advertActionButtonsHolder(
-                                      isOwner: isOwner,
-                                      userId: userId,
-                                      appLanguage: appLanguage,
-                                      isFavorite:
-                                          advert['favorites'].contains(userId),
-                                      advertImages: advert['images'],
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 5.0),
-                                advertTitleAndPriceHolder(
-                                  title: advert['title'],
-                                  price: advert['price'],
-                                  fontSize: fontSize,
-                                  noPrice: appLanguage['noPrice'],
-                                ),
-                                horizontalDividerIndented(),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    advertDetails(
-                                      appLanguage['locationHolder'],
-                                      advert['location'],
-                                    ),
-                                    advertDetails(
-                                      appLanguage['typeOfDeal'],
-                                      advert['type'],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    advertDetails(
-                                      appLanguage['phoneNumber'],
-                                      advert['phone'].toString(),
-                                    ),
-                                    advertDetails(
-                                        appLanguage['date'], advertDate),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    advertDetails(
-                                      appLanguage['emailLabel'],
-                                      advert['email'].toString(),
-                                    ),
-                                  ],
-                                ),
-                                horizontalDividerIndented(),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0,
-                                  ),
-                                  child: Text(
-                                    advert['text'].toString(),
-                                    textDirection: isRTL(advert['text'])
-                                        ? TextDirection.rtl
-                                        : TextDirection.ltr,
-                                    style: TextStyle(fontSize: fontSize),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+              return SingleChildScrollView(
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: MediaQuery.of(context).size.width * 1,
+                    minHeight: MediaQuery.of(context).size.height * 1,
                   ),
-                  !isOwner
-                      ? Positioned(
-                          bottom: 0.0,
-                          right: 0,
-                          left: 0,
-                          child: advertOwnersDetails(
-                            advert['owner'],
-                            advert['phone'],
-                            appLanguage,
-                            fontSize,
-                            advertFirstImage,
-                          ),
-                        )
-                      : emptyBox(),
-                ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      _buildAdvertImages(advert['images']),
+                      const EmptySpace(height: 5.0),
+                      _buildTitleAndPriceHolder(
+                        title: advert['title'],
+                        price: advert['price'],
+                        fontSize: fontSize,
+                        noPrice: appLanguage['noPrice'],
+                      ),
+                      _buildAdvertDateAndLocation(
+                        Icons.my_location,
+                        advert['location'],
+                        advertDate,
+                        advert['type'],
+                      ),
+                      !fastMessageSent
+                          ? _buildSendInitialMessage(
+                              context: context,
+                              appLanguage: appLanguage,
+                              owner: advert['owner'],
+                              advertPhoto: advertFirstImage,
+                              isOwner: isOwner,
+                            )
+                          : _buildMessageSentDialog(
+                              appLanguage['messageSent'],
+                            ),
+                      isOwner
+                          ? _buildCallToActionButtonsForOwner(
+                              context: context,
+                              appLanguage: appLanguage,
+                              onDelete: deletePost,
+                              advertImages: advert['images'],
+                            )
+                          : _buildCallToActionButtons(
+                              context: context,
+                              owner: advert['owner'],
+                              userId: userId,
+                              appLanguage: appLanguage,
+                              advertPhoto: advertFirstImage,
+                              isFavorite: advert['favorites'].contains(userId),
+                              phoneNumber: advert['phone'],
+                              onFavorite: favoriteAPost,
+                            ),
+                      const EmptySpace(height: 10.0),
+                      horizontalDividerIndented(),
+                      _buildAdvertDescription(
+                        appLanguage,
+                        advert,
+                        fontSize,
+                      ),
+                      const EmptySpace(height: 10.0),
+                      !isOwner
+                          ? _buildAdvertOwnerDetails(
+                              owner: advert['owner'],
+                              appLanguage: appLanguage,
+                              fontSize: fontSize,
+                            )
+                          : emptyBox(),
+                      const EmptySpace(height: 10.0),
+                    ],
+                  ),
+                ),
               );
             },
           )
         : wait(appLanguage['wait'], context);
   }
 
-  Widget advertImagesHolder(images) {
+  Widget _buildAdvertImages(List<dynamic> images) {
+    List<String> postImages = images.cast<String>();
     return GestureDetector(
       onTap: () {
         if (images.length > 0) {
@@ -263,10 +298,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
         }
       },
       child: images.length > 0
-          ? postImages(
-              image: images[0],
-              context: context,
-              scrollView: Axis.horizontal,
+          ? ImageSlider(
+              imageUrls: postImages,
             )
           : Center(
               child: Icon(
@@ -278,60 +311,25 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertMoreImageIndicator({
-    appLanguage,
-    length,
-    context,
-  }) {
-    final userLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    return length > 0
-        ? Positioned(
-            bottom: 6.0,
-            right: userLanguage == 'English' ? 0.0 : 265.0,
-            left: userLanguage == 'English' ? 265.0 : 0.0,
-            child: Container(
-              color: Colors.white.withOpacity(0.5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const Icon(
-                    FontAwesomeIcons.images,
-                    size: 18.0,
-                  ),
-                  const SizedBox(
-                    width: 5.0,
-                  ),
-                  Text(
-                    '+${length.toString()}',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ],
-              ),
-            ),
-          )
-        : emptyBox();
-  }
-
-  Widget advertTitleAndPriceHolder({
+  Widget _buildTitleAndPriceHolder({
     title,
     price,
     fontSize,
     noPrice,
   }) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Expanded(
-          child: postTittleHolder(title.toString(), fontSize, context),
-        ),
+        postTittleHolder(title.toString(), 20.0, context),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Text(
-            price.toString() != 'null' ? price : noPrice,
+            price.toString() != null ? price : noPrice,
             style: TextStyle(
               color: Colors.cyan,
               fontSize: price.toString() != 'null' ? 17.0 : 15.0,
+              letterSpacing: 3,
             ),
           ),
         ),
@@ -339,203 +337,337 @@ class _AdvertDetailsState extends State<AdvertDetails>
     );
   }
 
-  Widget advertDetails(
-    forText,
-    text,
+  Widget _buildAdvertDateAndLocation(
+    icon,
+    advertLocation,
+    advertDate,
+    advertType,
   ) {
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 10.0,
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                '$forText: ',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12.0,
-                ),
-              ),
-              text.toString() != 'null' ? Text(text) : const Text('---'),
-            ],
+          Text(advertDate.toString()),
+          Text(' --  '),
+          Text(advertLocation.toString()),
+          const EmptySpace(width: 20.0),
+          Text(
+            advertType,
+            style: TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.purple,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget advertOwnersDetails(
+  Widget _buildSendInitialMessage({
+    context,
+    appLanguage,
+    owner,
+    advertPhoto,
+    isOwner,
+  }) {
+    return !isOwner
+        ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Card(
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                width: MediaQuery.of(context).size.width * 1,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: Text(
+                        appLanguage['sendFastMessage'],
+                        style: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14.0,
+                        ),
+                      ),
+                    ),
+                    const EmptySpace(height: 5.0),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        _buildSendMessageInputField(
+                            appLanguage['stillAvailable'],),
+                        customButton(
+                          appLanguage: appLanguage,
+                          context: context,
+                          onClick: () => onSendFastMessage(
+                            _fastMessageText,
+                            owner,
+                            advertPhoto,
+                            appLanguage['stillAvailable'],
+                          ),
+                          forText: 'send',
+                          width: MediaQuery.of(context).size.width * 0.2,
+                          height: 28.0,
+                          fontSize: 13.0,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              elevation: 4.0,
+            ),
+          )
+        : emptyBox();
+  }
+
+  _buildMessageSentDialog(dialogMessage) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: Text(
+          dialogMessage,
+          style: TextStyle(
+            color: Colors.purple,
+            fontSize: 12.0,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSendMessageInputField(String stillAvailable) {
+    return Container(
+      height: 30.0,
+      width: 205.0,
+      child: TextFormField(
+        initialValue: stillAvailable,
+        onChanged: _handleFastMessageTextChange,
+        autocorrect: false,
+        cursorColor: Colors.black,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 12.0,
+          height: .9,
+        ),
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.grey[100],
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 20,
+          ),
+          errorStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 15.0,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 0.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: const BorderSide(
+              color: Colors.transparent,
+              width: 0.0,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCallToActionButtons({
+    context,
     owner,
     phoneNumber,
     appLanguage,
-    fontSize,
     advertPhoto,
+    userId,
+    isFavorite,
+    onFavorite,
+  }) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          CircledButton(
+            icon: Icons.call,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.black,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () {
+              if (phoneNumber != null) {
+                callPhoneNumber(phoneNumber);
+              } else
+                showErrorDialog(
+                  appLanguage['noPhoneNumberProvide'],
+                  context,
+                  appLanguage['alertDialogTitle'],
+                  appLanguage['ok'],
+                );
+            },
+            iconSize: 16.0,
+          ),
+          CircledButton(
+            icon: Icons.message,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.black,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ChatScreen(
+                    messageId: null,
+                    initiatorId: owner['id'],
+                    initiatorName: owner['name'],
+                    initiatorPhoto: owner['photo'],
+                    aboutId: widget.advertId,
+                    aboutTitle: widget.advertTitle,
+                    aboutPhotoUrl: advertPhoto,
+                  ),
+                ),
+              );
+            },
+            iconSize: 16.0,
+          ),
+          CircledButton(
+            icon: Icons.favorite,
+            fillColor: isFavorite ? Colors.purple : Colors.grey[300],
+            iconColor: isFavorite ? Colors.white : Colors.black,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () =>
+                onFavorite(userId, appLanguage['advertSaved'], isFavorite),
+            iconSize: 16.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCallToActionButtonsForOwner({
+    context,
+    appLanguage,
+    onDelete,
+    advertImages,
+  }) {
+    return Container(
+      margin: EdgeInsets.only(top: 15.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          CircledButton(
+            icon: Icons.edit,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.green,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () => null,
+            iconSize: 16.0,
+          ),
+          CircledButton(
+            icon: Icons.delete,
+            fillColor: Colors.grey[300],
+            iconColor: Colors.red,
+            width: 35.0,
+            height: 35.0,
+            onPressed: () =>
+                onDelete(context, appLanguage['advertDeleted'], advertImages),
+            iconSize: 16.0,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdvertDescription(
+    appLanguage,
+    advert,
+    fontSize,
   ) {
     return Container(
-      decoration: BoxDecoration(
-        border: const Border(
-          top: const BorderSide(
-            color: Colors.cyanAccent,
-            width: 0.5,
-          ),
-        ),
-        color: Colors.grey[100],
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10.0,
+        vertical: 5.0,
       ),
-      height: MediaQuery.of(context).size.height * 0.091,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
+          Text(
+            appLanguage['description'],
+            style: TextStyle(
+              fontSize: 15.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            advert['text'].toString(),
+            textDirection:
+                isRTL(advert['text']) ? TextDirection.rtl : TextDirection.ltr,
+            style: TextStyle(
+              fontSize: fontSize,
+              height: 1.0,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAdvertOwnerDetails({
+    owner,
+    appLanguage,
+    fontSize,
+  }) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 1,
+      margin: EdgeInsets.symmetric(
+        horizontal: 8.0,
+      ),
+      child: Card(
+        elevation: 4.0,
+        child: Container(
+          child: Row(
             children: <Widget>[
               userAvatarHolder(
                 url: owner['photo'],
               ),
-              Text(
-                owner['name'],
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: fontSize,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    owner['name'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    owner['location'],
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 12.0,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          Container(
-            width: 110.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                InkWell(
-                  child: const Icon(
-                    Entypo.message,
-                    size: 38.0,
-                    color: Colors.purple,
-                  ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatScreen(
-                          messageId: null,
-                          initiatorId: owner['id'],
-                          initiatorName: owner['name'],
-                          initiatorPhoto: owner['photo'],
-                          aboutId: widget.advertId,
-                          aboutTitle: widget.advertTitle,
-                          aboutPhotoUrl: advertPhoto,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                InkWell(
-                  child: const Icon(
-                    FontAwesome.phone_square,
-                    size: 30.0,
-                    color: Colors.purple,
-                  ),
-                  onTap: () {
-                    if (phoneNumber != null) {
-                      callPhoneNumber(phoneNumber);
-                    } else
-                      showErrorDialog(
-                        appLanguage['noPhoneNumberProvide'],
-                        context,
-                        appLanguage['alertDialogTitle'],
-                        appLanguage['ok'],
-                      );
-                  },
-                ),
-              ],
-            ),
-          )
-        ],
+        ),
       ),
-    );
-  }
-
-  Widget advertActionButtonsHolder({
-    isOwner,
-    userId,
-    appLanguage,
-    isFavorite,
-    advertImages,
-  }) {
-    return Positioned(
-      bottom: 0.0,
-      right: 0,
-      left: 0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          !isOwner
-              ? advertActionButton(
-                  FontAwesomeIcons.heart,
-                  Colors.white,
-                  null,
-                  favoriteAPost,
-                  context,
-                  'favorite',
-                  userId,
-                  appLanguage['advertSaved'],
-                  isFavorite,
-                  null,
-                )
-              : emptyBox(),
-          isOwner
-              ? advertActionButton(
-                  FontAwesomeIcons.trash,
-                  Colors.red,
-                  deletePost,
-                  null,
-                  context,
-                  'delete',
-                  userId,
-                  appLanguage['advertDeleted'],
-                  isFavorite,
-                  advertImages,
-                )
-              : emptyBox(),
-        ],
-      ),
-    );
-  }
-
-  Widget advertActionButton(
-    icon,
-    iconColor,
-    onDelete,
-    onFavorite,
-    context,
-    actionType,
-    userId,
-    message,
-    isFavorite,
-    advertImages,
-  ) {
-    return RawMaterialButton(
-      constraints: const BoxConstraints(
-        minWidth: 40.0,
-        minHeight: 36.0,
-      ),
-      onPressed: () {
-        if (actionType == 'delete') {
-          onDelete(context, message, advertImages);
-        } else
-          onFavorite(userId, message, isFavorite);
-      },
-      child: Icon(
-        icon,
-        color: iconColor,
-        size: 18.0,
-      ),
-      shape: const CircleBorder(),
-      elevation: 2.0,
-      fillColor: isFavorite
-          ? Colors.purple
-          : actionType == 'delete' ? Colors.white : Colors.grey,
     );
   }
 }

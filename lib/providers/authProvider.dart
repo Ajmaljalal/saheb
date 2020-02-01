@@ -42,38 +42,43 @@ class AuthProvider with ChangeNotifier {
     return user;
   }
 
-//  updateUserLocation(context, userId) async {
-//    await Provider.of<PostsProvider>(context).updateUserInfo(
-//      userId: userId,
-//      field: 'location',
-//      value: Provider.of<LocationProvider>(context).getUserLocality,
-//      context: context,
-//    );
-//  }
-
-  Future<void> registerUserToDb(id, name, email, photo, context) async {
-    final _userRef = db.collection("users").document(id);
-    final _user = await _userRef.get();
-    if (_user.exists) {
-      return;
-    }
-    final userLocality =
-        await Provider.of<LocationProvider>(context).getUserLocality;
-    if (_userRef.documentID.toString().isNotEmpty) {
-      await _userRef.setData({
-        "id": id,
-        "name": name,
-        "email": email,
-        "photoUrl": photo,
-        "location": userLocality
-      });
-    } else {
-      await _userRef.updateData({
+  Future<void> registerUserToDb(id, name, email, photo, context, userRef) async {
+    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
+    if (userRef.documentID.toString().isNotEmpty) {
+      await userRef.setData({
         "id": id,
         "name": name,
         "email": email,
         "photoUrl": photo,
         "location": userLocality,
+        "dateOfBirth": null,
+        "phone": null,
+        "gender" : null,
+        "newMessagesCount" : 0,
+        "postsCount": 0,
+        "advertsCount": 0,
+        "servicesCount": 0,
+        "activityCount": 0,
+        "followersCount": 0,
+        "followingCount": 0,
+      });
+    } else {
+      await userRef.updateData({
+        "id": id,
+        "name": name,
+        "email": email,
+        "photoUrl": photo,
+        "location": userLocality,
+        "dateOfBirth": null,
+        "phone": null,
+        "gender" : null,
+        "newMessagesCount" : 0,
+        "postsCount": 0,
+        "advertsCount": 0,
+        "servicesCount": 0,
+        "activityCount": 0,
+        "followersCount": 0,
+        "followingCount": 0,
       });
     }
   }
@@ -93,18 +98,17 @@ class AuthProvider with ChangeNotifier {
           password: password,
         ))
             .user;
+        final _userRef = db.collection("users").document(_user.uid);
+        await registerUserToDb(_user.uid, name, email, photoUrl, context, _userRef,);
         UserUpdateInfo info = new UserUpdateInfo();
         info.displayName = name;
         info.photoUrl = photoUrl;
         await _user.updateProfile(info);
-
-        await registerUserToDb(_user.uid, name, email, photoUrl, context);
       } else {
         _user = (await _auth.signInWithEmailAndPassword(
                 email: email, password: password))
             .user;
       }
-
       // save user token and save user info to local
       _token = (await _user.getIdToken()).token;
       _userId = _user.uid;
@@ -141,22 +145,26 @@ class AuthProvider with ChangeNotifier {
         return FirebaseAuth.instance
             .signInWithCredential(credential)
             .then((AuthResult result) async {
-          UserUpdateInfo info = new UserUpdateInfo();
-          info.displayName = userName;
-          info.photoUrl = photoUrl;
-          await result.user.updateProfile(info);
-          await registerUserToDb(
-            result.user.uid,
-            userName,
-            null,
-            photoUrl,
-            context,
-          );
+              final _userRef = db.collection("users").document(result.user.uid);
+              final _fireBaseUser = await _userRef.get();
+              if (!_fireBaseUser.exists) {
+                await registerUserToDb(
+                  result.user.uid,
+                  userName,
+                  null,
+                  photoUrl,
+                  context,
+                  _userRef,
+                );
+                UserUpdateInfo info = new UserUpdateInfo();
+                info.displayName = userName;
+                info.photoUrl = photoUrl;
+                await result.user.updateProfile(info);
+              }
 
           // save user token and save user info to local
           _token = (await result.user.getIdToken()).token;
           _userId = result.user.uid;
-
           notifyListeners();
           final prefs = await SharedPreferences.getInstance();
           final userData = json.encode(
@@ -216,16 +224,22 @@ class AuthProvider with ChangeNotifier {
 
       final FirebaseUser _user =
           (await _auth.signInWithCredential(credential)).user;
+
+      final _userRef = db.collection("users").document(_user.uid);
+      final _fireBaseUser = await _userRef.get();
+      if (!_fireBaseUser.exists) {
+        await registerUserToDb(
+          _user.uid,
+          _user.displayName,
+          _user.email,
+          _user.photoUrl,
+          context,
+          _userRef,
+        );
+      }
+
       _token = (await _user.getIdToken()).token;
       _userId = _user.uid;
-      await registerUserToDb(
-        _user.uid,
-        _user.displayName,
-        _user.email,
-        _user.photoUrl,
-        context,
-      );
-
       notifyListeners();
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode(
@@ -235,7 +249,6 @@ class AuthProvider with ChangeNotifier {
         },
       );
       prefs.setString('userData', userData);
-
       return _user.uid;
     } catch (error) {
       throw error;
@@ -255,18 +268,24 @@ class AuthProvider with ChangeNotifier {
 
       final FirebaseUser _user =
           (await _auth.signInWithCredential(_credential)).user;
+
+      
+      final _userRef = db.collection("users").document(_user.uid);
+      final _fireBaseUser = await _userRef.get();
+      if (!_fireBaseUser.exists) {
+        await registerUserToDb(
+          _user.uid,
+          _user.displayName,
+          _user.email,
+          _user.photoUrl,
+          context,
+          _userRef
+        );
+      }
       _token = (await _user.getIdToken()).token;
       _userId = _user.uid;
 
-      await registerUserToDb(
-        _user.uid,
-        _user.displayName,
-        _user.email,
-        _user.photoUrl,
-        context,
-      );
-
-      notifyListeners();
+      notifyListeners(); 
       final prefs = await SharedPreferences.getInstance();
       final userData = json.encode(
         {
@@ -275,7 +294,6 @@ class AuthProvider with ChangeNotifier {
         },
       );
       prefs.setString('userData', userData);
-
       return _user.uid;
     } catch (error) {
       throw error;

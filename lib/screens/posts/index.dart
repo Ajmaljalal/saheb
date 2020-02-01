@@ -34,6 +34,7 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   int itemsPerPage = 10;
   List filteredPosts;
   DocumentSnapshot _lastPost;
+  List postsIds = [];
 
   handleFilterOptionsChange(text, id) {
     setState(() {
@@ -93,6 +94,27 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    Future.delayed(Duration.zero, () {
+      final postsSnapshot =
+          Provider.of<PostsProvider>(context).getAllSnapshots('postsSnapshots');
+      postsSnapshot.forEach((QuerySnapshot snapshot) {
+        List<String> newPostsIds = List();
+        newPostsIds = snapshot.documents.map((DocumentSnapshot docSnapshot) {
+          return docSnapshot.documentID;
+        }).toList();
+        if (mounted) {
+          setState(() {
+            postsIds = newPostsIds;
+          });
+        }
+      });
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     final appLanguage = getLanguages(context);
@@ -106,26 +128,25 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
       });
     }
 
-    if (filteredPosts == null) {
-      print('callled');
-      initialLoadOfData();
-      return Text('null');
-    }
-
-    var newFilteredPosts = filterList(
-      posts: filteredPosts,
-      currentFilterOption: currentFilterOption,
-      currentUserId: currentUserId,
-      type: 'posts',
-      appLanguage: appLanguage,
-      appBarSearchString: widget.searchBarString,
-    );
+//    if (filteredPosts == null) {
+//      print('callled');
+//      initialLoadOfData();
+//      return Text('null');
+//    }
+//
+//    var newFilteredPosts = filterList(
+//      posts: filteredPosts,
+//      currentFilterOption: currentFilterOption,
+//      currentUserId: currentUserId,
+//      type: 'posts',
+//      appLanguage: appLanguage,
+//      appBarSearchString: widget.searchBarString,
+//    );
 
     return _buildContent(
       appLanguage: appLanguage,
       currentUserId: currentUserId,
       userLocation: userLocality,
-      posts: newFilteredPosts,
     );
   }
 
@@ -133,39 +154,34 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
     appLanguage,
     currentUserId,
     userLocation,
-    posts,
   }) {
-    print(filteredPosts[filteredPosts.length - 1]['postId']);
-
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
           filterOptions(appLanguage, userLocation),
-          posts.length > 0
+          postsIds.length > 0
               ? Column(
                   children: <Widget>[
                     ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: posts.length,
+                      itemCount: postsIds.length,
                       itemBuilder: (context, index) {
-                        final postId = posts.toList()[index]['postId'];
-                        var post = posts.toList()[index]['post'];
+                        final postId = postsIds[index];
                         return Post(
-                          post: post,
                           postId: postId,
                           usersProvince: widget.usersProvince,
                         );
                       },
                     ),
-                    FlatButton(
-                      onPressed: () => loadMore(
-                        appLanguage,
-                        currentUserId,
-                      ),
-                      child: Text('load more'),
-                    ),
+//                    FlatButton(
+//                      onPressed: () => loadMore(
+//                        appLanguage,
+//                        currentUserId,
+//                      ),
+//                      child: Text('load more'),
+//                    ),
                   ],
                 )
               : noContent(appLanguage['noContent'], context)

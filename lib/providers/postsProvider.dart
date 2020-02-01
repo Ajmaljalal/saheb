@@ -37,6 +37,24 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
+  addPostToSnapshots({
+    id,
+    date,
+    location,
+    collection,
+  }) {
+    try {
+      db.collection(collection).add(
+        {
+          'date': date,
+          'location': location,
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   editOnePost({
     postId,
     owner,
@@ -228,6 +246,14 @@ class PostsProvider with ChangeNotifier {
         .startAfterDocument(currentLastPostId)
         .limit(numberOfPosts)
         .snapshots();
+    return dataStream;
+  }
+
+  Stream<QuerySnapshot> getAllSnapshots(
+    String collection,
+  ) {
+    final dataStream =
+        db.collection(collection).orderBy("date", descending: true).snapshots();
     return dataStream;
   }
 
