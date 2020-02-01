@@ -32,9 +32,10 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   int currentOptionId = 1;
   static int present = 0;
   int itemsPerPage = 10;
-  List filteredPosts;
+  List posts;
   DocumentSnapshot _lastPost;
-  List postsIds = [];
+  List currentPostsSnapshot = [];
+  List renderedPosts = [];
 
   handleFilterOptionsChange(text, id) {
     setState(() {
@@ -43,51 +44,48 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
     });
   }
 
-  void initialLoadOfData() {
-    final initItems = Provider.of<PostsProvider>(context, listen: false)
-        .getInitialPosts('posts', itemsPerPage);
-    initItems.forEach((QuerySnapshot snapshot) {
-      List<Map<dynamic, dynamic>> newPosts = List();
-      newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
-        var post = {
-          'post': docSnapshot.data,
-          'postId': docSnapshot.documentID,
-        };
-        return post;
-      }).toList();
-
-      if (mounted) {
-        setState(() {
-          filteredPosts = newPosts;
-          _lastPost = snapshot.documents[snapshot.documents.length - 1];
-        });
-      }
-    });
-  }
+//  void initialLoadOfData() {
+//    final initItems = Provider.of<PostsProvider>(context, listen: false)
+//        .getInitialPosts('posts', itemsPerPage);
+//    initItems.forEach((QuerySnapshot snapshot) {
+//      List<Map<dynamic, dynamic>> newPosts = List();
+//      newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
+//        var post = {
+//          'post': docSnapshot.data,
+//          'postId': docSnapshot.documentID,
+//        };
+//        return post;
+//      }).toList();
+//
+//      if (mounted) {
+//        setState(() {
+//          posts = newPosts;
+//          _lastPost = snapshot.documents[snapshot.documents.length - 1];
+//        });
+//      }
+//    });
+//  }
 
   void loadMore(appLanguage, currentUserId) {
-    print('called again');
     bool request = false;
     if (!request) {
-      final newItems = Provider.of<PostsProvider>(context, listen: false)
-          .getAllPosts('posts', itemsPerPage, _lastPost);
-      newItems.forEach((QuerySnapshot snapshot) {
-        List<Map<dynamic, dynamic>> newPosts = List();
+      final postsSnapshot = Provider.of<PostsProvider>(context)
+          .getAllPosts('ids_posts', itemsPerPage, _lastPost);
+      postsSnapshot.forEach((QuerySnapshot snapshot) {
+        List<Map<String, dynamic>> newPosts = List();
         newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
-          var post = {
-            'post': docSnapshot.data,
-            'postId': docSnapshot.documentID,
+          final post = {
+            'id': docSnapshot.documentID,
+            'location': docSnapshot.data['location'],
           };
           return post;
         }).toList();
-
         if (mounted) {
           setState(() {
-            filteredPosts.addAll(newPosts);
+            currentPostsSnapshot.addAll(newPosts);
             _lastPost = snapshot.documents[snapshot.documents.length - 1];
           });
         }
-        print(_lastPost.documentID);
       });
     }
     request = true;
@@ -98,15 +96,20 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
     // TODO: implement initState
     Future.delayed(Duration.zero, () {
       final postsSnapshot =
-          Provider.of<PostsProvider>(context).getAllSnapshots('postsSnapshots');
+          Provider.of<PostsProvider>(context).getAllSnapshots('ids_posts');
       postsSnapshot.forEach((QuerySnapshot snapshot) {
-        List<String> newPostsIds = List();
-        newPostsIds = snapshot.documents.map((DocumentSnapshot docSnapshot) {
-          return docSnapshot.documentID;
+        List<Map<String, dynamic>> newPosts = List();
+        newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
+          final post = {
+            'id': docSnapshot.documentID,
+            'location': docSnapshot.data['location'],
+          };
+          return post;
         }).toList();
         if (mounted) {
           setState(() {
-            postsIds = newPostsIds;
+            currentPostsSnapshot = newPosts;
+            _lastPost = snapshot.documents[snapshot.documents.length - 1];
           });
         }
       });
@@ -128,25 +131,18 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
       });
     }
 
-//    if (filteredPosts == null) {
-//      print('callled');
-//      initialLoadOfData();
-//      return Text('null');
-//    }
-//
-//    var newFilteredPosts = filterList(
-//      posts: filteredPosts,
-//      currentFilterOption: currentFilterOption,
-//      currentUserId: currentUserId,
-//      type: 'posts',
-//      appLanguage: appLanguage,
-//      appBarSearchString: widget.searchBarString,
-//    );
+    var _filteredPosts = filterListBasedOnLocation(
+      posts: currentPostsSnapshot,
+      currentFilterOption: currentFilterOption,
+      currentUserId: currentUserId,
+    );
+    print(renderedPosts.length);
 
     return _buildContent(
       appLanguage: appLanguage,
       currentUserId: currentUserId,
       userLocation: userLocality,
+      filteredPosts: _filteredPosts,
     );
   }
 
@@ -154,34 +150,41 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
     appLanguage,
     currentUserId,
     userLocation,
+    filteredPosts,
   }) {
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
           filterOptions(appLanguage, userLocation),
-          postsIds.length > 0
+          filteredPosts.length > 0
               ? Column(
                   children: <Widget>[
                     ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: postsIds.length,
+                      itemCount: filteredPosts.length,
                       itemBuilder: (context, index) {
-                        final postId = postsIds[index];
+                        final postId = filteredPosts[index]['id'];
+//                        renderedPosts.add(Post(
+//                          postId: postId,
+//                          usersProvince: widget.usersProvince,
+//                        ));
+
+//                        return renderedPosts[index];
                         return Post(
                           postId: postId,
                           usersProvince: widget.usersProvince,
                         );
                       },
                     ),
-//                    FlatButton(
-//                      onPressed: () => loadMore(
-//                        appLanguage,
-//                        currentUserId,
-//                      ),
-//                      child: Text('load more'),
-//                    ),
+                    FlatButton(
+                      onPressed: () => loadMore(
+                        appLanguage,
+                        currentUserId,
+                      ),
+                      child: Text('load more'),
+                    ),
                   ],
                 )
               : noContent(appLanguage['noContent'], context)

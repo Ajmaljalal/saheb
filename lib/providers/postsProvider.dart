@@ -10,15 +10,18 @@ final Firestore db = Firestore.instance;
 class PostsProvider with ChangeNotifier {
   addOnePost({
     owner,
+    id,
+    date,
     text,
     location,
     images,
   }) {
     try {
-      db.collection('posts').add(
+      db.collection('posts').document(id).setData(
         {
+          'id': id,
           'comments': [],
-          'date': DateTime.now(),
+          'date': date,
           'favorites': [],
           'hiddenFrom': [],
           'likes': [],
@@ -37,14 +40,14 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  addPostToSnapshots({
+  savePostSnapshot({
     id,
     date,
     location,
     collection,
   }) {
     try {
-      db.collection(collection).add(
+      db.collection(collection).document(id).setData(
         {
           'date': date,
           'location': location,
@@ -177,7 +180,9 @@ class PostsProvider with ChangeNotifier {
   deleteOneRecord(postId, collection, images) async {
     try {
       await db.collection(collection).document(postId).delete();
-      await deleteImagesFromDB(images: images, collection: collection);
+      if (images != null) {
+        await deleteImagesFromDB(images: images, collection: collection);
+      }
     } catch (e) {
       print(e.toString());
     }
@@ -227,9 +232,12 @@ class PostsProvider with ChangeNotifier {
 
   reportAPost(post, postId) {
     try {
-      db.collection('reported').document(postId).setData(
-            post,
-          );
+      db.collection('reported').document(postId).setData({
+        'id': post['id'],
+        'text': post['text'],
+        'images': post['images'],
+        'owner': post['owner']['id'],
+      });
     } catch (e) {
       print(e.toString());
     }
@@ -252,8 +260,11 @@ class PostsProvider with ChangeNotifier {
   Stream<QuerySnapshot> getAllSnapshots(
     String collection,
   ) {
-    final dataStream =
-        db.collection(collection).orderBy("date", descending: true).snapshots();
+    final dataStream = db
+        .collection(collection)
+        .orderBy("date", descending: true)
+        .limit(20)
+        .snapshots();
     return dataStream;
   }
 

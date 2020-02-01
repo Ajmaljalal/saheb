@@ -1,3 +1,20 @@
+filterListBasedOnLocation({posts, currentFilterOption, currentUserId}) {
+  var filteredPosts = posts;
+
+  if (currentFilterOption.toLowerCase() == 'افغانستان') {
+    return filteredPosts;
+  }
+
+  filteredPosts = filteredPosts
+      .where(
+        (post) => post['location'].toString().toLowerCase().contains(
+              currentFilterOption.toLowerCase(),
+            ),
+      )
+      .toList();
+  return filteredPosts;
+}
+
 filterList({
   List posts,
   appBarSearchString,
@@ -8,8 +25,6 @@ filterList({
   context,
 }) {
   ///////////////// for adverts only ////////////////////////
-  print('fillterd called');
-  print(posts.length);
   if (type == 'adverts') {
     var filteredPosts = posts;
     if (appBarSearchString != null) {
@@ -27,18 +42,6 @@ filterList({
                     .contains(appBarSearchString.toString()),
           )
           .toList();
-    }
-    if (currentFilterOption.toLowerCase() == 'افغانستان') {
-      filteredPosts = filteredPosts
-          .where(
-            (post) =>
-                (post['advert']['hiddenFrom']
-                    .toList()
-                    .contains(currentUserId.toString())) ==
-                false,
-          )
-          .toList();
-      return filteredPosts;
     }
 
     if (currentFilterOption == appLanguage['myAdverts']) {
@@ -224,7 +227,6 @@ filterList({
                 .contains(currentUserId.toString())) ==
             false)
         .toList();
-    print('end');
     return filteredPosts;
   }
 

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:com.pywast.pywast/util/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -119,7 +120,8 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       );
       return;
     }
-
+    final newPostId = Uuid().generateV4();
+    final newPostDate = DateTime.now();
     setState(() {
       postSavingInProgress = true;
     });
@@ -134,6 +136,8 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
     final userLocality =
         Provider.of<LocationProvider>(context, listen: false).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOnePost(
+      id: newPostId,
+      date: newPostDate,
       text: _text,
       location: _location,
       owner: {
@@ -144,7 +148,12 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       },
       images: _uploadedFileUrl,
     );
-
+    await Provider.of<PostsProvider>(context, listen: false).savePostSnapshot(
+      id: newPostId,
+      date: newPostDate,
+      location: _location,
+      collection: 'ids_posts',
+    );
     Navigator.of(context).pop();
   }
 

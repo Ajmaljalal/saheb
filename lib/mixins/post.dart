@@ -14,7 +14,8 @@ class PostMixin {
   Widget cardHeader(
     post,
   ) {
-    final shamsiDate = Jalali.fromDateTime(post['date'].toDate());
+    final shamsiDate =
+        post != null ? Jalali.fromDateTime(post['date'].toDate()) : null;
     final postDate =
         '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
     return Row(
@@ -134,14 +135,16 @@ class PostMixin {
 //      return emptyBox();
 //  }
 
-  Widget postOptions(
-      {context,
-      onOpenOptions,
-      appLanguage,
-      postOwnerId,
-      currentUserId,
-      isFavorite,
-      postImages}) {
+  Widget postOptions({
+    context,
+    onOpenOptions,
+    appLanguage,
+    postOwnerId,
+    currentUserId,
+    isFavorite,
+    postImages,
+    post,
+  }) {
     return Container(
       width: 45.0,
       child: FlatButton(
@@ -155,6 +158,7 @@ class PostMixin {
             postOwnerId,
             isFavorite,
             postImages,
+            post,
           );
         },
         child: Container(
