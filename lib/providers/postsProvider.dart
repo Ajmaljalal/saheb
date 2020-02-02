@@ -8,16 +8,16 @@ import '../util/uuid.dart';
 final Firestore db = Firestore.instance;
 
 class PostsProvider with ChangeNotifier {
-  addOnePost({
+  Future<void> addOnePost({
     owner,
     id,
     date,
     text,
     location,
     images,
-  }) {
+  }) async {
     try {
-      db.collection('posts').document(id).setData(
+      await db.collection('posts').document(id).setData(
         {
           'id': id,
           'comments': [],
@@ -40,15 +40,15 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  saveRecordSnapshot({
+  Future<void> saveRecordSnapshot({
     id,
     date,
     location,
     type,
     collection,
-  }) {
+  }) async {
     try {
-      db.collection(collection).document(id).setData(
+      await db.collection(collection).document(id).setData(
         {
           'date': date,
           'location': location,
@@ -60,7 +60,7 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  editOnePost({
+  Future<void> editOnePost({
     postId,
     owner,
     text,
@@ -77,10 +77,11 @@ class PostsProvider with ChangeNotifier {
     promoStartDate,
     promoEndDate,
     promoMoneyAmount,
-  }) {
+  }) async {
     try {
-      db.collection('posts').document(postId).setData(
+      await db.collection('posts').document(postId).setData(
         {
+          'id': postId,
           'comments': comments,
           'date': date,
           'favorites': favorites,
@@ -103,7 +104,7 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  addOneAdvert({
+  Future<void> addOneAdvert({
     id,
     date,
     owner,
@@ -115,9 +116,9 @@ class PostsProvider with ChangeNotifier {
     phone,
     images,
     location,
-  }) {
+  }) async {
     try {
-      db.collection('adverts').document(id).setData(
+      await db.collection('adverts').document(id).setData(
         {
           'id': id,
           'date': date,
@@ -143,7 +144,7 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  addOneService({
+  Future<void> addOneService({
     id,
     date,
     owner,
@@ -155,9 +156,9 @@ class PostsProvider with ChangeNotifier {
     phone,
     images,
     location,
-  }) {
+  }) async {
     try {
-      db.collection('services').document(id).setData(
+      await db.collection('services').document(id).setData(
         {
           'id': id,
           'date': date,
@@ -185,7 +186,7 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  deleteOneRecord(postId, collection, images) async {
+  Future<void> deleteOneRecord(postId, collection, images) async {
     try {
       await db.collection(collection).document(postId).delete();
       if (images != null) {
@@ -196,10 +197,10 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  favoriteAPost(postId, collection, userId, isFavorite) async {
+  Future<void> favoriteAPost(postId, collection, userId, isFavorite) async {
     if (isFavorite) {
       try {
-        db.collection(collection).document(postId).updateData(
+        await db.collection(collection).document(postId).updateData(
           {
             'favorites': FieldValue.arrayRemove(
               [userId],
@@ -211,7 +212,7 @@ class PostsProvider with ChangeNotifier {
       }
     } else {
       try {
-        db.collection(collection).document(postId).updateData(
+        await db.collection(collection).document(postId).updateData(
           {
             'favorites': FieldValue.arrayUnion(
               [userId],
@@ -224,9 +225,9 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  hideAPost(postId, collection, userId) async {
+  Future<void> hideAPost(postId, collection, userId) async {
     try {
-      db.collection(collection).document(postId).updateData(
+      await db.collection(collection).document(postId).updateData(
         {
           'hiddenFrom': FieldValue.arrayUnion(
             [userId],
@@ -238,9 +239,9 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  reportAPost(post, postId) {
+  Future<void> reportAPost(post, postId) async {
     try {
-      db.collection('reported').document(postId).setData({
+      await db.collection('reported').document(postId).setData({
         'id': post['id'],
         'text': post['text'],
         'images': post['images'],
@@ -309,15 +310,15 @@ class PostsProvider with ChangeNotifier {
     return dataStream;
   }
 
-  updatePostLikes(
+  Future<void> updatePostLikes(
     String postId,
     collection,
     userId,
     isLiked,
-  ) {
+  ) async {
     if (isLiked) {
       try {
-        db.collection(collection).document(postId).updateData(
+        await db.collection(collection).document(postId).updateData(
           {
             'likes': FieldValue.arrayRemove(
               [userId],
@@ -329,7 +330,7 @@ class PostsProvider with ChangeNotifier {
       }
     } else {
       try {
-        db.collection(collection).document(postId).updateData(
+        await db.collection(collection).document(postId).updateData(
           {
             'likes': FieldValue.arrayUnion(
               [userId],
@@ -342,14 +343,14 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  addCommentOnPost({
+  Future<void> addCommentOnPost({
     String postId,
     String text,
     Map user,
     String collection,
-  }) {
+  }) async {
     try {
-      db.collection(collection).document(postId).updateData(
+      await db.collection(collection).document(postId).updateData(
         {
           'comments': FieldValue.arrayUnion(
             [
@@ -369,7 +370,7 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  updateCommentLikes({
+  Future<void> updateCommentLikes({
     String postId,
     postComment,
     collection,
@@ -414,13 +415,13 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  deleteComment({
+  Future<void> deleteComment({
     String postId,
     postComment,
     collection,
-  }) {
+  }) async {
     try {
-      db.collection(collection).document(postId).updateData(
+      await db.collection(collection).document(postId).updateData(
         {
           'comments': FieldValue.arrayRemove(
             [
@@ -452,13 +453,13 @@ class PostsProvider with ChangeNotifier {
     return dataStream;
   }
 
-  toggleServiceOpenClose({
+  Future<void> toggleServiceOpenClose({
     serviceId,
     userId,
     openClose,
-  }) {
+  }) async {
     try {
-      db.collection('services').document(serviceId).updateData(
+      await db.collection('services').document(serviceId).updateData(
         {
           'open': openClose,
         },
@@ -480,7 +481,7 @@ class PostsProvider with ChangeNotifier {
     return dataStream;
   }
 
-  replyToAConversation({
+  Future<void> replyToAConversation({
     String userId,
     String messageReceiverUserId,
     String messageId,
@@ -554,7 +555,7 @@ class PostsProvider with ChangeNotifier {
     return dataStream;
   }
 
-  startNewConversation({
+  Future<void> startNewConversation({
     String messageReceiverUserId,
     String ownerLocation,
     String userId,
@@ -564,9 +565,9 @@ class PostsProvider with ChangeNotifier {
     String text,
     initiator,
     aboutWhat,
-  }) {
+  }) async {
     try {
-      db
+      await db
           .collection('messages')
           .document(userId)
           .collection('chat-rooms')
@@ -589,7 +590,7 @@ class PostsProvider with ChangeNotifier {
         },
       );
 
-      db
+      await db
           .collection('messages')
           .document(messageReceiverUserId)
           .collection('chat-rooms')
@@ -620,7 +621,7 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  deleteAChatRoom({
+  Future<void> deleteAChatRoom({
     String userId,
     String messageId,
   }) async {
@@ -656,7 +657,7 @@ class PostsProvider with ChangeNotifier {
     try {
       final user = db.collection('users').document(userId);
       if (user != null) {
-        user.setData(
+        await user.setData(
           {'$field': value},
           merge: true,
         );

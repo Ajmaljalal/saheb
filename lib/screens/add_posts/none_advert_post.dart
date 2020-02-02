@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:com.pywast.pywast/util/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,7 @@ import '../../mixins/add_post.dart';
 import '../../widgets/emptyBox.dart';
 
 class NoneAdvertPost extends StatefulWidget {
-  final Map post;
+  final DocumentSnapshot post;
   final postId;
   final bool edit;
   final province;
@@ -205,6 +206,13 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       promoStartDate: post['promoStartDate'],
       promoEndDate: post['promoEndDate'],
       promoMoneyAmount: post['promoMoneyAmount'],
+    );
+
+    await Provider.of<PostsProvider>(context, listen: false).saveRecordSnapshot(
+      id: widget.postId,
+      date: post['date'],
+      location: _location,
+      collection: 'ids_posts', // Make sure this is the RIGHT COLLECTION
     );
 
     Navigator.of(context).pop();

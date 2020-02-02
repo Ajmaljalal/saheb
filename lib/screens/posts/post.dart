@@ -1,3 +1,4 @@
+import 'package:com.pywast.pywast/widgets/progressIndicators.dart';
 import 'package:com.pywast.pywast/widgets/wait.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -85,11 +86,12 @@ class _PostState extends State<Post> with PostMixin {
 
     await Provider.of<PostsProvider>(context)
         .deleteOneRecord(widget.postId, 'posts', images);
-    renderFlashBar(message);
-
-    setState(() {
-      postDeleting = false;
-    });
+    if (mounted) {
+      setState(() {
+        postDeleting = false;
+      });
+      renderFlashBar(message);
+    }
   }
 
   favoriteAPost(userId, message, isFavorite) {
@@ -160,89 +162,111 @@ class _PostState extends State<Post> with PostMixin {
               if (!snapshot.hasData) {
                 return wait(appLanguage['wait'], context);
               }
+              if (snapshot.hasError) {
+                return emptyBox();
+              }
               var _post = snapshot.data;
-              return Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  decoration: BoxDecoration(),
-                  child: Card(
-                    elevation: 0.0,
-                    color: Colors.white,
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 3.0,
-                      horizontal: 1.0,
-                    ),
-                    child: Column(
+              return _buildPostContent(
+                context: context,
+                post: _post,
+                appLanguage: appLanguage,
+                currentUserId: currentUserId,
+                postId: postId,
+                fontSize: fontSize,
+              );
+            },
+          )
+        : emptyBox();
+  }
+
+  Widget _buildPostContent({
+    BuildContext context,
+    post,
+    appLanguage,
+    currentUserId,
+    postId,
+    fontSize,
+  }) {
+    return post != null
+        ? Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 1,
+              decoration: BoxDecoration(),
+              child: Card(
+                elevation: 0.0,
+                color: Colors.white,
+                margin: const EdgeInsets.symmetric(
+                  vertical: 3.0,
+                  horizontal: 1.0,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: kSpaceBetween,
+                      crossAxisAlignment: kStart,
                       children: <Widget>[
-                        Row(
-                          mainAxisAlignment: kSpaceBetween,
-                          crossAxisAlignment: kStart,
-                          children: <Widget>[
-                            cardHeader(_post),
-                            postOptions(
-                              context: context,
-                              onOpenOptions: showPostOptions,
-                              appLanguage: appLanguage,
-                              postOwnerId: _post['owner']['id'],
-                              currentUserId: currentUserId,
-                              isFavorite:
-                                  _post['favorites'].contains(currentUserId),
-                              postImages: _post['images'],
-                              post: _post,
-                            ),
-                          ],
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            goToDetailsScreen(postId, _post['title']);
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              postTittleHolder(
-                                  _post['title'], fontSize, context),
-                              postContent(
-                                  text: _post['text'],
-                                  images: _post['images'],
-                                  flag: revealMoreTextFlag,
-                                  onRevealMoreText: _revealMoreText,
-                                  appLanguage: appLanguage,
-                                  context: context,
-                                  imagesScrollView: Axis.horizontal,
-                                  fontSize: fontSize,
-                                  postDate: _post['date']),
-                            ],
-                          ),
-                        ),
-                        postLikesCommentsCountHolder(
-                          post: _post,
-                          appLanguage: appLanguage,
-                          userId: currentUserId,
-                          isLiked: _post['likes'].contains(currentUserId)
-                              ? true
-                              : false,
-                        ),
-                        kHorizontalDivider,
-                        postActionButtons(
-                          onClickComment: goToDetailsScreen,
-                          postId: widget.postId,
-                          userId: currentUserId,
-                          post: _post,
-                          postTitle: _post['title'],
-                          flag: 'post',
-                          updateLikes: updateLikes,
+                        cardHeader(post),
+                        postOptions(
                           context: context,
-                          isLiked: _post['likes'].contains(currentUserId)
-                              ? true
-                              : false,
+                          onOpenOptions: showPostOptions,
+                          appLanguage: appLanguage,
+                          postOwnerId: post['owner']['id'],
+                          currentUserId: currentUserId,
+                          isFavorite: post['favorites'].contains(currentUserId),
+                          postImages: post['images'],
+                          post: post,
                         ),
                       ],
                     ),
-                  ),
+                    GestureDetector(
+                      onTap: () {
+                        goToDetailsScreen(postId, post['title']);
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          postTittleHolder(
+                            post['title'],
+                            fontSize,
+                            context,
+                          ),
+                          postContent(
+                              text: post['text'],
+                              images: post['images'],
+                              flag: revealMoreTextFlag,
+                              onRevealMoreText: _revealMoreText,
+                              appLanguage: appLanguage,
+                              context: context,
+                              imagesScrollView: Axis.horizontal,
+                              fontSize: fontSize,
+                              postDate: post['date']),
+                        ],
+                      ),
+                    ),
+                    postLikesCommentsCountHolder(
+                      post: post,
+                      appLanguage: appLanguage,
+                      userId: currentUserId,
+                      isLiked:
+                          post['likes'].contains(currentUserId) ? true : false,
+                    ),
+                    kHorizontalDivider,
+                    postActionButtons(
+                      onClickComment: goToDetailsScreen,
+                      postId: widget.postId,
+                      userId: currentUserId,
+                      post: post,
+                      postTitle: post['title'],
+                      flag: 'post',
+                      updateLikes: updateLikes,
+                      context: context,
+                      isLiked:
+                          post['likes'].contains(currentUserId) ? true : false,
+                    ),
+                  ],
                 ),
-              );
-              ;
-            },
+              ),
+            ),
           )
         : emptyBox();
   }

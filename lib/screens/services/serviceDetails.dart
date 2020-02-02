@@ -160,77 +160,99 @@ class _ServiceDetailsState extends State<ServiceDetails>
                   '${shamsiDate.formatter.d.toString()}   ${shamsiDate.formatter.mN}';
               final serviceFirstImage =
                   service['images'].length > 0 ? service['images'][0] : 'null';
-              return SingleChildScrollView(
-                child: Container(
-                  constraints: BoxConstraints(
-                    minWidth: MediaQuery.of(context).size.width * 1,
-                    minHeight: MediaQuery.of(context).size.height * 1,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      _buildServiceImages(service['images']),
-                      const EmptySpace(height: 5.0),
-                      _buildServiceTitle(
-                        title: service['title'],
-                        fontSize: fontSize,
-                      ),
-                      _buildServiceDateAndLocation(
-                        Icons.my_location,
-                        service['location'],
-                        serviceDate,
-                        service['fullAddress'],
-                      ),
-                      const EmptySpace(height: 15.0),
-                      _buildServiceOpenCloseState(
-                        isOwner: isOwner,
-                        open: service['open'],
-                        openText: appLanguage['openNow'],
-                        closeText: appLanguage['closeNow'],
-                        userId: userId,
-                        serviceType: service['type'],
-                      ),
-                      const EmptySpace(height: 15.0),
-                      isOwner
-                          ? _buildCallToActionButtonsForOwner(
-                              context: context,
-                              appLanguage: appLanguage,
-                              onDelete: deletePost,
-                              serviceImages: service['images'],
-                            )
-                          : _buildCallToActionButtons(
-                              context: context,
-                              owner: service['owner'],
-                              userId: userId,
-                              appLanguage: appLanguage,
-                              servicePhoto: serviceFirstImage,
-                              isFavorite: service['favorites'].contains(userId),
-                              phoneNumber: service['phone'],
-                              onFavorite: favoriteAPost,
-                            ),
-                      const EmptySpace(height: 10.0),
-                      horizontalDividerIndented(),
-                      _buildServiceDescription(
-                        appLanguage['serviceDescription'],
-                        service['desc'],
-                        fontSize,
-                      ),
-                      const EmptySpace(height: 10.0),
-                      !isOwner
-                          ? _buildServiceOwnerDetails(
-                              owner: service['owner'],
-                              appLanguage: appLanguage,
-                              fontSize: fontSize,
-                            )
-                          : emptyBox(),
-                      const EmptySpace(height: 10.0),
-                    ],
-                  ),
-                ),
+              return _buildServiceContent(
+                context: context,
+                service: service,
+                fontSize: fontSize,
+                serviceDate: serviceDate,
+                isOwner: isOwner,
+                appLanguage: appLanguage,
+                userId: userId,
+                serviceFirstImage: serviceFirstImage,
               );
             },
           )
         : wait(appLanguage['wait'], context);
+  }
+
+  Widget _buildServiceContent({
+    BuildContext context,
+    service,
+    fontSize,
+    String serviceDate,
+    bool isOwner,
+    appLanguage,
+    userId,
+    serviceFirstImage,
+  }) {
+    return SingleChildScrollView(
+      child: Container(
+        constraints: BoxConstraints(
+          minWidth: MediaQuery.of(context).size.width * 1,
+          minHeight: MediaQuery.of(context).size.height * 1,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            _buildServiceImages(service['images']),
+            const EmptySpace(height: 5.0),
+            _buildServiceTitle(
+              title: service['title'],
+              fontSize: fontSize,
+            ),
+            _buildServiceDateAndLocation(
+              Icons.my_location,
+              service['location'],
+              serviceDate,
+              service['fullAddress'],
+            ),
+            const EmptySpace(height: 15.0),
+            _buildServiceOpenCloseState(
+              isOwner: isOwner,
+              open: service['open'],
+              openText: appLanguage['openNow'],
+              closeText: appLanguage['closeNow'],
+              userId: userId,
+              serviceType: service['type'],
+            ),
+            const EmptySpace(height: 15.0),
+            isOwner
+                ? _buildCallToActionButtonsForOwner(
+                    context: context,
+                    appLanguage: appLanguage,
+                    onDelete: deletePost,
+                    serviceImages: service['images'],
+                  )
+                : _buildCallToActionButtons(
+                    context: context,
+                    owner: service['owner'],
+                    userId: userId,
+                    appLanguage: appLanguage,
+                    servicePhoto: serviceFirstImage,
+                    isFavorite: service['favorites'].contains(userId),
+                    phoneNumber: service['phone'],
+                    onFavorite: favoriteAPost,
+                  ),
+            const EmptySpace(height: 10.0),
+            horizontalDividerIndented(),
+            _buildServiceDescription(
+              appLanguage['serviceDescription'],
+              service['desc'],
+              fontSize,
+            ),
+            const EmptySpace(height: 10.0),
+            !isOwner
+                ? _buildServiceOwnerDetails(
+                    owner: service['owner'],
+                    appLanguage: appLanguage,
+                    fontSize: fontSize,
+                  )
+                : emptyBox(),
+            const EmptySpace(height: 10.0),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildServiceImages(List<dynamic> images) {
