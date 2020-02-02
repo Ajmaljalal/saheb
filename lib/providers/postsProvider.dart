@@ -10,15 +10,18 @@ final Firestore db = Firestore.instance;
 class PostsProvider with ChangeNotifier {
   addOnePost({
     owner,
+    id,
+    date,
     text,
     location,
     images,
   }) {
     try {
-      db.collection('posts').add(
+      db.collection('posts').document(id).setData(
         {
+          'id': id,
           'comments': [],
-          'date': DateTime.now(),
+          'date': date,
           'favorites': [],
           'hiddenFrom': [],
           'likes': [],
@@ -30,6 +33,26 @@ class PostsProvider with ChangeNotifier {
           'promoStartDate': null,
           'promoEndDate': null,
           'promoMoneyAmount': 0,
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  saveRecordSnapshot({
+    id,
+    date,
+    location,
+    type,
+    collection,
+  }) {
+    try {
+      db.collection(collection).document(id).setData(
+        {
+          'date': date,
+          'location': location,
+          'type': type,
         },
       );
     } catch (e) {
@@ -81,6 +104,8 @@ class PostsProvider with ChangeNotifier {
   }
 
   addOneAdvert({
+    id,
+    date,
     owner,
     text,
     title,
@@ -92,9 +117,10 @@ class PostsProvider with ChangeNotifier {
     location,
   }) {
     try {
-      db.collection('adverts').add(
+      db.collection('adverts').document(id).setData(
         {
-          'date': DateTime.now(),
+          'id': id,
+          'date': date,
           'owner': owner,
           'text': text,
           'title': title,
@@ -118,6 +144,8 @@ class PostsProvider with ChangeNotifier {
   }
 
   addOneService({
+    id,
+    date,
     owner,
     desc,
     title,
@@ -129,9 +157,10 @@ class PostsProvider with ChangeNotifier {
     location,
   }) {
     try {
-      db.collection('services').add(
+      db.collection('services').document(id).setData(
         {
-          'date': DateTime.now(),
+          'id': id,
+          'date': date,
           'owner': owner,
           'desc': desc,
           'open': true,
@@ -159,7 +188,9 @@ class PostsProvider with ChangeNotifier {
   deleteOneRecord(postId, collection, images) async {
     try {
       await db.collection(collection).document(postId).delete();
-      await deleteImagesFromDB(images: images, collection: collection);
+      if (images != null) {
+        await deleteImagesFromDB(images: images, collection: collection);
+      }
     } catch (e) {
       print(e.toString());
     }
@@ -209,17 +240,62 @@ class PostsProvider with ChangeNotifier {
 
   reportAPost(post, postId) {
     try {
-      db.collection('reported').document(postId).setData(
-            post,
-          );
+      db.collection('reported').document(postId).setData({
+        'id': post['id'],
+        'text': post['text'],
+        'images': post['images'],
+        'owner': post['owner']['id'],
+      });
     } catch (e) {
       print(e.toString());
     }
   }
 
-  Stream<QuerySnapshot> getAllPosts(String collection) {
+  Stream<QuerySnapshot> getAllPosts(
+    String collection,
+  ) {
     final dataStream =
         db.collection(collection).orderBy("date", descending: true).snapshots();
+    return dataStream;
+  }
+
+  Stream<QuerySnapshot> getMorePosts(
+    String collection,
+    int numberOfPosts,
+    currentLastPostId,
+//    String location,
+  ) {
+    final dataStream = db
+        .collection(collection)
+        .orderBy("date", descending: true)
+        .startAfterDocument(currentLastPostId)
+//        .where('location', isEqualTo: location)
+        .limit(numberOfPosts)
+        .snapshots();
+    return dataStream;
+  }
+
+  Stream<QuerySnapshot> getAllSnapshots(
+    String collection,
+  ) {
+    final dataStream = db
+        .collection(collection)
+        .orderBy("date", descending: true)
+//        .where('location', isEqualTo: location)
+        .limit(10)
+        .snapshots();
+    return dataStream;
+  }
+
+  Stream<QuerySnapshot> getInitialPosts(
+    String collection,
+    int numberOfPosts,
+  ) {
+    final dataStream = db
+        .collection(collection)
+        .orderBy("date", descending: true)
+        .limit(numberOfPosts)
+        .snapshots();
     return dataStream;
   }
 

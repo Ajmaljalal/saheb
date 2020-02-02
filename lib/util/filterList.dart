@@ -1,3 +1,20 @@
+filterListBasedOnLocation({posts, currentFilterOption, currentUserId}) {
+  var filteredPosts = posts;
+
+  if (currentFilterOption.toLowerCase() == 'افغانستان') {
+    return filteredPosts;
+  }
+
+  filteredPosts = filteredPosts
+      .where(
+        (post) => post['location'].toString().toLowerCase().contains(
+              currentFilterOption.toLowerCase(),
+            ),
+      )
+      .toList();
+  return filteredPosts;
+}
+
 filterList({
   List posts,
   appBarSearchString,
@@ -27,15 +44,6 @@ filterList({
           .toList();
     }
     if (currentFilterOption.toLowerCase() == 'افغانستان') {
-      filteredPosts = filteredPosts
-          .where(
-            (post) =>
-                (post['advert']['hiddenFrom']
-                    .toList()
-                    .contains(currentUserId.toString())) ==
-                false,
-          )
-          .toList();
       return filteredPosts;
     }
 
@@ -169,6 +177,7 @@ filterList({
                 false,
           )
           .toList();
+      print('end');
       return filteredPosts;
     }
 
@@ -221,7 +230,6 @@ filterList({
                 .contains(currentUserId.toString())) ==
             false)
         .toList();
-
     return filteredPosts;
   }
 

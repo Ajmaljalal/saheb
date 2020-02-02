@@ -107,6 +107,7 @@ class _PostDetailsState extends State<PostDetails> with PostMixin {
     final currentUserId = Provider.of<AuthProvider>(context).userId;
     final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
     double fontSize = currentLanguage == 'English' ? 15.0 : 17.0;
+    print('id: $postId');
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40.0),

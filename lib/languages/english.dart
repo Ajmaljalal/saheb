@@ -32,6 +32,7 @@ Map english = {
   'messageSent': 'Message sent, please follow up in the messages section.',
   'description': 'Description',
   'serviceDescription': 'More information',
+  'loadMore': 'Load more',
 
   ////////////////// Login and sign up //////////////////////
   'login': 'LOGIN',

@@ -50,6 +50,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
       advertDeleted = true;
     });
     Navigator.pop(context);
+    Provider.of<PostsProvider>(context)
+        .deleteOneRecord(widget.advertId, 'ids_adverts', null);
     renderFlashBar(message);
     await Provider.of<PostsProvider>(context)
         .deleteOneRecord(widget.advertId, 'adverts', images);
@@ -90,7 +92,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
     if (text != null && text.length == 0) {
       return;
     }
-    if(text == null) {
+    if (text == null) {
       text = sampleText;
     }
     final initiator = {
@@ -325,7 +327,7 @@ class _AdvertDetailsState extends State<AdvertDetails>
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Text(
-            price.toString() != null ? price : noPrice,
+            price != 'null' ? price : noPrice,
             style: TextStyle(
               color: Colors.cyan,
               fontSize: price.toString() != 'null' ? 17.0 : 15.0,
@@ -400,7 +402,8 @@ class _AdvertDetailsState extends State<AdvertDetails>
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         _buildSendMessageInputField(
-                            appLanguage['stillAvailable'],),
+                          appLanguage['stillAvailable'],
+                        ),
                         customButton(
                           appLanguage: appLanguage,
                           context: context,

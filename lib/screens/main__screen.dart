@@ -102,6 +102,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  // TODO: send currentUserId, userLocality, appLanguage to all other screens from here
   _returnCurrentScreen(currentIndex, userProvince) {
     if (currentIndex == 0) {
       return Posts(
@@ -130,10 +131,14 @@ class _MainScreenState extends State<MainScreen> {
         _currentScreenIndex == 1 ||
         _currentScreenIndex == 2;
     final appLanguage = getLanguages(context);
-    final currentLanguage = Provider.of<LanguageProvider>(context).getLanguage;
-    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
-    final userProvince = Provider.of<LocationProvider>(context).getUserProvince;
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
+    final currentLanguage =
+        Provider.of<LanguageProvider>(context, listen: false).getLanguage;
+    final userLocality =
+        Provider.of<LocationProvider>(context, listen: false).getUserLocality;
+    final userProvince =
+        Provider.of<LocationProvider>(context, listen: false).getUserProvince;
+    final currentUserId =
+        Provider.of<AuthProvider>(context, listen: false).userId;
     final double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
     return userLocality != null && userProvince != null
         ? Scaffold(

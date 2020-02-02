@@ -32,6 +32,7 @@ Map pashto = {
   'messageSent': 'پیغام واستول شو، د پیغامونو برخه کې ادامه ورکړئ.',
   'description': 'مشخصات',
   'serviceDescription': 'نور تفصیلات',
+  'loadMore': 'نور',
 
   /////////////////// Login and sign up  ////////////////
   'login': 'ننوځه!',
