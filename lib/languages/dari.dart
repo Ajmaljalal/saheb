@@ -28,6 +28,7 @@ Map dari = {
   'messageSent': 'پیام ارسال شد، در بخش پیام های خود می توانید ادامه دهید.',
   'description': 'مشخصات',
   'serviceDescription': 'تفصیلات بیشتر',
+  'loadMore': 'بیشتر',
 
   ///////////// Login and sign up /////////////////////////
   'login': 'ورود',

@@ -40,10 +40,11 @@ class PostsProvider with ChangeNotifier {
     }
   }
 
-  savePostSnapshot({
+  saveRecordSnapshot({
     id,
     date,
     location,
+    type,
     collection,
   }) {
     try {
@@ -51,6 +52,7 @@ class PostsProvider with ChangeNotifier {
         {
           'date': date,
           'location': location,
+          'type': type,
         },
       );
     } catch (e) {
@@ -102,6 +104,8 @@ class PostsProvider with ChangeNotifier {
   }
 
   addOneAdvert({
+    id,
+    date,
     owner,
     text,
     title,
@@ -113,9 +117,10 @@ class PostsProvider with ChangeNotifier {
     location,
   }) {
     try {
-      db.collection('adverts').add(
+      db.collection('adverts').document(id).setData(
         {
-          'date': DateTime.now(),
+          'id': id,
+          'date': date,
           'owner': owner,
           'text': text,
           'title': title,
@@ -139,6 +144,8 @@ class PostsProvider with ChangeNotifier {
   }
 
   addOneService({
+    id,
+    date,
     owner,
     desc,
     title,
@@ -150,9 +157,10 @@ class PostsProvider with ChangeNotifier {
     location,
   }) {
     try {
-      db.collection('services').add(
+      db.collection('services').document(id).setData(
         {
-          'date': DateTime.now(),
+          'id': id,
+          'date': date,
           'owner': owner,
           'desc': desc,
           'open': true,
@@ -245,13 +253,23 @@ class PostsProvider with ChangeNotifier {
 
   Stream<QuerySnapshot> getAllPosts(
     String collection,
+  ) {
+    final dataStream =
+        db.collection(collection).orderBy("date", descending: true).snapshots();
+    return dataStream;
+  }
+
+  Stream<QuerySnapshot> getMorePosts(
+    String collection,
     int numberOfPosts,
     currentLastPostId,
+//    String location,
   ) {
     final dataStream = db
         .collection(collection)
         .orderBy("date", descending: true)
         .startAfterDocument(currentLastPostId)
+//        .where('location', isEqualTo: location)
         .limit(numberOfPosts)
         .snapshots();
     return dataStream;
@@ -263,7 +281,8 @@ class PostsProvider with ChangeNotifier {
     final dataStream = db
         .collection(collection)
         .orderBy("date", descending: true)
-        .limit(20)
+//        .where('location', isEqualTo: location)
+        .limit(10)
         .snapshots();
     return dataStream;
   }

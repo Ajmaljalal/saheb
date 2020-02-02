@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:async';
+import 'package:com.pywast.pywast/util/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -134,15 +135,21 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
       return;
     }
 
+    final newServiceId = Uuid().generateV4();
+    final newServiceDate = DateTime.now();
+
     setState(() {
       serviceSavingInProgress = true;
     });
+
     await Future.wait(uploadAllImages(_images));
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
         Provider.of<AuthProvider>(context, listen: false).userId;
     final userLocation = Provider.of<LocationProvider>(context).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOneService(
+      id: newServiceId,
+      date: newServiceDate,
       type: _typeOfService,
       desc: _desc,
       title: _title,
@@ -157,6 +164,14 @@ class _ServicePostState extends State<ServicePost> with AddPostMixin {
         'photo': user.photoUrl,
       },
       images: _uploadedFileUrl,
+    );
+
+    await Provider.of<PostsProvider>(context, listen: false).saveRecordSnapshot(
+      id: newServiceId,
+      date: newServiceDate,
+      location: _location,
+      type: _typeOfService,
+      collection: 'ids_services',
     );
 
     Navigator.of(context).pop();

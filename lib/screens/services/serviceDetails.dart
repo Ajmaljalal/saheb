@@ -43,6 +43,8 @@ class _ServiceDetailsState extends State<ServiceDetails>
       serviceDeleted = true;
     });
     Navigator.pop(context);
+    Provider.of<PostsProvider>(context)
+        .deleteOneRecord(widget.serviceId, 'ids_services', null);
     renderFlashBar(message);
     await Provider.of<PostsProvider>(context).deleteOneRecord(
       widget.serviceId,
@@ -305,12 +307,14 @@ class _ServiceDetailsState extends State<ServiceDetails>
               ),
             ],
           ),
-          Text(
-            serviceFullAddress,
-            textDirection: isRTL(serviceFullAddress)
-                ? TextDirection.rtl
-                : TextDirection.ltr,
-          ),
+          serviceFullAddress != null
+              ? Text(
+                  serviceFullAddress,
+                  textDirection: isRTL(serviceFullAddress)
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                )
+              : emptyBox(),
         ],
       ),
     );

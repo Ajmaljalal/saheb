@@ -27,6 +27,9 @@ class Market extends StatefulWidget {
 class _MarketState extends State<Market> {
   String currentFilterOption;
   int currentOptionId = 1;
+  var appLanguage;
+  String currentUserId;
+  String userLocality;
 
   handleFilterOptionsChange(text, id) {
     setState(() {
@@ -37,9 +40,18 @@ class _MarketState extends State<Market> {
 
   @override
   Widget build(BuildContext context) {
-    final appLanguage = getLanguages(context);
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
+    if (currentFilterOption == null &&
+        currentUserId == null &&
+        userLocality == null) {
+      setState(() {
+        userLocality = Provider.of<LocationProvider>(context, listen: false)
+            .getUserLocality;
+        appLanguage = getLanguages(context);
+        currentUserId =
+            Provider.of<AuthProvider>(context, listen: false).userId;
+        currentFilterOption = userLocality;
+      });
+    }
     if (currentFilterOption == null) {
       setState(() {
         currentFilterOption = userLocality;
@@ -51,8 +63,7 @@ class _MarketState extends State<Market> {
         children: <Widget>[
           filterOptions(appLanguage, userLocality),
           StreamBuilder(
-            stream: Provider.of<PostsProvider>(context)
-                .getAllPosts('adverts', null, null),
+            stream: Provider.of<PostsProvider>(context).getAllPosts('adverts'),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return wait(appLanguage['wait'], context);

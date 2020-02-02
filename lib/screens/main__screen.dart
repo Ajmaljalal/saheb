@@ -102,6 +102,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  // TODO: send currentUserId, userLocality, appLanguage to all other screens from here
   _returnCurrentScreen(currentIndex, userProvince) {
     if (currentIndex == 0) {
       return Posts(

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:ui';
+import 'package:com.pywast.pywast/util/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -134,15 +135,21 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       );
       return;
     }
+    final newAdvertId = Uuid().generateV4();
+    final newAdvertDate = DateTime.now();
     setState(() {
       advertSavingInProgress = true;
     });
-    await Future.wait(uploadAllImages(_images));
+    if (_images != null) {
+      await Future.wait(uploadAllImages(_images));
+    }
     final user = await Provider.of<AuthProvider>(context).currentUser;
     final currentUserId =
         Provider.of<AuthProvider>(context, listen: false).userId;
     final userLocation = Provider.of<LocationProvider>(context).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false).addOneAdvert(
+      id: newAdvertId,
+      date: newAdvertDate,
       type: _typOfDeal,
       text: _text,
       title: _title,
@@ -159,6 +166,13 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
       images: _uploadedFileUrl,
     );
 
+    await Provider.of<PostsProvider>(context, listen: false).saveRecordSnapshot(
+      id: newAdvertId,
+      date: newAdvertDate,
+      location: _location,
+      type: _typOfDeal,
+      collection: 'ids_adverts',
+    );
     Navigator.of(context).pop();
   }
 

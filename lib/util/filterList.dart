@@ -43,6 +43,9 @@ filterList({
           )
           .toList();
     }
+    if (currentFilterOption.toLowerCase() == 'افغانستان') {
+      return filteredPosts;
+    }
 
     if (currentFilterOption == appLanguage['myAdverts']) {
       filteredPosts = filteredPosts

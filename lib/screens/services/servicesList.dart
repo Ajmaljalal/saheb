@@ -29,6 +29,10 @@ class _ServicesListState extends State<ServicesList> {
   String currentFilterOption;
   int currentOptionId = 1;
   String searchBarString;
+  var appLanguage;
+  String currentUserId;
+  String userProvince;
+  String userLocality;
 
   handleFilterOptionsChange(text, id) {
     setState(() {
@@ -51,13 +55,16 @@ class _ServicesListState extends State<ServicesList> {
 
   @override
   Widget build(BuildContext context) {
-    final appLanguage = getLanguages(context);
-    final currentUserId = Provider.of<AuthProvider>(context).userId;
-    final userProvince = Provider.of<LocationProvider>(context).getUserProvince;
-    final userLocality = Provider.of<LocationProvider>(context).getUserLocality;
-
-    if (currentFilterOption == null) {
+    if (currentFilterOption == null &&
+        currentUserId == null &&
+        userLocality == null) {
       setState(() {
+        userLocality = Provider.of<LocationProvider>(context, listen: false)
+            .getUserLocality;
+        appLanguage = getLanguages(context);
+        userProvince = Provider.of<LocationProvider>(context).getUserProvince;
+        currentUserId =
+            Provider.of<AuthProvider>(context, listen: false).userId;
         currentFilterOption = userLocality;
       });
     }

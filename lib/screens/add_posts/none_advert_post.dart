@@ -148,7 +148,7 @@ class _NoneAdvertPostState extends State<NoneAdvertPost> with AddPostMixin {
       },
       images: _uploadedFileUrl,
     );
-    await Provider.of<PostsProvider>(context, listen: false).savePostSnapshot(
+    await Provider.of<PostsProvider>(context, listen: false).saveRecordSnapshot(
       id: newPostId,
       date: newPostDate,
       location: _location,

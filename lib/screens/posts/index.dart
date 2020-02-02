@@ -30,12 +30,15 @@ class Posts extends StatefulWidget {
 class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   String currentFilterOption;
   int currentOptionId = 1;
-  static int present = 0;
   int itemsPerPage = 10;
   List posts;
   DocumentSnapshot _lastPost;
   List currentPostsSnapshot = [];
-  List renderedPosts = [];
+  String currentUserId;
+  var appLanguage;
+  var userLocality;
+  bool moreDataLoading = false;
+//  List renderedPosts = [];
 
   handleFilterOptionsChange(text, id) {
     setState(() {
@@ -67,10 +70,15 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
 //  }
 
   void loadMore(appLanguage, currentUserId) {
-    bool request = false;
-    if (!request) {
-      final postsSnapshot = Provider.of<PostsProvider>(context)
-          .getAllPosts('ids_posts', itemsPerPage, _lastPost);
+    setState(() {
+      moreDataLoading = true;
+    });
+    if (moreDataLoading) {
+      final postsSnapshot = Provider.of<PostsProvider>(context).getMorePosts(
+        'ids_posts',
+        itemsPerPage,
+        _lastPost,
+      );
       postsSnapshot.forEach((QuerySnapshot snapshot) {
         List<Map<String, dynamic>> newPosts = List();
         newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
@@ -84,16 +92,15 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
           setState(() {
             currentPostsSnapshot.addAll(newPosts);
             _lastPost = snapshot.documents[snapshot.documents.length - 1];
+            moreDataLoading = false;
           });
         }
       });
     }
-    request = true;
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     Future.delayed(Duration.zero, () {
       final postsSnapshot =
           Provider.of<PostsProvider>(context).getAllSnapshots('ids_posts');
@@ -120,13 +127,15 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final appLanguage = getLanguages(context);
-    final currentUserId =
-        Provider.of<AuthProvider>(context, listen: false).userId;
-    final userLocality =
-        Provider.of<LocationProvider>(context, listen: false).getUserLocality;
-    if (currentFilterOption == null) {
+    if (currentFilterOption == null &&
+        currentUserId == null &&
+        userLocality == null) {
       setState(() {
+        userLocality = Provider.of<LocationProvider>(context, listen: false)
+            .getUserLocality;
+        appLanguage = getLanguages(context);
+        currentUserId =
+            Provider.of<AuthProvider>(context, listen: false).userId;
         currentFilterOption = userLocality;
       });
     }
@@ -136,7 +145,6 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
       currentFilterOption: currentFilterOption,
       currentUserId: currentUserId,
     );
-    print(renderedPosts.length);
 
     return _buildContent(
       appLanguage: appLanguage,
@@ -178,18 +186,27 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
                         );
                       },
                     ),
-                    FlatButton(
-                      onPressed: () => loadMore(
-                        appLanguage,
-                        currentUserId,
+                    Container(
+                      padding: EdgeInsets.all(2.0),
+                      child: RaisedButton(
+                        textColor: Colors.purple,
+                        onPressed: () => loadMore(
+                          appLanguage,
+                          currentUserId,
+                        ),
+                        child: !moreDataLoading
+                            ? Text(
+                                appLanguage['loadMore'],
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              )
+                            : CircularProgressIndicator(),
                       ),
-                      child: Text('load more'),
                     ),
                   ],
                 )
               : noContent(appLanguage['noContent'], context)
-//            },
-//          ),
         ],
       ),
     );
@@ -241,6 +258,5 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
