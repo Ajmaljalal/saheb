@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:com.pywast.pywast/widgets/progressIndicators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
@@ -113,7 +114,7 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
           };
           return post;
         }).toList();
-        if (mounted) {
+        if (mounted && snapshot.documents.length != 0) {
           setState(() {
             currentPostsSnapshot = newPosts;
             _lastPost = snapshot.documents[snapshot.documents.length - 1];
@@ -188,21 +189,21 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
                     ),
                     Container(
                       padding: EdgeInsets.all(2.0),
-                      child: RaisedButton(
-                        textColor: Colors.purple,
-                        onPressed: () => loadMore(
-                          appLanguage,
-                          currentUserId,
-                        ),
-                        child: !moreDataLoading
-                            ? Text(
+                      child: !moreDataLoading
+                          ? RaisedButton(
+                              textColor: Colors.purple,
+                              onPressed: () => loadMore(
+                                appLanguage,
+                                currentUserId,
+                              ),
+                              child: Text(
                                 appLanguage['loadMore'],
                                 style: TextStyle(
                                   fontSize: 18.0,
                                 ),
-                              )
-                            : CircularProgressIndicator(),
-                      ),
+                              ),
+                            )
+                          : circularProgressIndicator(),
                     ),
                   ],
                 )
