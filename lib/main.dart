@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:com.pywast.pywast/screens/add_posts/none_advert_post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -16,7 +17,13 @@ import './screens/posts/postDetails.dart';
 import './screens/services/servicesList.dart';
 import './screens/services/serviceDetails.dart';
 
-void main() => runApp(MainApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firestore.instance.settings(persistenceEnabled: false);
+  runApp(
+    MainApp(),
+  );
+}
 
 class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {

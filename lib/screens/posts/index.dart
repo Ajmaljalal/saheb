@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:com.pywast.pywast/widgets/emptySpace.dart';
 import 'package:com.pywast.pywast/widgets/progressIndicators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -175,12 +176,6 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
                       itemCount: filteredPosts.length,
                       itemBuilder: (context, index) {
                         final postId = filteredPosts[index]['id'];
-//                        renderedPosts.add(Post(
-//                          postId: postId,
-//                          usersProvince: widget.usersProvince,
-//                        ));
-
-//                        return renderedPosts[index];
                         return Post(
                           postId: postId,
                           usersProvince: widget.usersProvince,
@@ -188,19 +183,31 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
                       },
                     ),
                     Container(
-                      padding: EdgeInsets.all(2.0),
+                      padding: const EdgeInsets.all(2.0),
+                      width: 150.0,
                       child: !moreDataLoading
                           ? RaisedButton(
+                              color: Colors.white,
                               textColor: Colors.purple,
                               onPressed: () => loadMore(
                                 appLanguage,
                                 currentUserId,
                               ),
-                              child: Text(
-                                appLanguage['loadMore'],
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  Text(
+                                    appLanguage['loadMore'],
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                  EmptySpace(
+                                    width: 5.0,
+                                  ),
+                                  Icon(Icons.more_horiz),
+                                ],
                               ),
                             )
                           : circularProgressIndicator(),
