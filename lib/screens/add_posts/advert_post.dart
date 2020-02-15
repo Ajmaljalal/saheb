@@ -126,7 +126,8 @@ class _AdvertPostState extends State<AdvertPost> with AddPostMixin {
     }
     if ((_text == null || _text.trim().length == 0) ||
         (_title == null || _title.trim().length == 0) ||
-        _typOfDeal == null) {
+        _typOfDeal == null ||
+        _images.length == 0) {
       showErrorDialog(
         appLanguage['fillOutRequiredSectionsOther'],
         context,

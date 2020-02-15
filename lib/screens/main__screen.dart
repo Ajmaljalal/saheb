@@ -31,6 +31,11 @@ class _MainScreenState extends State<MainScreen> {
   static String _searchBarString;
   static String _currentProvince;
   static String _currentLocality;
+  var appLanguage;
+  String userLocality;
+  String userProvince;
+  String currentUserId;
+  String currentLanguage;
 
   handleSearchBarStringChange(value) {
     setState(() {
@@ -130,15 +135,35 @@ class _MainScreenState extends State<MainScreen> {
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
         _currentScreenIndex == 1 ||
         _currentScreenIndex == 2;
-    final appLanguage = getLanguages(context);
-    final currentLanguage =
-        Provider.of<LanguageProvider>(context, listen: false).getLanguage;
-    final userLocality =
-        Provider.of<LocationProvider>(context, listen: false).getUserLocality;
-    final userProvince =
-        Provider.of<LocationProvider>(context, listen: false).getUserProvince;
-    final currentUserId =
-        Provider.of<AuthProvider>(context, listen: false).userId;
+    if (appLanguage == null) {
+      setState(() {
+        appLanguage = getLanguages(context);
+      });
+    }
+    if (currentUserId == null) {
+      setState(() {
+        currentUserId =
+            Provider.of<LanguageProvider>(context, listen: false).getLanguage;
+      });
+    }
+    if (currentLanguage == null) {
+      setState(() {
+        currentLanguage =
+            Provider.of<LanguageProvider>(context, listen: false).getLanguage;
+      });
+    }
+    if (userLocality == null) {
+      setState(() {
+        userLocality = Provider.of<LocationProvider>(context, listen: false)
+            .getUserLocality;
+      });
+    }
+    if (userProvince == null) {
+      setState(() {
+        userProvince = Provider.of<LocationProvider>(context, listen: false)
+            .getUserProvince;
+      });
+    }
     final double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
     return userLocality != null && userProvince != null
         ? Scaffold(

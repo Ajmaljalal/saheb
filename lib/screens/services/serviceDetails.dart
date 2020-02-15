@@ -240,15 +240,15 @@ class _ServiceDetailsState extends State<ServiceDetails>
               service['desc'],
               fontSize,
             ),
-            const EmptySpace(height: 10.0),
-            !isOwner
-                ? _buildServiceOwnerDetails(
-                    owner: service['owner'],
-                    appLanguage: appLanguage,
-                    fontSize: fontSize,
-                  )
-                : emptyBox(),
-            const EmptySpace(height: 10.0),
+            const EmptySpace(height: 5.0),
+//            !isOwner
+//                ? _buildServiceOwnerDetails(
+//                    owner: service['owner'],
+//                    appLanguage: appLanguage,
+//                    fontSize: fontSize,
+//                  )
+//                : emptyBox(),
+//            const EmptySpace(height: 10.0),
           ],
         ),
       ),
@@ -581,48 +581,48 @@ class _ServiceDetailsState extends State<ServiceDetails>
     );
   }
 
-  Widget _buildServiceOwnerDetails({
-    owner,
-    appLanguage,
-    fontSize,
-  }) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 1,
-      margin: EdgeInsets.symmetric(
-        horizontal: 8.0,
-      ),
-      child: Card(
-        elevation: 4.0,
-        child: Container(
-          child: Row(
-            children: <Widget>[
-              userAvatarHolder(
-                url: owner['photo'],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    owner['name'],
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    owner['location'],
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 12.0,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+//  Widget _buildServiceOwnerDetails({
+//    owner,
+//    appLanguage,
+//    fontSize,
+//  }) {
+//    return Container(
+//      width: MediaQuery.of(context).size.width * 1,
+//      margin: EdgeInsets.symmetric(
+//        horizontal: 8.0,
+//      ),
+//      child: Card(
+//        elevation: 4.0,
+//        child: Container(
+//          child: Row(
+//            children: <Widget>[
+//              userAvatarHolder(
+//                url: owner['photo'],
+//              ),
+//              Column(
+//                crossAxisAlignment: CrossAxisAlignment.start,
+//                children: <Widget>[
+//                  Text(
+//                    owner['name'],
+//                    style: TextStyle(
+//                      color: Colors.black,
+//                      fontSize: fontSize,
+//                      fontWeight: FontWeight.bold,
+//                    ),
+//                  ),
+//                  Text(
+//                    owner['location'],
+//                    style: TextStyle(
+//                      color: Colors.black,
+//                      fontSize: 12.0,
+//                    ),
+//                  ),
+//                ],
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
+//    );
+//  }
 }

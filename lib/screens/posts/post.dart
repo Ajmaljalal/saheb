@@ -1,4 +1,4 @@
-import 'package:com.pywast.pywast/widgets/progressIndicators.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:com.pywast.pywast/widgets/wait.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -158,7 +158,7 @@ class _PostState extends State<Post> with PostMixin {
         ? StreamBuilder(
             stream:
                 Provider.of<PostsProvider>(context).getOnePost('posts', postId),
-            builder: (context, snapshot) {
+            builder: (context, AsyncSnapshot snapshot) {
               if (!snapshot.hasData) {
                 return wait(appLanguage['wait'], context);
               }
@@ -181,13 +181,13 @@ class _PostState extends State<Post> with PostMixin {
 
   Widget _buildPostContent({
     BuildContext context,
-    post,
+    DocumentSnapshot post,
     appLanguage,
     currentUserId,
     postId,
     fontSize,
   }) {
-    return post != null
+    return post.data != null
         ? Center(
             child: Container(
               width: MediaQuery.of(context).size.width * 1,
