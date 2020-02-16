@@ -31,11 +31,9 @@ class _MainScreenState extends State<MainScreen> {
   static String _searchBarString;
   static String _currentProvince;
   static String _currentLocality;
-  var appLanguage;
   String userLocality;
   String userProvince;
   String currentUserId;
-  String currentLanguage;
 
   handleSearchBarStringChange(value) {
     setState(() {
@@ -132,23 +130,15 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appLanguage = getLanguages(context);
+    final currentLanguage =
+        Provider.of<LanguageProvider>(context, listen: false).getLanguage;
     final renderSearchAndAdd = _currentScreenIndex == 0 ||
         _currentScreenIndex == 1 ||
         _currentScreenIndex == 2;
-    if (appLanguage == null) {
-      setState(() {
-        appLanguage = getLanguages(context);
-      });
-    }
     if (currentUserId == null) {
       setState(() {
         currentUserId =
-            Provider.of<LanguageProvider>(context, listen: false).getLanguage;
-      });
-    }
-    if (currentLanguage == null) {
-      setState(() {
-        currentLanguage =
             Provider.of<LanguageProvider>(context, listen: false).getLanguage;
       });
     }
