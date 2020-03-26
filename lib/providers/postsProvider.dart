@@ -264,13 +264,13 @@ class PostsProvider with ChangeNotifier {
     String collection,
     int numberOfPosts,
     currentLastPostId,
-//    String location,
+    String location,
   ) {
     final dataStream = db
         .collection(collection)
         .orderBy("date", descending: true)
         .startAfterDocument(currentLastPostId)
-//        .where('location', isEqualTo: location)
+        .where('location', isEqualTo: location)
         .limit(numberOfPosts)
         .snapshots();
     return dataStream;
@@ -278,11 +278,12 @@ class PostsProvider with ChangeNotifier {
 
   Stream<QuerySnapshot> getAllSnapshots(
     String collection,
+    String location,
   ) {
     final dataStream = db
         .collection(collection)
         .orderBy("date", descending: true)
-//        .where('location', isEqualTo: location)
+        .where('location', isEqualTo: location)
         .limit(10)
         .snapshots();
     return dataStream;

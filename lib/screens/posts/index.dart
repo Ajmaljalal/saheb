@@ -9,10 +9,11 @@ import 'post.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/locationProvider.dart';
 import '../../widgets/noContent.dart';
-import '../../widgets/wait.dart';
+//import '../../widgets/wait.dart';
 import '../../widgets/topScreenFilterOption.dart';
 import '../../languages/provincesTranslator.dart';
 import '../../providers/postsProvider.dart';
+import '../../providers/postsStore.dart';
 import '../../util/filterList.dart';
 import '../../languages/index.dart';
 
@@ -34,66 +35,46 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   int currentOptionId = 1;
   int itemsPerPage = 10;
   List posts;
-  DocumentSnapshot _lastPost;
   List currentPostsSnapshot = [];
   String currentUserId;
   var appLanguage;
   var userLocality;
   bool moreDataLoading = false;
-//  List renderedPosts = [];
+  String postsLocation;
 
   handleFilterOptionsChange(text, id) {
     setState(() {
       currentFilterOption = text;
       currentOptionId = id;
+      postsLocation = setPostsLocation(text);
     });
   }
 
-//  void initialLoadOfData() {
-//    final initItems = Provider.of<PostsProvider>(context, listen: false)
-//        .getInitialPosts('posts', itemsPerPage);
-//    initItems.forEach((QuerySnapshot snapshot) {
-//      List<Map<dynamic, dynamic>> newPosts = List();
-//      newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
-//        var post = {
-//          'post': docSnapshot.data,
-//          'postId': docSnapshot.documentID,
-//        };
-//        return post;
-//      }).toList();
-//
-//      if (mounted) {
-//        setState(() {
-//          posts = newPosts;
-//          _lastPost = snapshot.documents[snapshot.documents.length - 1];
-//        });
-//      }
-//    });
-//  }
-
-  void loadMore(appLanguage, currentUserId) {
+  void loadMorePost(appLanguage, currentUserId) {
     setState(() {
       moreDataLoading = true;
     });
     if (moreDataLoading) {
+      final _lastPost = getLastPost();
       final postsSnapshot = Provider.of<PostsProvider>(context).getMorePosts(
         'ids_posts',
         itemsPerPage,
         _lastPost,
+        currentFilterOption,
       );
       postsSnapshot.forEach((QuerySnapshot snapshot) {
-        List<Map<String, dynamic>> newPosts = List();
+        List<Post> newPosts = List();
         newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
-          final post = {
-            'id': docSnapshot.documentID,
-            'location': docSnapshot.data['location'],
-          };
-          return post;
+          return Post(
+            postId: docSnapshot.documentID,
+            usersProvince: widget.usersProvince,
+          );
         }).toList();
         if (mounted) {
+          Provider.of<PostsStore>(context)
+              .addPostToStore(newPosts, postsLocation);
+          setLastPost(snapshot);
           setState(() {
-            currentPostsSnapshot.addAll(newPosts);
-            _lastPost = snapshot.documents[snapshot.documents.length - 1];
             moreDataLoading = false;
           });
         }
@@ -101,29 +82,96 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
     }
   }
 
+  DocumentSnapshot getLastPost() {
+    DocumentSnapshot lastPost;
+    if (postsLocation == 'local') {
+      lastPost = Provider.of<PostsStore>(context).getLastLocalPost;
+    }
+    if (postsLocation == 'province') {
+      lastPost = Provider.of<PostsStore>(context).getLastLocalPost;
+    }
+    if (postsLocation == 'country') {
+      lastPost = Provider.of<PostsStore>(context).getLastLocalPost;
+    }
+    return lastPost;
+  }
+
+  void setLastPost(QuerySnapshot snapshot) {
+    if (postsLocation == 'local') {
+      Provider.of<PostsStore>(context)
+          .setLastLocalPost(snapshot.documents[snapshot.documents.length - 1]);
+    }
+    if (postsLocation == 'province') {
+      Provider.of<PostsStore>(context).setLastProvincePost(
+          snapshot.documents[snapshot.documents.length - 1]);
+    }
+    if (postsLocation == 'country') {
+      Provider.of<PostsStore>(context).setLastCountryPost(
+          snapshot.documents[snapshot.documents.length - 1]);
+    }
+  }
+
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
-      final postsSnapshot =
-          Provider.of<PostsProvider>(context).getAllSnapshots('ids_posts');
-      postsSnapshot.forEach((QuerySnapshot snapshot) {
-        List<Map<String, dynamic>> newPosts = List();
-        newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
-          final post = {
-            'id': docSnapshot.documentID,
-            'location': docSnapshot.data['location'],
-          };
-          return post;
-        }).toList();
-        if (mounted && snapshot.documents.length != 0) {
-          setState(() {
-            currentPostsSnapshot = newPosts;
-            _lastPost = snapshot.documents[snapshot.documents.length - 1];
-          });
-        }
-      });
-    });
     super.initState();
+    Future.delayed(
+      Duration.zero,
+      () {
+        setState(() {
+          postsLocation = setPostsLocation(currentFilterOption);
+        });
+        List posts = getAllPosts();
+        print(posts.length);
+        if (posts.length == 0) {
+          setInitialPosts();
+        }
+      },
+    );
+  }
+
+  String setPostsLocation(_currentFilterOption) {
+    String location;
+    if (_currentFilterOption.contains(userLocality)) {
+      location = 'local';
+    } else if (_currentFilterOption.contains('افغانستان')) {
+      location = 'country';
+    } else {
+      location = 'province';
+    }
+    return location;
+  }
+
+  List getAllPosts() {
+    List posts;
+    if (postsLocation == 'local') {
+      posts = Provider.of<PostsStore>(context).getLocalPosts;
+    } else if (postsLocation == 'country') {
+      posts = Provider.of<PostsStore>(context).getCountryPosts;
+    } else {
+      posts = Provider.of<PostsStore>(context).getProvincePosts;
+    }
+    return posts;
+  }
+
+  void setInitialPosts() {
+    final postsSnapshot = Provider.of<PostsProvider>(context)
+        .getAllSnapshots('ids_posts', currentFilterOption);
+    postsSnapshot.forEach(
+      (QuerySnapshot snapshot) {
+        List<Post> newPosts = List();
+        newPosts = snapshot.documents.map((DocumentSnapshot docSnapshot) {
+          return Post(
+            postId: docSnapshot.documentID,
+            usersProvince: widget.usersProvince,
+          );
+        }).toList();
+        if (snapshot.documents.length != 0) {
+          Provider.of<PostsStore>(context)
+              .addPostToStore(newPosts, postsLocation);
+          setLastPost(snapshot);
+        }
+      },
+    );
   }
 
   @override
@@ -142,17 +190,10 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
       });
     }
 
-    var _filteredPosts = filterListBasedOnLocation(
-      posts: currentPostsSnapshot,
-      currentFilterOption: currentFilterOption,
-      currentUserId: currentUserId,
-    );
-
     return _buildContent(
       appLanguage: appLanguage,
       currentUserId: currentUserId,
       userLocation: userLocality,
-      filteredPosts: _filteredPosts,
     );
   }
 
@@ -160,63 +201,61 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
     appLanguage,
     currentUserId,
     userLocation,
-    filteredPosts,
   }) {
+    final posts = getAllPosts();
     return SingleChildScrollView(
       physics: ScrollPhysics(),
       child: Column(
         children: <Widget>[
           filterOptions(appLanguage, userLocation),
-          filteredPosts.length > 0
-              ? Column(
-                  children: <Widget>[
-                    ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: filteredPosts.length,
-                      itemBuilder: (context, index) {
-                        final postId = filteredPosts[index]['id'];
-                        return Post(
-                          postId: postId,
-                          usersProvince: widget.usersProvince,
-                        );
-                      },
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(2.0),
-                      width: 150.0,
-                      child: !moreDataLoading
-                          ? RaisedButton(
-                              color: Colors.white,
-                              textColor: Colors.purple,
-                              onPressed: () => loadMore(
-                                appLanguage,
-                                currentUserId,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    appLanguage['loadMore'],
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                  EmptySpace(
-                                    width: 5.0,
-                                  ),
-                                  Icon(Icons.more_horiz),
-                                ],
-                              ),
-                            )
-                          : circularProgressIndicator(),
-                    ),
-                  ],
-                )
-              : noContent(appLanguage['noContent'], context)
+          Column(
+            children: <Widget>[
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  return posts[index];
+                },
+              ),
+              loadMoreButton(appLanguage, currentUserId),
+            ],
+          )
         ],
       ),
+    );
+  }
+
+  Container loadMoreButton(appLanguage, currentUserId) {
+    return Container(
+      padding: const EdgeInsets.all(2.0),
+      width: 150.0,
+      child: !moreDataLoading
+          ? RaisedButton(
+              color: Colors.white,
+              textColor: Colors.purple,
+              onPressed: () => loadMorePost(
+                appLanguage,
+                currentUserId,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    appLanguage['loadMore'],
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  EmptySpace(
+                    width: 5.0,
+                  ),
+                  Icon(Icons.more_horiz),
+                ],
+              ),
+            )
+          : circularProgressIndicator(),
     );
   }
 

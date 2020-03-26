@@ -10,6 +10,7 @@ import './screens/startups/language_screen.dart';
 import './widgets/progressIndicators.dart';
 import './providers/languageProvider.dart';
 import './providers/postsProvider.dart';
+import './providers/postsStore.dart';
 import './providers/authProvider.dart';
 import './screens/startups/login_screen.dart';
 import './screens/main__screen.dart';
@@ -40,6 +41,9 @@ class MainApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: PostsProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: PostsStore(),
         ),
       ],
       child: Application(),
@@ -100,7 +104,7 @@ class Application extends StatelessWidget {
         routes: {
           '/posts': (context) => MainScreen(),
           '/postDetails': (context) => PostDetails(),
-          '/addNoneAdvertPost': (context) => NoneAdvertPost(),
+//          '/addNoneAdvertPost': (context) => NoneAdvertPost(),
           '/servicesList': (context) => ServicesList(),
           '/serviceDetails': (context) => ServiceDetails(),
           '/addAdvertPost': (context) => AdvertPost(),
