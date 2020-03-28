@@ -112,11 +112,11 @@ class _AdvertDetailsState extends State<AdvertDetails>
     final userLocality =
         Provider.of<LocationProvider>(context, listen: false).getUserLocality;
     Provider.of<PostsProvider>(context, listen: false).startNewConversation(
-      ownerName: user.displayName,
+      senderName: user.displayName,
       ownerLocation: userLocality,
-      ownerPhoto: user.photoUrl,
-      userId: currentUserId,
-      messageReceiverUserId: owner['id'],
+      senderPhoto: user.photoUrl,
+      senderId: currentUserId,
+      receiverId: owner['id'],
       messageId: newMessageId,
       text: text,
       initiator: initiator,

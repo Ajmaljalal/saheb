@@ -556,11 +556,11 @@ class PostsProvider with ChangeNotifier {
   }
 
   Future<void> startNewConversation({
-    String messageReceiverUserId,
+    String receiverId,
     String ownerLocation,
-    String userId,
-    String ownerName,
-    String ownerPhoto,
+    String senderId,
+    String senderName,
+    String senderPhoto,
     String messageId,
     String text,
     initiator,
@@ -569,7 +569,7 @@ class PostsProvider with ChangeNotifier {
     try {
       await db
           .collection('messages')
-          .document(userId)
+          .document(senderId)
           .collection('chat-rooms')
           .document(messageId)
           .setData(
@@ -577,10 +577,10 @@ class PostsProvider with ChangeNotifier {
           'messages': [
             {
               'date': DateTime.now(),
-              'ownerId': userId,
+              'ownerId': senderId,
               'ownerLocation': ownerLocation,
-              'ownerName': ownerName,
-              'ownerPhoto': ownerPhoto,
+              'ownerName': senderName,
+              'ownerPhoto': senderPhoto,
               'seen': false,
               'text': text,
             }
@@ -592,7 +592,7 @@ class PostsProvider with ChangeNotifier {
 
       await db
           .collection('messages')
-          .document(messageReceiverUserId)
+          .document(receiverId)
           .collection('chat-rooms')
           .document(messageId)
           .setData(
@@ -600,18 +600,18 @@ class PostsProvider with ChangeNotifier {
           'messages': [
             {
               'date': DateTime.now(),
-              'ownerId': userId,
+              'ownerId': senderId,
               'ownerLocation': ownerLocation,
-              'ownerName': ownerName,
-              'ownerPhoto': ownerPhoto,
+              'ownerName': senderName,
+              'ownerPhoto': senderPhoto,
               'seen': false,
               'text': text,
             }
           ],
           'initiator': {
-            'id': userId,
-            'name': ownerName,
-            'photo': ownerPhoto,
+            'id': senderId,
+            'name': senderName,
+            'photo': senderPhoto,
           },
           'aboutWhat': aboutWhat,
         },

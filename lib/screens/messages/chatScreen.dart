@@ -94,11 +94,11 @@ class _ChatScreenState extends State<ChatScreen> {
         Provider.of<LocationProvider>(context, listen: false).getUserLocality;
     await Provider.of<PostsProvider>(context, listen: false)
         .startNewConversation(
-      ownerName: user.displayName,
+      senderName: user.displayName,
       ownerLocation: userLocality,
-      ownerPhoto: user.photoUrl,
-      userId: currentUserId,
-      messageReceiverUserId: widget.initiatorId,
+      senderPhoto: user.photoUrl,
+      senderId: currentUserId,
+      receiverId: widget.initiatorId,
       messageId: newMessageId,
       text: _text,
       initiator: initiator,

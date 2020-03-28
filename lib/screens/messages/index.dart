@@ -43,7 +43,6 @@ class _MessagesState extends State<Messages> {
 
                   return Dismissible(
                     onDismissed: (direction) {
-//                      widget.messages.removeAt(index);
                       Provider.of<PostsProvider>(context).deleteAChatRoom(
                           userId: currentUserId, messageId: messageId);
                     },

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:provider/provider.dart';
@@ -32,8 +31,28 @@ class _MainScreenState extends State<MainScreen> {
   static String _currentProvince;
   static String _currentLocality;
   String userLocality;
-  String userProvince;
+  static var userProvince;
   String currentUserId;
+  var currentUser;
+  var postsPage;
+
+  @override
+  void initState() {
+    super.initState();
+    if (currentUser == null) {
+      Future.delayed(Duration.zero, () {
+        final userSnapshot = Provider.of<PostsProvider>(context)
+            .getOneUser(userId: currentUserId);
+        userSnapshot.forEach((doc) {
+          if (mounted == true) {
+            setState(() {
+              currentUser = doc.data;
+            });
+          }
+        });
+      });
+    }
+  }
 
   handleSearchBarStringChange(value) {
     setState(() {
@@ -108,10 +127,7 @@ class _MainScreenState extends State<MainScreen> {
   // TODO: send currentUserId, userLocality, appLanguage to all other screens from here
   _returnCurrentScreen(currentIndex, userProvince) {
     if (currentIndex == 0) {
-      return Posts(
-        searchBarString: _searchBarString,
-        usersProvince: userProvince,
-      );
+      return postsPage;
     }
     if (currentIndex == 1) {
       return Market(
@@ -139,7 +155,7 @@ class _MainScreenState extends State<MainScreen> {
     if (currentUserId == null) {
       setState(() {
         currentUserId =
-            Provider.of<LanguageProvider>(context, listen: false).getLanguage;
+            Provider.of<AuthProvider>(context, listen: false).userId;
       });
     }
     if (userLocality == null) {
@@ -152,6 +168,14 @@ class _MainScreenState extends State<MainScreen> {
       setState(() {
         userProvince = Provider.of<LocationProvider>(context, listen: false)
             .getUserProvince;
+      });
+    }
+    if (postsPage == null) {
+      setState(() {
+        postsPage = Posts(
+          searchBarString: _searchBarString,
+          usersProvince: userProvince,
+        );
       });
     }
     final double fontSize = currentLanguage == 'English' ? 12.0 : 15.0;
@@ -168,7 +192,6 @@ class _MainScreenState extends State<MainScreen> {
                   currentLanguage: currentLanguage,
                   handleSearchBarStringChange: handleSearchBarStringChange,
                   appLanguage: appLanguage,
-                  userId: currentUserId,
                   usersProvince: userProvince,
                 ),
               ),
@@ -248,74 +271,28 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  renderMessagesIconAndCount(appLanguage, userId) {
-    return Container(
-      child: StreamBuilder(
-        stream:
-            Provider.of<PostsProvider>(context).getAllMessages(userId: userId),
-        builder: (context, AsyncSnapshot snapshot) {
-          if (!snapshot.hasData) {
-            return emptyMessageIcon();
-          }
-          if (snapshot.data.documents.toList().length == 0) {
-            return emptyMessageIcon();
-          }
-          List<DocumentSnapshot> tempList = snapshot.data.documents;
-          List messages = List();
-          messages = tempList;
+//  renderMessagesIconAndCount(appLanguage, userId) {
+//    return Container(
+//      child: StreamBuilder(
+//        stream:
+//            Provider.of<PostsProvider>(context).getAllMessages(userId: userId),
+//        builder: (context, AsyncSnapshot snapshot) {
+//          if (!snapshot.hasData) {
+//            return emptyMessageIcon();
+//          }
+//          if (snapshot.data.documents.toList().length == 0) {
+//            return emptyMessageIcon();
+//          }
+//          List<DocumentSnapshot> tempList = snapshot.data.documents;
+//          List messages = List();
+//          messages = tempList;
+//          return messageIconWithCount(messages, userId);
+//        },
+//      ),
+//    );
+//  }
 
-          var filteredMessages = messages;
-          return messageIconWithCount(filteredMessages, userId);
-        },
-      ),
-    );
-  }
-
-  Widget emptyMessageIcon() {
-    return Container(
-      padding: const EdgeInsets.only(
-        right: 8.0,
-        left: 8.0,
-      ),
-      child: InkWell(
-        child: const Icon(
-          Icons.email,
-          size: 30.0,
-        ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => Messages(
-                messages: null,
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget messageIconWithCount(messages, userId) {
-    List filteredMessages = messages.map((DocumentSnapshot messagesSnapshot) {
-      var message = {
-        'conversations': messagesSnapshot.data['messages'],
-        'messageId': messagesSnapshot.documentID,
-        'aboutWhat': messagesSnapshot.data['aboutWhat'],
-        'initiator': messagesSnapshot.data['initiator'],
-      };
-      return message;
-    }).toList();
-
-    List unSeenMessages;
-    for (var i = 0; i < filteredMessages.length; i++) {
-      var newMessages = (filteredMessages[i]['conversations']);
-      unSeenMessages = newMessages
-          .where((message) =>
-              message['ownerId'] != userId && message['seen'] == false)
-          .toList();
-    }
-
+  Widget messageIcon(newMessagesCount) {
     return Stack(
       children: <Widget>[
         Container(
@@ -333,7 +310,7 @@ class _MainScreenState extends State<MainScreen> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => Messages(
-                    messages: filteredMessages,
+                    messages: null,
                   ),
                 ),
               );
@@ -344,7 +321,7 @@ class _MainScreenState extends State<MainScreen> {
           bottom: 15.0,
           right: 0,
           left: 25,
-          child: unSeenMessages.length > 0
+          child: newMessagesCount != null && newMessagesCount > 0
               ? Container(
                   width: 15,
                   height: 15,
@@ -354,7 +331,7 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      unSeenMessages.length.toString(),
+                      newMessagesCount.toString(),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 10.0,
@@ -374,7 +351,6 @@ class _MainScreenState extends State<MainScreen> {
     currentLanguage,
     handleSearchBarStringChange,
     appLanguage,
-    userId,
     usersProvince,
   }) {
     if (currentLanguage == 'English') {
@@ -388,7 +364,8 @@ class _MainScreenState extends State<MainScreen> {
                   _getAppBarTitle(appLanguage).toString(),
                 ),
           renderSearchAndAdd
-              ? renderMessagesIconAndCount(appLanguage, userId)
+              ? messageIcon(
+                  currentUser != null ? currentUser['newMessagesCount'] : 0)
               : emptyBox(),
           renderSearchAndAdd
               ? AppBarSearch(handleSearchBarStringChange)
@@ -460,7 +437,8 @@ class _MainScreenState extends State<MainScreen> {
               ? AppBarSearch(handleSearchBarStringChange)
               : emptyBox(),
           renderSearchAndAdd
-              ? renderMessagesIconAndCount(appLanguage, userId)
+              ? messageIcon(
+                  currentUser != null ? currentUser['newMessagesCount'] : 0)
               : emptyBox(),
           renderSearchAndAdd
               ? emptyBox()
