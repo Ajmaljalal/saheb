@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:com.pywast.pywast/widgets/emptySpace.dart';
+import 'package:com.pywast.pywast/widgets/noContent.dart';
 import 'package:com.pywast.pywast/widgets/progressIndicators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,8 +9,6 @@ import 'package:provider/provider.dart';
 import 'post.dart';
 import '../../providers/authProvider.dart';
 import '../../providers/locationProvider.dart';
-import '../../widgets/noContent.dart';
-import '../../widgets/wait.dart';
 import '../../widgets/topScreenFilterOption.dart';
 import '../../languages/provincesTranslator.dart';
 import '../../providers/postsProvider.dart';
@@ -40,7 +39,6 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
   var appLanguage;
   var userLocality;
   bool moreDataLoading = false;
-//  List renderedPosts = [];
 
   handleFilterOptionsChange(text, id) {
     setState(() {
@@ -128,6 +126,7 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    print('posts index');
     super.build(context);
     if (currentFilterOption == null &&
         currentUserId == null &&
@@ -182,41 +181,45 @@ class _PostsState extends State<Posts> with AutomaticKeepAliveClientMixin {
                         );
                       },
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(2.0),
-                      width: 150.0,
-                      child: !moreDataLoading
-                          ? RaisedButton(
-                              color: Colors.white,
-                              textColor: Colors.purple,
-                              onPressed: () => loadMore(
-                                appLanguage,
-                                currentUserId,
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Text(
-                                    appLanguage['loadMore'],
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                    ),
-                                  ),
-                                  EmptySpace(
-                                    width: 5.0,
-                                  ),
-                                  Icon(Icons.more_horiz),
-                                ],
-                              ),
-                            )
-                          : circularProgressIndicator(),
-                    ),
+                    loadMoreButton(appLanguage, currentUserId),
                   ],
                 )
               : noContent(appLanguage['noContent'], context)
         ],
       ),
+    );
+  }
+
+  Container loadMoreButton(appLanguage, currentUserId) {
+    return Container(
+      padding: const EdgeInsets.all(2.0),
+      width: 150.0,
+      child: !moreDataLoading
+          ? RaisedButton(
+              color: Colors.white,
+              textColor: Colors.purple,
+              onPressed: () => loadMore(
+                appLanguage,
+                currentUserId,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Text(
+                    appLanguage['loadMore'],
+                    style: TextStyle(
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  EmptySpace(
+                    width: 5.0,
+                  ),
+                  Icon(Icons.more_horiz),
+                ],
+              ),
+            )
+          : circularProgressIndicator(),
     );
   }
 
