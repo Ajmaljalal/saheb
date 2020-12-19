@@ -271,27 +271,6 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-//  renderMessagesIconAndCount(appLanguage, userId) {
-//    return Container(
-//      child: StreamBuilder(
-//        stream:
-//            Provider.of<PostsProvider>(context).getAllMessages(userId: userId),
-//        builder: (context, AsyncSnapshot snapshot) {
-//          if (!snapshot.hasData) {
-//            return emptyMessageIcon();
-//          }
-//          if (snapshot.data.documents.toList().length == 0) {
-//            return emptyMessageIcon();
-//          }
-//          List<DocumentSnapshot> tempList = snapshot.data.documents;
-//          List messages = List();
-//          messages = tempList;
-//          return messageIconWithCount(messages, userId);
-//        },
-//      ),
-//    );
-//  }
-
   Widget messageIcon(newMessagesCount) {
     return Stack(
       children: <Widget>[
@@ -309,9 +288,7 @@ class _MainScreenState extends State<MainScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Messages(
-                    messages: null,
-                  ),
+                  builder: (context) => Messages(),
                 ),
               );
             },

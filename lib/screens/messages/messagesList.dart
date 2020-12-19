@@ -8,13 +8,14 @@ class MessagesListTile extends StatefulWidget {
   final messageId;
   final about;
   final initiator;
+  final unReadMessages;
 
-  MessagesListTile({
-    this.conversations,
-    this.messageId,
-    this.initiator,
-    this.about,
-  });
+  MessagesListTile(
+      {this.conversations,
+      this.messageId,
+      this.initiator,
+      this.about,
+      this.unReadMessages});
   @override
   _MessagesListTileState createState() => _MessagesListTileState();
 }
@@ -38,6 +39,7 @@ class _MessagesListTileState extends State<MessagesListTile> {
               aboutId: widget.about['id'],
               aboutTitle: widget.about['title'],
               aboutPhotoUrl: widget.about['photoUrl'],
+              unReadMessages: widget.unReadMessages,
             ),
           ),
         );
@@ -55,8 +57,8 @@ class _MessagesListTileState extends State<MessagesListTile> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             userAvatar(
-              height: 40.0,
-              width: 40.0,
+              height: 50.0,
+              width: 50.0,
               photo: widget.initiator['photo'],
             ),
             const SizedBox(
@@ -76,21 +78,18 @@ class _MessagesListTileState extends State<MessagesListTile> {
                     child: Text(
                       widget.conversations[widget.conversations.length - 1]
                           ['text'],
-                      maxLines: 2,
+                      maxLines: 1,
                       style: TextStyle(
-                        fontSize: 13.0,
+                        fontSize: 14.0,
                         height: 1.0,
-                        color: widget.conversations[
-                                    widget.conversations.length - 1]['seen'] ==
-                                true
-                            ? Colors.grey
-                            : Colors.black,
+                        color:
+                            widget.unReadMessages ? Colors.purple : Colors.grey,
                       ),
                     ),
                   )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

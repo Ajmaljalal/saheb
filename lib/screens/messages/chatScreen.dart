@@ -20,16 +20,17 @@ class ChatScreen extends StatefulWidget {
   final aboutId;
   final aboutTitle;
   final aboutPhotoUrl;
+  final unReadMessages;
 
-  ChatScreen({
-    this.initiatorId,
-    this.messageId,
-    this.initiatorName,
-    this.initiatorPhoto,
-    this.aboutId,
-    this.aboutTitle,
-    this.aboutPhotoUrl,
-  });
+  ChatScreen(
+      {this.initiatorId,
+      this.messageId,
+      this.initiatorName,
+      this.initiatorPhoto,
+      this.aboutId,
+      this.aboutTitle,
+      this.aboutPhotoUrl,
+      this.unReadMessages});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -115,6 +116,12 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     _scrollController = ScrollController();
     _messageInputFieldController = TextEditingController();
+    if (mounted && widget.unReadMessages) {
+      final currentUserId =
+          Provider.of<AuthProvider>(context, listen: false).userId;
+      Provider.of<PostsProvider>(context, listen: false).updateUnreadMessages(
+          conversationId: widget.messageId, userId: currentUserId);
+    }
   }
 
   @override
@@ -149,8 +156,9 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             Container(
               color: Colors.grey[100],
+              height: MediaQuery.of(context).size.height * .09,
               padding: const EdgeInsets.all(
-                5.0,
+                4.0,
               ),
               child: Row(
                 children: <Widget>[

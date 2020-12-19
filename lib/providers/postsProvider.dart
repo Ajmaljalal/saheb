@@ -481,80 +481,6 @@ class PostsProvider with ChangeNotifier {
     return dataStream;
   }
 
-  Future<void> replyToAConversation({
-    String userId,
-    String messageReceiverUserId,
-    String messageId,
-    String ownerLocation,
-    String ownerName,
-    String ownerPhoto,
-    String text,
-  }) async {
-    try {
-      await db
-          .collection('messages')
-          .document(userId)
-          .collection('chat-rooms')
-          .document(messageId)
-          .updateData(
-        {
-          'messages': FieldValue.arrayUnion(
-            [
-              {
-                'date': DateTime.now(),
-                'ownerId': userId,
-                'ownerLocation': ownerLocation,
-                'ownerName': ownerName,
-                'ownerPhoto': ownerPhoto,
-                'seen': false,
-                'text': text,
-              }
-            ],
-          ),
-        },
-      );
-
-      await db
-          .collection('messages')
-          .document(messageReceiverUserId)
-          .collection('chat-rooms')
-          .document(messageId)
-          .updateData(
-        {
-          'messages': FieldValue.arrayUnion(
-            [
-              {
-                'date': DateTime.now(),
-                'ownerId': userId,
-                'ownerLocation': ownerLocation,
-                'ownerName': ownerName,
-                'ownerPhoto': ownerPhoto,
-                'seen': false,
-                'text': text,
-              }
-            ],
-          ),
-        },
-      );
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  Stream<DocumentSnapshot> getOneConversation({
-    chatRoomId,
-    userId,
-    messagesCollection,
-  }) {
-    final dataStream = db
-        .collection('messages')
-        .document(userId)
-        .collection('chat-rooms')
-        .document(chatRoomId)
-        .snapshots();
-    return dataStream;
-  }
-
   Future<void> startNewConversation({
     String receiverId,
     String ownerLocation,
@@ -614,11 +540,105 @@ class PostsProvider with ChangeNotifier {
             'photo': senderPhoto,
           },
           'aboutWhat': aboutWhat,
+          'unReadMessages': true
         },
       );
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future<void> replyToAConversation({
+    String userId,
+    String messageReceiverUserId,
+    String messageId,
+    String ownerLocation,
+    String ownerName,
+    String ownerPhoto,
+    String text,
+  }) async {
+    try {
+      await db
+          .collection('messages')
+          .document(userId)
+          .collection('chat-rooms')
+          .document(messageId)
+          .updateData(
+        {
+          'messages': FieldValue.arrayUnion(
+            [
+              {
+                'date': DateTime.now(),
+                'ownerId': userId,
+                'ownerLocation': ownerLocation,
+                'ownerName': ownerName,
+                'ownerPhoto': ownerPhoto,
+                'seen': false,
+                'text': text,
+              }
+            ],
+          ),
+        },
+      );
+
+      await db
+          .collection('messages')
+          .document(messageReceiverUserId)
+          .collection('chat-rooms')
+          .document(messageId)
+          .updateData(
+        {
+          'messages': FieldValue.arrayUnion(
+            [
+              {
+                'date': DateTime.now(),
+                'ownerId': userId,
+                'ownerLocation': ownerLocation,
+                'ownerName': ownerName,
+                'ownerPhoto': ownerPhoto,
+                'seen': false,
+                'text': text,
+              }
+            ],
+          ),
+          'unReadMessages': true
+        },
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> updateUnreadMessages({
+    String userId,
+    String conversationId,
+  }) async {
+    try {
+      await db
+          .collection('messages')
+          .document(userId)
+          .collection('chat-rooms')
+          .document(conversationId)
+          .updateData(
+        {'unReadMessages': false},
+      );
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Stream<DocumentSnapshot> getOneConversation({
+    chatRoomId,
+    userId,
+    messagesCollection,
+  }) {
+    final dataStream = db
+        .collection('messages')
+        .document(userId)
+        .collection('chat-rooms')
+        .document(chatRoomId)
+        .snapshots();
+    return dataStream;
   }
 
   Future<void> deleteAChatRoom({
